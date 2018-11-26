@@ -13,12 +13,18 @@ namespace AutoPriorities
     {
         private static List<Tuple2<int, Dictionary<WorkTypeDef, float>>> _priorityToDictOfWorkTypeToPercentOfColonists;
         private static HashSet<WorkTypeDef> _workTypes;
+        private static HashSet<WorkTypeDef> _workTypesNotRequiringSkills;
         private static int _pawnsCountForDeterminingWhetherToRebuild;
         private static Dictionary<WorkTypeDef, List<Tuple2<Pawn, float>>> _sortedPawnSkillForEveryWork;
+        private static HashSet<Pawn> _allPlayerPawns;
+
+        private static HashSet<int> _prioritiesDrawnCached;
 
         private const float _sliderWidth = 20f;
         private const float _sliderHeight = 60f;
         private const float _sliderMargin = 80f;
+
+        private const float _guiShadowedMult = 0.5f;
 
         private const float _slidersDistFromLeftBorder = 30f;
         private const float _slidersDistFromRightBorder = 30f;
@@ -33,7 +39,10 @@ namespace AutoPriorities
 
         static AutoPriorities_Dialog()
         {
+            _allPlayerPawns = new HashSet<Pawn>();
+            _prioritiesDrawnCached = new HashSet<int>();
             _workTypes = new HashSet<WorkTypeDef>();
+            _workTypesNotRequiringSkills = new HashSet<WorkTypeDef>();
             _priorityToDictOfWorkTypeToPercentOfColonists = new List<Tuple2<int, Dictionary<WorkTypeDef, float>>>();
             _pawnsCountForDeterminingWhetherToRebuild = 0;
             _sortedPawnSkillForEveryWork = new Dictionary<WorkTypeDef, List<Tuple2<Pawn, float>>>();
@@ -62,9 +71,15 @@ namespace AutoPriorities
             var scrollHeight = tableSizeY > scrollRect.height ? tableSizeY : windowRect.height;
             Widgets.BeginScrollView(scrollRect, ref _scrollPos, new Rect(0, 0, scrollWidth, scrollHeight));
 
+            _prioritiesDrawnCached.Clear();
             int row = 0;
             foreach(var pr in _priorityToDictOfWorkTypeToPercentOfColonists)
             {
+                var colOrig = GUI.color;
+                //shadow repeating priorities
+                if(_prioritiesDrawnCached.Contains(pr._val1))
+                    GUI.color = colOrig * _guiShadowedMult;
+
                 var slidersRect = new Rect(_slidersDistFromLeftBorder, (_sliderHeight + 3 * _buttonHeight) * row, tableSizeX + _slidersDistFromRightBorder, _sliderHeight + 3 * _buttonHeight);
 
                 //draw bottom line
@@ -85,7 +100,11 @@ namespace AutoPriorities
                     Widgets.Label(labelRect, workName);
 
                     var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, _sliderWidth, _sliderHeight);
-                    pr._val2[workType] = GUI.VerticalSlider(sliderRect, pr._val2[workType], 1, 0);
+                    var newSliderValue = GUI.VerticalSlider(sliderRect, pr._val2[workType], 1f, 0f);
+                    var available = PercentOfColonistsAvailable(workType, pr._val1);
+                    if(available < newSliderValue)
+                        newSliderValue = available;
+                    pr._val2[workType] = newSliderValue;
 
                     var percentLabelText = Mathf.RoundToInt(pr._val2[workType] * 100f).ToString() + "%";
                     var percentLabelRect = new Rect(
@@ -98,6 +117,9 @@ namespace AutoPriorities
                     i += 1;
                 }
                 row += 1;
+                _prioritiesDrawnCached.Add(pr._val1);
+                //return to normal
+                GUI.color = colOrig;
             }
             Widgets.EndScrollView();
 
@@ -108,8 +130,8 @@ namespace AutoPriorities
                 label.GetWidthCached() + 10f,
                 _buttonHeight);
             if(Widgets.ButtonText(buttonRect, label))
-                foreach(var tuple in _priorityToDictOfWorkTypeToPercentOfColonists)
-                    AssignPriorities(tuple);
+
+                AssignPriorities();
 
             var removePriorityButtonRect = new Rect(
                 windowRect.xMax - _sliderMargin,
@@ -131,8 +153,7 @@ namespace AutoPriorities
         private void AddPriority()
         {
             var dict = new Dictionary<WorkTypeDef, float>();
-            _priorityToDictOfWorkTypeToPercentOfColonists.Add(
-                new Tuple2<int, Dictionary<WorkTypeDef, float>>(4, dict));
+            _priorityToDictOfWorkTypeToPercentOfColonists.Add(new Tuple2<int, Dictionary<WorkTypeDef, float>>(0, dict));
 
             foreach(var keyValue in _workTypes)
                 dict.Add(keyValue, 0f);
@@ -147,32 +168,127 @@ namespace AutoPriorities
             SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
         }
 
-        private void AssignPriorities(Tuple2<int, Dictionary<WorkTypeDef, float>> priorityWorks)
+        private float PercentOfColonistsAvailable(WorkTypeDef workType, int priorityIgnore)
         {
-            foreach(var keyValue in _sortedPawnSkillForEveryWork)
+            float taken = 0;
+            foreach(var tuple in _priorityToDictOfWorkTypeToPercentOfColonists)
             {
-                float pawnsIterated = 1;
-                float pawnsCount = keyValue.Value.Count;
-                foreach(var tuple in keyValue.Value)
+                if(tuple._val1 == priorityIgnore)
+                    continue;
+                taken += tuple._val2[workType];
+                if(taken > 1f)
+                    Log.Error($"Percent of colonists assigned to work type {workType.defName} is greater than 1: {taken}");
+            }
+            return 1f - taken;
+        }
+
+        private void AssignPriorities()
+        {
+            var listOfPawnAndAmountOfJobsAssigned = new Dictionary<Pawn, int>(_allPlayerPawns.Count);
+            foreach(var item in _allPlayerPawns)
+                listOfPawnAndAmountOfJobsAssigned.Add(item, 0);
+
+            var priorityToPercentOfColonists = new List<Tuple2<int, float>>();
+            foreach(var work in _workTypes)
+            {
+                //skip works not requiring skills because they will be handled later
+                if(_workTypesNotRequiringSkills.Contains(work))
+                    continue;
+
+                FillListOfPriorityToPercentOfColonists(work, priorityToPercentOfColonists);
+
+                var pawns = _sortedPawnSkillForEveryWork[work];
+                float pawnsCount = pawns.Count;
+
+                _prioritiesDrawnCached.Clear();
+                int pawnsIterated = 0;
+                float mustBeIteratedForThisPriority = 0f;
+                foreach(var priorityToPercent in priorityToPercentOfColonists)
                 {
-                    if(!tuple._val1.IsCapableOfWholeWorkType(keyValue.Key))
+                    //skip repeating priorities
+                    if(_prioritiesDrawnCached.Contains(priorityToPercent._val1))
                         continue;
 
-                    // if percent iterated is greater than specified
-                    if(pawnsIterated / pawnsCount > priorityWorks._val2[keyValue.Key])
+                    mustBeIteratedForThisPriority += priorityToPercent._val2 * pawnsCount;
+                    //Log.Message($"mustBeIteratedForThisPriority {priorityToPercent._val1}: {mustBeIteratedForThisPriority}; pawnsCount: {pawnsCount}");
+                    for(; pawnsIterated < mustBeIteratedForThisPriority; pawnsIterated++)
                     {
-                        tuple._val1.workSettings.Disable(keyValue.Key);
-                        //Log.Message($"broke for {tuple._val1.Name.ToStringFull} work {keyValue.Key.defName}");
-                    }
-                    else
-                    {
-                        tuple._val1.workSettings.SetPriority(keyValue.Key, priorityWorks._val1);
-                    }
+                        var currentPawn = pawns[pawnsIterated];
 
-                    pawnsIterated += 1;
+                        //skip incapable pawns
+                        if(currentPawn._val1.IsCapableOfWholeWorkType(work))
+                        {
+                            //Log.Message($"in loop mustBeIteratedForThisPriority {priorityToPercent._val1}: {mustBeIteratedForThisPriority}; pawnsIterated: {pawnsIterated}");
+                            currentPawn._val1.workSettings.SetPriority(work, priorityToPercent._val1);
+
+                            listOfPawnAndAmountOfJobsAssigned[currentPawn._val1] += 1;
+                        }
+                    }
+                    _prioritiesDrawnCached.Add(priorityToPercent._val1);
+                }
+                //set remaining pawns to 0
+                if(pawnsIterated < pawnsCount)
+                {
+                    for(; pawnsIterated < pawnsCount; pawnsIterated++)
+                    {
+                        if(!pawns[pawnsIterated]._val1.IsCapableOfWholeWorkType(work))
+                            continue;
+                        pawns[pawnsIterated]._val1.workSettings.SetPriority(work, 0);
+                    }
+                }
+            }
+
+            //turn dict to list
+            var jobsCount = new List<Tuple2<Pawn, int>>(listOfPawnAndAmountOfJobsAssigned.Count);
+            foreach(var item in listOfPawnAndAmountOfJobsAssigned)
+                jobsCount.Add(new Tuple2<Pawn, int>(item.Key, item.Value));
+
+            //sort by ascending to then iterate (lower count of works assigned gets works first)
+            jobsCount.Sort((x, y) => x._val2.CompareTo(y._val2));
+            foreach(var work in _workTypesNotRequiringSkills)
+            {
+                FillListOfPriorityToPercentOfColonists(work, priorityToPercentOfColonists);
+
+                _prioritiesDrawnCached.Clear();
+                int pawnsIterated = 0;
+                float mustBeIteratedForThisPriority = 0f;
+                foreach(var priorityToPercent in priorityToPercentOfColonists)
+                {
+                    //skip repeating priorities
+                    if(_prioritiesDrawnCached.Contains(priorityToPercent._val1))
+                        continue;
+
+                    mustBeIteratedForThisPriority += priorityToPercent._val2 * jobsCount.Count;
+                    for(; pawnsIterated < mustBeIteratedForThisPriority; pawnsIterated++)
+                    {
+                        var currentPawn = jobsCount[pawnsIterated];
+
+                        //skip incapable pawns
+                        if(currentPawn._val1.IsCapableOfWholeWorkType(work))
+                            currentPawn._val1.workSettings.SetPriority(work, priorityToPercent._val1);
+                    }
+                    _prioritiesDrawnCached.Add(priorityToPercent._val1);
+                }
+                //set remaining pawns to 0
+                if(pawnsIterated < jobsCount.Count)
+                {
+                    for(; pawnsIterated < jobsCount.Count; pawnsIterated++)
+                    {
+                        if(!jobsCount[pawnsIterated]._val1.IsCapableOfWholeWorkType(work))
+                            continue;
+                        jobsCount[pawnsIterated]._val1.workSettings.SetPriority(work, 0);
+                    }
                 }
             }
             SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
+
+            void FillListOfPriorityToPercentOfColonists(WorkTypeDef work, List<Tuple2<int, float>> toFill)
+            {
+                toFill.Clear();
+                foreach(var priority in _priorityToDictOfWorkTypeToPercentOfColonists)
+                    toFill.Add(new Tuple2<int, float>(priority._val1, priority._val2[work]));
+                toFill.Sort((x, y) => x._val1.CompareTo(y._val1));
+            }
         }
 
         private void RebuildIfDirtySortedPawnSkillForEveryWork()
@@ -188,13 +304,18 @@ namespace AutoPriorities
             _pawnsCountForDeterminingWhetherToRebuild = Find.CurrentMap.mapPawns.AllPawnsCount;
 
             // get all skills associated with the work types
-            var workTypeSkillForEveryPawn = new Dictionary<WorkTypeDef, List<Tuple2<Pawn, float>>>();
+            _allPlayerPawns.Clear();
+            _sortedPawnSkillForEveryWork.Clear();
             foreach(var work in workTypes)
             {
                 foreach(var pawn in pawns)
                 {
                     if(pawn.AnimalOrWildMan())
                         continue;
+
+                    if(!_allPlayerPawns.Contains(pawn))
+                        _allPlayerPawns.Add(pawn);
+
                     float skill = 0;
                     try
                     {
@@ -204,13 +325,13 @@ namespace AutoPriorities
                     {
                         Log.Message($"error: {e} for pawn {pawn.Name.ToStringFull}");
                     }
-                    if(workTypeSkillForEveryPawn.ContainsKey(work))
+                    if(_sortedPawnSkillForEveryWork.ContainsKey(work))
                     {
-                        workTypeSkillForEveryPawn[work].Add(new Tuple2<Pawn, float>(pawn, skill));
+                        _sortedPawnSkillForEveryWork[work].Add(new Tuple2<Pawn, float>(pawn, skill));
                     }
                     else
                     {
-                        workTypeSkillForEveryPawn.Add(work, new List<Tuple2<Pawn, float>>
+                        _sortedPawnSkillForEveryWork.Add(work, new List<Tuple2<Pawn, float>>
                         {
                             new Tuple2<Pawn, float>(pawn, skill),
                         });
@@ -218,15 +339,17 @@ namespace AutoPriorities
 
                 }
                 if(!_workTypes.Contains(work))
+                {
                     _workTypes.Add(work);
+                    if(work.relevantSkills.Count == 0)
+                        _workTypesNotRequiringSkills.Add(work);
+                }
             }
 
-            foreach(var keyValue in workTypeSkillForEveryPawn)
+            foreach(var keyValue in _sortedPawnSkillForEveryWork)
             {
                 keyValue.Value.Sort((x, y) => y._val2.CompareTo(x._val2));
             }
-            _sortedPawnSkillForEveryWork = workTypeSkillForEveryPawn;
-            return;
         }
     }
 }

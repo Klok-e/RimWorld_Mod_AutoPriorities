@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -52,6 +54,7 @@
   <ItemGroup>
     <Compile Include="AutoPriorities_Dialog.cs" />
     <Compile Include="Extensions\PawnExtensions.cs" />
+    <Compile Include="Extensions\UsefulThings.cs" />
     <Compile Include="MapComponent_TickManager.cs" />
     <Compile Include="Core\Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

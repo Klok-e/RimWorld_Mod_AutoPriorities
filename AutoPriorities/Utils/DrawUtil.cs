@@ -15,9 +15,10 @@ namespace AutoPriorities.Utils
             if(priority > 0)
             {
                 Text.Anchor = TextAnchor.MiddleCenter;
+                var colorOrig = GUI.color;
                 GUI.color = ColorOfPriority(priority);
                 Widgets.Label(rect.ContractedBy(-3f), priority.ToStringCached());
-                GUI.color = Color.white;
+                GUI.color = colorOrig;
                 Text.Anchor = TextAnchor.UpperLeft;
             }
             if(Event.current.type == EventType.MouseDown && Mouse.IsOver(rect))
@@ -68,10 +69,11 @@ namespace AutoPriorities.Utils
             var texture2D2 = WidgetsWork.WorkBoxBGTex_Bad;
             float a = 3f / 4f;
 
+            var colorOrig = GUI.color;
             GUI.DrawTexture(rect, (Texture)texture2D1);
             GUI.color = new Color(GUI.color.r, GUI.color.g, GUI.color.b, a);
             GUI.DrawTexture(rect, (Texture)texture2D2);
-            GUI.color = Color.white;
+            GUI.color = colorOrig;
         }
     }
 }
