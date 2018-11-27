@@ -23,7 +23,7 @@ namespace AutoPriorities
 
         private const float _sliderWidth = 20f;
         private const float _sliderHeight = 60f;
-        private const float _sliderMargin = 80f;
+        private const float _sliderMargin = 50f;
 
         private const float _guiShadowedMult = 0.5f;
 
@@ -124,7 +124,7 @@ namespace AutoPriorities
                 int i = 0;
                 foreach(var workType in _sortedPawnSkillForEveryWork.Keys)
                 {
-                    var workName = workType.defName;
+                    var workName = workType.labelShort;
 
                     float elementXPos = slidersRect.xMin + _sliderMargin * (i + 1);
 
