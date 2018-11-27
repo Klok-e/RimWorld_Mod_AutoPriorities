@@ -3,5 +3,8 @@
 	<name>AutoPriorities</name>
 	<author>LokiVKlokeNaAndoke</author>
 	<targetVersion>1.0.0</targetVersion>
-	<description>Adds a window that allows to automatically set work priorities for specified percents of pawns</description>
+	<description>
+Adds a window that allows to automatically set work priorities for specified percents of pawns
+NOTE: It isn't compatible with any other mods that somehow change the work tab!
+</description>
 </ModMetaData>
