@@ -65,7 +65,7 @@ namespace AutoPriorities
             {
                 _priorityToWorkTypesAndPercentOfPawns = PercentPerWorkTypeSaver.LoadState();
             }
-            catch(System.IO.FileNotFoundException e)
+            catch(System.IO.FileNotFoundException)
             {
                 _priorityToWorkTypesAndPercentOfPawns = new List<Tuple2<int, Dictionary<WorkTypeDef, float>>>();
             }
