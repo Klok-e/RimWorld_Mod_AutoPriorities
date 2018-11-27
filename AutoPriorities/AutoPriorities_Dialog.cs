@@ -1,4 +1,5 @@
-﻿using AutoPriorities.Extensions;
+﻿using AutoPriorities.Core;
+using AutoPriorities.Extensions;
 using AutoPriorities.Utils;
 using RimWorld;
 using System;
@@ -11,14 +12,14 @@ namespace AutoPriorities
 {
     public class AutoPriorities_Dialog : Window
     {
-        private static List<Tuple2<int, Dictionary<WorkTypeDef, float>>> _priorityToDictOfWorkTypeToPercentOfColonists;
+        private static List<Tuple2<int, Dictionary<WorkTypeDef, float>>> _priorityToWorkTypesAndPercentOfPawns;
         private static HashSet<WorkTypeDef> _workTypes;
         private static HashSet<WorkTypeDef> _workTypesNotRequiringSkills;
         private static int _pawnsCountForDeterminingWhetherToRebuild;
         private static Dictionary<WorkTypeDef, List<Tuple2<Pawn, float>>> _sortedPawnSkillForEveryWork;
         private static HashSet<Pawn> _allPlayerPawns;
 
-        private static HashSet<int> _prioritiesDrawnCached;
+        private static HashSet<int> _prioritiesEncounteredCached;
 
         private const float _sliderWidth = 20f;
         private const float _sliderHeight = 60f;
@@ -40,12 +41,14 @@ namespace AutoPriorities
         static AutoPriorities_Dialog()
         {
             _allPlayerPawns = new HashSet<Pawn>();
-            _prioritiesDrawnCached = new HashSet<int>();
+            _prioritiesEncounteredCached = new HashSet<int>();
             _workTypes = new HashSet<WorkTypeDef>();
             _workTypesNotRequiringSkills = new HashSet<WorkTypeDef>();
-            _priorityToDictOfWorkTypeToPercentOfColonists = new List<Tuple2<int, Dictionary<WorkTypeDef, float>>>();
+            _priorityToWorkTypesAndPercentOfPawns = new List<Tuple2<int, Dictionary<WorkTypeDef, float>>>();
             _pawnsCountForDeterminingWhetherToRebuild = 0;
             _sortedPawnSkillForEveryWork = new Dictionary<WorkTypeDef, List<Tuple2<Pawn, float>>>();
+
+            LoadSavedState();
         }
 
         public AutoPriorities_Dialog() : base()
@@ -54,6 +57,35 @@ namespace AutoPriorities
             draggable = true;
             resizeable = true;
             _scrollPos = new Vector2();
+        }
+
+        private static void LoadSavedState()
+        {
+            try
+            {
+                _priorityToWorkTypesAndPercentOfPawns = PercentPerWorkTypeSaver.LoadState();
+            }
+            catch(System.IO.FileNotFoundException e)
+            {
+                _priorityToWorkTypesAndPercentOfPawns = new List<Tuple2<int, Dictionary<WorkTypeDef, float>>>();
+            }
+            catch(Exception e)
+            {
+                Log.Error(e.Message);
+                _priorityToWorkTypesAndPercentOfPawns = new List<Tuple2<int, Dictionary<WorkTypeDef, float>>>();
+            }
+        }
+
+        private static void SaveState()
+        {
+            try
+            {
+                PercentPerWorkTypeSaver.SaveState(_priorityToWorkTypesAndPercentOfPawns);
+            }
+            catch(Exception e)
+            {
+                Log.Error(e.Message);
+            }
         }
 
         public override void DoWindowContents(Rect windowRect)
@@ -67,17 +99,17 @@ namespace AutoPriorities
             var tableSizeX = (worktypes + 1) * _sliderMargin + _slidersDistFromLeftBorder + _slidersDistFromRightBorder;
             var scrollWidth = tableSizeX > windowRect.width ? tableSizeX : windowRect.width;
 
-            var tableSizeY = (_sliderHeight + 3 * _buttonHeight) * _priorityToDictOfWorkTypeToPercentOfColonists.Count;
+            var tableSizeY = (_sliderHeight + 3 * _buttonHeight) * _priorityToWorkTypesAndPercentOfPawns.Count;
             var scrollHeight = tableSizeY > scrollRect.height ? tableSizeY : windowRect.height;
             Widgets.BeginScrollView(scrollRect, ref _scrollPos, new Rect(0, 0, scrollWidth, scrollHeight));
 
-            _prioritiesDrawnCached.Clear();
+            _prioritiesEncounteredCached.Clear();
             int row = 0;
-            foreach(var pr in _priorityToDictOfWorkTypeToPercentOfColonists)
+            foreach(var pr in _priorityToWorkTypesAndPercentOfPawns)
             {
                 var colOrig = GUI.color;
                 //shadow repeating priorities
-                if(_prioritiesDrawnCached.Contains(pr._val1))
+                if(_prioritiesEncounteredCached.Contains(pr._val1))
                     GUI.color = colOrig * _guiShadowedMult;
 
                 var slidersRect = new Rect(_slidersDistFromLeftBorder, (_sliderHeight + 3 * _buttonHeight) * row, tableSizeX + _slidersDistFromRightBorder, _sliderHeight + 3 * _buttonHeight);
@@ -117,7 +149,7 @@ namespace AutoPriorities
                     i += 1;
                 }
                 row += 1;
-                _prioritiesDrawnCached.Add(pr._val1);
+                _prioritiesEncounteredCached.Add(pr._val1);
                 //return to normal
                 GUI.color = colOrig;
             }
@@ -130,8 +162,11 @@ namespace AutoPriorities
                 label.GetWidthCached() + 10f,
                 _buttonHeight);
             if(Widgets.ButtonText(buttonRect, label))
-
+            {
                 AssignPriorities();
+                SaveState();
+                SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
+            }
 
             var removePriorityButtonRect = new Rect(
                 windowRect.xMax - _sliderMargin,
@@ -139,7 +174,10 @@ namespace AutoPriorities
                 _buttonHeight,
                 _buttonHeight);
             if(Widgets.ButtonImage(removePriorityButtonRect, Core.Resources._minusIcon))
+            {
                 RemovePriority();
+                SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
+            }
 
             var addPriorityButtonRect = new Rect(
                 removePriorityButtonRect.xMin - StandardMargin - removePriorityButtonRect.width,
@@ -147,31 +185,31 @@ namespace AutoPriorities
                 _buttonHeight,
                 _buttonHeight);
             if(Widgets.ButtonImage(addPriorityButtonRect, Core.Resources._plusIcon))
+            {
                 AddPriority();
+                SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
+            }
         }
 
         private void AddPriority()
         {
             var dict = new Dictionary<WorkTypeDef, float>();
-            _priorityToDictOfWorkTypeToPercentOfColonists.Add(new Tuple2<int, Dictionary<WorkTypeDef, float>>(0, dict));
+            _priorityToWorkTypesAndPercentOfPawns.Add(new Tuple2<int, Dictionary<WorkTypeDef, float>>(0, dict));
 
             foreach(var keyValue in _workTypes)
                 dict.Add(keyValue, 0f);
-
-            SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
         }
 
         private void RemovePriority()
         {
-            if(_priorityToDictOfWorkTypeToPercentOfColonists.Count > 0)
-                _priorityToDictOfWorkTypeToPercentOfColonists.RemoveLast();
-            SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
+            if(_priorityToWorkTypesAndPercentOfPawns.Count > 0)
+                _priorityToWorkTypesAndPercentOfPawns.RemoveLast();
         }
 
         private float PercentOfColonistsAvailable(WorkTypeDef workType, int priorityIgnore)
         {
             float taken = 0;
-            foreach(var tuple in _priorityToDictOfWorkTypeToPercentOfColonists)
+            foreach(var tuple in _priorityToWorkTypesAndPercentOfPawns)
             {
                 if(tuple._val1 == priorityIgnore)
                     continue;
@@ -200,13 +238,13 @@ namespace AutoPriorities
                 var pawns = _sortedPawnSkillForEveryWork[work];
                 float pawnsCount = pawns.Count;
 
-                _prioritiesDrawnCached.Clear();
+                _prioritiesEncounteredCached.Clear();
                 int pawnsIterated = 0;
                 float mustBeIteratedForThisPriority = 0f;
                 foreach(var priorityToPercent in priorityToPercentOfColonists)
                 {
                     //skip repeating priorities
-                    if(_prioritiesDrawnCached.Contains(priorityToPercent._val1))
+                    if(_prioritiesEncounteredCached.Contains(priorityToPercent._val1))
                         continue;
 
                     mustBeIteratedForThisPriority += priorityToPercent._val2 * pawnsCount;
@@ -224,7 +262,7 @@ namespace AutoPriorities
                             listOfPawnAndAmountOfJobsAssigned[currentPawn._val1] += 1;
                         }
                     }
-                    _prioritiesDrawnCached.Add(priorityToPercent._val1);
+                    _prioritiesEncounteredCached.Add(priorityToPercent._val1);
                 }
                 //set remaining pawns to 0
                 if(pawnsIterated < pawnsCount)
@@ -249,13 +287,13 @@ namespace AutoPriorities
             {
                 FillListOfPriorityToPercentOfColonists(work, priorityToPercentOfColonists);
 
-                _prioritiesDrawnCached.Clear();
+                _prioritiesEncounteredCached.Clear();
                 int pawnsIterated = 0;
                 float mustBeIteratedForThisPriority = 0f;
                 foreach(var priorityToPercent in priorityToPercentOfColonists)
                 {
                     //skip repeating priorities
-                    if(_prioritiesDrawnCached.Contains(priorityToPercent._val1))
+                    if(_prioritiesEncounteredCached.Contains(priorityToPercent._val1))
                         continue;
 
                     mustBeIteratedForThisPriority += priorityToPercent._val2 * jobsCount.Count;
@@ -267,7 +305,7 @@ namespace AutoPriorities
                         if(currentPawn._val1.IsCapableOfWholeWorkType(work))
                             currentPawn._val1.workSettings.SetPriority(work, priorityToPercent._val1);
                     }
-                    _prioritiesDrawnCached.Add(priorityToPercent._val1);
+                    _prioritiesEncounteredCached.Add(priorityToPercent._val1);
                 }
                 //set remaining pawns to 0
                 if(pawnsIterated < jobsCount.Count)
@@ -280,12 +318,11 @@ namespace AutoPriorities
                     }
                 }
             }
-            SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
 
             void FillListOfPriorityToPercentOfColonists(WorkTypeDef work, List<Tuple2<int, float>> toFill)
             {
                 toFill.Clear();
-                foreach(var priority in _priorityToDictOfWorkTypeToPercentOfColonists)
+                foreach(var priority in _priorityToWorkTypesAndPercentOfPawns)
                     toFill.Add(new Tuple2<int, float>(priority._val1, priority._val2[work]));
                 toFill.Sort((x, y) => x._val1.CompareTo(y._val1));
             }

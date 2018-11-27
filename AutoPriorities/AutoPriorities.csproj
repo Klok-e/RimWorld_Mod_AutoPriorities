@@ -55,8 +55,8 @@
     <Compile Include="AutoPriorities_Dialog.cs" />
     <Compile Include="Extensions\PawnExtensions.cs" />
     <Compile Include="Extensions\UsefulThings.cs" />
-    <Compile Include="MapComponent_TickManager.cs" />
     <Compile Include="Core\Mod.cs" />
+    <Compile Include="Core\PercentPerWorkTypeSaver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\Resources.cs" />
     <Compile Include="HarmonyPatches\WorkTab_AddButtonToOpenAutoPrioritiesWindow.cs" />
