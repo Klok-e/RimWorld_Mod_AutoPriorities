@@ -3,5 +3,5 @@
 	<name>AutoPriorities</name>
 	<author>LokiVKlokeNaAndoke</author>
 	<targetVersion>1.0.0</targetVersion>
-	<description>Adds ability to automatically set job priorities</description>
+	<description>Adds a window that allows to automatically set work priorities for specified percents of pawns</description>
 </ModMetaData>
