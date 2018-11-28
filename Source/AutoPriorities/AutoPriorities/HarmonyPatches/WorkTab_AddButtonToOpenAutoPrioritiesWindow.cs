@@ -7,12 +7,11 @@ namespace AutoPriorities.HarmonyPatches
     [HarmonyPatch(typeof(MainTabWindow_Work), nameof(MainTabWindow_Work.DoWindowContents))]
     public static class WorkTab_AddButtonToOpenAutoPrioritiesWindow
     {
-        private static bool _opened;
         private static AutoPriorities_Dialog _window;
 
         static WorkTab_AddButtonToOpenAutoPrioritiesWindow()
         {
-            _opened = false;
+            _window = new AutoPriorities_Dialog();
         }
 
         private static void Postfix(MainTabWindow_Work __instance, Rect rect)
@@ -23,15 +22,12 @@ namespace AutoPriorities.HarmonyPatches
 
             if(Verse.Widgets.ButtonImage(button, Core.Resources._autoPrioritiesButtonIcon, col, col * 0.9f))
             {
-                if(!_opened)
+                if(!_window.IsOpen)
                 {
-                    _opened = true;
-                    _window = new AutoPriorities_Dialog();
                     Verse.Find.WindowStack.Add(_window);
                 }
                 else
                 {
-                    _opened = false;
                     _window.Close();
                 }
             }
