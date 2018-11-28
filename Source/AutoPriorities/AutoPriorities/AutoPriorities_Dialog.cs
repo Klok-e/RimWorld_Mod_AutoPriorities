@@ -44,10 +44,10 @@ namespace AutoPriorities
             _prioritiesEncounteredCached = new HashSet<int>();
             _workTypes = new HashSet<WorkTypeDef>();
             _workTypesNotRequiringSkills = new HashSet<WorkTypeDef>();
-            _priorityToWorkTypesAndPercentOfPawns = new List<Tuple2<int, Dictionary<WorkTypeDef, float>>>();
-            _pawnsCountForDeterminingWhetherToRebuild = 0;
+            _pawnsCountForDeterminingWhetherToRebuild = -1;
             _sortedPawnSkillForEveryWork = new Dictionary<WorkTypeDef, List<Tuple2<Pawn, float>>>();
 
+            _priorityToWorkTypesAndPercentOfPawns = new List<Tuple2<int, Dictionary<WorkTypeDef, float>>>();
             LoadSavedState();
         }
 
@@ -61,9 +61,31 @@ namespace AutoPriorities
 
         private static void LoadSavedState()
         {
+            RebuildIfDirtySortedPawnSkillForEveryWork();
             try
             {
                 _priorityToWorkTypesAndPercentOfPawns = PercentPerWorkTypeSaver.LoadState();
+
+                //check whether state is correct
+                bool correct = true;
+                foreach(var keyVal in _priorityToWorkTypesAndPercentOfPawns)
+                {
+                    foreach(var work in _workTypes)
+                    {
+                        if(!keyVal._val2.ContainsKey(work))
+                        {
+                            Log.Message($"AutoPriorities: {work.labelShort} has been found but was not present in a save file");
+                            correct = false;
+                            goto outOfCycles;
+                        }
+                    }
+                }
+                outOfCycles:
+                if(!correct)
+                {
+                    _priorityToWorkTypesAndPercentOfPawns = new List<Tuple2<int, Dictionary<WorkTypeDef, float>>>();
+                    Log.Message("AutoPriorities: Priorities have been reset.");
+                }
             }
             catch(System.IO.FileNotFoundException)
             {
@@ -122,31 +144,37 @@ namespace AutoPriorities
                 pr._val1 = DrawUtil.PriorityBox(slidersRect.xMin, slidersRect.yMin + (slidersRect.height / 2f), pr._val1);
 
                 int i = 0;
-                foreach(var workType in _sortedPawnSkillForEveryWork.Keys)
+                foreach(var workType in _workTypes)
                 {
                     var workName = workType.labelShort;
+                    try
+                    {
+                        float elementXPos = slidersRect.xMin + _sliderMargin * (i + 1);
 
-                    float elementXPos = slidersRect.xMin + _sliderMargin * (i + 1);
+                        var labelRect = new Rect(elementXPos - (workName.GetWidthCached() / 2), slidersRect.yMin + (i % 2 == 0 ? 0f : 30f), 100f, 30f);
+                        Widgets.Label(labelRect, workName);
 
-                    var labelRect = new Rect(elementXPos - (workName.GetWidthCached() / 2), slidersRect.yMin + (i % 2 == 0 ? 0f : 30f), 100f, 30f);
-                    Widgets.Label(labelRect, workName);
+                        var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, _sliderWidth, _sliderHeight);
+                        var newSliderValue = GUI.VerticalSlider(sliderRect, pr._val2[workType], 1f, 0f);
+                        var available = PercentOfColonistsAvailable(workType, pr._val1);
+                        if(available < newSliderValue)
+                            newSliderValue = available;
+                        pr._val2[workType] = newSliderValue;
 
-                    var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, _sliderWidth, _sliderHeight);
-                    var newSliderValue = GUI.VerticalSlider(sliderRect, pr._val2[workType], 1f, 0f);
-                    var available = PercentOfColonistsAvailable(workType, pr._val1);
-                    if(available < newSliderValue)
-                        newSliderValue = available;
-                    pr._val2[workType] = newSliderValue;
+                        var percentLabelText = Mathf.RoundToInt(pr._val2[workType] * 100f).ToString() + "%";
+                        var percentLabelRect = new Rect(
+                            sliderRect.xMax - (_sliderWidth / 2) - (percentLabelText.GetWidthCached() / 2),
+                            sliderRect.yMax,
+                            percentLabelText.GetWidthCached(),
+                            25f);
+                        Widgets.Label(percentLabelRect, percentLabelText);
 
-                    var percentLabelText = Mathf.RoundToInt(pr._val2[workType] * 100f).ToString() + "%";
-                    var percentLabelRect = new Rect(
-                        sliderRect.xMax - (_sliderWidth / 2) - (percentLabelText.GetWidthCached() / 2),
-                        sliderRect.yMax,
-                        percentLabelText.GetWidthCached(),
-                        25f);
-                    Widgets.Label(percentLabelRect, percentLabelText);
-
-                    i += 1;
+                        i += 1;
+                    }
+                    catch(Exception e)
+                    {
+                        Log.Error($"Error {e.Message} for work type {workName}");
+                    }
                 }
                 row += 1;
                 _prioritiesEncounteredCached.Add(pr._val1);
@@ -191,7 +219,7 @@ namespace AutoPriorities
             }
         }
 
-        private void AddPriority()
+        private static void AddPriority()
         {
             var dict = new Dictionary<WorkTypeDef, float>();
             _priorityToWorkTypesAndPercentOfPawns.Add(new Tuple2<int, Dictionary<WorkTypeDef, float>>(0, dict));
@@ -200,13 +228,13 @@ namespace AutoPriorities
                 dict.Add(keyValue, 0f);
         }
 
-        private void RemovePriority()
+        private static void RemovePriority()
         {
             if(_priorityToWorkTypesAndPercentOfPawns.Count > 0)
                 _priorityToWorkTypesAndPercentOfPawns.RemoveLast();
         }
 
-        private float PercentOfColonistsAvailable(WorkTypeDef workType, int priorityIgnore)
+        private static float PercentOfColonistsAvailable(WorkTypeDef workType, int priorityIgnore)
         {
             float taken = 0;
             foreach(var tuple in _priorityToWorkTypesAndPercentOfPawns)
@@ -220,7 +248,7 @@ namespace AutoPriorities
             return 1f - taken;
         }
 
-        private void AssignPriorities()
+        private static void AssignPriorities()
         {
             var listOfPawnAndAmountOfJobsAssigned = new Dictionary<Pawn, int>(_allPlayerPawns.Count);
             foreach(var item in _allPlayerPawns)
@@ -328,7 +356,7 @@ namespace AutoPriorities
             }
         }
 
-        private void RebuildIfDirtySortedPawnSkillForEveryWork()
+        private static void RebuildIfDirtySortedPawnSkillForEveryWork()
         {
             if(_pawnsCountForDeterminingWhetherToRebuild == Find.CurrentMap.mapPawns.AllPawnsCount)
                 return;
