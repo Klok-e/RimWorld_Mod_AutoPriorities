@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoPriorities.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
@@ -26,15 +27,7 @@ namespace AutoPriorities.Core
             }
             catch(Exception e)
             {
-                Log.Error(e.Message);
-
-                do
-                {
-                    e = e.InnerException ?? null;
-                    if(e != null)
-                        Log.Error(e.Message);
-                }
-                while(e != null);
+                ExceptionUtil.LogAllInnerExceptions(e);
             }
         }
 

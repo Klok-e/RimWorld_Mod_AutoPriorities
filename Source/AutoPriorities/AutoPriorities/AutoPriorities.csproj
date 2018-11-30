@@ -62,6 +62,7 @@
     <Compile Include="HarmonyPatches\WorkTab_AddButtonToOpenAutoPrioritiesWindow.cs" />
     <Compile Include="Tuple2.cs" />
     <Compile Include="Utils\DrawUtil.cs" />
+    <Compile Include="Utils\ExceptionUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
