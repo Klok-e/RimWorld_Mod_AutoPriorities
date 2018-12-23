@@ -1,5 +1,6 @@
 # RimWorld_Mod_AutoPriorities
 Adds a window that allows to automatically set work priorities for specified percents of pawns
+Steam: https://steamcommunity.com/sharedfiles/filedetails/?id=1598406574
 
 This mod uses/includes the [Harmony library](https://github.com/pardeike/Harmony)
 
