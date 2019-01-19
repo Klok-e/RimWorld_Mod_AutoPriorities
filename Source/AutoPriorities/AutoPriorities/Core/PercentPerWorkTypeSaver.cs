@@ -12,10 +12,10 @@ namespace AutoPriorities.Core
         private const string _filename = "ModAutoPrioritiesSave.xml";
         private const string _filenameBackup = "ModAutoPrioritiesBackupSave.xml";
 
-        private static string _savePathFull;
-        private static string _saveBackupPathFull;
+        private static readonly string _savePathFull;
+        private static readonly string _saveBackupPathFull;
 
-        private static XmlSerializer _writer;
+        private static readonly XmlSerializer _writer;
 
         static PercentPerWorkTypeSaver()
         {

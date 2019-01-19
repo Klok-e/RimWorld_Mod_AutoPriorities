@@ -10,7 +10,7 @@ namespace AutoPriorities.Utils
             Log.Error(e.Message);
             do
             {
-                e = e.InnerException ?? null;
+                e = e?.InnerException;
                 if(e != null)
                     Log.Error(e.Message);
             }
