@@ -2,7 +2,9 @@
 <ModMetaData>
 	<name>AutoPriorities</name>
 	<author>LokiVKlokeNaAndoke</author>
-	<targetVersion>1.0</targetVersion>
+	<supportedVersions>
+        	<li>1.0</li>
+	</supportedVersions>
 	<description>
 Adds a window that allows to automatically set work priorities for specified percents of pawns
 
