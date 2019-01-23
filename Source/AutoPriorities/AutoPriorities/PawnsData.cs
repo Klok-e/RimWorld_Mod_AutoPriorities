@@ -14,7 +14,7 @@ namespace AutoPriorities
 
         public HashSet<WorkTypeDef> WorkTypesNotRequiringSkills { get; private set; }
 
-        public Dictionary<WorkTypeDef, List<Tuple2<Pawn, float>>> SortedPawnSkillForEveryWork { get; private set; }
+        public Dictionary<WorkTypeDef, List<Tuple2<Pawn, float>>> SortedPawnFitnessForEveryWork { get; private set; }
 
         public HashSet<Pawn> AllPlayerPawns { get; private set; }
 
@@ -23,7 +23,7 @@ namespace AutoPriorities
             AllPlayerPawns = new HashSet<Pawn>();
             WorkTypes = new HashSet<WorkTypeDef>();
             WorkTypesNotRequiringSkills = new HashSet<WorkTypeDef>();
-            SortedPawnSkillForEveryWork = new Dictionary<WorkTypeDef, List<Tuple2<Pawn, float>>>();
+            SortedPawnFitnessForEveryWork = new Dictionary<WorkTypeDef, List<Tuple2<Pawn, float>>>();
 
             PriorityToWorkTypesAndPercentOfPawns = new List<Tuple2<int, Dictionary<WorkTypeDef, float>>>();
 
@@ -91,7 +91,7 @@ namespace AutoPriorities
 
             // get all skills associated with the work types
             AllPlayerPawns.Clear();
-            SortedPawnSkillForEveryWork.Clear();
+            SortedPawnFitnessForEveryWork.Clear();
             foreach(var work in workTypes)
             {
                 foreach(var pawn in pawns)
@@ -102,24 +102,35 @@ namespace AutoPriorities
                     if(!AllPlayerPawns.Contains(pawn))
                         AllPlayerPawns.Add(pawn);
 
-                    float skill = 0;
+                    float fitness = 0;
                     try
                     {
-                        skill = pawn.skills.AverageOfRelevantSkillsFor(work);
+                        float skill = pawn.skills.AverageOfRelevantSkillsFor(work);
+                        float passion = 0f;
+                        switch(pawn.skills.MaxPassionOfRelevantSkillsFor(work))
+                        {
+                            case Passion.Minor:
+                                passion = 1f;
+                                break;
+                            case Passion.Major:
+                                passion = 2f;
+                                break;
+                        }
+                        fitness = skill + skill * passion * Controller.Settings._passionMult;
                     }
                     catch(Exception e)
                     {
                         Log.Message($"error: {e} for pawn {pawn.Name.ToStringFull}");
                     }
-                    if(SortedPawnSkillForEveryWork.ContainsKey(work))
+                    if(SortedPawnFitnessForEveryWork.ContainsKey(work))
                     {
-                        SortedPawnSkillForEveryWork[work].Add(new Tuple2<Pawn, float>(pawn, skill));
+                        SortedPawnFitnessForEveryWork[work].Add(new Tuple2<Pawn, float>(pawn, fitness));
                     }
                     else
                     {
-                        SortedPawnSkillForEveryWork.Add(work, new List<Tuple2<Pawn, float>>
+                        SortedPawnFitnessForEveryWork.Add(work, new List<Tuple2<Pawn, float>>
                         {
-                            new Tuple2<Pawn, float>(pawn, skill),
+                            new Tuple2<Pawn, float>(pawn, fitness),
                         });
                     }
 
@@ -132,7 +143,7 @@ namespace AutoPriorities
                 }
             }
 
-            foreach(var keyValue in SortedPawnSkillForEveryWork)
+            foreach(var keyValue in SortedPawnFitnessForEveryWork)
             {
                 keyValue.Value.Sort((x, y) => y._val2.CompareTo(x._val2));
             }

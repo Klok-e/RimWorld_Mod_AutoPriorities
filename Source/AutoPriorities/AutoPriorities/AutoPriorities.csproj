@@ -53,9 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoPriorities_Dialog.cs" />
+    <Compile Include="Core\Controller.cs" />
+    <Compile Include="Core\Settings.cs" />
     <Compile Include="Extensions\PawnExtensions.cs" />
     <Compile Include="Extensions\UsefulThings.cs" />
-    <Compile Include="Core\Mod.cs" />
     <Compile Include="Core\PercentPerWorkTypeSaver.cs" />
     <Compile Include="PawnsData.cs" />
     <Compile Include="PrioritiesAssigner.cs" />

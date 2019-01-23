@@ -10,17 +10,15 @@ namespace AutoPriorities.Core
     public static class PercentPerWorkTypeSaver
     {
         private const string _filename = "ModAutoPrioritiesSave.xml";
-        private const string _filenameBackup = "ModAutoPrioritiesBackupSave.xml";
 
         private static readonly string _savePathFull;
-        private static readonly string _saveBackupPathFull;
 
         private static readonly XmlSerializer _writer;
 
         static PercentPerWorkTypeSaver()
         {
             _savePathFull = UnityEngine.Application.persistentDataPath + _filename;
-            _saveBackupPathFull = UnityEngine.Application.persistentDataPath + _filenameBackup;
+
             try
             {
                 _writer = new XmlSerializer(typeof(State));

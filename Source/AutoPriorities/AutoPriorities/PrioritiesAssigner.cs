@@ -35,7 +35,7 @@ namespace AutoPriorities
 
                     FillListOfPriorityToPercentOfColonists(work, priorityToPercentOfColonists);
 
-                    var pawns = PawnsData.SortedPawnSkillForEveryWork[work];
+                    var pawns = PawnsData.SortedPawnFitnessForEveryWork[work];
                     float pawnsCount = pawns.Count;
 
                     PrioritiesEncounteredCached.Clear();

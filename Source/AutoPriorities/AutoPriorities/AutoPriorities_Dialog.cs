@@ -18,18 +18,20 @@ namespace AutoPriorities
 
         private const float _sliderWidth = 20f;
         private const float _sliderHeight = 60f;
-        private const float _sliderMargin = 50f;
+        private const float _sliderMargin = 60f;
 
         private const float _guiShadowedMult = 0.5f;
 
         private const float _slidersDistFromLeftBorder = 30f;
-        private const float _slidersDistFromRightBorder = 30f;
+        private const float _slidersDistFromRightBorder = 10f;
         private const float _distFromTopBorder = 80f;
         private const float _distFromBottomBorder = 50f;
 
         private const float _scrollSize = 30f;
 
         private const float _buttonHeight = 30f;
+
+        private const float _percentStringWidth = 60f;
 
         private Vector2 _scrollPos;
         private Rect _rect;
@@ -52,23 +54,22 @@ namespace AutoPriorities
         {
             base.PostClose();
             _rect = windowRect;
+            PawnsData.SaveState();
         }
 
         public override void PostOpen()
         {
             base.PostOpen();
+            PawnsData.Rebuild();
             if(_openedOnce)
-            {
-                PawnsData.Rebuild();
                 windowRect = _rect;
-            }
             else
                 _openedOnce = true;
         }
 
         public override void DoWindowContents(Rect windowRect)
         {
-            var worktypes = PawnsData.SortedPawnSkillForEveryWork.Count;
+            var worktypes = PawnsData.SortedPawnFitnessForEveryWork.Count;
 
             var scrollRect = new Rect(windowRect.xMin, windowRect.yMin, windowRect.width, windowRect.height - _distFromBottomBorder);
 
@@ -88,7 +89,12 @@ namespace AutoPriorities
                 if(PrioritiesEncounteredCached.Contains(pr._val1))
                     GUI.color = colOrig * _guiShadowedMult;
 
-                var slidersRect = new Rect(_slidersDistFromLeftBorder, (_sliderHeight + 3 * _buttonHeight) * row, tableSizeX + _slidersDistFromRightBorder, _sliderHeight + 3 * _buttonHeight);
+                var slidersRect = new Rect(
+                    _slidersDistFromLeftBorder,
+                    (_sliderHeight + 3 * _buttonHeight) * row,
+                    tableSizeX + _slidersDistFromRightBorder,
+                    _sliderHeight + 3 * _buttonHeight + 5f
+                    );
 
                 //draw bottom line
                 Widgets.DrawLine(new Vector2(slidersRect.xMin, slidersRect.yMax), new Vector2(slidersRect.xMax, slidersRect.yMax), new Color(0.7f, 0.7f, 0.7f), 1f);
@@ -105,30 +111,31 @@ namespace AutoPriorities
                     {
                         float elementXPos = slidersRect.xMin + _sliderMargin * (i + 1);
 
-                        var labelRect = new Rect(elementXPos - (workName.GetWidthCached() / 2), slidersRect.yMin + (i % 2 == 0 ? 0f : 30f), 100f, 30f);
+                        var labelRect = new Rect(elementXPos - (workName.GetWidthCached() / 2), slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f, 100f, 25f);
                         Widgets.Label(labelRect, workName);
 
                         var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, _sliderWidth, _sliderHeight);
                         var newSliderValue = GUI.VerticalSlider(sliderRect, pr._val2[workType], 1f, 0f);
                         var available = PawnsData.PercentOfColonistsAvailable(workType, pr._val1);
-                        if(available < newSliderValue)
-                            newSliderValue = available;
-                        pr._val2[workType] = newSliderValue;
+                        newSliderValue = Mathf.Min(available, newSliderValue);
 
-                        var percentLabelText = Mathf.RoundToInt(pr._val2[workType] * 100f).ToString() + "%";
-                        var percentLabelRect = new Rect(
-                            sliderRect.xMax - (_sliderWidth / 2) - (percentLabelText.GetWidthCached() / 2),
-                            sliderRect.yMax,
-                            percentLabelText.GetWidthCached(),
+                        var percentsText = Mathf.RoundToInt(newSliderValue * 100f).ToString();
+                        var percentsRect = new Rect(
+                            sliderRect.xMax - _percentStringWidth / 2,
+                            sliderRect.yMax + 3f,
+                            _percentStringWidth,
                             25f);
-                        Widgets.Label(percentLabelRect, percentLabelText);
 
-                        i += 1;
+                        Widgets.TextFieldPercent(percentsRect, ref newSliderValue, ref percentsText);
+                        newSliderValue = Mathf.Min(available, newSliderValue);
+
+                        pr._val2[workType] = newSliderValue;
                     }
                     catch(Exception e)
                     {
                         Log.Error($"Error {e.Message} for work type {workName}");
                     }
+                    i += 1;
                 }
                 row += 1;
                 PrioritiesEncounteredCached.Add(pr._val1);
@@ -137,7 +144,7 @@ namespace AutoPriorities
             }
             Widgets.EndScrollView();
 
-            var label = "Run AutoPriorities";
+            const string label = "Run AutoPriorities";
             var buttonRect = new Rect(
                 windowRect.xMin,
                 scrollRect.yMax + 9f,
