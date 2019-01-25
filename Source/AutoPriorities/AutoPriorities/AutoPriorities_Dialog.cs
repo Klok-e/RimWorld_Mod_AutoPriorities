@@ -60,7 +60,6 @@ namespace AutoPriorities
         public override void PostOpen()
         {
             base.PostOpen();
-            PawnsData.Rebuild();
             if(_openedOnce)
                 windowRect = _rect;
             else
@@ -152,6 +151,7 @@ namespace AutoPriorities
                 _buttonHeight);
             if(Widgets.ButtonText(buttonRect, label))
             {
+                PawnsData.Rebuild();
                 PrioritiesAssigner.AssignPriorities();
                 PawnsData.SaveState();
                 SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
