@@ -23,6 +23,11 @@ do
 done
 echo build complete.
 
+echo compressing the build to zip
+rm -f ./Build.zip
+zip -r ./Build.zip ./Build
+echo compressed the build to ./Build.zip
+
 if ! [[ -z "$RIMWORLD_DEPLOY_PATH" ]]
 then
     echo deploying to $RIMWORLD_DEPLOY_PATH
