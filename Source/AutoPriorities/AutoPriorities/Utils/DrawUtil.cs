@@ -31,7 +31,7 @@ namespace AutoPriorities.Utils
                     if(priority2 < 0)
                         priority2 = 4;
                     priority = priority2;
-                    SoundDefOf.AmountIncrement.PlayOneShotOnCamera(null);
+                    SoundDefOf.Click.PlayOneShotOnCamera(null);
                 }
                 if(Event.current.button == 1)
                 {
@@ -39,7 +39,7 @@ namespace AutoPriorities.Utils
                     if(priority2 > 4)
                         priority2 = 0;
                     priority = priority2;
-                    SoundDefOf.AmountDecrement.PlayOneShotOnCamera(null);
+                    SoundDefOf.Click.PlayOneShotOnCamera(null);
                 }
                 Event.current.Use();
             }

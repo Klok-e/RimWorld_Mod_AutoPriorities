@@ -1,74 +1,267 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2665FA17-D471-447B-A1C9-F5C43E3F048A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AutoPriorities</RootNamespace>
-    <AssemblyName>AutoPriorities</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>false</DebugSymbols>
-    <DebugType>none</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\..\Assemblies\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\..\Assemblies\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>7.2</LangVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="0Harmony, Version=1.2.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lib.Harmony.1.2.0.1\lib\net35\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\..\..\Programs\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\..\..\Programs\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AutoPriorities_Dialog.cs" />
-    <Compile Include="Core\Controller.cs" />
-    <Compile Include="Core\Settings.cs" />
-    <Compile Include="Extensions\PawnExtensions.cs" />
-    <Compile Include="Extensions\UsefulThings.cs" />
-    <Compile Include="Core\PercentPerWorkTypeSaver.cs" />
-    <Compile Include="PawnsData.cs" />
-    <Compile Include="PrioritiesAssigner.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Core\Resources.cs" />
-    <Compile Include="HarmonyPatches\WorkTab_AddButtonToOpenAutoPrioritiesWindow.cs" />
-    <Compile Include="Tuple2.cs" />
-    <Compile Include="Utils\DrawUtil.cs" />
-    <Compile Include="Utils\ExceptionUtil.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{F2A88E78-D16D-4771-8BAA-97A15D606A66}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>AutoPriorities</RootNamespace>
+        <AssemblyName>AutoPriorities</AssemblyName>
+        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>8</LangVersion>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>../../../1.1/Assemblies/</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>none</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>../../../1.1/Assemblies/</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="AutoPriorities_Dialog.cs" />
+        <Compile Include="Core\Controller.cs" />
+        <Compile Include="Core\PercentPerWorkTypeSaver.cs" />
+        <Compile Include="Core\Resources.cs" />
+        <Compile Include="Core\Settings.cs" />
+        <Compile Include="Extensions\PawnExtensions.cs" />
+        <Compile Include="Extensions\UsefulThings.cs" />
+        <Compile Include="HarmonyPatches\WorkTab_AddButtonToOpenAutoPrioritiesWindow.cs" />
+        <Compile Include="PawnsData.cs" />
+        <Compile Include="PrioritiesAssigner.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Tuple2.cs" />
+        <Compile Include="Utils\DrawUtil.cs" />
+        <Compile Include="Utils\ExceptionUtil.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="0Harmony, Version=2.0.0.7, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\packages\Lib.Harmony.2.0.0.7\lib\net472\0Harmony.dll</HintPath>
+        <Private>True</Private>
+      </Reference>
+      <Reference Include="Assembly-CSharp, Version=1.1.7363.30072, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\Assembly-CSharp.dll</HintPath><Private>False</Private>
+          <Private>False</Private>
+      </Reference>
+      <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\Assembly-CSharp-firstpass.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="System" />
+      <Reference Include="System.Runtime.InteropServices.RuntimeInformation" />
+      <Reference Include="System.Xml" />
+      <Reference Include="System.Xml.Linq" />
+      <Reference Include="System.Xml.Serialization" />
+      <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\Unity.TextMeshPro.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.AccessibilityModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.AccessibilityModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.AIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.AIModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.AndroidJNIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.AndroidJNIModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.AnimationModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.ARModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.ARModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.AssetBundleModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.AudioModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.ClothModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.ClothModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.ClusterInputModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.ClusterInputModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.ClusterRendererModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.ClusterRendererModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.CoreModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.CrashReportingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.CrashReportingModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.DirectorModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.DirectorModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.DSPGraphModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.DSPGraphModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.FileSystemHttpModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.FileSystemHttpModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.GameCenterModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.GameCenterModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.GridModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.GridModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.HotReloadModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.HotReloadModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.ImageConversionModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.IMGUIModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.InputLegacyModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.InputModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.InputModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.JSONSerializeModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.JSONSerializeModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.LocalizationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.LocalizationModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.ParticleSystemModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.PerformanceReportingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.PerformanceReportingModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.Physics2DModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.Physics2DModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.PhysicsModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.ProfilerModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.ProfilerModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.ScreenCaptureModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.ScreenCaptureModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.SharedInternalsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.SharedInternalsModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.SpriteMaskModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.SpriteMaskModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.SpriteShapeModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.SpriteShapeModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.StreamingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.StreamingModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.SubstanceModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.SubstanceModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.TerrainModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.TerrainModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.TerrainPhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.TerrainPhysicsModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.TextCoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.TextCoreModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.TextRenderingModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.TilemapModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.TilemapModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.TLSModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.TLSModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.UI.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.UIElementsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.UIElementsModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.UIModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.UmbraModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.UmbraModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.UNETModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.UNETModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.UnityAnalyticsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.UnityAnalyticsModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.UnityConnectModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.UnityConnectModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.UnityTestProtocolModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.UnityTestProtocolModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestAudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.UnityWebRequestAudioModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.UnityWebRequestModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestTextureModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.UnityWebRequestTextureModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.UnityWebRequestWWWModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.VehiclesModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.VehiclesModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.VFXModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.VFXModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.VideoModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.VideoModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.VRModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.VRModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.WindModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.WindModule.dll</HintPath><Private>False</Private>
+      </Reference>
+      <Reference Include="UnityEngine.XRModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\RimManaged\UnityEngine.XRModule.dll</HintPath><Private>False</Private>
+      </Reference>
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="packages.config" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+             Other similar extension points exist, see Microsoft.Common.targets.
+        <Target Name="BeforeBuild">
+        </Target>
+        <Target Name="AfterBuild">
+        </Target>
+        -->
 </Project>

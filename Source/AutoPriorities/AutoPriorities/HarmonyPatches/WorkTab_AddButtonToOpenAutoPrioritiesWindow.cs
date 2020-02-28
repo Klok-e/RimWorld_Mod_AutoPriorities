@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 
@@ -20,9 +20,9 @@ namespace AutoPriorities.HarmonyPatches
 
             var col = Color.white;
 
-            if(Verse.Widgets.ButtonImage(button, Core.Resources._autoPrioritiesButtonIcon, col, col * 0.9f))
+            if (Verse.Widgets.ButtonImage(button, Core.Resources._autoPrioritiesButtonIcon, col, col * 0.9f))
             {
-                if(!_window.IsOpen)
+                if (!_window.IsOpen)
                 {
                     Verse.Find.WindowStack.Add(_window);
                 }

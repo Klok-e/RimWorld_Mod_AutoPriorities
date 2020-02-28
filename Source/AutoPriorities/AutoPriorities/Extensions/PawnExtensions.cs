@@ -6,7 +6,7 @@ namespace AutoPriorities.Extensions
     {
         public static bool IsCapableOfWholeWorkType(this Pawn pawn, WorkTypeDef workType)
         {
-            return !pawn.story.WorkTypeIsDisabled(workType);
+            return !pawn.story.DisabledWorkTagsBackstoryAndTraits.HasFlag(workType.workTags);
         }
     }
 }

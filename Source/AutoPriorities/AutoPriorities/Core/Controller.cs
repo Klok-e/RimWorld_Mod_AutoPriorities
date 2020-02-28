@@ -1,4 +1,4 @@
-using Harmony;
+using HarmonyLib;
 using System.Reflection;
 using UnityEngine;
 using Verse;
@@ -14,9 +14,9 @@ namespace AutoPriorities.Core
         public Controller(ModContentPack content) : base(content)
         {
 #if DEBUG
-            HarmonyInstance.DEBUG = true;
+            Harmony.DEBUG = true;
 #endif
-            var harmony = HarmonyInstance.Create("auto_priorities");
+            var harmony = new Harmony("auto_priorities");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
 
             Settings = GetSettings<Settings>();

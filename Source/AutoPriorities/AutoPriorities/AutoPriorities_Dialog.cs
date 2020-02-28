@@ -154,7 +154,7 @@ namespace AutoPriorities
                 PawnsData.Rebuild();
                 PrioritiesAssigner.AssignPriorities();
                 PawnsData.SaveState();
-                SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
+                SoundDefOf.Click.PlayOneShotOnCamera();
             }
 
             var removePriorityButtonRect = new Rect(
@@ -165,7 +165,7 @@ namespace AutoPriorities
             if(Widgets.ButtonImage(removePriorityButtonRect, Core.Resources._minusIcon))
             {
                 RemovePriority();
-                SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
+                SoundDefOf.Click.PlayOneShotOnCamera();
             }
 
             var addPriorityButtonRect = new Rect(
@@ -176,7 +176,7 @@ namespace AutoPriorities
             if(Widgets.ButtonImage(addPriorityButtonRect, Core.Resources._plusIcon))
             {
                 AddPriority();
-                SoundDefOf.AmountIncrement.PlayOneShotOnCamera();
+                SoundDefOf.Click.PlayOneShotOnCamera();
             }
         }
 

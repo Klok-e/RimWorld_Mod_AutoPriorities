@@ -1,9 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2046
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoPriorities", "AutoPriorities\AutoPriorities.csproj", "{2665FA17-D471-447B-A1C9-F5C43E3F048A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoPriorities", "AutoPriorities\AutoPriorities.csproj", "{F2A88E78-D16D-4771-8BAA-97A15D606A66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +8,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2665FA17-D471-447B-A1C9-F5C43E3F048A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2665FA17-D471-447B-A1C9-F5C43E3F048A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2665FA17-D471-447B-A1C9-F5C43E3F048A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2665FA17-D471-447B-A1C9-F5C43E3F048A}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {14DA2410-E712-4346-9505-332FC5809BD8}
+		{F2A88E78-D16D-4771-8BAA-97A15D606A66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2A88E78-D16D-4771-8BAA-97A15D606A66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2A88E78-D16D-4771-8BAA-97A15D606A66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2A88E78-D16D-4771-8BAA-97A15D606A66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
