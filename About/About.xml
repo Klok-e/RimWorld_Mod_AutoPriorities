@@ -2,8 +2,10 @@
 <ModMetaData>
 	<name>AutoPriorities</name>
 	<author>LokiVKlokeNaAndoke</author>
+	<packageId>LokiVKlokeNaAndoke.AutoPriorities</packageId>
 	<supportedVersions>
         	<li>1.0</li>
+			<li>1.1</li>
 	</supportedVersions>
 	<description>
 Adds a window that allows to automatically set work priorities for specified percents of pawns
@@ -17,5 +19,5 @@ NOTE:
 3. It is safe to add/remove to/from existing saves
 
 github: https://github.com/LokiVKlokeNaAndoke/RimWorld_Mod_AutoPriorities
-</description>
+	</description>
 </ModMetaData>
