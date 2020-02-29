@@ -1,6 +1,17 @@
 RIMWORLD_ASSEMBLIES_DIR=~/.steam/steam/steamapps/common/RimWorld/RimWorldLinux_Data/Managed
 RIMWORLD_DEPLOY_PATH=~/.steam/steam/steamapps/common/RimWorld/Mods
 
+if [ "$1" = "Release" ]
+then
+    BUILD_CONFIGURATION=Release
+elif [ "$1" = "Debug" ]
+then
+    BUILD_CONFIGURATION=Debug
+else
+    BUILD_CONFIGURATION=Release
+fi
+echo selected $BUILD_CONFIGURATION configuration
+
 echo removing old Rimworld assemblies...
 rm -r -f ./Source/RimManaged
 
@@ -11,7 +22,7 @@ echo removing old build...
 rm -r -f ./1.1/Assemblies/
 echo compiling...
 cd ./Source/AutoPriorities/AutoPriorities/
-msbuild AutoPriorities.csproj -p:Configuration=Release
+msbuild AutoPriorities.csproj -p:Configuration=$BUILD_CONFIGURATION
 cd ../../../
 
 rm -r -f ./Build
