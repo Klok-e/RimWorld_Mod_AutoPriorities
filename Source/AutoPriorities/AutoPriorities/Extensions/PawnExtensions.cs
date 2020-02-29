@@ -1,4 +1,5 @@
-﻿using Verse;
+﻿using UnityEngine;
+using Verse;
 
 namespace AutoPriorities.Extensions
 {
@@ -6,7 +7,11 @@ namespace AutoPriorities.Extensions
     {
         public static bool IsCapableOfWholeWorkType(this Pawn pawn, WorkTypeDef workType)
         {
-            return !pawn.story.DisabledWorkTagsBackstoryAndTraits.HasFlag(workType.workTags);
+            var capable = (pawn.story.DisabledWorkTagsBackstoryAndTraits & workType.workTags) == 0;
+#if DEBUG
+            //Log.Message($"{pawn.NameFullColored} is {(capable ? "" : "not")} capable of {workType.defName}");
+#endif
+            return capable;
         }
     }
 }
