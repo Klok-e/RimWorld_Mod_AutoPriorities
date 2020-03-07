@@ -1,5 +1,8 @@
-﻿namespace AutoPriorities
+﻿using System;
+
+namespace AutoPriorities
 {
+    [Obsolete]
     public class Tuple2<T1, T2>
     {
         public T1 _val1;

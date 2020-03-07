@@ -11,10 +11,10 @@ namespace AutoPriorities.Utils
             do
             {
                 e = e?.InnerException;
-                if(e != null)
+                if (e != null)
                     Log.Error(e.Message);
             }
-            while(e != null);
+            while (e != null);
         }
     }
 }

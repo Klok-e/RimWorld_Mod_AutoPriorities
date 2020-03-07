@@ -12,7 +12,7 @@ namespace AutoPriorities.Utils
             Rect rect = new Rect(x, y, 25f, 25f);
             DrawWorkBoxBackground(rect);
 
-            if(priority > 0)
+            if (priority > 0)
             {
                 Text.Anchor = TextAnchor.MiddleCenter;
                 var colorOrig = GUI.color;
@@ -21,22 +21,22 @@ namespace AutoPriorities.Utils
                 GUI.color = colorOrig;
                 Text.Anchor = TextAnchor.UpperLeft;
             }
-            if(Event.current.type == EventType.MouseDown && Mouse.IsOver(rect))
+            if (Event.current.type == EventType.MouseDown && Mouse.IsOver(rect))
             {
                 int priorityOrig = priority;
                 bool flag = priority > 0;
-                if(Event.current.button == 0)
+                if (Event.current.button == 0)
                 {
                     int priority2 = priorityOrig - 1;
-                    if(priority2 < 0)
+                    if (priority2 < 0)
                         priority2 = 4;
                     priority = priority2;
                     SoundDefOf.Click.PlayOneShotOnCamera(null);
                 }
-                if(Event.current.button == 1)
+                if (Event.current.button == 1)
                 {
                     int priority2 = priorityOrig + 1;
-                    if(priority2 > 4)
+                    if (priority2 > 4)
                         priority2 = 0;
                     priority = priority2;
                     SoundDefOf.Click.PlayOneShotOnCamera(null);
@@ -48,7 +48,7 @@ namespace AutoPriorities.Utils
 
         private static Color ColorOfPriority(int prio)
         {
-            switch(prio)
+            switch (prio)
             {
                 case 1:
                     return new Color(0.0f, 1f, 0.0f);

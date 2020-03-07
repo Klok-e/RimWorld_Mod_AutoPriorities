@@ -47,7 +47,7 @@ namespace AutoPriorities
             _openedOnce = false;
 
             PawnsData = new PawnsData();
-            PrioritiesAssigner = new PrioritiesAssigner(PawnsData);
+            PrioritiesAssigner = new PrioritiesAssigner();
         }
 
         public override void PostClose()
@@ -60,7 +60,7 @@ namespace AutoPriorities
         public override void PostOpen()
         {
             base.PostOpen();
-            if(_openedOnce)
+            if (_openedOnce)
                 windowRect = _rect;
             else
                 _openedOnce = true;
@@ -70,22 +70,25 @@ namespace AutoPriorities
         {
             var worktypes = PawnsData.SortedPawnFitnessForEveryWork.Count;
 
-            var scrollRect = new Rect(windowRect.xMin, windowRect.yMin, windowRect.width, windowRect.height - _distFromBottomBorder);
+            var scrollRect = new Rect(windowRect.xMin, windowRect.yMin, windowRect.width,
+                windowRect.height - _distFromBottomBorder);
 
             var tableSizeX = (worktypes + 1) * _sliderMargin + _slidersDistFromLeftBorder + _slidersDistFromRightBorder;
             var scrollWidth = tableSizeX > windowRect.width ? tableSizeX : windowRect.width;
 
-            var tableSizeY = (_sliderHeight + 3 * _buttonHeight) * PawnsData.PriorityToWorkTypesAndPercentOfPawns.Count;
+            var tableSizeY = (_sliderHeight + 3 * _buttonHeight) * PawnsData.WorkTables.Count;
             var scrollHeight = tableSizeY > scrollRect.height ? tableSizeY : windowRect.height;
             Widgets.BeginScrollView(scrollRect, ref _scrollPos, new Rect(0, 0, scrollWidth, scrollHeight));
 
             PrioritiesEncounteredCached.Clear();
             int row = 0;
-            foreach(var pr in PawnsData.PriorityToWorkTypesAndPercentOfPawns)
+            var workTables = PawnsData.WorkTables;
+            for (var table = 0; table < workTables.Count; table++)
             {
+                var pr = PawnsData.WorkTables[table];
                 var colOrig = GUI.color;
                 //shadow repeating priorities
-                if(PrioritiesEncounteredCached.Contains(pr._val1))
+                if (PrioritiesEncounteredCached.Contains(pr.priority))
                     GUI.color = colOrig * _guiShadowedMult;
 
                 var slidersRect = new Rect(
@@ -93,29 +96,34 @@ namespace AutoPriorities
                     (_sliderHeight + 3 * _buttonHeight) * row,
                     tableSizeX + _slidersDistFromRightBorder,
                     _sliderHeight + 3 * _buttonHeight + 5f
-                    );
+                );
 
                 //draw bottom line
-                Widgets.DrawLine(new Vector2(slidersRect.xMin, slidersRect.yMax), new Vector2(slidersRect.xMax, slidersRect.yMax), new Color(0.7f, 0.7f, 0.7f), 1f);
+                Widgets.DrawLine(new Vector2(slidersRect.xMin, slidersRect.yMax),
+                    new Vector2(slidersRect.xMax, slidersRect.yMax), new Color(0.7f, 0.7f, 0.7f), 1f);
 
-                var priorityButtonRect = new Rect(slidersRect.xMin, slidersRect.yMin + (slidersRect.height / 2f), _buttonHeight, _buttonHeight);
+                var priorityButtonRect = new Rect(slidersRect.xMin, slidersRect.yMin + (slidersRect.height / 2f),
+                    _buttonHeight, _buttonHeight);
 
-                pr._val1 = DrawUtil.PriorityBox(slidersRect.xMin, slidersRect.yMin + (slidersRect.height / 2f), pr._val1);
+                pr.priority = DrawUtil.PriorityBox(slidersRect.xMin, slidersRect.yMin + (slidersRect.height / 2f),
+                    pr.priority);
+                PawnsData.WorkTables[table] = pr;
 
                 int i = 0;
-                foreach(var workType in PawnsData.WorkTypes)
+                foreach (var workType in PawnsData.WorkTypes)
                 {
                     var workName = workType.labelShort;
                     try
                     {
                         float elementXPos = slidersRect.xMin + _sliderMargin * (i + 1);
 
-                        var labelRect = new Rect(elementXPos - (workName.GetWidthCached() / 2), slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f, 100f, 25f);
+                        var labelRect = new Rect(elementXPos - (workName.GetWidthCached() / 2),
+                            slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f, 100f, 25f);
                         Widgets.Label(labelRect, workName);
 
                         var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, _sliderWidth, _sliderHeight);
-                        var newSliderValue = GUI.VerticalSlider(sliderRect, pr._val2[workType], 1f, 0f);
-                        var available = PawnsData.PercentOfColonistsAvailable(workType, pr._val1);
+                        var newSliderValue = GUI.VerticalSlider(sliderRect, pr.workTypes[workType], 1f, 0f);
+                        var available = PawnsData.PercentOfColonistsAvailable(workType, pr.priority);
                         newSliderValue = Mathf.Min(available, newSliderValue);
 
                         var percentsText = Mathf.RoundToInt(newSliderValue * 100f).ToString();
@@ -128,19 +136,22 @@ namespace AutoPriorities
                         Widgets.TextFieldPercent(percentsRect, ref newSliderValue, ref percentsText);
                         newSliderValue = Mathf.Min(available, newSliderValue);
 
-                        pr._val2[workType] = newSliderValue;
+                        pr.workTypes[workType] = newSliderValue;
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         Log.Error($"Error {e.Message} for work type {workName}");
                     }
+
                     i += 1;
                 }
+
                 row += 1;
-                PrioritiesEncounteredCached.Add(pr._val1);
+                PrioritiesEncounteredCached.Add(pr.priority);
                 //return to normal
                 GUI.color = colOrig;
             }
+
             Widgets.EndScrollView();
 
             const string label = "Run AutoPriorities";
@@ -149,10 +160,10 @@ namespace AutoPriorities
                 scrollRect.yMax + 9f,
                 label.GetWidthCached() + 10f,
                 _buttonHeight);
-            if(Widgets.ButtonText(buttonRect, label))
+            if (Widgets.ButtonText(buttonRect, label))
             {
                 PawnsData.Rebuild();
-                PrioritiesAssigner.AssignPriorities();
+                PrioritiesAssigner.AssignPriorities(PawnsData);
                 PawnsData.SaveState();
                 SoundDefOf.Click.PlayOneShotOnCamera();
             }
@@ -162,7 +173,7 @@ namespace AutoPriorities
                 scrollRect.yMax + 9f,
                 _buttonHeight,
                 _buttonHeight);
-            if(Widgets.ButtonImage(removePriorityButtonRect, Core.Resources._minusIcon))
+            if (Widgets.ButtonImage(removePriorityButtonRect, Core.Resources._minusIcon))
             {
                 RemovePriority();
                 SoundDefOf.Click.PlayOneShotOnCamera();
@@ -173,7 +184,7 @@ namespace AutoPriorities
                 scrollRect.yMax + 9f,
                 _buttonHeight,
                 _buttonHeight);
-            if(Widgets.ButtonImage(addPriorityButtonRect, Core.Resources._plusIcon))
+            if (Widgets.ButtonImage(addPriorityButtonRect, Core.Resources._plusIcon))
             {
                 AddPriority();
                 SoundDefOf.Click.PlayOneShotOnCamera();
@@ -183,16 +194,17 @@ namespace AutoPriorities
         private void AddPriority()
         {
             var dict = new Dictionary<WorkTypeDef, float>();
-            PawnsData.PriorityToWorkTypesAndPercentOfPawns.Add(new Tuple2<int, Dictionary<WorkTypeDef, float>>(0, dict));
+            PawnsData.WorkTables.Add(
+                (0, dict));
 
-            foreach(var keyValue in PawnsData.WorkTypes)
+            foreach (var keyValue in PawnsData.WorkTypes)
                 dict.Add(keyValue, 0f);
         }
 
         private void RemovePriority()
         {
-            if(PawnsData.PriorityToWorkTypesAndPercentOfPawns.Count > 0)
-                PawnsData.PriorityToWorkTypesAndPercentOfPawns.RemoveLast();
+            if (PawnsData.WorkTables.Count > 0)
+                PawnsData.WorkTables.RemoveLast();
         }
     }
 }

@@ -7,9 +7,9 @@ namespace AutoPriorities.Extensions
         public static IEnumerable<T> NonRepeating<T>(this IEnumerable<T> enumer, IEqualityComparer<T> comparer)
         {
             var hashSet = new HashSet<T>(comparer);
-            foreach(var item in enumer)
+            foreach (var item in enumer)
             {
-                if(!hashSet.Contains(item))
+                if (!hashSet.Contains(item))
                 {
                     yield return item;
                 }
