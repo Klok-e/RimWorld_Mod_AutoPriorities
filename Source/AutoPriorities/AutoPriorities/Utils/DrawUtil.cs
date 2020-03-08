@@ -48,19 +48,7 @@ namespace AutoPriorities.Utils
 
         private static Color ColorOfPriority(int prio)
         {
-            switch (prio)
-            {
-                case 1:
-                    return new Color(0.0f, 1f, 0.0f);
-                case 2:
-                    return new Color(1f, 0.9f, 0.5f);
-                case 3:
-                    return new Color(0.8f, 0.7f, 0.5f);
-                case 4:
-                    return new Color(0.74f, 0.74f, 0.74f);
-                default:
-                    return Color.grey;
-            }
+            return WidgetsWork.ColorOfPriority(prio);
         }
 
         private static void DrawWorkBoxBackground(Rect rect)
@@ -70,9 +58,9 @@ namespace AutoPriorities.Utils
             float a = 3f / 4f;
 
             var colorOrig = GUI.color;
-            GUI.DrawTexture(rect, (Texture)texture2D1);
+            GUI.DrawTexture(rect, texture2D1);
             GUI.color = new Color(GUI.color.r, GUI.color.g, GUI.color.b, a);
-            GUI.DrawTexture(rect, (Texture)texture2D2);
+            GUI.DrawTexture(rect, texture2D2);
             GUI.color = colorOrig;
         }
     }
