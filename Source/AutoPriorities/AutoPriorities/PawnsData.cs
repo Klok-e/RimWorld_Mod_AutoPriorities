@@ -8,74 +8,74 @@ namespace AutoPriorities
 {
     internal class PawnsData
     {
-        public List<Tuple2<int, Dictionary<WorkTypeDef, float>>> PriorityToWorkTypesAndPercentOfPawns { get; private set; }
+        public List<(int priority, Dictionary<WorkTypeDef, float> workTypes)> WorkTables { get; }
 
-        public HashSet<WorkTypeDef> WorkTypes { get; private set; }
+        public HashSet<WorkTypeDef> WorkTypes { get; }
 
-        public HashSet<WorkTypeDef> WorkTypesNotRequiringSkills { get; private set; }
+        public HashSet<WorkTypeDef> WorkTypesNotRequiringSkills { get; }
 
-        public Dictionary<WorkTypeDef, List<Tuple2<Pawn, float>>> SortedPawnFitnessForEveryWork { get; private set; }
+        public Dictionary<WorkTypeDef, List<(Pawn pawn, float fitness)>> SortedPawnFitnessForEveryWork { get; }
 
-        public HashSet<Pawn> AllPlayerPawns { get; private set; }
+        public HashSet<Pawn> AllPlayerPawns { get; }
 
         public PawnsData()
         {
             AllPlayerPawns = new HashSet<Pawn>();
             WorkTypes = new HashSet<WorkTypeDef>();
             WorkTypesNotRequiringSkills = new HashSet<WorkTypeDef>();
-            SortedPawnFitnessForEveryWork = new Dictionary<WorkTypeDef, List<Tuple2<Pawn, float>>>();
+            SortedPawnFitnessForEveryWork = new Dictionary<WorkTypeDef, List<(Pawn, float)>>();
 
-            PriorityToWorkTypesAndPercentOfPawns = new List<Tuple2<int, Dictionary<WorkTypeDef, float>>>();
-
-            LoadSavedState();
+            WorkTables = LoadSavedState() ?? new List<(int, Dictionary<WorkTypeDef, float>)>();
         }
 
-        private void LoadSavedState()
+        private List<(int, Dictionary<WorkTypeDef, float>)>? LoadSavedState()
         {
             Rebuild();
+            List<(int priority, Dictionary<WorkTypeDef, float> workTypes)> workTables = null;
             try
             {
-                PriorityToWorkTypesAndPercentOfPawns = PercentPerWorkTypeSaver.LoadState();
+                workTables = PercentPerWorkTypeSaver.LoadState();
 
                 //check whether state is correct
                 bool correct = true;
-                foreach(var keyVal in PriorityToWorkTypesAndPercentOfPawns)
+                foreach (var keyVal in workTables)
                 {
-                    foreach(var work in WorkTypes)
+                    foreach (var work in WorkTypes)
                     {
-                        if(!keyVal._val2.ContainsKey(work))
+                        if (!keyVal.workTypes.ContainsKey(work))
                         {
-                            Log.Message($"AutoPriorities: {work.labelShort} has been found but was not present in a save file");
+                            Log.Message(
+                                $"AutoPriorities: {work.labelShort} has been found but was not present in a save file");
                             correct = false;
                             goto outOfCycles;
                         }
                     }
                 }
+
                 outOfCycles:
-                if(!correct)
+                if (!correct)
                 {
-                    PriorityToWorkTypesAndPercentOfPawns = new List<Tuple2<int, Dictionary<WorkTypeDef, float>>>();
                     Log.Message("AutoPriorities: Priorities have been reset.");
                 }
             }
-            catch(System.IO.FileNotFoundException)
+            catch (System.IO.FileNotFoundException)
             {
-                PriorityToWorkTypesAndPercentOfPawns = new List<Tuple2<int, Dictionary<WorkTypeDef, float>>>();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.Error(e.Message);
-                PriorityToWorkTypesAndPercentOfPawns = new List<Tuple2<int, Dictionary<WorkTypeDef, float>>>();
             }
+
+            return workTables;
         }
 
         public void SaveState()
         {
             try
             {
-                PercentPerWorkTypeSaver.SaveState(PriorityToWorkTypesAndPercentOfPawns);
+                PercentPerWorkTypeSaver.SaveState(WorkTables);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.Error(e.Message);
             }
@@ -92,14 +92,14 @@ namespace AutoPriorities
             // get all skills associated with the work types
             AllPlayerPawns.Clear();
             SortedPawnFitnessForEveryWork.Clear();
-            foreach(var work in workTypes)
+            foreach (var work in workTypes)
             {
-                foreach(var pawn in pawns)
+                foreach (var pawn in pawns)
                 {
-                    if(pawn.AnimalOrWildMan())
+                    if (pawn.AnimalOrWildMan())
                         continue;
 
-                    if(!AllPlayerPawns.Contains(pawn))
+                    if (!AllPlayerPawns.Contains(pawn))
                         AllPlayerPawns.Add(pawn);
 
                     float fitness = 0;
@@ -107,7 +107,7 @@ namespace AutoPriorities
                     {
                         float skill = pawn.skills.AverageOfRelevantSkillsFor(work);
                         float passion = 0f;
-                        switch(pawn.skills.MaxPassionOfRelevantSkillsFor(work))
+                        switch (pawn.skills.MaxPassionOfRelevantSkillsFor(work))
                         {
                             case Passion.Minor:
                                 passion = 1f;
@@ -116,50 +116,54 @@ namespace AutoPriorities
                                 passion = 2f;
                                 break;
                         }
-                        fitness = skill + skill * passion * Controller.Settings._passionMult;
+
+                        fitness = skill + skill * passion * Controller.PassionMult;
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         Log.Message($"error: {e} for pawn {pawn.Name.ToStringFull}");
                     }
-                    if(SortedPawnFitnessForEveryWork.ContainsKey(work))
+
+                    if (SortedPawnFitnessForEveryWork.ContainsKey(work))
                     {
-                        SortedPawnFitnessForEveryWork[work].Add(new Tuple2<Pawn, float>(pawn, fitness));
+                        SortedPawnFitnessForEveryWork[work].Add((pawn, fitness));
                     }
                     else
                     {
-                        SortedPawnFitnessForEveryWork.Add(work, new List<Tuple2<Pawn, float>>
+                        SortedPawnFitnessForEveryWork.Add(work, new List<(Pawn, float)>
                         {
-                            new Tuple2<Pawn, float>(pawn, fitness),
+                            (pawn, fitness)
                         });
                     }
-
                 }
-                if(!WorkTypes.Contains(work))
+
+                if (!WorkTypes.Contains(work))
                 {
                     WorkTypes.Add(work);
-                    if(work.relevantSkills.Count == 0)
+                    if (work.relevantSkills.Count == 0)
                         WorkTypesNotRequiringSkills.Add(work);
                 }
             }
 
-            foreach(var keyValue in SortedPawnFitnessForEveryWork)
+            foreach (var keyValue in SortedPawnFitnessForEveryWork)
             {
-                keyValue.Value.Sort((x, y) => y._val2.CompareTo(x._val2));
+                keyValue.Value.Sort((x, y) => y.fitness.CompareTo(x.fitness));
             }
         }
 
         public float PercentOfColonistsAvailable(WorkTypeDef workType, int priorityIgnore)
         {
             float taken = 0;
-            foreach(var tuple in PriorityToWorkTypesAndPercentOfPawns)
+            foreach (var tuple in WorkTables)
             {
-                if(tuple._val1 == priorityIgnore)
+                if (tuple.priority == priorityIgnore)
                     continue;
-                taken += tuple._val2[workType];
-                if(taken > 1f)
-                    Log.Error($"Percent of colonists assigned to work type {workType.defName} is greater than 1: {taken}");
+                taken += tuple.workTypes[workType];
+                if (taken > 1f)
+                    Log.Error(
+                        $"Percent of colonists assigned to work type {workType.defName} is greater than 1: {taken}");
             }
+
             return 1f - taken;
         }
     }

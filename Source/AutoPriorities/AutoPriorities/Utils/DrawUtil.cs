@@ -7,12 +7,14 @@ namespace AutoPriorities.Utils
 {
     internal static class DrawUtil
     {
+        public static int MaxPriority { get; set; } = 4;
+
         public static int PriorityBox(float x, float y, int priority)
         {
             Rect rect = new Rect(x, y, 25f, 25f);
             DrawWorkBoxBackground(rect);
 
-            if(priority > 0)
+            if (priority > 0)
             {
                 Text.Anchor = TextAnchor.MiddleCenter;
                 var colorOrig = GUI.color;
@@ -21,46 +23,41 @@ namespace AutoPriorities.Utils
                 GUI.color = colorOrig;
                 Text.Anchor = TextAnchor.UpperLeft;
             }
-            if(Event.current.type == EventType.MouseDown && Mouse.IsOver(rect))
+
+            if (Event.current.type != EventType.MouseDown || !Mouse.IsOver(rect))
+                return priority;
+
+            var priorityOrig = priority;
+            switch (Event.current.button)
             {
-                int priorityOrig = priority;
-                bool flag = priority > 0;
-                if(Event.current.button == 0)
+                case 0:
                 {
-                    int priority2 = priorityOrig - 1;
-                    if(priority2 < 0)
-                        priority2 = 4;
+                    var priority2 = priorityOrig - 1;
+                    if (priority2 < 0)
+                        priority2 = MaxPriority;
                     priority = priority2;
-                    SoundDefOf.Click.PlayOneShotOnCamera(null);
+                    SoundDefOf.Click.PlayOneShotOnCamera();
+                    break;
                 }
-                if(Event.current.button == 1)
+                case 1:
                 {
-                    int priority2 = priorityOrig + 1;
-                    if(priority2 > 4)
+                    var priority2 = priorityOrig + 1;
+                    if (priority2 > MaxPriority)
                         priority2 = 0;
                     priority = priority2;
-                    SoundDefOf.Click.PlayOneShotOnCamera(null);
+                    SoundDefOf.Click.PlayOneShotOnCamera();
+                    break;
                 }
-                Event.current.Use();
             }
+
+            Event.current.Use();
+
             return priority;
         }
 
-        private static Color ColorOfPriority(int prio)
+        private static Color ColorOfPriority(int priority)
         {
-            switch(prio)
-            {
-                case 1:
-                    return new Color(0.0f, 1f, 0.0f);
-                case 2:
-                    return new Color(1f, 0.9f, 0.5f);
-                case 3:
-                    return new Color(0.8f, 0.7f, 0.5f);
-                case 4:
-                    return new Color(0.74f, 0.74f, 0.74f);
-                default:
-                    return Color.grey;
-            }
+            return WidgetsWork.ColorOfPriority(priority);
         }
 
         private static void DrawWorkBoxBackground(Rect rect)
@@ -70,9 +67,9 @@ namespace AutoPriorities.Utils
             float a = 3f / 4f;
 
             var colorOrig = GUI.color;
-            GUI.DrawTexture(rect, (Texture)texture2D1);
+            GUI.DrawTexture(rect, texture2D1);
             GUI.color = new Color(GUI.color.r, GUI.color.g, GUI.color.b, a);
-            GUI.DrawTexture(rect, (Texture)texture2D2);
+            GUI.DrawTexture(rect, texture2D2);
             GUI.color = colorOrig;
         }
     }
