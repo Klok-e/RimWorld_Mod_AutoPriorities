@@ -45,7 +45,6 @@
         <Compile Include="PawnsData.cs" />
         <Compile Include="PrioritiesAssigner.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Tuple2.cs" />
         <Compile Include="Utils\DrawUtil.cs" />
         <Compile Include="Utils\ExceptionUtil.cs" />
     </ItemGroup>
