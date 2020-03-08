@@ -1,52 +1,27 @@
 using HarmonyLib;
 using System.Reflection;
+using HugsLib;
+using HugsLib.Settings;
 using UnityEngine;
 using Verse;
 
 namespace AutoPriorities.Core
 {
-    public class Controller : Mod
+    public class Controller : ModBase
     {
-        private string _buffer;
-
-        public static Settings Settings { get; private set; }
-
-        public Controller(ModContentPack content) : base(content)
+        public override void Initialize()
         {
-#if DEBUG
-            Harmony.DEBUG = true;
-#endif
-            var harmony = new Harmony("auto_priorities");
-            harmony.PatchAll(Assembly.GetExecutingAssembly());
-
-            Settings = GetSettings<Settings>();
-            _buffer = Settings._passionMult.ToString();
+            base.Initialize();
+            HarmonyInst.PatchAll(Assembly.GetExecutingAssembly());
         }
 
-        public override string SettingsCategory()
+        public static SettingHandle<float> PassionMult { get; private set; }
+
+        public override void DefsLoaded()
         {
-            return "AutoPriorities";
-        }
-
-        public override void DoSettingsWindowContents(Rect inRect)
-        {
-            base.DoSettingsWindowContents(inRect);
-
-            const string category = "Passion multiplier";
-
-            var labelRect = new Rect(
-                inRect.min,
-                new Vector2(category.GetWidthCached(), 25f)
-                );
-            Widgets.Label(labelRect, category);
-
-            var fieldRect = new Rect(
-                labelRect.xMax + 5f,
-                labelRect.yMin,
-                50f,
-                25f
-                );
-            Widgets.TextFieldNumeric(fieldRect, ref Settings._passionMult, ref _buffer);
+            base.DefsLoaded();
+            PassionMult = Settings.GetHandle("passionMult", "Passion multiplier",
+                "Determines the importance of passions whe assigning priorities", 1f);
         }
     }
 }

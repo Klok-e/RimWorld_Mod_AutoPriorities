@@ -117,7 +117,7 @@ namespace AutoPriorities
                                 break;
                         }
 
-                        fitness = skill + skill * passion * Controller.Settings._passionMult;
+                        fitness = skill + skill * passion * Controller.PassionMult;
                     }
                     catch (Exception e)
                     {
