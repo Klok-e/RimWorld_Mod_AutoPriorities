@@ -7,6 +7,8 @@ namespace AutoPriorities.Utils
 {
     internal static class DrawUtil
     {
+        public static int MaxPriority { get; set; } = 4;
+
         public static int PriorityBox(float x, float y, int priority)
         {
             Rect rect = new Rect(x, y, 25f, 25f);
@@ -21,34 +23,41 @@ namespace AutoPriorities.Utils
                 GUI.color = colorOrig;
                 Text.Anchor = TextAnchor.UpperLeft;
             }
-            if (Event.current.type == EventType.MouseDown && Mouse.IsOver(rect))
+
+            if (Event.current.type != EventType.MouseDown || !Mouse.IsOver(rect))
+                return priority;
+
+            var priorityOrig = priority;
+            switch (Event.current.button)
             {
-                int priorityOrig = priority;
-                bool flag = priority > 0;
-                if (Event.current.button == 0)
+                case 0:
                 {
-                    int priority2 = priorityOrig - 1;
+                    var priority2 = priorityOrig - 1;
                     if (priority2 < 0)
-                        priority2 = 4;
+                        priority2 = MaxPriority;
                     priority = priority2;
-                    SoundDefOf.Click.PlayOneShotOnCamera(null);
+                    SoundDefOf.Click.PlayOneShotOnCamera();
+                    break;
                 }
-                if (Event.current.button == 1)
+                case 1:
                 {
-                    int priority2 = priorityOrig + 1;
-                    if (priority2 > 4)
+                    var priority2 = priorityOrig + 1;
+                    if (priority2 > MaxPriority)
                         priority2 = 0;
                     priority = priority2;
-                    SoundDefOf.Click.PlayOneShotOnCamera(null);
+                    SoundDefOf.Click.PlayOneShotOnCamera();
+                    break;
                 }
-                Event.current.Use();
             }
+
+            Event.current.Use();
+
             return priority;
         }
 
-        private static Color ColorOfPriority(int prio)
+        private static Color ColorOfPriority(int priority)
         {
-            return WidgetsWork.ColorOfPriority(prio);
+            return WidgetsWork.ColorOfPriority(priority);
         }
 
         private static void DrawWorkBoxBackground(Rect rect)
