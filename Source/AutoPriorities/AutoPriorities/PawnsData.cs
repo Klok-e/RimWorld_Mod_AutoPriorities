@@ -8,19 +8,15 @@ namespace AutoPriorities
 {
     internal class PawnsData
     {
-        public List<(int priority, Dictionary<WorkTypeDef, float> workTypes)> WorkTables { get; private set; }
+        public List<(int priority, Dictionary<WorkTypeDef, float> workTypes)> WorkTables { get; }
 
-        public HashSet<WorkTypeDef> WorkTypes { get; private set; }
+        public HashSet<WorkTypeDef> WorkTypes { get; }
 
-        public HashSet<WorkTypeDef> WorkTypesNotRequiringSkills { get; private set; }
+        public HashSet<WorkTypeDef> WorkTypesNotRequiringSkills { get; }
 
-        public Dictionary<WorkTypeDef, List<(Pawn pawn, float fitness)>> SortedPawnFitnessForEveryWork
-        {
-            get;
-            private set;
-        }
+        public Dictionary<WorkTypeDef, List<(Pawn pawn, float fitness)>> SortedPawnFitnessForEveryWork { get; }
 
-        public HashSet<Pawn> AllPlayerPawns { get; private set; }
+        public HashSet<Pawn> AllPlayerPawns { get; }
 
         public PawnsData()
         {
@@ -29,21 +25,20 @@ namespace AutoPriorities
             WorkTypesNotRequiringSkills = new HashSet<WorkTypeDef>();
             SortedPawnFitnessForEveryWork = new Dictionary<WorkTypeDef, List<(Pawn, float)>>();
 
-            WorkTables = new List<(int, Dictionary<WorkTypeDef, float>)>();
-
-            LoadSavedState();
+            WorkTables = LoadSavedState() ?? new List<(int, Dictionary<WorkTypeDef, float>)>();
         }
 
-        private void LoadSavedState()
+        private List<(int, Dictionary<WorkTypeDef, float>)>? LoadSavedState()
         {
             Rebuild();
+            List<(int priority, Dictionary<WorkTypeDef, float> workTypes)> workTables = null;
             try
             {
-                WorkTables = PercentPerWorkTypeSaver.LoadState();
+                workTables = PercentPerWorkTypeSaver.LoadState();
 
                 //check whether state is correct
                 bool correct = true;
-                foreach (var keyVal in WorkTables)
+                foreach (var keyVal in workTables)
                 {
                     foreach (var work in WorkTypes)
                     {
@@ -60,19 +55,18 @@ namespace AutoPriorities
                 outOfCycles:
                 if (!correct)
                 {
-                    WorkTables = new List<(int, Dictionary<WorkTypeDef, float>)>();
                     Log.Message("AutoPriorities: Priorities have been reset.");
                 }
             }
             catch (System.IO.FileNotFoundException)
             {
-                WorkTables = new List<(int, Dictionary<WorkTypeDef, float>)>();
             }
             catch (Exception e)
             {
                 Log.Error(e.Message);
-                WorkTables = new List<(int, Dictionary<WorkTypeDef, float>)>();
             }
+
+            return workTables;
         }
 
         public void SaveState()
