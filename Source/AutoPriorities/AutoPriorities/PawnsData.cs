@@ -57,7 +57,7 @@ namespace AutoPriorities
                     }
                 }
 
-            outOfCycles:
+                outOfCycles:
                 if (!correct)
                 {
                     WorkTables = new List<(int, Dictionary<WorkTypeDef, float>)>();

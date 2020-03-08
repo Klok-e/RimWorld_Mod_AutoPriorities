@@ -40,7 +40,7 @@
         <Compile Include="Core\Resources.cs" />
         <Compile Include="Core\Settings.cs" />
         <Compile Include="Extensions\PawnExtensions.cs" />
-        <Compile Include="Extensions\UsefulThings.cs" />
+        <Compile Include="Extensions\CollectionExtensions.cs" />
         <Compile Include="HarmonyPatches\WorkTab_AddButtonToOpenAutoPrioritiesWindow.cs" />
         <Compile Include="PawnsData.cs" />
         <Compile Include="PrioritiesAssigner.cs" />

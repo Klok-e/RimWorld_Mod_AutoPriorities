@@ -66,18 +66,18 @@ namespace AutoPriorities
                 _openedOnce = true;
         }
 
-        public override void DoWindowContents(Rect windowRect)
+        public override void DoWindowContents(Rect inRect)
         {
             var worktypes = PawnsData.SortedPawnFitnessForEveryWork.Count;
 
-            var scrollRect = new Rect(windowRect.xMin, windowRect.yMin, windowRect.width,
-                windowRect.height - _distFromBottomBorder);
+            var scrollRect = new Rect(inRect.xMin, inRect.yMin, inRect.width,
+                inRect.height - _distFromBottomBorder);
 
             var tableSizeX = (worktypes + 1) * _sliderMargin + _slidersDistFromLeftBorder + _slidersDistFromRightBorder;
-            var scrollWidth = tableSizeX > windowRect.width ? tableSizeX : windowRect.width;
+            var scrollWidth = tableSizeX > inRect.width ? tableSizeX : inRect.width;
 
             var tableSizeY = (_sliderHeight + 3 * _buttonHeight) * PawnsData.WorkTables.Count;
-            var scrollHeight = tableSizeY > scrollRect.height ? tableSizeY : windowRect.height;
+            var scrollHeight = tableSizeY > scrollRect.height ? tableSizeY : inRect.height;
             Widgets.BeginScrollView(scrollRect, ref _scrollPos, new Rect(0, 0, scrollWidth, scrollHeight));
 
             PrioritiesEncounteredCached.Clear();
@@ -156,7 +156,7 @@ namespace AutoPriorities
 
             const string label = "Run AutoPriorities";
             var buttonRect = new Rect(
-                windowRect.xMin,
+                inRect.xMin,
                 scrollRect.yMax + 9f,
                 label.GetWidthCached() + 10f,
                 _buttonHeight);
@@ -169,7 +169,7 @@ namespace AutoPriorities
             }
 
             var removePriorityButtonRect = new Rect(
-                windowRect.xMax - _sliderMargin,
+                inRect.xMax - _sliderMargin,
                 scrollRect.yMax + 9f,
                 _buttonHeight,
                 _buttonHeight);
