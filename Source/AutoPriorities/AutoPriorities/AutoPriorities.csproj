@@ -42,6 +42,11 @@
         <Compile Include="Extensions\CollectionExtensions.cs" />
         <Compile Include="HarmonyPatches\WorkTab_AddButtonToOpenAutoPrioritiesWindow.cs" />
         <Compile Include="PawnsData.cs" />
+        <Compile Include="Percents\IPercent.cs" />
+        <Compile Include="Percents\Number.cs" />
+        <Compile Include="Percents\Percent.cs" />
+        <Compile Include="Percents\RefInt.cs" />
+        <Compile Include="Percents\Variant.cs" />
         <Compile Include="PrioritiesAssigner.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Utils\DrawUtil.cs" />

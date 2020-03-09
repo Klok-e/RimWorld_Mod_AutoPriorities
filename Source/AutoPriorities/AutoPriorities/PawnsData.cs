@@ -2,13 +2,15 @@
 using RimWorld;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using AutoPriorities.Percents;
 using Verse;
 
 namespace AutoPriorities
 {
-    internal class PawnsData
+    public class PawnsData
     {
-        public List<(int priority, Dictionary<WorkTypeDef, float> workTypes)> WorkTables { get; }
+        public List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)> WorkTables { get; }
 
         public HashSet<WorkTypeDef> WorkTypes { get; }
 
@@ -25,16 +27,21 @@ namespace AutoPriorities
             WorkTypesNotRequiringSkills = new HashSet<WorkTypeDef>();
             SortedPawnFitnessForEveryWork = new Dictionary<WorkTypeDef, List<(Pawn, float)>>();
 
-            WorkTables = LoadSavedState() ?? new List<(int, Dictionary<WorkTypeDef, float>)>();
+            WorkTables = LoadSavedState() ?? new List<(int, Dictionary<WorkTypeDef, IPercent>)>();
         }
 
-        private List<(int, Dictionary<WorkTypeDef, float>)>? LoadSavedState()
+        private List<(int, Dictionary<WorkTypeDef, IPercent>)>? LoadSavedState()
         {
             Rebuild();
-            List<(int priority, Dictionary<WorkTypeDef, float> workTypes)> workTables = null;
+            List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)>? workTables = null;
             try
             {
-                workTables = PercentPerWorkTypeSaver.LoadState();
+                // TODO: make loader load IPercents instead of converting
+                workTables = PercentPerWorkTypeSaver
+                    .LoadState()
+                    .Select(a => (a.Item1, a.Item2
+                        .Select(b => (b.Key, (IPercent) new Percent(b.Value)))
+                        .ToDictionary(x => x.Key, y => y.Item2))).ToList();
 
                 //check whether state is correct
                 bool correct = true;
@@ -73,7 +80,12 @@ namespace AutoPriorities
         {
             try
             {
-                PercentPerWorkTypeSaver.SaveState(WorkTables);
+                // TODO: make loader load IPercents instead of converting
+                PercentPerWorkTypeSaver.SaveState(WorkTables
+                    .Select(a => (a.priority, a.workTypes
+                        .Select(b => (b.Key, b.Value.Value))
+                        .ToDictionary(x => x.Key, y => y.Value)))
+                    .ToList());
             }
             catch (Exception e)
             {
@@ -158,7 +170,7 @@ namespace AutoPriorities
             {
                 if (tuple.priority == priorityIgnore)
                     continue;
-                taken += tuple.workTypes[workType];
+                taken += tuple.workTypes[workType].Value;
                 if (taken > 1f)
                     Log.Error(
                         $"Percent of colonists assigned to work type {workType.defName} is greater than 1: {taken}");

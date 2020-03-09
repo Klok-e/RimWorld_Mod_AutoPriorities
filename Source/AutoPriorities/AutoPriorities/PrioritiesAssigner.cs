@@ -123,8 +123,9 @@ namespace AutoPriorities
             List<(int, float)> priorityPercents)
         {
             priorityPercents.Clear();
-            priorityPercents.AddRange(pawnsData.WorkTables.Select(priority =>
-                (priority.priority, priority.workTypes[work])).Where(a => a.priority > 0));
+            priorityPercents.AddRange(pawnsData.WorkTables
+                .Select(priority => (priority.priority, priority.workTypes[work].Value))
+                .Where(a => a.priority > 0));
             priorityPercents.Sort((x, y) => x.Item1.CompareTo(y.Item1));
         }
     }

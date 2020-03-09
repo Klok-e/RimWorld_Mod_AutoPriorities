@@ -2,6 +2,7 @@
 using RimWorld;
 using System;
 using System.Collections.Generic;
+using AutoPriorities.Percents;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
@@ -122,7 +123,7 @@ namespace AutoPriorities
                         Widgets.Label(labelRect, workName);
 
                         var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, _sliderWidth, _sliderHeight);
-                        var newSliderValue = GUI.VerticalSlider(sliderRect, pr.workTypes[workType], 1f, 0f);
+                        var newSliderValue = GUI.VerticalSlider(sliderRect, pr.workTypes[workType].Value, 1f, 0f);
                         var available = PawnsData.PercentOfColonistsAvailable(workType, pr.priority);
                         newSliderValue = Mathf.Min(available, newSliderValue);
 
@@ -136,7 +137,7 @@ namespace AutoPriorities
                         Widgets.TextFieldPercent(percentsRect, ref newSliderValue, ref percentsText);
                         newSliderValue = Mathf.Min(available, newSliderValue);
 
-                        pr.workTypes[workType] = newSliderValue;
+                        pr.workTypes[workType] = new Percent(newSliderValue);
                     }
                     catch (Exception e)
                     {
@@ -193,12 +194,12 @@ namespace AutoPriorities
 
         private void AddPriority()
         {
-            var dict = new Dictionary<WorkTypeDef, float>();
+            var dict = new Dictionary<WorkTypeDef, IPercent>();
             PawnsData.WorkTables.Add(
                 (0, dict));
 
             foreach (var keyValue in PawnsData.WorkTypes)
-                dict.Add(keyValue, 0f);
+                dict.Add(keyValue, new Percent(0f));
         }
 
         private void RemovePriority()
