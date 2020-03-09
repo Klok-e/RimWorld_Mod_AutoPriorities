@@ -5,7 +5,7 @@ namespace AutoPriorities.Percents
         public RefInt Total { get; }
         public int Count { get; }
         public Variant Variant => Variant.Number;
-        public float Value => (float) Count / Total.Value;
+        public double Value => (double) Count / Total.Value;
 
         public Number(int count, RefInt total)
         {

@@ -16,7 +16,7 @@ namespace AutoPriorities
 
         public HashSet<WorkTypeDef> WorkTypesNotRequiringSkills { get; }
 
-        public Dictionary<WorkTypeDef, List<(Pawn pawn, float fitness)>> SortedPawnFitnessForEveryWork { get; }
+        public Dictionary<WorkTypeDef, List<(Pawn pawn, double fitness)>> SortedPawnFitnessForEveryWork { get; }
 
         public HashSet<Pawn> AllPlayerPawns { get; }
 
@@ -25,7 +25,7 @@ namespace AutoPriorities
             AllPlayerPawns = new HashSet<Pawn>();
             WorkTypes = new HashSet<WorkTypeDef>();
             WorkTypesNotRequiringSkills = new HashSet<WorkTypeDef>();
-            SortedPawnFitnessForEveryWork = new Dictionary<WorkTypeDef, List<(Pawn, float)>>();
+            SortedPawnFitnessForEveryWork = new Dictionary<WorkTypeDef, List<(Pawn, double)>>();
 
             WorkTables = LoadSavedState() ?? new List<(int, Dictionary<WorkTypeDef, IPercent>)>();
         }
@@ -84,7 +84,7 @@ namespace AutoPriorities
                 PercentPerWorkTypeSaver.SaveState(WorkTables
                     .Select(a => (a.priority, a.workTypes
                         .Select(b => (b.Key, b.Value.Value))
-                        .ToDictionary(x => x.Key, y => y.Value)))
+                        .ToDictionary(x => x.Key, y => y.Item2)))
                     .ToList());
             }
             catch (Exception e)
@@ -114,11 +114,11 @@ namespace AutoPriorities
                     if (!AllPlayerPawns.Contains(pawn))
                         AllPlayerPawns.Add(pawn);
 
-                    float fitness = 0;
+                    double fitness = 0;
                     try
                     {
-                        float skill = pawn.skills.AverageOfRelevantSkillsFor(work);
-                        float passion = 0f;
+                        double skill = pawn.skills.AverageOfRelevantSkillsFor(work);
+                        double passion = 0f;
                         switch (pawn.skills.MaxPassionOfRelevantSkillsFor(work))
                         {
                             case Passion.Minor:
@@ -142,7 +142,7 @@ namespace AutoPriorities
                     }
                     else
                     {
-                        SortedPawnFitnessForEveryWork.Add(work, new List<(Pawn, float)>
+                        SortedPawnFitnessForEveryWork.Add(work, new List<(Pawn, double)>
                         {
                             (pawn, fitness)
                         });
@@ -163,9 +163,9 @@ namespace AutoPriorities
             }
         }
 
-        public float PercentOfColonistsAvailable(WorkTypeDef workType, int priorityIgnore)
+        public double PercentOfColonistsAvailable(WorkTypeDef workType, int priorityIgnore)
         {
-            float taken = 0;
+            var taken = 0d;
             foreach (var tuple in WorkTables)
             {
                 if (tuple.priority == priorityIgnore)
@@ -176,7 +176,7 @@ namespace AutoPriorities
                         $"Percent of colonists assigned to work type {workType.defName} is greater than 1: {taken}");
             }
 
-            return 1f - taken;
+            return 1d - taken;
         }
     }
 }

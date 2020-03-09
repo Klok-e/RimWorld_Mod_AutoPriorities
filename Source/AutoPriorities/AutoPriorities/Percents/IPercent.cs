@@ -4,6 +4,6 @@ namespace AutoPriorities.Percents
     {
         Variant Variant { get; }
 
-        float Value { get; }
+        double Value { get; }
     }
 }

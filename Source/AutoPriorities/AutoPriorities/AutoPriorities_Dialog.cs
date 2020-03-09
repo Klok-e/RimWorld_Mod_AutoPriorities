@@ -123,8 +123,8 @@ namespace AutoPriorities
                         Widgets.Label(labelRect, workName);
 
                         var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, _sliderWidth, _sliderHeight);
-                        var newSliderValue = GUI.VerticalSlider(sliderRect, pr.workTypes[workType].Value, 1f, 0f);
-                        var available = PawnsData.PercentOfColonistsAvailable(workType, pr.priority);
+                        var newSliderValue = GUI.VerticalSlider(sliderRect, (float)pr.workTypes[workType].Value, 1f, 0f);
+                        var available = (float)PawnsData.PercentOfColonistsAvailable(workType, pr.priority);
                         newSliderValue = Mathf.Min(available, newSliderValue);
 
                         var percentsText = Mathf.RoundToInt(newSliderValue * 100f).ToString();

@@ -3,9 +3,9 @@ namespace AutoPriorities.Percents
     public class Percent : IPercent
     {
         public Variant Variant => Variant.Percent;
-        public float Value { get; }
+        public double Value { get; }
 
-        public Percent(float value)
+        public Percent(double value)
         {
             Value = value;
         }
