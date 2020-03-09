@@ -17,6 +17,7 @@ namespace AutoPriorities.Core
             base.Initialize();
             HarmonyInst.PatchAll(Assembly.GetExecutingAssembly());
             Log = Logger;
+            
         }
 
         public static SettingHandle<double> PassionMult { get; private set; }

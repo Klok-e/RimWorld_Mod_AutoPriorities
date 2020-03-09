@@ -49,7 +49,7 @@ namespace AutoPriorities
                 var pawns = pawnsData.SortedPawnFitnessForEveryWork[work];
                 var coveredPawns = (int) (pawns.Count * PriorityPercentCached.Sum(a => a.percent));
 
-                Controller.Log.Message($"workType {work.defName}, covered {coveredPawns}, total {pawns.Count}");
+                //Controller.Log.Message($"workType {work.defName}, covered {coveredPawns}, total {pawns.Count}");
 
                 PrioritiesEncounteredCached.Clear();
                 //skip repeating priorities
@@ -61,8 +61,8 @@ namespace AutoPriorities
                     var (priority, _) = PriorityPercentCached[priorityInd];
                     var (pawn, _) = pawns[iter];
 
-                    Controller.Log.Message(
-                        $"iter {iter}, priority {priorityInd}, pawn {pawn.NameFullColored}, priority {priority}");
+                    //Controller.Log.Message(
+                    //    $"iter {iter}, priority {priorityInd}, pawn {pawn.NameFullColored}, priority {priority}");
 
                     //skip incapable pawns
                     if (pawn.IsCapableOfWholeWorkType(work))

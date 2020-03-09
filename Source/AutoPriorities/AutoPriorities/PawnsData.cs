@@ -37,11 +37,7 @@ namespace AutoPriorities
             try
             {
                 // TODO: make loader load IPercents instead of converting
-                workTables = PercentPerWorkTypeSaver
-                    .LoadState()
-                    .Select(a => (a.Item1, a.Item2
-                        .Select(b => (b.Key, (IPercent) new Percent(b.Value)))
-                        .ToDictionary(x => x.Key, y => y.Item2))).ToList();
+                workTables = PercentPerWorkTypeSaver.LoadStateLegacy();
 
                 //check whether state is correct
                 bool correct = true;
@@ -80,12 +76,7 @@ namespace AutoPriorities
         {
             try
             {
-                // TODO: make loader load IPercents instead of converting
-                PercentPerWorkTypeSaver.SaveState(WorkTables
-                    .Select(a => (a.priority, a.workTypes
-                        .Select(b => (b.Key, b.Value.Value))
-                        .ToDictionary(x => x.Key, y => y.Item2)))
-                    .ToList());
+                PercentPerWorkTypeSaver.SaveStateLegacy(WorkTables);
             }
             catch (Exception e)
             {

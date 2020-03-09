@@ -3,25 +3,29 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using AutoPriorities.Percents;
 using Verse;
 
 namespace AutoPriorities.Core
 {
+    [Obsolete]
     public static class PercentPerWorkTypeSaver
     {
-        private const string _filename = "ModAutoPrioritiesSave.xml";
+        private const string Filename = "ModAutoPrioritiesSave.xml";
 
-        private static readonly string _savePathFull;
+        public static readonly string SavePathFull;
 
-        private static readonly XmlSerializer _writer;
+        private static readonly XmlSerializer Writer;
+
+        public static bool SaveFileExists => File.Exists(SavePathFull);
 
         static PercentPerWorkTypeSaver()
         {
-            _savePathFull = UnityEngine.Application.persistentDataPath + _filename;
+            SavePathFull = UnityEngine.Application.persistentDataPath + Filename;
 
             try
             {
-                _writer = new XmlSerializer(typeof(State));
+                Writer = new XmlSerializer(typeof(State));
             }
             catch (Exception e)
             {
@@ -29,9 +33,9 @@ namespace AutoPriorities.Core
             }
         }
 
-        public static void SaveState(List<(int priority, Dictionary<WorkTypeDef, double> workTypes)> state)
+        public static void SaveStateLegacy(List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)> state)
         {
-            using var stream = new FileStream(_savePathFull, FileMode.Create);
+            using var stream = new FileStream(SavePathFull, FileMode.Create);
             var list = new State
             {
                 _intAndLists = new List<IntAndList>(state.Count)
@@ -43,7 +47,7 @@ namespace AutoPriorities.Core
                 {
                     listOfWorks.Add(new WorkTypeAndFloat()
                     {
-                        _percent = keyValue.Value,
+                        _percent = keyValue.Value.Value,
                         _workTypeDefName = keyValue.Key.defName,
                     });
                 }
@@ -55,22 +59,22 @@ namespace AutoPriorities.Core
                 });
             }
 
-            _writer.Serialize(stream, list);
+            Writer.Serialize(stream, list);
         }
 
-        public static List<(int, Dictionary<WorkTypeDef, double>)> LoadState()
+        public static List<(int, Dictionary<WorkTypeDef, IPercent>)> LoadStateLegacy()
         {
-            var output = new List<(int, Dictionary<WorkTypeDef, double>)>();
-            using (var stream = new FileStream(_savePathFull, FileMode.Open))
+            var output = new List<(int, Dictionary<WorkTypeDef, IPercent>)>();
+            using (var stream = new FileStream(SavePathFull, FileMode.Open))
             {
-                var des = (State)_writer.Deserialize(stream);
+                var des = (State) Writer.Deserialize(stream);
 
                 foreach (var prior in des._intAndLists)
                 {
-                    var dict = new Dictionary<WorkTypeDef, double>();
+                    var dict = new Dictionary<WorkTypeDef, IPercent>();
                     foreach (var workType in prior._list)
                     {
-                        dict.Add(StringToDef(workType._workTypeDefName), workType._percent);
+                        dict.Add(StringToDef(workType._workTypeDefName), new Percent(workType._percent));
                     }
 
                     output.Add((prior._priority, dict));
