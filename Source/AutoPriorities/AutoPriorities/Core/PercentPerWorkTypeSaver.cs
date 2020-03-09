@@ -29,7 +29,7 @@ namespace AutoPriorities.Core
             }
         }
 
-        public static void SaveState(List<(int priority, Dictionary<WorkTypeDef, float> workTypes)> state)
+        public static void SaveState(List<(int priority, Dictionary<WorkTypeDef, double> workTypes)> state)
         {
             using var stream = new FileStream(_savePathFull, FileMode.Create);
             var list = new State
@@ -58,16 +58,16 @@ namespace AutoPriorities.Core
             _writer.Serialize(stream, list);
         }
 
-        public static List<(int, Dictionary<WorkTypeDef, float>)> LoadState()
+        public static List<(int, Dictionary<WorkTypeDef, double>)> LoadState()
         {
-            var output = new List<(int, Dictionary<WorkTypeDef, float>)>();
+            var output = new List<(int, Dictionary<WorkTypeDef, double>)>();
             using (var stream = new FileStream(_savePathFull, FileMode.Open))
             {
                 var des = (State)_writer.Deserialize(stream);
 
                 foreach (var prior in des._intAndLists)
                 {
-                    var dict = new Dictionary<WorkTypeDef, float>();
+                    var dict = new Dictionary<WorkTypeDef, double>();
                     foreach (var workType in prior._list)
                     {
                         dict.Add(StringToDef(workType._workTypeDefName), workType._percent);
@@ -107,7 +107,7 @@ namespace AutoPriorities.Core
         public class WorkTypeAndFloat
         {
             [XmlAttribute] public string _workTypeDefName;
-            [XmlAttribute] public float _percent;
+            [XmlAttribute] public double _percent;
         }
     }
 }

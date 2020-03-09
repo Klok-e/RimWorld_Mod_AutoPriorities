@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AutoPriorities.Extensions
 {
@@ -18,13 +19,13 @@ namespace AutoPriorities.Extensions
             }
         }
 
-        public static IEnumerable<(int i, int percentIndex)> IterPercents(this IEnumerable<float> percents, int iterations)
+        public static IEnumerable<(int i, int percentIndex)> IterPercents(this IEnumerable<double> percents, int iterations)
         {
             var iters = 0;
             var percentIter = 0;
             foreach (var percent in percents)
             {
-                var toIter = iters + (int) (percent * iterations);
+                var toIter = iters + (int) Math.Ceiling(percent * iterations);
                 for (var i = iters; i < toIter && i < iterations; i++)
                 {
                     yield return (i, percentIter);

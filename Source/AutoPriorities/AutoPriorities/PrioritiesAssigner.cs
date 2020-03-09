@@ -3,6 +3,7 @@ using AutoPriorities.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoPriorities.Core;
 using Verse;
 
 namespace AutoPriorities
@@ -10,13 +11,13 @@ namespace AutoPriorities
     internal class PrioritiesAssigner
     {
         private HashSet<int> PrioritiesEncounteredCached { get; }
-        private List<(int priority, float percent)> PriorityPercentCached { get; }
+        private List<(int priority, double percent)> PriorityPercentCached { get; }
         private Dictionary<Pawn, int> PawnJobCountCached { get; }
 
         public PrioritiesAssigner()
         {
             PrioritiesEncounteredCached = new HashSet<int>();
-            PriorityPercentCached = new List<(int priority, float percent)>();
+            PriorityPercentCached = new List<(int priority, double percent)>();
             PawnJobCountCached = new Dictionary<Pawn, int>();
         }
 
@@ -48,6 +49,8 @@ namespace AutoPriorities
                 var pawns = pawnsData.SortedPawnFitnessForEveryWork[work];
                 var coveredPawns = (int) (pawns.Count * PriorityPercentCached.Sum(a => a.percent));
 
+                Controller.Log.Message($"workType {work.defName}, covered {coveredPawns}, total {pawns.Count}");
+
                 PrioritiesEncounteredCached.Clear();
                 //skip repeating priorities
                 foreach (var (iter, priorityInd) in PriorityPercentCached
@@ -57,6 +60,9 @@ namespace AutoPriorities
                 {
                     var (priority, _) = PriorityPercentCached[priorityInd];
                     var (pawn, _) = pawns[iter];
+
+                    Controller.Log.Message(
+                        $"iter {iter}, priority {priorityInd}, pawn {pawn.NameFullColored}, priority {priority}");
 
                     //skip incapable pawns
                     if (pawn.IsCapableOfWholeWorkType(work))
@@ -120,11 +126,12 @@ namespace AutoPriorities
         }
 
         private static void FillListPriorityPercents(PawnsData pawnsData, WorkTypeDef work,
-            List<(int, float)> priorityPercents)
+            List<(int, double)> priorityPercents)
         {
             priorityPercents.Clear();
-            priorityPercents.AddRange(pawnsData.WorkTables.Select(priority =>
-                (priority.priority, priority.workTypes[work])).Where(a => a.priority > 0));
+            priorityPercents.AddRange(pawnsData.WorkTables
+                .Select(priority => (priority.priority, priority.workTypes[work].Value))
+                .Where(a => a.priority > 0));
             priorityPercents.Sort((x, y) => x.Item1.CompareTo(y.Item1));
         }
     }
