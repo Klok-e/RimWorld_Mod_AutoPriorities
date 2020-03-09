@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AutoPriorities.Extensions
 {
@@ -24,7 +25,7 @@ namespace AutoPriorities.Extensions
             var percentIter = 0;
             foreach (var percent in percents)
             {
-                var toIter = iters + (int) (percent * iterations);
+                var toIter = iters + (int) Math.Ceiling(percent * iterations);
                 for (var i = iters; i < toIter && i < iterations; i++)
                 {
                     yield return (i, percentIter);
