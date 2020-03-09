@@ -3,7 +3,9 @@ using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using AutoPriorities.Percents;
+using AutoPriorities.Utils;
 using Verse;
 
 namespace AutoPriorities
@@ -37,7 +39,7 @@ namespace AutoPriorities
             try
             {
                 // TODO: make loader load IPercents instead of converting
-                workTables = PercentPerWorkTypeSaver.LoadStateLegacy();
+                workTables = PercentTableSaver.LoadState();
 
                 //check whether state is correct
                 bool correct = true;
@@ -47,8 +49,8 @@ namespace AutoPriorities
                     {
                         if (!keyVal.workTypes.ContainsKey(work))
                         {
-                            Log.Message(
-                                $"AutoPriorities: {work.labelShort} has been found but was not present in a save file");
+                            Controller.Log.Message(
+                                $"{work.labelShort} has been found but was not present in a save file");
                             correct = false;
                             goto outOfCycles;
                         }
@@ -58,7 +60,7 @@ namespace AutoPriorities
                 outOfCycles:
                 if (!correct)
                 {
-                    Log.Message("AutoPriorities: Priorities have been reset.");
+                    Controller.Log.Message("AutoPriorities: Priorities have been reset.");
                 }
             }
             catch (System.IO.FileNotFoundException)
@@ -66,7 +68,7 @@ namespace AutoPriorities
             }
             catch (Exception e)
             {
-                Log.Error(e.Message);
+                e.LogAllInnerExceptions();
             }
 
             return workTables;
@@ -76,11 +78,11 @@ namespace AutoPriorities
         {
             try
             {
-                PercentPerWorkTypeSaver.SaveStateLegacy(WorkTables);
+                PercentTableSaver.SaveState(WorkTables);
             }
             catch (Exception e)
             {
-                Log.Error(e.Message);
+                e.LogAllInnerExceptions();
             }
         }
 
@@ -124,7 +126,7 @@ namespace AutoPriorities
                     }
                     catch (Exception e)
                     {
-                        Log.Message($"error: {e} for pawn {pawn.Name.ToStringFull}");
+                        Controller.Log.Message($"error: {e} for pawn {pawn.Name.ToStringFull}");
                     }
 
                     if (SortedPawnFitnessForEveryWork.ContainsKey(work))

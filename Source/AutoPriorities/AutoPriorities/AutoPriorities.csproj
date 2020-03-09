@@ -57,7 +57,7 @@
         <Reference Include="0Harmony, Version=2.0.0.8, Culture=neutral, PublicKeyToken=null">
           <HintPath>../packages/Lib.Harmony.2.0.0.8/lib/net472/0Harmony.dll</HintPath>
         </Reference>
-        <Reference Include="Assembly-CSharp, Version=1.1.7371.27655, Culture=neutral, PublicKeyToken=null">
+        <Reference Include="Assembly-CSharp, Version=1.1.7372.23284, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\RimManaged\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
@@ -69,6 +69,7 @@
         <Reference Include="ISharpZipLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\RimManaged\ISharpZipLib.dll</HintPath>
         </Reference>
+        <Reference Include="Microsoft.CSharp" />
         <Reference Include="Mono.Posix, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
           <HintPath>..\..\RimManaged\Mono.Posix.dll</HintPath>
         </Reference>
@@ -77,10 +78,6 @@
         </Reference>
         <Reference Include="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <HintPath>..\..\RimManaged\mscorlib.dll</HintPath>
-        </Reference>
-        <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-          <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-          <Private>True</Private>
         </Reference>
         <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <HintPath>..\..\RimManaged\System.dll</HintPath>
@@ -91,6 +88,8 @@
         <Reference Include="System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <HintPath>..\..\RimManaged\System.Core.dll</HintPath>
         </Reference>
+        <Reference Include="System.Data" />
+        <Reference Include="System.Data.DataSetExtensions" />
         <Reference Include="System.Runtime.InteropServices.RuntimeInformation" />
         <Reference Include="System.Runtime.Serialization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <HintPath>..\..\RimManaged\System.Runtime.Serialization.dll</HintPath>
