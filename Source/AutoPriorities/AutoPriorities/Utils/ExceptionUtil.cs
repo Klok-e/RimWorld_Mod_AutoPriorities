@@ -6,6 +6,7 @@ namespace AutoPriorities.Utils
 {
     internal static class ExceptionUtil
     {
+        [Obsolete]
         public static void LogAllInnerExceptions(this Exception? e)
         {
             if (e != null)
@@ -16,6 +17,11 @@ namespace AutoPriorities.Utils
                 if (e != null)
                     Controller.Log.Error(e.Message);
             } while (e != null);
+        }
+
+        public static void LogStackTrace(this Exception? e)
+        {
+            Controller.Log.Error(e?.StackTrace);
         }
     }
 }

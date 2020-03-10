@@ -36,40 +36,31 @@ namespace AutoPriorities
         private List<(int, Dictionary<WorkTypeDef, IPercent>)>? LoadSavedState()
         {
             Rebuild();
-            List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)>? workTables = null;
+            List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)>? workTables;
             try
             {
                 // TODO: make loader load IPercents instead of converting
                 workTables = PercentTableSaver.LoadState();
 
                 //check whether state is correct
-                bool correct = true;
-                foreach (var keyVal in workTables)
+                foreach (var work in workTables
+                    .SelectMany(keyVal => WorkTypes
+                        .Where(work => !keyVal.workTypes.ContainsKey(work))))
                 {
-                    foreach (var work in WorkTypes)
-                    {
-                        if (!keyVal.workTypes.ContainsKey(work))
-                        {
-                            Controller.Log.Message(
-                                $"{work.labelShort} has been found but was not present in a save file");
-                            correct = false;
-                            goto outOfCycles;
-                        }
-                    }
-                }
-
-                outOfCycles:
-                if (!correct)
-                {
-                    Controller.Log.Message("AutoPriorities: Priorities have been reset.");
+                    Controller.Log.Message(
+                        $"{work.labelShort} has been found but was not present in a save file");
+                    Controller.Log.Message("Priorities have been reset.");
+                    workTables = null;
                 }
             }
             catch (System.IO.FileNotFoundException)
             {
+                workTables = null;
             }
             catch (Exception e)
             {
-                e.LogAllInnerExceptions();
+                e.LogStackTrace();
+                workTables = null;
             }
 
             return workTables;
@@ -83,7 +74,7 @@ namespace AutoPriorities
             }
             catch (Exception e)
             {
-                e.LogAllInnerExceptions();
+                e.LogStackTrace();
             }
         }
 
