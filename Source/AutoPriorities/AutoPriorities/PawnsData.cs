@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using AutoPriorities.Extensions;
 using AutoPriorities.Percents;
 using AutoPriorities.Utils;
 using Verse;
@@ -110,19 +111,26 @@ namespace AutoPriorities
                     double fitness = 0;
                     try
                     {
-                        double skill = pawn.skills.AverageOfRelevantSkillsFor(work);
-                        double passion = 0f;
-                        switch (pawn.skills.MaxPassionOfRelevantSkillsFor(work))
+                        if (pawn.IsCapableOfWholeWorkType(work))
                         {
-                            case Passion.Minor:
-                                passion = 1f;
-                                break;
-                            case Passion.Major:
-                                passion = 2f;
-                                break;
-                        }
+                            double skill = pawn.skills.AverageOfRelevantSkillsFor(work);
+                            double passion = 0f;
+                            switch (pawn.skills.MaxPassionOfRelevantSkillsFor(work))
+                            {
+                                case Passion.Minor:
+                                    passion = 1f;
+                                    break;
+                                case Passion.Major:
+                                    passion = 2f;
+                                    break;
+                            }
 
-                        fitness = skill + skill * passion * Controller.PassionMult;
+                            fitness = skill + skill * passion * Math.Max(Controller.PassionMult, 0d);
+                        }
+                        else
+                        {
+                            fitness = 0;
+                        }
                     }
                     catch (Exception e)
                     {

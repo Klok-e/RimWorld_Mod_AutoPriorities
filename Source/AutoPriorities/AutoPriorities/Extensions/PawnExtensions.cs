@@ -7,7 +7,7 @@ namespace AutoPriorities.Extensions
     {
         public static bool IsCapableOfWholeWorkType(this Pawn pawn, WorkTypeDef workType)
         {
-            var capable = (pawn.story.DisabledWorkTagsBackstoryAndTraits & workType.workTags) == 0;
+            var capable = (pawn.story.DisabledWorkTagsBackstoryAndTraits & workType.workTags) == WorkTags.None;
 #if DEBUG
             //Log.Message($"{pawn.NameFullColored} is {(capable ? "" : "not")} capable of {workType.defName}");
 #endif
