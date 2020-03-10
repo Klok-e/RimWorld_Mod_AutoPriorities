@@ -45,21 +45,21 @@ namespace AutoPriorities
                 FillListPriorityPercents(pawnsData, work, PriorityPercentCached);
 
                 var pawns = pawnsData.SortedPawnFitnessForEveryWork[work];
-                var coveredPawns = (int) (pawns.Count * PriorityPercentCached.Sum(a => a.percent));
-
-                Controller.Log.Message($"skilled workType {work.defName}, covered {coveredPawns}, total {pawns.Count}");
+                var covered = 0;
 
                 //skip repeating priorities
                 foreach (var (iter, priorityInd) in PriorityPercentCached
                     .Distinct(x => x.priority)
                     .Select(a => a.percent)
-                    .IterPercents(coveredPawns))
+                    .IterPercents(pawns.Count))
                 {
+                    covered = iter;
+
                     var (priority, _) = PriorityPercentCached[priorityInd];
                     var (pawn, _) = pawns[iter];
 
-                    Controller.Log.Message(
-                        $"iter {iter}, priority {priorityInd}, pawn {pawn.NameFullColored}, priority {priority}");
+                    //Controller.Log.Message(
+                    //    $"iter {iter}, priority {priorityInd}, pawn {pawn.NameFullColored}, priority {priority}");
 
                     //skip incapable pawns
                     if (pawn.IsCapableOfWholeWorkType(work))
@@ -71,7 +71,7 @@ namespace AutoPriorities
                 }
 
                 //set remaining pawns to 0
-                for (var i = coveredPawns; i < pawns.Count; i++)
+                for (var i = covered + 1; i < pawns.Count; i++)
                 {
                     if (!pawns[i].pawn.IsCapableOfWholeWorkType(work))
                         continue;
@@ -91,22 +91,21 @@ namespace AutoPriorities
             {
                 FillListPriorityPercents(pawnsData, work, PriorityPercentCached);
 
-                var coveredPawns = (int) (jobsCount.Count * PriorityPercentCached.Sum(a => a.percent));
-
-                Controller.Log.Message(
-                    $"non skilled workType {work.defName}, covered {coveredPawns}, total {jobsCount.Count}");
+                var covered = 0;
 
                 //skip repeating priorities
                 foreach (var (iter, percentIndex) in PriorityPercentCached
                     .Distinct(x => x.priority)
                     .Select(a => a.percent)
-                    .IterPercents(coveredPawns))
+                    .IterPercents(jobsCount.Count))
                 {
+                    covered = iter;
+
                     var (priority, _) = PriorityPercentCached[percentIndex];
                     var (pawn, _) = jobsCount[iter];
 
-                    Controller.Log.Message(
-                        $"iter {iter}, priority {percentIndex}, pawn {pawn.NameFullColored}, priority {priority}");
+                    //Controller.Log.Message(
+                    //    $"iter {iter}, priority {percentIndex}, pawn {pawn.NameFullColored}, priority {priority}");
 
                     //skip incapable pawns
                     if (pawn.IsCapableOfWholeWorkType(work))
@@ -114,7 +113,7 @@ namespace AutoPriorities
                 }
 
                 //set remaining pawns to 0
-                for (var i = coveredPawns; i < jobsCount.Count; i++)
+                for (var i = covered + 1; i < jobsCount.Count; i++)
                 {
                     if (!jobsCount[i].pawn.IsCapableOfWholeWorkType(work))
                         continue;
