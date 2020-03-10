@@ -39,7 +39,6 @@ namespace AutoPriorities
             List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)>? workTables;
             try
             {
-                // TODO: make loader load IPercents instead of converting
                 workTables = PercentTableSaver.LoadState();
 
                 //check whether state is correct
