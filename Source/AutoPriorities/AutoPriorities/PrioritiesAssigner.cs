@@ -10,13 +10,11 @@ namespace AutoPriorities
 {
     internal class PrioritiesAssigner
     {
-        private HashSet<int> PrioritiesEncounteredCached { get; }
         private List<(int priority, double percent)> PriorityPercentCached { get; }
         private Dictionary<Pawn, int> PawnJobCountCached { get; }
 
         public PrioritiesAssigner()
         {
-            PrioritiesEncounteredCached = new HashSet<int>();
             PriorityPercentCached = new List<(int priority, double percent)>();
             PawnJobCountCached = new Dictionary<Pawn, int>();
         }
@@ -51,10 +49,9 @@ namespace AutoPriorities
 
                 //Controller.Log.Message($"workType {work.defName}, covered {coveredPawns}, total {pawns.Count}");
 
-                PrioritiesEncounteredCached.Clear();
                 //skip repeating priorities
                 foreach (var (iter, priorityInd) in PriorityPercentCached
-                    .Where(priorityToPercent => !PrioritiesEncounteredCached.Contains(priorityToPercent.priority))
+                    .Distinct(x => x.priority)
                     .Select(a => a.percent)
                     .IterPercents(coveredPawns))
                 {
@@ -71,8 +68,6 @@ namespace AutoPriorities
 
                         pawnJobCount[pawn] += 1;
                     }
-
-                    PrioritiesEncounteredCached.Add(priority);
                 }
 
                 //set remaining pawns to 0
@@ -96,12 +91,11 @@ namespace AutoPriorities
             {
                 FillListPriorityPercents(pawnsData, work, PriorityPercentCached);
 
-                PrioritiesEncounteredCached.Clear();
                 var coveredPawns = (int) (jobsCount.Count * PriorityPercentCached.Sum(a => a.percent));
 
                 //skip repeating priorities
                 foreach (var (iter, percentIndex) in PriorityPercentCached
-                    .Where(priorityToPercent => !PrioritiesEncounteredCached.Contains(priorityToPercent.priority))
+                    .Distinct(x => x.priority)
                     .Select(a => a.percent)
                     .IterPercents(coveredPawns))
                 {
@@ -111,8 +105,6 @@ namespace AutoPriorities
                     //skip incapable pawns
                     if (pawn.IsCapableOfWholeWorkType(work))
                         pawn.workSettings.SetPriority(work, priority);
-
-                    PrioritiesEncounteredCached.Add(priority);
                 }
 
                 //set remaining pawns to 0

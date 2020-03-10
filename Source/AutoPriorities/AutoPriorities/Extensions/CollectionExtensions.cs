@@ -5,21 +5,20 @@ namespace AutoPriorities.Extensions
 {
     public static class CollectionExtensions
     {
-        public static IEnumerable<T> NonRepeating<T>(this IEnumerable<T> enumer, IEqualityComparer<T> comparer)
+        public static IEnumerable<T> Distinct<T, K>(this IEnumerable<T> enumer, Func<T, K> key)
         {
-            var hashSet = new HashSet<T>(comparer);
+            var hashSet = new HashSet<K>();
             foreach (var item in enumer)
             {
-                if (!hashSet.Contains(item))
-                {
+                if (!hashSet.Contains(key(item)))
                     yield return item;
-                }
 
-                hashSet.Add(item);
+                hashSet.Add(key(item));
             }
         }
 
-        public static IEnumerable<(int i, int percentIndex)> IterPercents(this IEnumerable<double> percents, int iterations)
+        public static IEnumerable<(int i, int percentIndex)> IterPercents(this IEnumerable<double> percents,
+            int iterations)
         {
             var iters = 0;
             var percentIter = 0;

@@ -29,5 +29,15 @@ namespace Tests
                 Assert.AreEqual(i, arr.Length);
             }
         }
+
+        [Test]
+        public void TestDistinct()
+        {
+            var v = new[] {(1, 2d), (4, 1d), (2, 1d), (7, 1d), (8, 1d), (9, 2d), (1, 1d)};
+
+            var actual = v.Distinct(x => x.Item1).ToArray();
+
+            Assert.AreEqual(new[] {(1, 2d), (4, 1d), (2, 1d), (7, 1d), (8, 1d), (9, 2d)}, actual);
+        }
     }
 }
