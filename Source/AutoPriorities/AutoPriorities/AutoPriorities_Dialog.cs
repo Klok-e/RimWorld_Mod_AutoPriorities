@@ -123,8 +123,9 @@ namespace AutoPriorities
                         Widgets.Label(labelRect, workName);
 
                         var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, _sliderWidth, _sliderHeight);
-                        var newSliderValue = GUI.VerticalSlider(sliderRect, (float)pr.workTypes[workType].Value, 1f, 0f);
-                        var available = (float)PawnsData.PercentOfColonistsAvailable(workType, pr.priority);
+                        var newSliderValue =
+                            GUI.VerticalSlider(sliderRect, (float) pr.workTypes[workType].Value, 1f, 0f);
+                        var available = (float) PawnsData.PercentOfColonistsAvailable(workType, pr.priority);
                         newSliderValue = Mathf.Min(available, newSliderValue);
 
                         var percentsText = Mathf.RoundToInt(newSliderValue * 100f).ToString();
@@ -141,7 +142,8 @@ namespace AutoPriorities
                     }
                     catch (Exception e)
                     {
-                        Log.Error($"Error {e.Message} for work type {workName}");
+                        Log.Error($"Error for work type {workName}:");
+                        e.LogStackTrace();
                     }
 
                     i += 1;

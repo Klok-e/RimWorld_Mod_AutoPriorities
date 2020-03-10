@@ -3,7 +3,10 @@ using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using AutoPriorities.Extensions;
 using AutoPriorities.Percents;
+using AutoPriorities.Utils;
 using Verse;
 
 namespace AutoPriorities
@@ -33,44 +36,30 @@ namespace AutoPriorities
         private List<(int, Dictionary<WorkTypeDef, IPercent>)>? LoadSavedState()
         {
             Rebuild();
-            List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)>? workTables = null;
+            List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)>? workTables;
             try
             {
-                // TODO: make loader load IPercents instead of converting
-                workTables = PercentPerWorkTypeSaver
-                    .LoadState()
-                    .Select(a => (a.Item1, a.Item2
-                        .Select(b => (b.Key, (IPercent) new Percent(b.Value)))
-                        .ToDictionary(x => x.Key, y => y.Item2))).ToList();
+                workTables = PercentTableSaver.LoadState();
 
                 //check whether state is correct
-                bool correct = true;
-                foreach (var keyVal in workTables)
+                foreach (var work in workTables
+                    .SelectMany(keyVal => WorkTypes
+                        .Where(work => !keyVal.workTypes.ContainsKey(work))))
                 {
-                    foreach (var work in WorkTypes)
-                    {
-                        if (!keyVal.workTypes.ContainsKey(work))
-                        {
-                            Log.Message(
-                                $"AutoPriorities: {work.labelShort} has been found but was not present in a save file");
-                            correct = false;
-                            goto outOfCycles;
-                        }
-                    }
-                }
-
-                outOfCycles:
-                if (!correct)
-                {
-                    Log.Message("AutoPriorities: Priorities have been reset.");
+                    Controller.Log.Message(
+                        $"{work.labelShort} has been found but was not present in a save file");
+                    Controller.Log.Message("Priorities have been reset.");
+                    workTables = null;
                 }
             }
             catch (System.IO.FileNotFoundException)
             {
+                workTables = null;
             }
             catch (Exception e)
             {
-                Log.Error(e.Message);
+                e.LogStackTrace();
+                workTables = null;
             }
 
             return workTables;
@@ -80,16 +69,11 @@ namespace AutoPriorities
         {
             try
             {
-                // TODO: make loader load IPercents instead of converting
-                PercentPerWorkTypeSaver.SaveState(WorkTables
-                    .Select(a => (a.priority, a.workTypes
-                        .Select(b => (b.Key, b.Value.Value))
-                        .ToDictionary(x => x.Key, y => y.Item2)))
-                    .ToList());
+                PercentTableSaver.SaveState(WorkTables);
             }
             catch (Exception e)
             {
-                Log.Error(e.Message);
+                e.LogStackTrace();
             }
         }
 
@@ -117,23 +101,30 @@ namespace AutoPriorities
                     double fitness = 0;
                     try
                     {
-                        double skill = pawn.skills.AverageOfRelevantSkillsFor(work);
-                        double passion = 0f;
-                        switch (pawn.skills.MaxPassionOfRelevantSkillsFor(work))
+                        if (pawn.IsCapableOfWholeWorkType(work))
                         {
-                            case Passion.Minor:
-                                passion = 1f;
-                                break;
-                            case Passion.Major:
-                                passion = 2f;
-                                break;
-                        }
+                            double skill = pawn.skills.AverageOfRelevantSkillsFor(work);
+                            double passion = 0f;
+                            switch (pawn.skills.MaxPassionOfRelevantSkillsFor(work))
+                            {
+                                case Passion.Minor:
+                                    passion = 1f;
+                                    break;
+                                case Passion.Major:
+                                    passion = 2f;
+                                    break;
+                            }
 
-                        fitness = skill + skill * passion * Controller.PassionMult;
+                            fitness = skill + skill * passion * Math.Max(Controller.PassionMult, 0d);
+                        }
+                        else
+                        {
+                            fitness = 0;
+                        }
                     }
                     catch (Exception e)
                     {
-                        Log.Message($"error: {e} for pawn {pawn.Name.ToStringFull}");
+                        Controller.Log.Message($"error: {e} for pawn {pawn.Name.ToStringFull}");
                     }
 
                     if (SortedPawnFitnessForEveryWork.ContainsKey(work))

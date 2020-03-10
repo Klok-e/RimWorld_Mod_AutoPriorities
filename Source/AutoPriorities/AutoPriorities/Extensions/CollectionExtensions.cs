@@ -5,34 +5,41 @@ namespace AutoPriorities.Extensions
 {
     public static class CollectionExtensions
     {
-        public static IEnumerable<T> NonRepeating<T>(this IEnumerable<T> enumer, IEqualityComparer<T> comparer)
+        public static IEnumerable<T> Distinct<T, K>(this IEnumerable<T> enumer, Func<T, K> key)
         {
-            var hashSet = new HashSet<T>(comparer);
+            var hashSet = new HashSet<K>();
             foreach (var item in enumer)
             {
-                if (!hashSet.Contains(item))
-                {
+                if (!hashSet.Contains(key(item)))
                     yield return item;
-                }
 
-                hashSet.Add(item);
+                hashSet.Add(key(item));
             }
         }
 
-        public static IEnumerable<(int i, int percentIndex)> IterPercents(this IEnumerable<double> percents, int iterations)
+        public static IEnumerable<double> Cumulative(this IEnumerable<double> enu)
         {
-            var iters = 0;
-            var percentIter = 0;
+            double cum = 0;
+            foreach (var v in enu)
+            {
+                cum += v;
+                yield return cum;
+            }
+        }
+
+        public static IEnumerable<(int i, int percentIndex)> IterPercents(this IEnumerable<double> percents,
+            int total)
+        {
+            var iter = 0;
+            var toIter = 0d;
+            var percentInd = 0;
             foreach (var percent in percents)
             {
-                var toIter = iters + (int) Math.Ceiling(percent * iterations);
-                for (var i = iters; i < toIter && i < iterations; i++)
-                {
-                    yield return (i, percentIter);
-                    iters += 1;
-                }
+                toIter += percent * total;
+                for (; iter < toIter && iter < total; iter++)
+                    yield return (iter, percentInd);
 
-                percentIter += 1;
+                percentInd += 1;
             }
         }
     }
