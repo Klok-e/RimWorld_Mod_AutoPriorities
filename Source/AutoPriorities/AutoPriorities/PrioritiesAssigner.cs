@@ -47,7 +47,7 @@ namespace AutoPriorities
                 var pawns = pawnsData.SortedPawnFitnessForEveryWork[work];
                 var coveredPawns = (int) (pawns.Count * PriorityPercentCached.Sum(a => a.percent));
 
-                //Controller.Log.Message($"workType {work.defName}, covered {coveredPawns}, total {pawns.Count}");
+                Controller.Log.Message($"skilled workType {work.defName}, covered {coveredPawns}, total {pawns.Count}");
 
                 //skip repeating priorities
                 foreach (var (iter, priorityInd) in PriorityPercentCached
@@ -58,8 +58,8 @@ namespace AutoPriorities
                     var (priority, _) = PriorityPercentCached[priorityInd];
                     var (pawn, _) = pawns[iter];
 
-                    //Controller.Log.Message(
-                    //    $"iter {iter}, priority {priorityInd}, pawn {pawn.NameFullColored}, priority {priority}");
+                    Controller.Log.Message(
+                        $"iter {iter}, priority {priorityInd}, pawn {pawn.NameFullColored}, priority {priority}");
 
                     //skip incapable pawns
                     if (pawn.IsCapableOfWholeWorkType(work))
@@ -93,6 +93,9 @@ namespace AutoPriorities
 
                 var coveredPawns = (int) (jobsCount.Count * PriorityPercentCached.Sum(a => a.percent));
 
+                Controller.Log.Message(
+                    $"non skilled workType {work.defName}, covered {coveredPawns}, total {jobsCount.Count}");
+
                 //skip repeating priorities
                 foreach (var (iter, percentIndex) in PriorityPercentCached
                     .Distinct(x => x.priority)
@@ -101,6 +104,9 @@ namespace AutoPriorities
                 {
                     var (priority, _) = PriorityPercentCached[percentIndex];
                     var (pawn, _) = jobsCount[iter];
+
+                    Controller.Log.Message(
+                        $"iter {iter}, priority {percentIndex}, pawn {pawn.NameFullColored}, priority {priority}");
 
                     //skip incapable pawns
                     if (pawn.IsCapableOfWholeWorkType(work))

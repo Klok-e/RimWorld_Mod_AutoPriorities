@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AutoPriorities.Extensions
 {
@@ -17,21 +18,29 @@ namespace AutoPriorities.Extensions
             }
         }
 
-        public static IEnumerable<(int i, int percentIndex)> IterPercents(this IEnumerable<double> percents,
-            int iterations)
+        public static IEnumerable<double> Cumulative(this IEnumerable<double> enu)
         {
-            var iters = 0;
-            var percentIter = 0;
+            double cum = 0;
+            foreach (var v in enu)
+            {
+                cum += v;
+                yield return cum;
+            }
+        }
+
+        public static IEnumerable<(int i, int percentIndex)> IterPercents(this IEnumerable<double> percents,
+            int total)
+        {
+            var iter = 0;
+            var toIter = 0d;
+            var percentInd = 0;
             foreach (var percent in percents)
             {
-                var toIter = iters + (int) Math.Ceiling(percent * iterations);
-                for (var i = iters; i < toIter && i < iterations; i++)
-                {
-                    yield return (i, percentIter);
-                    iters += 1;
-                }
+                toIter += percent * total;
+                for (; iter < toIter && iter < total; iter++)
+                    yield return (iter, percentInd);
 
-                percentIter += 1;
+                percentInd += 1;
             }
         }
     }
