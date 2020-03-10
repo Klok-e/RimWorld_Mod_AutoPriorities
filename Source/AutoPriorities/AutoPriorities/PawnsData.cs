@@ -41,15 +41,14 @@ namespace AutoPriorities
             {
                 workTables = PercentTableSaver.LoadState();
 
-                //check whether state is correct
+                // if not present in built structure, then add with 0 percent
                 foreach (var work in workTables
                     .SelectMany(keyVal => WorkTypes
                         .Where(work => !keyVal.workTypes.ContainsKey(work))))
+                foreach (var (_, d) in workTables)
                 {
-                    Controller.Log.Message(
-                        $"{work.labelShort} has been found but was not present in a save file");
-                    Controller.Log.Message("Priorities have been reset.");
-                    workTables = null;
+                    Controller.Log.Message($"Work type {work} wasn't found in a save file. Setting percent to 0");
+                    d.Add(work, new Percent(0));
                 }
             }
             catch (System.IO.FileNotFoundException)

@@ -48,7 +48,7 @@ namespace AutoPriorities.Core
             }
         }
 
-        private static WorkTypeDef StringToDef(string name)
+        private static WorkTypeDef? StringToDef(string name)
         {
             foreach (var workType in WorkTypeDefsUtility.WorkTypeDefsInPriorityOrder)
             {
@@ -56,7 +56,7 @@ namespace AutoPriorities.Core
                     return workType;
             }
 
-            Log.Error($"name {name} not found");
+            Controller.Log.Message($"Work type {name} not found. Excluding {name} from the internal data structure.");
             return null;
         }
 
@@ -102,6 +102,7 @@ namespace AutoPriorities.Core
 
             public Dictionary<WorkTypeDef, IPercent> Parsed() => percents
                 .Select(x => x.Parsed())
+                .Where(x => x.Item1 != null)
                 .ToDictionary(x => x.Item1, x => x.Item2);
 
             public static Dic Serialized(Dictionary<WorkTypeDef, IPercent> dic)
@@ -120,7 +121,7 @@ namespace AutoPriorities.Core
             public string workType;
             public UnionPercent percent;
 
-            public (WorkTypeDef, IPercent) Parsed() => (StringToDef(workType), percent.Parsed());
+            public (WorkTypeDef?, IPercent) Parsed() => (StringToDef(workType), percent.Parsed());
 
             public static StrPercent Serialized((WorkTypeDef work, IPercent percent) val)
             {
