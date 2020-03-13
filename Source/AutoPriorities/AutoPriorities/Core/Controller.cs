@@ -1,8 +1,10 @@
 using System;
+using System.IO;
 using System.Linq;
 using HarmonyLib;
 using System.Reflection;
 using AutoPriorities.HarmonyPatches;
+using AutoPriorities.Utils;
 using HugsLib;
 using HugsLib.Settings;
 using HugsLib.Utils;
@@ -54,6 +56,9 @@ namespace AutoPriorities.Core
 #if DEBUG
                 Log.Message("Fluffy's worktab detected");
 #endif
+                Assembly.LoadFile(Path.Combine(ModContentPack.RootDir,
+                    "ConditionalAssemblies/1.1/FluffyWorktabPatch.dll"));
+
                 worktab = (from asm in AppDomain.CurrentDomain.GetAssemblies()
                     from type in asm.GetTypes()
                     where type.IsClass && type.Name == "MainTabWindow_WorkTab"
@@ -62,6 +67,7 @@ namespace AutoPriorities.Core
                     from type in asm.GetTypes()
                     where type.IsClass && type.Name == "WorkTab_AddButtonToFluffysWorktab"
                     select type).Single();
+                DrawUtil.MaxPriority = 9;
             }
 
             var worktabDoContents = AccessTools.Method(worktab, "DoWindowContents");

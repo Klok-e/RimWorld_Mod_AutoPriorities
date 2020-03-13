@@ -13,13 +13,14 @@ echo selected $BUILD_CONFIGURATION configuration
 
 echo removing old build...
 rm -r -f ./1.1/Assemblies/
+rm -r -f ./ConditionalAssemblies/1.1/
 echo compiling...
 msbuild Source/AutoPriorities/AutoPriorities.sln -verbosity:quiet -p:Configuration=$BUILD_CONFIGURATION
 
 rm -r -f ./Build
 mkdir ./Build
 echo building mod to $(realpath ./Build)
-for dir in /1.1 /Textures /Defs /Assemblies /About /LICENSE
+for dir in /1.1 /Textures /Defs /Assemblies /About /LICENSE /ConditionalAssemblies
 do
     cp -r .$dir "./Build/$dir"
 done
