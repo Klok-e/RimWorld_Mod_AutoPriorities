@@ -32,7 +32,7 @@ namespace AutoPriorities
             }
             catch (Exception e)
             {
-                ExceptionUtil.LogAllInnerExceptions(e);
+                e.LogStackTrace();
             }
         }
 

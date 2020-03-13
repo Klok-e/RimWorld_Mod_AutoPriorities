@@ -156,6 +156,7 @@ namespace AutoPriorities
             }
             catch (Exception e)
             {
+                Controller.Log.Error($"An error occured when rebuilding PawnData:");
                 e.LogStackTrace();
             }
         }
@@ -169,7 +170,7 @@ namespace AutoPriorities
                     continue;
                 taken += tuple.workTypes[workType].Value;
                 if (taken > 1f)
-                    Log.Error(
+                    Log.Warning(
                         $"Percent of colonists assigned to work type {workType.defName} is greater than 1: {taken}");
             }
 

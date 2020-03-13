@@ -17,19 +17,15 @@ namespace AutoPriorities.Core
     public class Controller : ModBase
     {
         public static ModLogger Log { get; private set; }
-        public static AutoPriorities_Dialog Dialog { get; private set; }
+
+        private static AutoPriorities_Dialog _dialog;
+        public static AutoPriorities_Dialog Dialog => _dialog ??= new AutoPriorities_Dialog();
 
         public override void Initialize()
         {
             base.Initialize();
             Log = Logger;
             PatchWorkTab();
-        }
-
-        public override void WorldLoaded()
-        {
-            base.WorldLoaded();
-            Dialog = new AutoPriorities_Dialog();
         }
 
         private void PatchWorkTab()
