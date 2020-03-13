@@ -14,8 +14,8 @@ echo selected $BUILD_CONFIGURATION configuration
 echo removing old build...
 rm -r -f ./1.1/Assemblies/
 echo compiling...
-cd ./Source/AutoPriorities/AutoPriorities/
-msbuild AutoPriorities.csproj -p:Configuration=$BUILD_CONFIGURATION
+cd ./Source/AutoPriorities/
+msbuild AutoPriorities.sln -p:Configuration=$BUILD_CONFIGURATION
 cd ../../../
 
 rm -r -f ./Build
