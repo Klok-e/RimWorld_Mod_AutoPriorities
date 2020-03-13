@@ -11,12 +11,14 @@ namespace AutoPriorities.Core
     public class Controller : ModBase
     {
         public static ModLogger Log { get; private set; }
+        public static AutoPriorities_Dialog Dialog { get; private set; }
 
         public override void Initialize()
         {
             base.Initialize();
             HarmonyInst.PatchAll(Assembly.GetExecutingAssembly());
             Log = Logger;
+            Dialog = new AutoPriorities_Dialog();
         }
 
         public static SettingHandle<double> PassionMult { get; private set; }
