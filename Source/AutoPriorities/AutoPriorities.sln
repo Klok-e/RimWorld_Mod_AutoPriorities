@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoPriorities", "AutoPrior
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{68A151F2-115B-4E45-A76B-013110677DBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluffyWorktabPatch", "FluffyWorktabPatch\FluffyWorktabPatch.csproj", "{B088D1BC-BFB3-4F1F-AC65-F70BBD4F21B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{68A151F2-115B-4E45-A76B-013110677DBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68A151F2-115B-4E45-A76B-013110677DBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68A151F2-115B-4E45-A76B-013110677DBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B088D1BC-BFB3-4F1F-AC65-F70BBD4F21B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B088D1BC-BFB3-4F1F-AC65-F70BBD4F21B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B088D1BC-BFB3-4F1F-AC65-F70BBD4F21B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B088D1BC-BFB3-4F1F-AC65-F70BBD4F21B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
