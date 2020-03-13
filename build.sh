@@ -1,5 +1,7 @@
 RIMWORLD_DEPLOY_PATH=~/.steam/steam/steamapps/common/RimWorld/Mods
 
+cd "${0%/*}"
+
 if [ "$1" = "Release" ]
 then
     BUILD_CONFIGURATION=Release
@@ -14,9 +16,7 @@ echo selected $BUILD_CONFIGURATION configuration
 echo removing old build...
 rm -r -f ./1.1/Assemblies/
 echo compiling...
-cd ./Source/AutoPriorities/
-msbuild AutoPriorities.sln -verbosity:quiet -p:Configuration=$BUILD_CONFIGURATION
-cd ../../../
+msbuild Source/AutoPriorities/AutoPriorities.sln -verbosity:quiet -p:Configuration=$BUILD_CONFIGURATION
 
 rm -r -f ./Build
 mkdir ./Build
