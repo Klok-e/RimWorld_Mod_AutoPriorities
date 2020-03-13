@@ -5,7 +5,6 @@ using WorkTab;
 
 namespace FluffyWorktabPatch
 {
-    [HarmonyPatch(typeof(MainTabWindow_WorkTab), nameof(MainTabWindow_WorkTab.DoWindowContents))]
     public static class WorkTab_AddButtonToFluffysWorktab
     {
         private static void Postfix(MainTabWindow_WorkTab __instance, Rect rect)

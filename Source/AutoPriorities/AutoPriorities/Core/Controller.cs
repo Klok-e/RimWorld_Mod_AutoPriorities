@@ -1,8 +1,12 @@
+using System;
+using System.Linq;
 using HarmonyLib;
 using System.Reflection;
+using AutoPriorities.HarmonyPatches;
 using HugsLib;
 using HugsLib.Settings;
 using HugsLib.Utils;
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -16,9 +20,53 @@ namespace AutoPriorities.Core
         public override void Initialize()
         {
             base.Initialize();
-            HarmonyInst.PatchAll(Assembly.GetExecutingAssembly());
             Log = Logger;
+            PatchWorkTab();
+        }
+
+        public override void WorldLoaded()
+        {
+            base.WorldLoaded();
             Dialog = new AutoPriorities_Dialog();
+        }
+
+        private void PatchWorkTab()
+        {
+            var classInstance = (from asm in AppDomain.CurrentDomain.GetAssemblies()
+                from type in asm.GetTypes()
+                where type.IsClass && type.Name == "MainTabWindow_WorkTab"
+                select type).SingleOrDefault();
+
+            Type worktab;
+            Type patchClass;
+            if (classInstance == null)
+            {
+                // no fluffy's worktab detected
+#if DEBUG
+                Log.Message("No Fluffy's worktab detected");
+#endif
+                worktab = typeof(MainTabWindow_Work);
+                patchClass = typeof(WorkTab_AddButtonToOpenAutoPrioritiesWindow);
+            }
+            else
+            {
+                // fluffy's worktab
+#if DEBUG
+                Log.Message("Fluffy's worktab detected");
+#endif
+                worktab = (from asm in AppDomain.CurrentDomain.GetAssemblies()
+                    from type in asm.GetTypes()
+                    where type.IsClass && type.Name == "MainTabWindow_WorkTab"
+                    select type).Single();
+                patchClass = (from asm in AppDomain.CurrentDomain.GetAssemblies()
+                    from type in asm.GetTypes()
+                    where type.IsClass && type.Name == "WorkTab_AddButtonToFluffysWorktab"
+                    select type).Single();
+            }
+
+            var worktabDoContents = AccessTools.Method(worktab, "DoWindowContents");
+            var patchPostfix = AccessTools.Method(patchClass, "Postfix");
+            HarmonyInst.Patch(worktabDoContents, postfix: new HarmonyMethod(patchPostfix));
         }
 
         public static SettingHandle<double> PassionMult { get; private set; }

@@ -78,79 +78,81 @@ namespace AutoPriorities
 
         public void Rebuild()
         {
-            // get all work types
-            var workTypes = WorkTypeDefsUtility.WorkTypeDefsInPriorityOrder;
 
-            // get all pawns owned by player
-            var pawns = Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer);
+                // get all work types
+                var workTypes = WorkTypeDefsUtility.WorkTypeDefsInPriorityOrder;
 
-            // get all skills associated with the work types
-            AllPlayerPawns.Clear();
-            SortedPawnFitnessForEveryWork.Clear();
-            foreach (var work in workTypes)
-            {
-                foreach (var pawn in pawns)
+                // get all pawns owned by player
+                var pawns = Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer);
+
+                // get all skills associated with the work types
+                AllPlayerPawns.Clear();
+                SortedPawnFitnessForEveryWork.Clear();
+                foreach (var work in workTypes)
                 {
-                    if (pawn.AnimalOrWildMan())
-                        continue;
-
-                    if (!AllPlayerPawns.Contains(pawn))
-                        AllPlayerPawns.Add(pawn);
-
-                    double fitness = 0;
-                    try
+                    foreach (var pawn in pawns)
                     {
-                        if (pawn.IsCapableOfWholeWorkType(work))
-                        {
-                            double skill = pawn.skills.AverageOfRelevantSkillsFor(work);
-                            double passion = 0f;
-                            switch (pawn.skills.MaxPassionOfRelevantSkillsFor(work))
-                            {
-                                case Passion.Minor:
-                                    passion = 1f;
-                                    break;
-                                case Passion.Major:
-                                    passion = 2f;
-                                    break;
-                            }
+                        if (pawn.AnimalOrWildMan())
+                            continue;
 
-                            fitness = skill + skill * passion * Math.Max(Controller.PassionMult, 0d);
+                        if (!AllPlayerPawns.Contains(pawn))
+                            AllPlayerPawns.Add(pawn);
+
+                        double fitness = 0;
+                        try
+                        {
+                            if (pawn.IsCapableOfWholeWorkType(work))
+                            {
+                                double skill = pawn.skills.AverageOfRelevantSkillsFor(work);
+                                double passion = 0f;
+                                switch (pawn.skills.MaxPassionOfRelevantSkillsFor(work))
+                                {
+                                    case Passion.Minor:
+                                        passion = 1f;
+                                        break;
+                                    case Passion.Major:
+                                        passion = 2f;
+                                        break;
+                                }
+
+                                fitness = skill + skill * passion * Math.Max(Controller.PassionMult, 0d);
+                            }
+                            else
+                            {
+                                fitness = 0;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Controller.Log.Message($"error: {e} for pawn {pawn.Name.ToStringFull}");
+                        }
+
+                        if (SortedPawnFitnessForEveryWork.ContainsKey(work))
+                        {
+                            SortedPawnFitnessForEveryWork[work].Add((pawn, fitness));
                         }
                         else
                         {
-                            fitness = 0;
+                            SortedPawnFitnessForEveryWork.Add(work, new List<(Pawn, double)>
+                            {
+                                (pawn, fitness)
+                            });
                         }
                     }
-                    catch (Exception e)
-                    {
-                        Controller.Log.Message($"error: {e} for pawn {pawn.Name.ToStringFull}");
-                    }
 
-                    if (SortedPawnFitnessForEveryWork.ContainsKey(work))
+                    if (!WorkTypes.Contains(work))
                     {
-                        SortedPawnFitnessForEveryWork[work].Add((pawn, fitness));
-                    }
-                    else
-                    {
-                        SortedPawnFitnessForEveryWork.Add(work, new List<(Pawn, double)>
-                        {
-                            (pawn, fitness)
-                        });
+                        WorkTypes.Add(work);
+                        if (work.relevantSkills.Count == 0)
+                            WorkTypesNotRequiringSkills.Add(work);
                     }
                 }
 
-                if (!WorkTypes.Contains(work))
+                foreach (var keyValue in SortedPawnFitnessForEveryWork)
                 {
-                    WorkTypes.Add(work);
-                    if (work.relevantSkills.Count == 0)
-                        WorkTypesNotRequiringSkills.Add(work);
+                    keyValue.Value.Sort((x, y) => y.fitness.CompareTo(x.fitness));
                 }
-            }
-
-            foreach (var keyValue in SortedPawnFitnessForEveryWork)
-            {
-                keyValue.Value.Sort((x, y) => y.fitness.CompareTo(x.fitness));
-            }
+            
         }
 
         public double PercentOfColonistsAvailable(WorkTypeDef workType, int priorityIgnore)

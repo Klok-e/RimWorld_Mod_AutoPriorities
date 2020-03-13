@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace AutoPriorities.HarmonyPatches
 {
-    [HarmonyPatch(typeof(MainTabWindow_Work), nameof(MainTabWindow_Work.DoWindowContents))]
     public static class WorkTab_AddButtonToOpenAutoPrioritiesWindow
     {
         private static void Postfix(MainTabWindow_Work __instance, Rect rect)
