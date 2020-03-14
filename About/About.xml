@@ -30,5 +30,6 @@ github: https://github.com/LokiVKlokeNaAndoke/RimWorld_Mod_AutoPriorities
 	</modDependencies>
 	<loadAfter>
 		<li>UnlimitedHugs.HugsLib</li>
+		<li>fluffy.worktab</li>
 	</loadAfter>
 </ModMetaData>

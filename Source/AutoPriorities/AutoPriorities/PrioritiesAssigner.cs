@@ -32,7 +32,7 @@ namespace AutoPriorities
             }
             catch (Exception e)
             {
-                ExceptionUtil.LogAllInnerExceptions(e);
+                e.LogStackTrace();
             }
         }
 
@@ -45,7 +45,10 @@ namespace AutoPriorities
                 FillListPriorityPercents(pawnsData, work, PriorityPercentCached);
 
                 var pawns = pawnsData.SortedPawnFitnessForEveryWork[work];
-                var covered = 0;
+                var covered = -1;
+#if DEBUG
+                Controller.Log.Message($"skilled worktype {work.defName}");
+#endif
 
                 //skip repeating priorities
                 foreach (var (iter, priorityInd) in PriorityPercentCached
@@ -58,8 +61,10 @@ namespace AutoPriorities
                     var (priority, _) = PriorityPercentCached[priorityInd];
                     var (pawn, _) = pawns[iter];
 
-                    //Controller.Log.Message(
-                    //    $"iter {iter}, priority {priorityInd}, pawn {pawn.NameFullColored}, priority {priority}");
+#if DEBUG
+                    Controller.Log.Message(
+                        $"iter {iter}, priority {priorityInd}, pawn {pawn.NameFullColored}, priority {priority}");
+#endif
 
                     //skip incapable pawns
                     if (pawn.IsCapableOfWholeWorkType(work))
@@ -73,8 +78,14 @@ namespace AutoPriorities
                 //set remaining pawns to 0
                 for (var i = covered + 1; i < pawns.Count; i++)
                 {
+#if DEBUG
+                    //Controller.Log.Message($"iter {i}, pawn {pawns[i].pawn.NameFullColored} priority 0");
+#endif
                     if (!pawns[i].pawn.IsCapableOfWholeWorkType(work))
+                    {
                         continue;
+                    }
+
                     pawns[i].pawn.workSettings.SetPriority(work, 0);
                 }
             }
@@ -91,7 +102,11 @@ namespace AutoPriorities
             {
                 FillListPriorityPercents(pawnsData, work, PriorityPercentCached);
 
-                var covered = 0;
+                var covered = -1;
+
+#if DEBUG
+                Controller.Log.Message($"unskilled worktype {work.defName}");
+#endif
 
                 //skip repeating priorities
                 foreach (var (iter, percentIndex) in PriorityPercentCached
@@ -104,8 +119,10 @@ namespace AutoPriorities
                     var (priority, _) = PriorityPercentCached[percentIndex];
                     var (pawn, _) = jobsCount[iter];
 
-                    //Controller.Log.Message(
-                    //    $"iter {iter}, priority {percentIndex}, pawn {pawn.NameFullColored}, priority {priority}");
+#if DEBUG
+                    Controller.Log.Message(
+                        $"iter {iter}, priority {percentIndex}, pawn {pawn.NameFullColored}, priority {priority}");
+#endif
 
                     //skip incapable pawns
                     if (pawn.IsCapableOfWholeWorkType(work))
@@ -115,6 +132,9 @@ namespace AutoPriorities
                 //set remaining pawns to 0
                 for (var i = covered + 1; i < jobsCount.Count; i++)
                 {
+#if DEBUG
+                    //Controller.Log.Message($"iter {i}, pawn {jobsCount[i].pawn.NameFullColored} priority 0");
+#endif
                     if (!jobsCount[i].pawn.IsCapableOfWholeWorkType(work))
                         continue;
                     jobsCount[i].pawn.workSettings.SetPriority(work, 0);

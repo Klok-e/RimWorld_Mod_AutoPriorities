@@ -1,21 +1,22 @@
-﻿using AutoPriorities.Core;
-using HarmonyLib;
+﻿using HarmonyLib;
 using RimWorld;
 using UnityEngine;
+using WorkTab;
 
-namespace AutoPriorities.HarmonyPatches
+namespace FluffyWorktabPatch
 {
-    public static class WorkTab_AddButtonToOpenAutoPrioritiesWindow
+    public static class WorkTab_AddButtonToFluffysWorktab
     {
-        private static void Postfix(MainTabWindow_Work __instance, Rect rect)
+        private static void Postfix(MainTabWindow_WorkTab __instance, Rect rect)
         {
-            var window = Controller.Dialog;
-            
+            var window = AutoPriorities.Core.Controller.Dialog;
+
             var button = new Rect(rect.x + 160, rect.y + 5, 25, 25);
 
             var col = Color.white;
 
-            if (Verse.Widgets.ButtonImage(button, Core.Resources._autoPrioritiesButtonIcon, col, col * 0.9f))
+            if (Verse.Widgets.ButtonImage(button, AutoPriorities.Core.Resources._autoPrioritiesButtonIcon, col,
+                col * 0.9f))
             {
                 if (!window.IsOpen)
                 {
