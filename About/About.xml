@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ModMetaData>
 	<name>AutoPriorities</name>
 	<author>LokiVKlokeNaAndoke</author>
 	<packageId>LokiVKlokeNaAndoke.AutoPriorities</packageId>
 	<supportedVersions>
-        	<li>1.0</li>
-			<li>1.1</li>
+		<li>1.0</li>
+		<li>1.1</li>
 	</supportedVersions>
 	<description>
 Adds a window that allows to automatically set work priorities for specified percents of pawns
@@ -14,7 +14,7 @@ How it works:
 All pawns are sorted before assigning so that the highest skill gets the job first. Mod also takes into account if the job does not require any skills. In that case, pawn with least skilled jobs assigned gets dumb job first.
 
 NOTE: 
-1. It isn't compatible with any other mods that somehow change the work tab
+1. Compatible with Fluffy's Worktab
 2. Mods that add job types are fine
 3. It is safe to add/remove to/from existing saves
 
