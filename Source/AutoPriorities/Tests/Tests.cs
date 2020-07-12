@@ -25,10 +25,10 @@ namespace Tests
         [Test]
         public void TestIterPercentsCoverage()
         {
-            for (int i = 0; i < 1000; i++)
+            for (var i = 0; i < 1000; i++)
             {
                 var percents = new[] {i / 1000d, (1000 - i) / 1000d};
-                for (int k = 0; k < 1000; k++)
+                for (var k = 0; k < 1000; k++)
                 {
                     var arr = percents.IterPercents(k).ToArray();
                     Assert.AreEqual(k, arr.Length);
@@ -38,7 +38,7 @@ namespace Tests
             var p = new[] {new[] {0.3,}, new[] {0.1, 0.5}, new[] {0.2, 0.7}, new[] {0.4, 0.05}, new[] {0.5,}};
             foreach (var arr in p)
             {
-                for (int i = 0; i < 100; i++)
+                for (var i = 0; i < 100; i++)
                 {
                     var covered = (int) Math.Ceiling(i * arr.Sum());
                     var actual = arr.IterPercents(i).ToArray();

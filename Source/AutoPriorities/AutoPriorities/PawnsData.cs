@@ -105,16 +105,12 @@ namespace AutoPriorities
                             if (pawn.IsCapableOfWholeWorkType(work))
                             {
                                 double skill = pawn.skills.AverageOfRelevantSkillsFor(work);
-                                double passion = 0f;
-                                switch (pawn.skills.MaxPassionOfRelevantSkillsFor(work))
+                                double passion = pawn.skills.MaxPassionOfRelevantSkillsFor(work) switch
                                 {
-                                    case Passion.Minor:
-                                        passion = 1f;
-                                        break;
-                                    case Passion.Major:
-                                        passion = 2f;
-                                        break;
-                                }
+                                    Passion.Minor => 1f,
+                                    Passion.Major => 2f,
+                                    _ => 0f
+                                };
 
                                 fitness = skill + skill * passion * Math.Max(Controller.PassionMult, 0d);
                             }
@@ -164,11 +160,11 @@ namespace AutoPriorities
         public double PercentOfColonistsAvailable(WorkTypeDef workType, int priorityIgnore)
         {
             var taken = 0d;
-            foreach (var tuple in WorkTables)
+            foreach (var (priority, workTypes) in WorkTables)
             {
-                if (tuple.priority == priorityIgnore)
+                if (priority == priorityIgnore)
                     continue;
-                taken += tuple.workTypes[workType].Value;
+                taken += workTypes[workType].Value;
                 if (taken > 1f)
                     Log.Warning(
                         $"Percent of colonists assigned to work type {workType.defName} is greater than 1: {taken}");

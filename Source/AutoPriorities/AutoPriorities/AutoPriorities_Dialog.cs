@@ -17,28 +17,28 @@ namespace AutoPriorities
 
         private PrioritiesAssigner PrioritiesAssigner { get; }
 
-        private const float _sliderWidth = 20f;
-        private const float _sliderHeight = 60f;
-        private const float _sliderMargin = 60f;
+        private const float SliderWidth = 20f;
+        private const float SliderHeight = 60f;
+        private const float SliderMargin = 60f;
 
-        private const float _guiShadowedMult = 0.5f;
+        private const float GuiShadowedMult = 0.5f;
 
-        private const float _slidersDistFromLeftBorder = 30f;
-        private const float _slidersDistFromRightBorder = 10f;
-        private const float _distFromTopBorder = 80f;
-        private const float _distFromBottomBorder = 50f;
+        private const float SlidersDistFromLeftBorder = 30f;
+        private const float SlidersDistFromRightBorder = 10f;
+        private const float DistFromTopBorder = 80f;
+        private const float DistFromBottomBorder = 50f;
 
-        private const float _scrollSize = 30f;
+        private const float ScrollSize = 30f;
 
-        private const float _buttonHeight = 30f;
+        private const float ButtonHeight = 30f;
 
-        private const float _percentStringWidth = 60f;
+        private const float PercentStringWidth = 60f;
 
         private Vector2 _scrollPos;
         private Rect _rect;
         private bool _openedOnce;
 
-        public AutoPriorities_Dialog() : base()
+        public AutoPriorities_Dialog()
         {
             doCloseButton = true;
             draggable = true;
@@ -72,17 +72,17 @@ namespace AutoPriorities
             var worktypes = PawnsData.SortedPawnFitnessForEveryWork.Count;
 
             var scrollRect = new Rect(inRect.xMin, inRect.yMin, inRect.width,
-                inRect.height - _distFromBottomBorder);
+                inRect.height - DistFromBottomBorder);
 
-            var tableSizeX = (worktypes + 1) * _sliderMargin + _slidersDistFromLeftBorder + _slidersDistFromRightBorder;
+            var tableSizeX = (worktypes + 1) * SliderMargin + SlidersDistFromLeftBorder + SlidersDistFromRightBorder;
             var scrollWidth = tableSizeX > inRect.width ? tableSizeX : inRect.width;
 
-            var tableSizeY = (_sliderHeight + 3 * _buttonHeight) * PawnsData.WorkTables.Count;
+            var tableSizeY = (SliderHeight + 3 * ButtonHeight) * PawnsData.WorkTables.Count;
             var scrollHeight = tableSizeY > scrollRect.height ? tableSizeY : inRect.height;
             Widgets.BeginScrollView(scrollRect, ref _scrollPos, new Rect(0, 0, scrollWidth, scrollHeight));
 
             PrioritiesEncounteredCached.Clear();
-            int row = 0;
+            var row = 0;
             var workTables = PawnsData.WorkTables;
             for (var table = 0; table < workTables.Count; table++)
             {
@@ -90,13 +90,13 @@ namespace AutoPriorities
                 var colOrig = GUI.color;
                 //shadow repeating priorities
                 if (PrioritiesEncounteredCached.Contains(pr.priority))
-                    GUI.color = colOrig * _guiShadowedMult;
+                    GUI.color = colOrig * GuiShadowedMult;
 
                 var slidersRect = new Rect(
-                    _slidersDistFromLeftBorder,
-                    (_sliderHeight + 3 * _buttonHeight) * row,
-                    tableSizeX + _slidersDistFromRightBorder,
-                    _sliderHeight + 3 * _buttonHeight + 5f
+                    SlidersDistFromLeftBorder,
+                    (SliderHeight + 3 * ButtonHeight) * row,
+                    tableSizeX + SlidersDistFromRightBorder,
+                    SliderHeight + 3 * ButtonHeight + 5f
                 );
 
                 //draw bottom line
@@ -104,25 +104,25 @@ namespace AutoPriorities
                     new Vector2(slidersRect.xMax, slidersRect.yMax), new Color(0.7f, 0.7f, 0.7f), 1f);
 
                 var priorityButtonRect = new Rect(slidersRect.xMin, slidersRect.yMin + (slidersRect.height / 2f),
-                    _buttonHeight, _buttonHeight);
+                    ButtonHeight, ButtonHeight);
 
                 pr.priority = DrawUtil.PriorityBox(slidersRect.xMin, slidersRect.yMin + (slidersRect.height / 2f),
                     pr.priority);
                 PawnsData.WorkTables[table] = pr;
 
-                int i = 0;
+                var i = 0;
                 foreach (var workType in PawnsData.WorkTypes)
                 {
                     var workName = workType.labelShort;
                     try
                     {
-                        float elementXPos = slidersRect.xMin + _sliderMargin * (i + 1);
+                        var elementXPos = slidersRect.xMin + SliderMargin * (i + 1);
 
                         var labelRect = new Rect(elementXPos - (workName.GetWidthCached() / 2),
                             slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f, 100f, 25f);
                         Widgets.Label(labelRect, workName);
 
-                        var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, _sliderWidth, _sliderHeight);
+                        var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
                         var newSliderValue =
                             GUI.VerticalSlider(sliderRect, (float) pr.workTypes[workType].Value, 1f, 0f);
                         var available = (float) PawnsData.PercentOfColonistsAvailable(workType, pr.priority);
@@ -130,9 +130,9 @@ namespace AutoPriorities
 
                         var percentsText = Mathf.RoundToInt(newSliderValue * 100f).ToString();
                         var percentsRect = new Rect(
-                            sliderRect.xMax - _percentStringWidth / 2,
+                            sliderRect.xMax - PercentStringWidth / 2,
                             sliderRect.yMax + 3f,
-                            _percentStringWidth,
+                            PercentStringWidth,
                             25f);
 
                         Widgets.TextFieldPercent(percentsRect, ref newSliderValue, ref percentsText);
@@ -162,7 +162,7 @@ namespace AutoPriorities
                 inRect.xMin,
                 scrollRect.yMax + 9f,
                 label.GetWidthCached() + 10f,
-                _buttonHeight);
+                ButtonHeight);
             if (Widgets.ButtonText(buttonRect, label))
             {
                 PawnsData.Rebuild();
@@ -172,10 +172,10 @@ namespace AutoPriorities
             }
 
             var removePriorityButtonRect = new Rect(
-                inRect.xMax - _sliderMargin,
+                inRect.xMax - SliderMargin,
                 scrollRect.yMax + 9f,
-                _buttonHeight,
-                _buttonHeight);
+                ButtonHeight,
+                ButtonHeight);
             if (Widgets.ButtonImage(removePriorityButtonRect, Core.Resources._minusIcon))
             {
                 RemovePriority();
@@ -185,8 +185,8 @@ namespace AutoPriorities
             var addPriorityButtonRect = new Rect(
                 removePriorityButtonRect.xMin - StandardMargin - removePriorityButtonRect.width,
                 scrollRect.yMax + 9f,
-                _buttonHeight,
-                _buttonHeight);
+                ButtonHeight,
+                ButtonHeight);
             if (Widgets.ButtonImage(addPriorityButtonRect, Core.Resources._plusIcon))
             {
                 AddPriority();

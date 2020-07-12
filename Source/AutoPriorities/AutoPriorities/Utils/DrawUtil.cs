@@ -11,7 +11,7 @@ namespace AutoPriorities.Utils
 
         public static int PriorityBox(float x, float y, int priority)
         {
-            Rect rect = new Rect(x, y, 25f, 25f);
+            var rect = new Rect(x, y, 25f, 25f);
             DrawWorkBoxBackground(rect);
 
             if (priority > 0)
