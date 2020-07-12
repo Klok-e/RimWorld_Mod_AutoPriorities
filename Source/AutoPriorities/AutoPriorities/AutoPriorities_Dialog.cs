@@ -131,12 +131,12 @@ namespace AutoPriorities
                         var available = (float) PawnsData.PercentColonistsAvailable(workType, pr.priority);
                         newSliderValue = Mathf.Min(available, newSliderValue);
 
-                        var percentsText = currentPercent switch
+                        var percentsText = (currentPercent switch
                         {
-                            Percent _ => ((int) (newSliderValue * 100f)).ToString(),
-                            Number _ => ((int) (newSliderValue * PawnsData.NumberColonists(workType))).ToString(),
+                            Percent _ => Mathf.RoundToInt(newSliderValue * 100f),
+                            Number _ => Mathf.RoundToInt(newSliderValue * PawnsData.NumberColonists(workType)),
                             _ => throw new ArgumentOutOfRangeException(nameof(currentPercent))
-                        };
+                        }).ToString();
                         var percentsRect = new Rect(
                             sliderRect.xMax - PercentStringWidth,
                             sliderRect.yMax + 3f,
@@ -153,7 +153,16 @@ namespace AutoPriorities
                             Number _ => newSliderValue * PawnsData.NumberColonists(workType),
                             _ => throw new ArgumentOutOfRangeException(nameof(currentPercent))
                         };
-                     
+
+#if DEBUG
+                        if (sliderValRepr > 0f)
+                        {
+                            // Controller.Log!.Trace(
+                            //     $"sliderValRepr for {workType} worktype and {pr.priority} " +
+                            //     $"priority is {sliderValRepr}, newSliderValue is {newSliderValue}");
+                        }
+#endif
+
                         Widgets.TextFieldNumeric(percentsRect, ref sliderValRepr, ref percentsText);
                         var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
                         switch (currentPercent)
@@ -177,7 +186,7 @@ namespace AutoPriorities
                                     Controller.PoolPercents.Pool(p);
                                     currentPercent = Controller.PoolNumbers.Acquire(new NumberPoolArgs
                                     {
-                                        Count = (int) (newSliderValue * PawnsData.NumberColonists(workType)),
+                                        Count = Mathf.RoundToInt(newSliderValue * PawnsData.NumberColonists(workType)),
                                         Total = PawnsData.NumberColonists(workType)
                                     });
                                 }
@@ -202,7 +211,7 @@ namespace AutoPriorities
                                 Controller.PoolNumbers.Pool(n);
                                 pr.workTypes[workType] = Controller.PoolNumbers.Acquire(new NumberPoolArgs
                                 {
-                                    Count = (int) (newSliderValue * PawnsData.NumberColonists(workType)),
+                                    Count = Mathf.RoundToInt(newSliderValue * PawnsData.NumberColonists(workType)),
                                     Total = PawnsData.NumberColonists(workType)
                                 });
                                 break;
