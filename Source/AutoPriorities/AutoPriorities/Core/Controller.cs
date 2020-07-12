@@ -4,6 +4,7 @@ using System.Linq;
 using HarmonyLib;
 using System.Reflection;
 using AutoPriorities.HarmonyPatches;
+using AutoPriorities.Percents;
 using AutoPriorities.Utils;
 using HugsLib;
 using HugsLib.Settings;
@@ -16,10 +17,16 @@ namespace AutoPriorities.Core
 {
     public class Controller : ModBase
     {
-        public static ModLogger Log { get; private set; }
+        public static ModLogger? Log { get; private set; }
 
-        private static AutoPriorities_Dialog _dialog;
+        private static AutoPriorities_Dialog? _dialog;
         public static AutoPriorities_Dialog Dialog => _dialog ??= new AutoPriorities_Dialog();
+
+        public static PoolFactory<Number, NumberPoolArgs> PoolNumbers { get; } =
+            new PoolFactory<Number, NumberPoolArgs>();
+
+        public static PoolFactory<Percent, PercentPoolArgs> PoolPercents { get; } =
+            new PoolFactory<Percent, PercentPoolArgs>();
 
         public override void Initialize()
         {
@@ -71,13 +78,13 @@ namespace AutoPriorities.Core
             HarmonyInst.Patch(worktabDoContents, postfix: new HarmonyMethod(patchPostfix));
         }
 
-        public static SettingHandle<double> PassionMult { get; private set; }
+        public static SettingHandle<double>? PassionMult { get; private set; }
 
         public override void DefsLoaded()
         {
             base.DefsLoaded();
             PassionMult = Settings.GetHandle("passionMult", "Passion multiplier",
-                "Determines the importance of passions whe assigning priorities", 1d);
+                "Determines the importance of passions when assigning priorities", 1d);
         }
     }
 }

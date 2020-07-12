@@ -74,7 +74,8 @@ namespace AutoPriorities.Core
                     var dict = new Dictionary<WorkTypeDef, IPercent>();
                     foreach (var workType in prior._list)
                     {
-                        dict.Add(StringToDef(workType._workTypeDefName), new Percent(workType._percent));
+                        dict.Add(StringToDef(workType._workTypeDefName),
+                            Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = workType._percent}));
                     }
 
                     output.Add((prior._priority, dict));

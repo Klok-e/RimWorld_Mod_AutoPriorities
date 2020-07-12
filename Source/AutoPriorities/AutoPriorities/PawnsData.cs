@@ -3,7 +3,6 @@ using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using AutoPriorities.Extensions;
 using AutoPriorities.Percents;
 using AutoPriorities.Utils;
@@ -15,21 +14,17 @@ namespace AutoPriorities
     {
         public List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)> WorkTables { get; }
 
-        public HashSet<WorkTypeDef> WorkTypes { get; }
+        public HashSet<WorkTypeDef> WorkTypes { get; } = new HashSet<WorkTypeDef>();
 
-        public HashSet<WorkTypeDef> WorkTypesNotRequiringSkills { get; }
+        public HashSet<WorkTypeDef> WorkTypesNotRequiringSkills { get; } = new HashSet<WorkTypeDef>();
 
-        public Dictionary<WorkTypeDef, List<(Pawn pawn, double fitness)>> SortedPawnFitnessForEveryWork { get; }
+        public Dictionary<WorkTypeDef, List<(Pawn pawn, double fitness)>> SortedPawnFitnessForEveryWork { get; } =
+            new Dictionary<WorkTypeDef, List<(Pawn, double)>>();
 
-        public HashSet<Pawn> AllPlayerPawns { get; }
+        public HashSet<Pawn> AllPlayerPawns { get; } = new HashSet<Pawn>();
 
         public PawnsData()
         {
-            AllPlayerPawns = new HashSet<Pawn>();
-            WorkTypes = new HashSet<WorkTypeDef>();
-            WorkTypesNotRequiringSkills = new HashSet<WorkTypeDef>();
-            SortedPawnFitnessForEveryWork = new Dictionary<WorkTypeDef, List<(Pawn, double)>>();
-
             WorkTables = LoadSavedState() ?? new List<(int, Dictionary<WorkTypeDef, IPercent>)>();
         }
 
@@ -47,8 +42,8 @@ namespace AutoPriorities
                         .Where(work => !keyVal.workTypes.ContainsKey(work))))
                 foreach (var (_, d) in workTables)
                 {
-                    Controller.Log.Message($"Work type {work} wasn't found in a save file. Setting percent to 0");
-                    d.Add(work, new Percent(0));
+                    Controller.Log!.Message($"Work type {work} wasn't found in a save file. Setting percent to 0");
+                    d.Add(work, Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = 0}));
                 }
             }
             catch (System.IO.FileNotFoundException)
@@ -121,7 +116,7 @@ namespace AutoPriorities
                         }
                         catch (Exception e)
                         {
-                            Controller.Log.Message($"error: {e} for pawn {pawn.Name.ToStringFull}");
+                            Controller.Log!.Message($"error: {e} for pawn {pawn.Name.ToStringFull}");
                         }
 
                         if (SortedPawnFitnessForEveryWork.ContainsKey(work))
@@ -152,12 +147,12 @@ namespace AutoPriorities
             }
             catch (Exception e)
             {
-                Controller.Log.Error($"An error occured when rebuilding PawnData:");
+                Controller.Log!.Error("An error occured when rebuilding PawnData:");
                 e.LogStackTrace();
             }
         }
 
-        public double PercentOfColonistsAvailable(WorkTypeDef workType, int priorityIgnore)
+        public double PercentColonistsAvailable(WorkTypeDef workType, int priorityIgnore)
         {
             var taken = 0d;
             foreach (var (priority, workTypes) in WorkTables)
@@ -171,6 +166,14 @@ namespace AutoPriorities
             }
 
             return 1d - taken;
+        }
+
+        public int NumberColonists(WorkTypeDef workType) => SortedPawnFitnessForEveryWork[workType].Count;
+
+        public int NumberOfColonistsAvailable(WorkTypeDef workType, int priorityIgnore)
+        {
+            return (int) (PercentColonistsAvailable(workType, priorityIgnore) *
+                          NumberColonists(workType));
         }
     }
 }

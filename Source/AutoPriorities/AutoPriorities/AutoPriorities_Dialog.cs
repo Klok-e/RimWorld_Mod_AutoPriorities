@@ -2,7 +2,9 @@
 using RimWorld;
 using System;
 using System.Collections.Generic;
+using AutoPriorities.Core;
 using AutoPriorities.Percents;
+using HugsLib.Logs;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
@@ -19,7 +21,7 @@ namespace AutoPriorities
 
         private const float SliderWidth = 20f;
         private const float SliderHeight = 60f;
-        private const float SliderMargin = 60f;
+        private const float SliderMargin = 75f;
 
         private const float GuiShadowedMult = 0.5f;
 
@@ -32,7 +34,8 @@ namespace AutoPriorities
 
         private const float ButtonHeight = 30f;
 
-        private const float PercentStringWidth = 60f;
+        private const float PercentStringWidth = 30f;
+        private const float PercentStringLabelWidth = 20f;
 
         private Vector2 _scrollPos;
         private Rect _rect;
@@ -86,6 +89,7 @@ namespace AutoPriorities
             var workTables = PawnsData.WorkTables;
             for (var table = 0; table < workTables.Count; table++)
             {
+                // table row
                 var pr = PawnsData.WorkTables[table];
                 var colOrig = GUI.color;
                 //shadow repeating priorities
@@ -103,9 +107,6 @@ namespace AutoPriorities
                 Widgets.DrawLine(new Vector2(slidersRect.xMin, slidersRect.yMax),
                     new Vector2(slidersRect.xMax, slidersRect.yMax), new Color(0.7f, 0.7f, 0.7f), 1f);
 
-                var priorityButtonRect = new Rect(slidersRect.xMin, slidersRect.yMin + (slidersRect.height / 2f),
-                    ButtonHeight, ButtonHeight);
-
                 pr.priority = DrawUtil.PriorityBox(slidersRect.xMin, slidersRect.yMin + (slidersRect.height / 2f),
                     pr.priority);
                 PawnsData.WorkTables[table] = pr;
@@ -116,6 +117,8 @@ namespace AutoPriorities
                     var workName = workType.labelShort;
                     try
                     {
+                        var currentPercent = pr.workTypes[workType];
+
                         var elementXPos = slidersRect.xMin + SliderMargin * (i + 1);
 
                         var labelRect = new Rect(elementXPos - (workName.GetWidthCached() / 2),
@@ -125,20 +128,85 @@ namespace AutoPriorities
                         var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
                         var newSliderValue =
                             GUI.VerticalSlider(sliderRect, (float) pr.workTypes[workType].Value, 1f, 0f);
-                        var available = (float) PawnsData.PercentOfColonistsAvailable(workType, pr.priority);
+                        var available = (float) PawnsData.PercentColonistsAvailable(workType, pr.priority);
                         newSliderValue = Mathf.Min(available, newSliderValue);
 
-                        var percentsText = Mathf.RoundToInt(newSliderValue * 100f).ToString();
+                        var percentsText = currentPercent switch
+                        {
+                            Percent _ => ((int) (newSliderValue * 100f)).ToString(),
+                            Number _ => ((int) (newSliderValue * PawnsData.NumberColonists(workType))).ToString(),
+                            _ => throw new ArgumentOutOfRangeException(nameof(currentPercent))
+                        };
                         var percentsRect = new Rect(
-                            sliderRect.xMax - PercentStringWidth / 2,
+                            sliderRect.xMax - PercentStringWidth,
                             sliderRect.yMax + 3f,
                             PercentStringWidth,
                             25f);
 
-                        Widgets.TextFieldPercent(percentsRect, ref newSliderValue, ref percentsText);
+                        // percents and numbers switch button
+                        var switchRect = new Rect(percentsRect.min +
+                                                  new Vector2(5f + PercentStringLabelWidth, 0f), percentsRect.size);
+
+                        var sliderValRepr = currentPercent switch
+                        {
+                            Percent _ => newSliderValue * 100f,
+                            Number _ => newSliderValue * PawnsData.NumberColonists(workType),
+                            _ => throw new ArgumentOutOfRangeException(nameof(currentPercent))
+                        };
+                     
+                        Widgets.TextFieldNumeric(percentsRect, ref sliderValRepr, ref percentsText);
+                        var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
+                        switch (currentPercent)
+                        {
+                            case Number n:
+                                newSliderValue = sliderValRepr / PawnsData.NumberColonists(workType);
+                                if (Widgets.ButtonText(symbolRect, "№"))
+                                {
+                                    Controller.PoolNumbers.Pool(n);
+                                    currentPercent = Controller.PoolPercents.Acquire(new PercentPoolArgs
+                                    {
+                                        Value = newSliderValue
+                                    });
+                                }
+
+                                break;
+                            case Percent p:
+                                newSliderValue = sliderValRepr / 100f;
+                                if (Widgets.ButtonText(symbolRect, "%"))
+                                {
+                                    Controller.PoolPercents.Pool(p);
+                                    currentPercent = Controller.PoolNumbers.Acquire(new NumberPoolArgs
+                                    {
+                                        Count = (int) (newSliderValue * PawnsData.NumberColonists(workType)),
+                                        Total = PawnsData.NumberColonists(workType)
+                                    });
+                                }
+
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException(nameof(currentPercent));
+                        }
+
                         newSliderValue = Mathf.Min(available, newSliderValue);
 
-                        pr.workTypes[workType] = new Percent(newSliderValue);
+                        switch (currentPercent)
+                        {
+                            case Percent p:
+                                Controller.PoolPercents.Pool(p);
+                                pr.workTypes[workType] = Controller.PoolPercents.Acquire(new PercentPoolArgs
+                                {
+                                    Value = newSliderValue
+                                });
+                                break;
+                            case Number n:
+                                Controller.PoolNumbers.Pool(n);
+                                pr.workTypes[workType] = Controller.PoolNumbers.Acquire(new NumberPoolArgs
+                                {
+                                    Count = (int) (newSliderValue * PawnsData.NumberColonists(workType)),
+                                    Total = PawnsData.NumberColonists(workType)
+                                });
+                                break;
+                        }
                     }
                     catch (Exception e)
                     {
@@ -197,11 +265,10 @@ namespace AutoPriorities
         private void AddPriority()
         {
             var dict = new Dictionary<WorkTypeDef, IPercent>();
-            PawnsData.WorkTables.Add(
-                (0, dict));
+            PawnsData.WorkTables.Add((0, dict));
 
             foreach (var keyValue in PawnsData.WorkTypes)
-                dict.Add(keyValue, new Percent(0f));
+                dict.Add(keyValue, Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = 0}));
         }
 
         private void RemovePriority()

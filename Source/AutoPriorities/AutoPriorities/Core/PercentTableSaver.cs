@@ -137,12 +137,14 @@ namespace AutoPriorities.Core
         {
             public Variant variant;
             public int number;
+
             public double percent;
 
+            // Controller.PoolPercents.Acquire(new PercentPoolArgs{Value = workType._percent})
             public IPercent Parsed() => variant switch
             {
-                Variant.Number => new Number(number, null),
-                Variant.Percent => new Percent(percent),
+                Variant.Number => Controller.PoolNumbers.Acquire(new NumberPoolArgs {Count = number, Total = 0}),
+                Variant.Percent => Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = percent}),
                 _ => throw new Exception()
             };
 

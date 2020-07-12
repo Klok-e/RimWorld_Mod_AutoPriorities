@@ -47,7 +47,7 @@ namespace AutoPriorities
                 var pawns = pawnsData.SortedPawnFitnessForEveryWork[work];
                 var covered = -1;
 #if DEBUG
-                Controller.Log.Message($"skilled worktype {work.defName}");
+                Controller.Log!.Message($"skilled worktype {work.defName}");
 #endif
 
                 //skip repeating priorities
@@ -105,7 +105,7 @@ namespace AutoPriorities
                 var covered = -1;
 
 #if DEBUG
-                Controller.Log.Message($"unskilled worktype {work.defName}");
+                Controller.Log!.Message($"unskilled worktype {work.defName}");
 #endif
 
                 //skip repeating priorities
