@@ -30,6 +30,7 @@ namespace AutoPriorities.Core
             catch (Exception e)
             {
                 e.LogStackTrace();
+                throw;
             }
         }
 
@@ -74,8 +75,9 @@ namespace AutoPriorities.Core
                     var dict = new Dictionary<WorkTypeDef, IPercent>();
                     foreach (var workType in prior._list)
                     {
-                        dict.Add(StringToDef(workType._workTypeDefName),
-                            Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = workType._percent}));
+                        var def = StringToDef(workType._workTypeDefName);
+                        if (def is null) continue;
+                        dict.Add(def, Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = workType._percent}));
                     }
 
                     output.Add((prior._priority, dict));
@@ -85,7 +87,7 @@ namespace AutoPriorities.Core
             return output;
         }
 
-        public static WorkTypeDef StringToDef(string name)
+        public static WorkTypeDef? StringToDef(string name)
         {
             foreach (var workType in WorkTypeDefsUtility.WorkTypeDefsInPriorityOrder)
             {
@@ -100,18 +102,18 @@ namespace AutoPriorities.Core
         [XmlRoot]
         public class State
         {
-            [XmlElement] public List<IntAndList> _intAndLists;
+            [XmlElement] public List<IntAndList> _intAndLists = new List<IntAndList>();
         }
 
         public class IntAndList
         {
             [XmlAttribute] public int _priority;
-            [XmlElement] public List<WorkTypeAndFloat> _list;
+            [XmlElement] public List<WorkTypeAndFloat> _list = new List<WorkTypeAndFloat>();
         }
 
         public class WorkTypeAndFloat
         {
-            [XmlAttribute] public string _workTypeDefName;
+            [XmlAttribute] public string _workTypeDefName = "";
             [XmlAttribute] public double _percent;
         }
     }

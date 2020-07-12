@@ -48,7 +48,7 @@ namespace AutoPriorities.Core
             {
                 // no fluffy's worktab detected
 #if DEBUG
-                Log.Message("No Fluffy's worktab detected");
+                Log!.Message("No Fluffy's worktab detected");
 #endif
                 worktab = typeof(MainTabWindow_Work);
                 patchClass = typeof(WorkTab_AddButtonToOpenAutoPrioritiesWindow);
@@ -57,7 +57,7 @@ namespace AutoPriorities.Core
             {
                 // fluffy's worktab
 #if DEBUG
-                Log.Message("Fluffy's worktab detected");
+                Log!.Message("Fluffy's worktab detected");
 #endif
                 Assembly.LoadFile(Path.Combine(ModContentPack.RootDir,
                     "ConditionalAssemblies/1.1/FluffyWorktabPatch.dll"));

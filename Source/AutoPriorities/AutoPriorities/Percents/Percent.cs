@@ -7,8 +7,6 @@ namespace AutoPriorities.Percents
 {
     public class Percent : IPercent, IPoolable<Percent, PercentPoolArgs>
     {
-        public Variant Variant => Variant.Percent;
-
         public double Value { get; private set; }
 
         public Percent Initialize(PercentPoolArgs args)

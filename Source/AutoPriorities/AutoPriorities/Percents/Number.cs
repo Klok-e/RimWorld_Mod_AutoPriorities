@@ -11,8 +11,7 @@ namespace AutoPriorities.Percents
         public int Total { get; private set; }
 
         public int Count { get; private set; }
-
-        public Variant Variant => Variant.Number;
+        
         public double Value => (double) Count / Total;
 
         public Number Initialize(NumberPoolArgs args)

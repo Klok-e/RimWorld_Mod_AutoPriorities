@@ -56,13 +56,13 @@ namespace AutoPriorities.Core
                     return workType;
             }
 
-            Controller.Log.Message($"Work type {name} not found. Excluding {name} from the internal data structure.");
+            Controller.Log!.Message($"Work type {name} not found. Excluding {name} from the internal data structure.");
             return null;
         }
 
         public class Ser
         {
-            public List<Tupl> data;
+            public List<Tupl> data = new List<Tupl>();
 
             public List<(int, Dictionary<WorkTypeDef, IPercent> )> Parsed() => data
                 .Select(x => x.Parsed())
@@ -82,7 +82,7 @@ namespace AutoPriorities.Core
         public class Tupl
         {
             public int priority;
-            public Dic dict;
+            public Dic dict = new Dic();
 
             public (int, Dictionary<WorkTypeDef, IPercent> ) Parsed() => (priority, dict.Parsed());
 
@@ -98,12 +98,12 @@ namespace AutoPriorities.Core
 
         public class Dic
         {
-            public List<StrPercent> percents;
+            public List<StrPercent> percents = new List<StrPercent>();
 
             public Dictionary<WorkTypeDef, IPercent> Parsed() => percents
                 .Select(x => x.Parsed())
                 .Where(x => x.Item1 != null)
-                .ToDictionary(x => x.Item1, x => x.Item2);
+                .ToDictionary(x => x.Item1!, x => x.Item2);
 
             public static Dic Serialized(Dictionary<WorkTypeDef, IPercent> dic)
             {
@@ -118,8 +118,8 @@ namespace AutoPriorities.Core
 
         public class StrPercent
         {
-            public string workType;
-            public UnionPercent percent;
+            public string workType = "";
+            public UnionPercent percent = new UnionPercent();
 
             public (WorkTypeDef?, IPercent) Parsed() => (StringToDef(workType), percent.Parsed());
 
@@ -148,23 +148,29 @@ namespace AutoPriorities.Core
                 _ => throw new Exception()
             };
 
-            public static UnionPercent Serialized(IPercent p)
+            public static UnionPercent Serialized(IPercent percent)
             {
-                return p.Variant switch
+                return percent switch
                 {
-                    Variant.Number => new UnionPercent
+                    Number n => new UnionPercent
                     {
                         variant = Variant.Number,
-                        number = ((Number) p).Count
+                        number = n.Count
                     },
-                    Variant.Percent => new UnionPercent
+                    Percent p => new UnionPercent
                     {
                         variant = Variant.Percent,
-                        percent = ((Percent) p).Value
+                        percent = p.Value
                     },
                     _ => throw new Exception(),
                 };
             }
+        }
+
+        public enum Variant
+        {
+            Number,
+            Percent
         }
     }
 }
