@@ -24,8 +24,8 @@ namespace AutoPriorities
             try
             {
                 PawnJobCountCached.Clear();
-                foreach (var item in pawnsData.AllPlayerPawns)
-                    PawnJobCountCached.Add(item, 0);
+                foreach (var pawn in pawnsData.AllPlayerPawns)
+                    PawnJobCountCached.Add(pawn, 0);
 
                 AssignSkilledJobs(pawnsData, PawnJobCountCached);
                 AssignNonSkilledJobs(pawnsData, PawnJobCountCached);
@@ -63,16 +63,15 @@ namespace AutoPriorities
 
 #if DEBUG
                     Controller.Log.Message(
-                        $"iter {iter}, priority {priorityInd}, pawn {pawn.NameFullColored}, priority {priority}");
+                        $"iter {iter}, priority index {priorityInd}, pawn {pawn.NameFullColored}, priority {priority}");
 #endif
 
                     //skip incapable pawns
-                    if (pawn.IsCapableOfWholeWorkType(work))
-                    {
-                        pawn.workSettings.SetPriority(work, priority);
+                    if (!pawn.IsCapableOfWholeWorkType(work))
+                        continue;
+                    pawn.workSettings.SetPriority(work, priority);
 
-                        pawnJobCount[pawn] += 1;
-                    }
+                    pawnJobCount[pawn] += 1;
                 }
 
                 //set remaining pawns to 0
@@ -82,9 +81,7 @@ namespace AutoPriorities
                     //Controller.Log.Message($"iter {i}, pawn {pawns[i].pawn.NameFullColored} priority 0");
 #endif
                     if (!pawns[i].pawn.IsCapableOfWholeWorkType(work))
-                    {
                         continue;
-                    }
 
                     pawns[i].pawn.workSettings.SetPriority(work, 0);
                 }
@@ -93,14 +90,17 @@ namespace AutoPriorities
 
         private void AssignNonSkilledJobs(PawnsData pawnsData, Dictionary<Pawn, int> pawnJobCount)
         {
-            //turn dict to list
-            List<(Pawn pawn, int count)> jobsCount = pawnJobCount.Select(item => (item.Key, item.Value)).ToList();
-
-            //sort by ascending to then iterate (lower count of works assigned gets works first)
-            jobsCount.Sort((x, y) => x.count.CompareTo(y.count));
             foreach (var work in pawnsData.WorkTypesNotRequiringSkills)
             {
                 FillListPriorityPercents(pawnsData, work, PriorityPercentCached);
+
+                // combine fitness and job count parameters
+                // list of pawns and new fitness (higher is better, gets job faster)
+                List<(Pawn pawn, double fitness)> pawns = pawnsData.SortedPawnFitnessForEveryWork[work]
+                    .Select(p => (p.pawn, p.fitness >= 0d ? 1d / (1 + pawnJobCount[p.pawn]) : 0d)).ToList();
+                
+                // sort descending based on fitness
+                pawns.Sort((x, y) => y.fitness.CompareTo(x.fitness));
 
                 var covered = -1;
 
@@ -112,12 +112,12 @@ namespace AutoPriorities
                 foreach (var (iter, percentIndex) in PriorityPercentCached
                     .Distinct(x => x.priority)
                     .Select(a => a.percent)
-                    .IterPercents(jobsCount.Count))
+                    .IterPercents(pawns.Count))
                 {
                     covered = iter;
 
                     var (priority, _) = PriorityPercentCached[percentIndex];
-                    var (pawn, _) = jobsCount[iter];
+                    var (pawn, _) = pawns[iter];
 
 #if DEBUG
                     Controller.Log.Message(
@@ -130,14 +130,13 @@ namespace AutoPriorities
                 }
 
                 //set remaining pawns to 0
-                for (var i = covered + 1; i < jobsCount.Count; i++)
+                for (var i = covered + 1; i < pawns.Count; i++)
                 {
 #if DEBUG
                     //Controller.Log.Message($"iter {i}, pawn {jobsCount[i].pawn.NameFullColored} priority 0");
 #endif
-                    if (!jobsCount[i].pawn.IsCapableOfWholeWorkType(work))
-                        continue;
-                    jobsCount[i].pawn.workSettings.SetPriority(work, 0);
+                    if (pawns[i].pawn.IsCapableOfWholeWorkType(work))
+                        pawns[i].pawn.workSettings.SetPriority(work, 0);
                 }
             }
         }

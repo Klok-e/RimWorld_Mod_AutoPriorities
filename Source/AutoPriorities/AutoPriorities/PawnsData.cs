@@ -36,6 +36,11 @@ namespace AutoPriorities
             {
                 workTables = PercentTableSaver.LoadState();
 
+                // add totals, otherwise division by zero
+                foreach (var (work, percent) in workTables.SelectMany(table => table.workTypes))
+                    if (percent is Number n)
+                        n.Initialize(new NumberPoolArgs {Count = n.Count, Total = NumberColonists(work)});
+
                 // if not present in built structure, then add with 0 percent
                 foreach (var work in workTables
                     .SelectMany(keyVal => WorkTypes
@@ -76,7 +81,12 @@ namespace AutoPriorities
             try
             {
                 // get all work types
-                var workTypes = WorkTypeDefsUtility.WorkTypeDefsInPriorityOrder;
+                var workTypes = WorkTypeDefsUtility.WorkTypeDefsInPriorityOrder.ToArray();
+
+#if DEBUG
+                Controller.Log!.Message(
+                    $"work types: {string.Join(" ", workTypes.Select(w => w.defName))}");
+#endif
 
                 // get all pawns owned by player
                 var pawns = Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer);
@@ -94,9 +104,15 @@ namespace AutoPriorities
                         if (!AllPlayerPawns.Contains(pawn))
                             AllPlayerPawns.Add(pawn);
 
-                        double fitness = 0;
+                        var fitness = -1d;
                         try
                         {
+#if DEBUG
+                            if (!pawn.IsCapableOfWholeWorkType(work))
+                            {
+                                // Controller.Log!.Message($"{pawn.NameFullColored} is incapable of {work}");
+                            }
+#endif
                             if (pawn.IsCapableOfWholeWorkType(work))
                             {
                                 double skill = pawn.skills.AverageOfRelevantSkillsFor(work);
@@ -108,15 +124,20 @@ namespace AutoPriorities
                                 };
 
                                 fitness = skill + skill * passion * Math.Max(Controller.PassionMult, 0d);
-                            }
-                            else
-                            {
-                                fitness = 0;
+
+#if DEBUG
+                                if (work.defName == "Firefighter")
+                                {
+                                    Controller.Log!.Message(
+                                        $"{pawn.NameFullColored} is capable of {work} with fitness of {fitness}" +
+                                        $" (skill avg {skill}, passion {passion}, mult {Controller.PassionMult})");
+                                }
+#endif
                             }
                         }
                         catch (Exception e)
                         {
-                            Controller.Log!.Message($"error: {e} for pawn {pawn.Name.ToStringFull}");
+                            Controller.Log!.Message($"error: {e} for pawn {pawn.NameFullColored}");
                         }
 
                         if (SortedPawnFitnessForEveryWork.ContainsKey(work))
