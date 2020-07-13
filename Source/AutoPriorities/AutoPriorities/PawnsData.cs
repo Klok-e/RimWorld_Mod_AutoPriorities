@@ -36,7 +36,7 @@ namespace AutoPriorities
             {
                 workTables = PercentTableSaver.LoadState();
 
-                // add totals, otherwise division by zero
+                // add totals, otherwise results in division by zero
                 foreach (var (work, percent) in workTables.SelectMany(table => table.workTypes))
                     if (percent is Number n)
                         n.Initialize(new NumberPoolArgs {Count = n.Count, Total = NumberColonists(work)});
