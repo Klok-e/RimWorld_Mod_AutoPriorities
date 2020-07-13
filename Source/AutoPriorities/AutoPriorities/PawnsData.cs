@@ -128,9 +128,9 @@ namespace AutoPriorities
 #if DEBUG
                                 if (work.defName == "Firefighter")
                                 {
-                                    Controller.Log!.Message(
-                                        $"{pawn.NameFullColored} is capable of {work} with fitness of {fitness}" +
-                                        $" (skill avg {skill}, passion {passion}, mult {Controller.PassionMult})");
+                                    // Controller.Log!.Message(
+                                    //     $"{pawn.NameFullColored} is capable of {work} with fitness of {fitness}" +
+                                    //     $" (skill avg {skill}, passion {passion}, mult {Controller.PassionMult})");
                                 }
 #endif
                             }
