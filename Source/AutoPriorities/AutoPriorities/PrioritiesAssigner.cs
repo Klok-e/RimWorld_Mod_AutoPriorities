@@ -94,11 +94,10 @@ namespace AutoPriorities
             {
                 FillListPriorityPercents(pawnsData, work, PriorityPercentCached);
 
-                // combine fitness and job count parameters
-                // list of pawns and new fitness (higher is better, gets job faster)
+                // fitness doesn't matter here, only job count does
                 List<(Pawn pawn, double fitness)> pawns = pawnsData.SortedPawnFitnessForEveryWork[work]
-                    .Select(p => (p.pawn, p.fitness >= 0d ? 1d / (1 + pawnJobCount[p.pawn]) : 0d)).ToList();
-                
+                    .Select(p => (p.pawn, 1d / (1 + pawnJobCount[p.pawn]))).ToList();
+
                 // sort descending based on fitness
                 pawns.Sort((x, y) => y.fitness.CompareTo(x.fitness));
 
