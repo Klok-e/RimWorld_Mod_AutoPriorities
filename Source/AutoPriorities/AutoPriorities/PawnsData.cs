@@ -97,6 +97,7 @@ namespace AutoPriorities
                 SortedPawnFitnessForEveryWork.Clear();
                 foreach (var work in workTypes)
                 {
+                    SortedPawnFitnessForEveryWork[work] = new List<(Pawn pawn, double fitness)>();
                     foreach (var pawn in pawns)
                     {
                         if (pawn.AnimalOrWildMan())
@@ -114,7 +115,7 @@ namespace AutoPriorities
                                 // Controller.Log!.Message($"{pawn.NameFullColored} is incapable of {work}");
                             }
 #endif
-                            if (pawn.IsCapableOfWholeWorkType(work))
+                            if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains((work, pawn)))
                             {
                                 double skill = pawn.skills.AverageOfRelevantSkillsFor(work);
                                 double passion = pawn.skills.MaxPassionOfRelevantSkillsFor(work) switch
@@ -141,17 +142,8 @@ namespace AutoPriorities
                             Controller.Log!.Message($"error: {e} for pawn {pawn.NameFullColored}");
                         }
 
-                        if (SortedPawnFitnessForEveryWork.ContainsKey(work))
-                        {
+                        if (fitness >= 0d)
                             SortedPawnFitnessForEveryWork[work].Add((pawn, fitness));
-                        }
-                        else
-                        {
-                            SortedPawnFitnessForEveryWork.Add(work, new List<(Pawn, double)>
-                            {
-                                (pawn, fitness)
-                            });
-                        }
                     }
 
                     if (!WorkTypes.Contains(work))

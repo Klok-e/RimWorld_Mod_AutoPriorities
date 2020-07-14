@@ -88,13 +88,19 @@ namespace AutoPriorities
             var prioritiesButtonRect =
                 new Rect(inRect.xMin, inRect.yMin, _prioritiesLabelWidth, LabelHeight);
             if (Widgets.ButtonText(prioritiesButtonRect, PrioritiesLabel))
+            {
                 _currentlySelectedTab = SelectedTab.Priorities;
+                PawnsData.Rebuild();
+            }
 
             var pawnsButtonRect =
                 new Rect(prioritiesButtonRect.xMax + 5f, prioritiesButtonRect.yMin,
                     _pawnExcludeLabelWidth, LabelHeight);
             if (Widgets.ButtonText(pawnsButtonRect, PawnExcludeLabel))
+            {
                 _currentlySelectedTab = SelectedTab.PawnExclusion;
+                PawnsData.Rebuild();
+            }
 
             // draw tab contents lower than buttons
             inRect.yMin += LabelHeight + 10f;
