@@ -22,20 +22,12 @@ namespace AutoPriorities.Core
 
         public static void SaveState(List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)> state)
         {
-            // delete legacy file if exists
-            if (PercentPerWorkTypeSaver.SaveFileExists)
-                File.Delete(PercentPerWorkTypeSaver.SavePathFull);
-
             using var stream = new FileStream(FullPath, FileMode.Create);
             new XmlSerializer(typeof(Ser)).Serialize(stream, Ser.Serialized(state));
         }
 
         public static List<(int, Dictionary<WorkTypeDef, IPercent>)> LoadState()
         {
-            // load legacy file if exists
-            if (PercentPerWorkTypeSaver.SaveFileExists)
-                return PercentPerWorkTypeSaver.LoadStateLegacy();
-
             if (File.Exists(FullPath))
             {
                 using var stream = new FileStream(FullPath, FileMode.OpenOrCreate);
