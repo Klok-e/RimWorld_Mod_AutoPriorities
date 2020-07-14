@@ -9,9 +9,25 @@ namespace AutoPriorities.Utils
     {
         public static int MaxPriority { get; set; } = 4;
 
-        public static int PriorityBox(float x, float y, int priority)
+        /// <summary>
+        /// If false - only background is drawn
+        /// </summary>
+        public static void EmptyCheckbox(float x, float y, ref bool value, float width = 24f, float height = 24f)
         {
-            var rect = new Rect(x, y, 25f, 25f);
+            var rect = new Rect(x, y, width, height);
+            DrawWorkBoxBackground(rect);
+            if (value)
+                GUI.DrawTexture(rect, WidgetsWork.WorkBoxCheckTex);
+
+            if (Event.current.type != EventType.MouseDown || !Mouse.IsOver(rect))
+                return;
+
+            value = !value;
+        }
+
+        public static int PriorityBox(float x, float y, int priority, float width = 25f, float height = 25f)
+        {
+            var rect = new Rect(x, y, width, height);
             DrawWorkBoxBackground(rect);
 
             if (priority > 0)
@@ -64,7 +80,7 @@ namespace AutoPriorities.Utils
         {
             var texture2D1 = WidgetsWork.WorkBoxBGTex_Awful;
             var texture2D2 = WidgetsWork.WorkBoxBGTex_Bad;
-            float a = 3f / 4f;
+            const float a = 3f / 4f;
 
             var colorOrig = GUI.color;
             GUI.DrawTexture(rect, texture2D1);

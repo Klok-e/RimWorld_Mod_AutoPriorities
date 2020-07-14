@@ -79,8 +79,8 @@ namespace AutoPriorities
         private const string PawnExcludeLabel = "Exclude Colonists";
         private readonly float _pawnExcludeLabelWidth = PawnExcludeLabel.GetWidthCached() + 10f;
 
-        const string label = "Run AutoPriorities";
-        private readonly float _labelWidth = label.GetWidthCached() + 10f;
+        const string Label = "Run AutoPriorities";
+        private readonly float _labelWidth = Label.GetWidthCached() + 10f;
 
         public override void DoWindowContents(Rect inRect)
         {
@@ -118,7 +118,7 @@ namespace AutoPriorities
                 inRect.yMax - ButtonHeight,
                 _labelWidth,
                 ButtonHeight);
-            if (Widgets.ButtonText(buttonRect, label))
+            if (Widgets.ButtonText(buttonRect, Label))
             {
                 PawnsData.Rebuild();
                 PrioritiesAssigner.AssignPriorities(PawnsData);
@@ -327,7 +327,7 @@ namespace AutoPriorities
             var tableSizeX = PawnNameCoWidth + WorkLabelWidth / 2 +
                              WorkLabelHorizOffset * PawnsData.WorkTypes.Count;
 
-            var tableSizeY = fromTopToTickboxesVertical + ButtonHeight * PawnsData.AllPlayerPawns.Count;
+            var tableSizeY = fromTopToTickboxesVertical + (LabelMargin + ButtonHeight) * PawnsData.AllPlayerPawns.Count;
             Widgets.BeginScrollView(scrollRect, ref _pawnExcludeScrollPos, new Rect(0, 0, tableSizeX, tableSizeY));
 
             var tickboxesRect = new Rect(PawnNameCoWidth, fromTopToTickboxesVertical,
@@ -362,8 +362,8 @@ namespace AutoPriorities
                 (w, i) => (w, i)))
             {
                 // draw pawn name
-                var nameRect = new Rect(0f, tickboxesRect.yMin + ButtonHeight * rowi, PawnNameCoWidth,
-                    LabelHeight);
+                var nameRect = new Rect(0f, tickboxesRect.yMin + (LabelMargin + ButtonHeight) * rowi,
+                    PawnNameCoWidth, LabelHeight + LabelMargin);
                 Widgets.Label(nameRect, pawn.LabelNoCountColored);
 
                 Widgets.DrawLine(new Vector2(nameRect.xMin, nameRect.yMax),
@@ -377,14 +377,24 @@ namespace AutoPriorities
                 {
                     var prev = PawnsData.ExcludedPawns.Contains((workType, pawn));
                     var next = prev;
-                    Widgets.Checkbox(nameRect.xMax - (ButtonHeight - 1) / 2 + (i + 1) * WorkLabelHorizOffset,
-                        tickboxesRect.yMin + rowi * ButtonHeight, ref next);
-                    if (prev != next)
+                    DrawUtil.EmptyCheckbox(nameRect.xMax - (ButtonHeight - 1) / 2 + (i + 1) * WorkLabelHorizOffset,
+                        nameRect.yMin, ref next);
+                    if (prev == next) continue;
+                    if (next)
                     {
-                        if (next)
-                            PawnsData.ExcludedPawns.Add((workType, pawn));
-                        else
-                            PawnsData.ExcludedPawns.Remove((workType, pawn));
+                        PawnsData.ExcludedPawns.Add((workType, pawn));
+#if DEBUG
+                        Controller.Log!.Message(
+                            $"Pawn {pawn.NameFullColored} with work {workType.defName} was added to the Excluded list");
+#endif
+                    }
+                    else
+                    {
+                        PawnsData.ExcludedPawns.Remove((workType, pawn));
+#if DEBUG
+                        Controller.Log!.Message(
+                            $"Pawn {pawn.NameFullColored} with work {workType.defName} was removed from the Excluded list");
+#endif
                     }
                 }
             }
