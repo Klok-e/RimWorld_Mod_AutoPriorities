@@ -2,9 +2,9 @@
 using RimWorld;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoPriorities.Core;
 using AutoPriorities.Percents;
-using HugsLib.Logs;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
@@ -13,11 +13,11 @@ namespace AutoPriorities
 {
     public class AutoPriorities_Dialog : Window
     {
-        private HashSet<int> PrioritiesEncounteredCached { get; }
+        private HashSet<int> PrioritiesEncounteredCached { get; } = new HashSet<int>();
 
-        private PawnsData PawnsData { get; }
+        private PawnsData PawnsData { get; } = new PawnsData();
 
-        private PrioritiesAssigner PrioritiesAssigner { get; }
+        private PrioritiesAssigner PrioritiesAssigner { get; } = new PrioritiesAssigner();
 
         private const float SliderWidth = 20f;
         private const float SliderHeight = 60f;
@@ -27,17 +27,18 @@ namespace AutoPriorities
 
         private const float SlidersDistFromLeftBorder = 30f;
         private const float SlidersDistFromRightBorder = 10f;
-        private const float DistFromTopBorder = 80f;
         private const float DistFromBottomBorder = 50f;
 
-        private const float ScrollSize = 30f;
-
         private const float ButtonHeight = 30f;
+        private const float LabelHeight = 22f;
+        private const float LabelMargin = 5f;
+        private const float WorkLabelWidth = 75f;
+        private const float WorkLabelOffset = 25f;
+        private const float WorkLabelHorizOffset = 40f;
 
         private const float PercentStringWidth = 30f;
         private const float PercentStringLabelWidth = 20f;
 
-        private Vector2 _scrollPos;
         private Rect _rect;
         private bool _openedOnce;
 
@@ -46,12 +47,6 @@ namespace AutoPriorities
             doCloseButton = true;
             draggable = true;
             resizeable = true;
-            _scrollPos = new Vector2();
-            PrioritiesEncounteredCached = new HashSet<int>();
-            _openedOnce = false;
-
-            PawnsData = new PawnsData();
-            PrioritiesAssigner = new PrioritiesAssigner();
         }
 
         public override void PostClose()
@@ -70,7 +65,71 @@ namespace AutoPriorities
                 _openedOnce = true;
         }
 
+        private enum SelectedTab
+        {
+            Priorities = 1,
+            PawnExclusion = 2,
+        }
+
+        private SelectedTab _currentlySelectedTab = SelectedTab.Priorities;
+
+        private const string PrioritiesLabel = "Priorities";
+        private readonly float _prioritiesLabelWidth = PrioritiesLabel.GetWidthCached() + 10f;
+
+        private const string PawnExcludeLabel = "Exclude Colonists";
+        private readonly float _pawnExcludeLabelWidth = PawnExcludeLabel.GetWidthCached() + 10f;
+
+        const string label = "Run AutoPriorities";
+        private readonly float _labelWidth = label.GetWidthCached() + 10f;
+
         public override void DoWindowContents(Rect inRect)
+        {
+            // draw select tab buttons
+            var prioritiesButtonRect =
+                new Rect(inRect.xMin, inRect.yMin, _prioritiesLabelWidth, LabelHeight);
+            if (Widgets.ButtonText(prioritiesButtonRect, PrioritiesLabel))
+                _currentlySelectedTab = SelectedTab.Priorities;
+
+            var pawnsButtonRect =
+                new Rect(prioritiesButtonRect.xMax + 5f, prioritiesButtonRect.yMin,
+                    _pawnExcludeLabelWidth, LabelHeight);
+            if (Widgets.ButtonText(pawnsButtonRect, PawnExcludeLabel))
+                _currentlySelectedTab = SelectedTab.PawnExclusion;
+
+            // draw tab contents lower than buttons
+            inRect.yMin += LabelHeight + 10f;
+
+            // draw currently selected tab
+            switch (_currentlySelectedTab)
+            {
+                case SelectedTab.Priorities:
+                    PrioritiesTab(inRect);
+                    break;
+                case SelectedTab.PawnExclusion:
+                    PawnExcludeTab(inRect);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(_currentlySelectedTab));
+            }
+
+            // draw run auto priorities
+            var buttonRect = new Rect(
+                inRect.xMin,
+                inRect.yMax - ButtonHeight,
+                _labelWidth,
+                ButtonHeight);
+            if (Widgets.ButtonText(buttonRect, label))
+            {
+                PawnsData.Rebuild();
+                PrioritiesAssigner.AssignPriorities(PawnsData);
+                PawnsData.SaveState();
+                SoundDefOf.Click.PlayOneShotOnCamera();
+            }
+        }
+
+        private Vector2 _scrollPos;
+
+        private void PrioritiesTab(Rect inRect)
         {
             var worktypes = PawnsData.SortedPawnFitnessForEveryWork.Count;
 
@@ -122,7 +181,7 @@ namespace AutoPriorities
                         var elementXPos = slidersRect.xMin + SliderMargin * (i + 1);
 
                         var labelRect = new Rect(elementXPos - (workName.GetWidthCached() / 2),
-                            slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f, 100f, 25f);
+                            slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f, 100f, LabelHeight);
                         Widgets.Label(labelRect, workName);
 
                         var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
@@ -234,20 +293,6 @@ namespace AutoPriorities
 
             Widgets.EndScrollView();
 
-            const string label = "Run AutoPriorities";
-            var buttonRect = new Rect(
-                inRect.xMin,
-                scrollRect.yMax + 9f,
-                label.GetWidthCached() + 10f,
-                ButtonHeight);
-            if (Widgets.ButtonText(buttonRect, label))
-            {
-                PawnsData.Rebuild();
-                PrioritiesAssigner.AssignPriorities(PawnsData);
-                PawnsData.SaveState();
-                SoundDefOf.Click.PlayOneShotOnCamera();
-            }
-
             var removePriorityButtonRect = new Rect(
                 inRect.xMax - SliderMargin,
                 scrollRect.yMax + 9f,
@@ -269,6 +314,83 @@ namespace AutoPriorities
                 AddPriority();
                 SoundDefOf.Click.PlayOneShotOnCamera();
             }
+        }
+
+        private Vector2 _pawnExcludeScrollPos;
+        private const float PawnNameCoWidth = 150f;
+
+        private void PawnExcludeTab(Rect inRect)
+        {
+            const float fromTopToTickboxesVertical = WorkLabelOffset + LabelHeight + 15f;
+
+            var scrollRect = new Rect(inRect.xMin, inRect.yMin, inRect.width,
+                inRect.height - DistFromBottomBorder);
+
+            var tableSizeX = PawnNameCoWidth + (ButtonHeight + 10f) * PawnsData.WorkTypes.Count;
+            var scrollWidth = Math.Max(tableSizeX, scrollRect.width);
+
+            var tableSizeY = fromTopToTickboxesVertical + (ButtonHeight + 10f) * PawnsData.AllPlayerPawns.Count;
+            var scrollHeight = Math.Max(tableSizeY, scrollRect.height);
+            Widgets.BeginScrollView(scrollRect, ref _pawnExcludeScrollPos, new Rect(0, 0, scrollWidth, scrollHeight));
+
+            var tickboxesRect = new Rect(PawnNameCoWidth, fromTopToTickboxesVertical,
+                tableSizeX - PawnNameCoWidth, tableSizeY - fromTopToTickboxesVertical);
+            var anchor = Text.Anchor;
+            Widgets.DrawBox(tickboxesRect);
+            // draw worktypes
+            Text.Anchor = TextAnchor.UpperCenter;
+            foreach (var (workType, i) in PawnsData.WorkTypes.Zip(
+                Enumerable.Range(0, PawnsData.WorkTypes.Count),
+                (w, i) => (w, i)))
+            {
+                var workLabel = workType.labelShort;
+                var rect = new Rect(tickboxesRect.xMin + WorkLabelHorizOffset * i, i % 2 == 0 ? 0f : WorkLabelOffset,
+                    WorkLabelWidth,
+                    LabelHeight);
+                Widgets.Label(rect, workLabel);
+                Widgets.DrawBox(rect);
+                var horizLinePos = rect.center.x;
+                Widgets.DrawLine(new Vector2(horizLinePos, rect.yMax),
+                    new Vector2(horizLinePos, tickboxesRect.yMin),
+                    Color.grey, 1f);
+            }
+
+            Text.Anchor = TextAnchor.UpperLeft;
+            foreach (var (pawn, rowi) in PawnsData.AllPlayerPawns.Zip(
+                Enumerable.Range(0, PawnsData.AllPlayerPawns.Count),
+                (w, i) => (w, i)))
+            {
+                // draw pawn name
+                var nameRect = new Rect(0f, tickboxesRect.yMin + ButtonHeight * rowi, PawnNameCoWidth,
+                    LabelHeight);
+                Widgets.Label(nameRect, pawn.LabelNoCountColored);
+
+                Widgets.DrawLine(new Vector2(nameRect.xMin, nameRect.yMax),
+                    new Vector2(tickboxesRect.xMax, nameRect.yMax),
+                    Color.grey, 1f);
+
+                // draw tickboxes
+                foreach (var (workType, i) in PawnsData.WorkTypes.Zip(
+                    Enumerable.Range(0, PawnsData.WorkTypes.Count),
+                    (w, i) => (w, i)))
+                {
+                    var prev = PawnsData.ExcludedPawns.Contains((workType, pawn));
+                    var next = prev;
+                    Widgets.Checkbox(nameRect.xMax - (ButtonHeight - 1) / 2 + (i + 1) * WorkLabelHorizOffset,
+                        tickboxesRect.yMin + rowi * ButtonHeight, ref next);
+                    if (prev != next)
+                    {
+                        if (next)
+                            PawnsData.ExcludedPawns.Add((workType, pawn));
+                        else
+                            PawnsData.ExcludedPawns.Remove((workType, pawn));
+                    }
+                }
+            }
+
+            Widgets.EndScrollView();
+
+            Text.Anchor = anchor;
         }
 
         private void AddPriority()

@@ -13,6 +13,7 @@ namespace AutoPriorities
     public class PawnsData
     {
         public List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)> WorkTables { get; }
+        public HashSet<(WorkTypeDef, Pawn)> ExcludedPawns { get; } = new HashSet<(WorkTypeDef, Pawn)>();
 
         public HashSet<WorkTypeDef> WorkTypes { get; } = new HashSet<WorkTypeDef>();
 
@@ -165,6 +166,9 @@ namespace AutoPriorities
                 {
                     keyValue.Value.Sort((x, y) => y.fitness.CompareTo(x.fitness));
                 }
+
+                // remove all non player pawns
+                ExcludedPawns.RemoveWhere(wp => !AllPlayerPawns.Contains(wp.Item2));
             }
             catch (Exception e)
             {
