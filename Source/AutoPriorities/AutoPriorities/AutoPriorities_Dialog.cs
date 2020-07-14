@@ -137,11 +137,9 @@ namespace AutoPriorities
                 inRect.height - DistFromBottomBorder);
 
             var tableSizeX = (worktypes + 1) * SliderMargin + SlidersDistFromLeftBorder + SlidersDistFromRightBorder;
-            var scrollWidth = tableSizeX > inRect.width ? tableSizeX : inRect.width;
 
             var tableSizeY = (SliderHeight + 3 * ButtonHeight) * PawnsData.WorkTables.Count;
-            var scrollHeight = tableSizeY > scrollRect.height ? tableSizeY : inRect.height;
-            Widgets.BeginScrollView(scrollRect, ref _scrollPos, new Rect(0, 0, scrollWidth, scrollHeight));
+            Widgets.BeginScrollView(scrollRect, ref _scrollPos, new Rect(0, 0, tableSizeX, tableSizeY));
 
             PrioritiesEncounteredCached.Clear();
             var row = 0;
@@ -326,17 +324,18 @@ namespace AutoPriorities
             var scrollRect = new Rect(inRect.xMin, inRect.yMin, inRect.width,
                 inRect.height - DistFromBottomBorder);
 
-            var tableSizeX = PawnNameCoWidth + (ButtonHeight + 10f) * PawnsData.WorkTypes.Count;
-            var scrollWidth = Math.Max(tableSizeX, scrollRect.width);
+            var tableSizeX = PawnNameCoWidth + WorkLabelWidth / 2 +
+                             WorkLabelHorizOffset * PawnsData.WorkTypes.Count;
 
-            var tableSizeY = fromTopToTickboxesVertical + (ButtonHeight + 10f) * PawnsData.AllPlayerPawns.Count;
-            var scrollHeight = Math.Max(tableSizeY, scrollRect.height);
-            Widgets.BeginScrollView(scrollRect, ref _pawnExcludeScrollPos, new Rect(0, 0, scrollWidth, scrollHeight));
+            var tableSizeY = fromTopToTickboxesVertical + ButtonHeight * PawnsData.AllPlayerPawns.Count;
+            Widgets.BeginScrollView(scrollRect, ref _pawnExcludeScrollPos, new Rect(0, 0, tableSizeX, tableSizeY));
 
             var tickboxesRect = new Rect(PawnNameCoWidth, fromTopToTickboxesVertical,
                 tableSizeX - PawnNameCoWidth, tableSizeY - fromTopToTickboxesVertical);
             var anchor = Text.Anchor;
-            Widgets.DrawBox(tickboxesRect);
+#if DEBUG
+            //Widgets.DrawBox(tickboxesRect); 
+#endif
             // draw worktypes
             Text.Anchor = TextAnchor.UpperCenter;
             foreach (var (workType, i) in PawnsData.WorkTypes.Zip(
@@ -348,7 +347,9 @@ namespace AutoPriorities
                     WorkLabelWidth,
                     LabelHeight);
                 Widgets.Label(rect, workLabel);
-                Widgets.DrawBox(rect);
+#if DEBUG
+                //Widgets.DrawBox(rect);
+#endif
                 var horizLinePos = rect.center.x;
                 Widgets.DrawLine(new Vector2(horizLinePos, rect.yMax),
                     new Vector2(horizLinePos, tickboxesRect.yMin),
