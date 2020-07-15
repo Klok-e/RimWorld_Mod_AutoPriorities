@@ -7,7 +7,7 @@
 		<li>1.1</li>
 	</supportedVersions>
 	<description>
-Adds a window that allows to automatically set work priorities for specified percents of pawns
+Adds a window that allows to automatically set work priorities for a specified amount of pawns
 
 How it works:
 All pawns are sorted before assigning so that the highest skill gets the job first. Mod also takes into account if the job does not require any skills. In that case, pawn with least skilled jobs assigned gets dumb job first.
