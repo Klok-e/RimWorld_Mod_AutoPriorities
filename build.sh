@@ -20,7 +20,7 @@ msbuild Source/AutoPriorities/AutoPriorities.sln -verbosity:quiet -p:Configurati
 rm -r -f ./Build
 mkdir ./Build
 echo building mod to $(realpath ./Build)
-for dir in /1.1 /Textures /Defs /Assemblies /About /LICENSE /ConditionalAssemblies
+for dir in /1.1 /Textures /Defs /About /LICENSE /ConditionalAssemblies
 do
     cp -r .$dir "./Build/$dir"
 done
