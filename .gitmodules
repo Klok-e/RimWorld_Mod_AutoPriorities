@@ -1,3 +1,4 @@
 [submodule "Source/WorkTab"]
 	path = Source/WorkTab
 	url = https://github.com/fluffy-mods/WorkTab
+	branch = 1.1
