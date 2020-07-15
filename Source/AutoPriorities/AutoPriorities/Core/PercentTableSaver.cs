@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using AutoPriorities.Percents;
+using AutoPriorities.Utils;
+using RimWorld;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Verse;
@@ -20,53 +22,100 @@ namespace AutoPriorities.Core
             FullPath = Application.persistentDataPath + Filename;
         }
 
-        public static void SaveState(List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)> state)
+        public static void SaveState(
+            (List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)>, HashSet<(WorkTypeDef, Pawn)>) state)
         {
             using var stream = new FileStream(FullPath, FileMode.Create);
             new XmlSerializer(typeof(Ser)).Serialize(stream, Ser.Serialized(state));
         }
 
-        public static List<(int, Dictionary<WorkTypeDef, IPercent>)> LoadState()
+        public static (Func<List<(int, Dictionary<WorkTypeDef, IPercent> )>> percents,
+            Func<HashSet<(WorkTypeDef, Pawn)>> excluded)
+            GetStateLoaders()
         {
-            if (File.Exists(FullPath))
+            try
             {
-                using var stream = new FileStream(FullPath, FileMode.OpenOrCreate);
-                var ser = (Ser) new XmlSerializer(typeof(Ser)).Deserialize(stream);
-                return ser.Parsed();
+                if (File.Exists(FullPath))
+                {
+                    using var stream = new FileStream(FullPath, FileMode.OpenOrCreate);
+                    var ser = (Ser) new XmlSerializer(typeof(Ser)).Deserialize(stream);
+                    return (() => ser.ParsedData(), () => ser.ParsedExcluded());
+                }
             }
-            else
+            catch (Exception e)
             {
-                return new List<(int, Dictionary<WorkTypeDef, IPercent>)>();
+                Controller.Log!.Error("Error while deserializing state");
+                e.LogStackTrace();
             }
+
+            return (() => new List<(int, Dictionary<WorkTypeDef, IPercent>)>(),
+                () => new HashSet<(WorkTypeDef, Pawn)>());
         }
 
         private static WorkTypeDef? StringToDef(string name)
         {
-            foreach (var workType in WorkTypeDefsUtility.WorkTypeDefsInPriorityOrder)
-            {
-                if (workType.defName == name)
-                    return workType;
-            }
+            var work = WorkTypeDefsUtility.WorkTypeDefsInPriorityOrder.FirstOrDefault(w => w.defName == name);
+            if (!(work is null))
+                return work;
 
-            Controller.Log!.Message($"Work type {name} not found. Excluding {name} from the internal data structure.");
+            Controller.Log!.Warning($"Work type {name} not found. Excluding {name} from the internal data structure.");
+            return null;
+        }
+
+        private static Pawn? IdToPawn(string pawnId)
+        {
+            var res = Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer)
+                .FirstOrDefault(p => p.ThingID == pawnId);
+            if (!(res is null)) 
+                return res;
+            
+            Controller.Log!.Warning($"pawn {pawnId} wasn't found while deserializing data, skipping...");
             return null;
         }
 
         public class Ser
         {
             public List<Tupl> data = new List<Tupl>();
+            public List<WorktypePawn> excludedPawns = new List<WorktypePawn>();
 
-            public List<(int, Dictionary<WorkTypeDef, IPercent> )> Parsed() => data
+            public List<(int, Dictionary<WorkTypeDef, IPercent>)> ParsedData() => data
                 .Select(x => x.Parsed())
                 .ToList();
 
-            public static Ser Serialized(List<(int, Dictionary<WorkTypeDef, IPercent>)> data)
+            public HashSet<(WorkTypeDef, Pawn)> ParsedExcluded() => excludedPawns
+                .Select(x => x.Parsed())
+                .Where(p => p.Item1 != null && p.Item2 != null)
+                .Select(p => (p.Item1!, p.Item2!))
+                .ToHashSet();
+
+            public static Ser Serialized(
+                (List<(int, Dictionary<WorkTypeDef, IPercent> )> percents, HashSet<(WorkTypeDef, Pawn)> excluded) data)
             {
                 return new Ser
                 {
-                    data = data
+                    data = data.percents
                         .Select(Tupl.Serialized)
+                        .ToList(),
+                    excludedPawns = data.excluded
+                        .Select(WorktypePawn.Serialized)
                         .ToList()
+                };
+            }
+        }
+
+        public class WorktypePawn
+        {
+            public string workType = "";
+            public string pawnId = "";
+
+            public (WorkTypeDef?, Pawn?) Parsed() => (StringToDef(workType), IdToPawn(pawnId));
+
+            public static WorktypePawn Serialized((WorkTypeDef work, Pawn pawn) data)
+            {
+                return new WorktypePawn
+                {
+                    workType = data.work.defName,
+                    pawnId = data.pawn.ThingID,
                 };
             }
         }

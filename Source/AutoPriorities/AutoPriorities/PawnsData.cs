@@ -13,7 +13,7 @@ namespace AutoPriorities
     public class PawnsData
     {
         public List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)> WorkTables { get; }
-        public HashSet<(WorkTypeDef, Pawn)> ExcludedPawns { get; } = new HashSet<(WorkTypeDef, Pawn)>();
+        public HashSet<(WorkTypeDef, Pawn)> ExcludedPawns { get; }
 
         public HashSet<WorkTypeDef> WorkTypes { get; } = new HashSet<WorkTypeDef>();
 
@@ -26,16 +26,37 @@ namespace AutoPriorities
 
         public PawnsData()
         {
-            WorkTables = LoadSavedState() ?? new List<(int, Dictionary<WorkTypeDef, IPercent>)>();
+            var (percents, excluded) = PercentTableSaver.GetStateLoaders();
+            // Excluded must be loaded first because State depends on ExcludedPawns being filled
+            ExcludedPawns = LoadSavedExcluded(excluded);
+            WorkTables = LoadSavedState(percents);
         }
 
-        private List<(int, Dictionary<WorkTypeDef, IPercent>)>? LoadSavedState()
+        private HashSet<(WorkTypeDef, Pawn)> LoadSavedExcluded(Func<HashSet<(WorkTypeDef, Pawn)>> loader)
+        {
+            HashSet<(WorkTypeDef, Pawn)>? excluded;
+            try
+            {
+                excluded = loader();
+            }
+            catch (Exception e)
+            {
+                Controller.Log!.Error("Error while loading percents state");
+                e.LogStackTrace();
+                excluded = null;
+            }
+
+            return excluded ?? new HashSet<(WorkTypeDef, Pawn)>();
+        }
+
+        private List<(int, Dictionary<WorkTypeDef, IPercent>)> LoadSavedState(
+            Func<List<(int, Dictionary<WorkTypeDef, IPercent>)>> loader)
         {
             Rebuild();
             List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)>? workTables;
             try
             {
-                workTables = PercentTableSaver.LoadState();
+                workTables = loader();
 
                 // add totals, otherwise results in division by zero
                 foreach (var (work, percent) in workTables.SelectMany(table => table.workTypes))
@@ -52,24 +73,21 @@ namespace AutoPriorities
                     d.Add(work, Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = 0}));
                 }
             }
-            catch (System.IO.FileNotFoundException)
-            {
-                workTables = null;
-            }
             catch (Exception e)
             {
+                Controller.Log!.Error("Error while loading percents state");
                 e.LogStackTrace();
                 workTables = null;
             }
 
-            return workTables;
+            return workTables ?? new List<(int, Dictionary<WorkTypeDef, IPercent>)>();
         }
 
         public void SaveState()
         {
             try
             {
-                PercentTableSaver.SaveState(WorkTables);
+                PercentTableSaver.SaveState((WorkTables, ExcludedPawns));
             }
             catch (Exception e)
             {
@@ -87,6 +105,9 @@ namespace AutoPriorities
 #if DEBUG
                 Controller.Log!.Message(
                     $"work types: {string.Join(" ", workTypes.Select(w => w.defName))}");
+                var exclStr = ExcludedPawns.Select(wp => $"({wp.Item1.defName}; {wp.Item2.LabelNoCount})");
+                Controller.Log!.Message(
+                    $"excluded pawns: {string.Join(" ", exclStr)}");
 #endif
 
                 // get all pawns owned by player
@@ -139,7 +160,8 @@ namespace AutoPriorities
                         }
                         catch (Exception e)
                         {
-                            Controller.Log!.Message($"error: {e} for pawn {pawn.NameFullColored}");
+                            Controller.Log!.Error($"error: {e} for pawn {pawn.NameFullColored}");
+                            e.LogStackTrace();
                         }
 
                         if (fitness >= 0d)
