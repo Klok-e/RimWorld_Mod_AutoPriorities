@@ -284,6 +284,7 @@
             <Project>{f2a88e78-d16d-4771-8baa-97a15d606a66}</Project>
             <Name>AutoPriorities</Name>
             <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+            <Private>false</Private>
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
