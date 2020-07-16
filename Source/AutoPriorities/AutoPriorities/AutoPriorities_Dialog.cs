@@ -371,6 +371,16 @@ namespace AutoPriorities
                 var nameRect = new Rect(0f, tickboxesRect.yMin + (LabelMargin + ButtonHeight) * rowi,
                     PawnNameCoWidth, LabelHeight + LabelMargin);
                 Widgets.Label(nameRect, pawn.LabelNoCountColored);
+                TooltipHandler.TipRegion(nameRect, "Click here to toggle all jobs");
+                if (Widgets.ButtonInvisible(nameRect))
+                {
+                    var c = PawnsData.ExcludedPawns.Count(x => x.Item2 == pawn);
+                    if (c > PawnsData.WorkTypes.Count / 2)
+                        PawnsData.ExcludedPawns.RemoveWhere(x => x.Item2 == pawn);
+                    else
+                        foreach (var work in PawnsData.WorkTypes)
+                            PawnsData.ExcludedPawns.Add((work, pawn));
+                }
 
                 Widgets.DrawLine(new Vector2(nameRect.xMin, nameRect.yMax),
                     new Vector2(tickboxesRect.xMax, nameRect.yMax),
