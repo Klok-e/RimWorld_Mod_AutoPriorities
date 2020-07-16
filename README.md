@@ -9,6 +9,6 @@ It isn't compatible with any other mods that somehow change the work tab. If you
 
 Screenshots:
 
-![](/ImagesForGithub/new%20button.png)
+![](/ImagesForGithub/priorities.png)
 
-![](/ImagesForGithub/new%20window.png)
+![](/ImagesForGithub/exclude.png)
