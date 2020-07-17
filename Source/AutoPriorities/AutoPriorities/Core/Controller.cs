@@ -32,11 +32,12 @@ namespace AutoPriorities.Core
         {
             base.Initialize();
             Log = Logger;
-            PatchMod("fluffy.worktab","FluffyWorktabPatch.dll");
-            PatchMod("dame.interestsframework","InterestsPatch.dll");
+            if (PatchMod("fluffy.worktab", "FluffyWorktabPatch.dll"))
+                DrawUtil.MaxPriority = 9;
+            PatchMod("dame.interestsframework", "InterestsPatch.dll");
         }
 
-        private void PatchMod(string packageId, string patchName)
+        private bool PatchMod(string packageId, string patchName)
         {
             if (LoadedModManager.RunningModsListForReading.Exists(m => m.PackageId == packageId))
             {
@@ -48,14 +49,12 @@ namespace AutoPriorities.Core
                     Path.Combine("ConditionalAssemblies/1.1/", patchName)));
 
                 HarmonyInst.PatchAll(asm);
+                return true;
             }
-            else
-            {
 #if DEBUG
-                Log!.Message($"No {packageId} detected");
+            Log!.Message($"No {packageId} detected");
 #endif
-                DrawUtil.MaxPriority = 9;
-            }
+            return false;
         }
 
         public static SettingHandle<double>? PassionMult { get; private set; }
