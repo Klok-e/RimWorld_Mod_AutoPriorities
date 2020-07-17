@@ -2,3 +2,6 @@
 	path = Source/WorkTab
 	url = https://github.com/fluffy-mods/WorkTab
 	branch = 1.1
+[submodule "Source/InterestsFramework"]
+	path = Source/InterestsFramework
+	url = https://github.com/dametdame/InterestsFramework.git

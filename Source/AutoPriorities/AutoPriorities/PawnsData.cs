@@ -139,12 +139,7 @@ namespace AutoPriorities
                             if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains((work, pawn)))
                             {
                                 double skill = pawn.skills.AverageOfRelevantSkillsFor(work);
-                                double passion = pawn.skills.MaxPassionOfRelevantSkillsFor(work) switch
-                                {
-                                    Passion.Minor => 1f,
-                                    Passion.Major => 2f,
-                                    _ => 0f
-                                };
+                                double passion = PassionFactor(pawn.skills.MaxPassionOfRelevantSkillsFor(work));
 
                                 fitness = skill + skill * passion * Math.Max(Controller.PassionMult, 0d);
 
@@ -213,6 +208,16 @@ namespace AutoPriorities
         {
             return (int) (PercentColonistsAvailable(workType, priorityIgnore) *
                           NumberColonists(workType));
+        }
+
+        public static float PassionFactor(Passion passion)
+        {
+            return passion switch
+            {
+                Passion.Minor => 1f,
+                Passion.Major => 2f,
+                _ => 0f
+            };
         }
     }
 }

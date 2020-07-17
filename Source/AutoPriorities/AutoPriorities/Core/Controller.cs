@@ -32,50 +32,30 @@ namespace AutoPriorities.Core
         {
             base.Initialize();
             Log = Logger;
-            PatchWorkTab();
+            PatchMod("fluffy.worktab","FluffyWorktabPatch.dll");
+            PatchMod("dame.interestsframework","InterestsPatch.dll");
         }
 
-        private void PatchWorkTab()
+        private void PatchMod(string packageId, string patchName)
         {
-            var classInstance = (from asm in AppDomain.CurrentDomain.GetAssemblies()
-                from type in asm.GetTypes()
-                where type.IsClass && type.Name == "MainTabWindow_WorkTab"
-                select type).SingleOrDefault();
-
-            Type worktab;
-            Type patchClass;
-            if (classInstance == null)
+            if (LoadedModManager.RunningModsListForReading.Exists(m => m.PackageId == packageId))
             {
-                // no fluffy's worktab detected
 #if DEBUG
-                Log!.Message("No Fluffy's worktab detected");
+                Log!.Message($"{packageId} detected");
 #endif
-                worktab = typeof(MainTabWindow_Work);
-                patchClass = typeof(WorkTab_AddButtonToOpenAutoPrioritiesWindow);
+
+                var asm = Assembly.LoadFile(Path.Combine(ModContentPack.RootDir,
+                    Path.Combine("ConditionalAssemblies/1.1/", patchName)));
+
+                HarmonyInst.PatchAll(asm);
             }
             else
             {
-                // fluffy's worktab
 #if DEBUG
-                Log!.Message("Fluffy's worktab detected");
+                Log!.Message($"No {packageId} detected");
 #endif
-                Assembly.LoadFile(Path.Combine(ModContentPack.RootDir,
-                    "ConditionalAssemblies/1.1/FluffyWorktabPatch.dll"));
-
-                worktab = (from asm in AppDomain.CurrentDomain.GetAssemblies()
-                    from type in asm.GetTypes()
-                    where type.IsClass && type.Name == "MainTabWindow_WorkTab"
-                    select type).Single();
-                patchClass = (from asm in AppDomain.CurrentDomain.GetAssemblies()
-                    from type in asm.GetTypes()
-                    where type.IsClass && type.Name == "WorkTab_AddButtonToFluffysWorktab"
-                    select type).Single();
                 DrawUtil.MaxPriority = 9;
             }
-
-            var worktabDoContents = AccessTools.Method(worktab, "DoWindowContents");
-            var patchPostfix = AccessTools.Method(patchClass, "Postfix");
-            HarmonyInst.Patch(worktabDoContents, postfix: new HarmonyMethod(patchPostfix));
         }
 
         public static SettingHandle<double>? PassionMult { get; private set; }

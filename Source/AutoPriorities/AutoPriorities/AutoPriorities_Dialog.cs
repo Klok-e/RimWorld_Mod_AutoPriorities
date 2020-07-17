@@ -192,7 +192,7 @@ namespace AutoPriorities
                         var newSliderValue =
                             GUI.VerticalSlider(sliderRect, (float) pr.workTypes[workType].Value, 1f, 0f);
                         var available = (float) PawnsData.PercentColonistsAvailable(workType, pr.priority);
-                        newSliderValue = Mathf.Min(available, newSliderValue);
+                        newSliderValue = Mathf.Clamp(newSliderValue, 0f, available);
 
                         var percentsText = (currentPercent switch
                         {
@@ -259,7 +259,7 @@ namespace AutoPriorities
                                 throw new ArgumentOutOfRangeException(nameof(currentPercent));
                         }
 
-                        newSliderValue = Mathf.Min(available, newSliderValue);
+                        newSliderValue = Mathf.Clamp(newSliderValue, 0f, available);
 
                         switch (currentPercent)
                         {

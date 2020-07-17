@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{F2A88E78-D16D-4771-8BAA-97A15D606A66}</ProjectGuid>
+        <ProjectGuid>{76A3E822-3139-429C-8565-0CC5283C8EC5}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>AutoPriorities</RootNamespace>
-        <AssemblyName>AutoPriorities</AssemblyName>
+        <RootNamespace>InterestsPatch</RootNamespace>
+        <AssemblyName>InterestsPatch</AssemblyName>
         <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>8</LangVersion>
@@ -20,7 +20,7 @@
         <DebugSymbols>true</DebugSymbols>
         <DebugType>full</DebugType>
         <Optimize>false</Optimize>
-        <OutputPath>../../../1.1/Assemblies/</OutputPath>
+        <OutputPath>../../../ConditionalAssemblies/1.1/</OutputPath>
         <DefineConstants>DEBUG;TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
@@ -29,40 +29,24 @@
         <PlatformTarget>AnyCPU</PlatformTarget>
         <DebugType>none</DebugType>
         <Optimize>true</Optimize>
-        <OutputPath>../../../1.1/Assemblies/</OutputPath>
+        <OutputPath>../../../ConditionalAssemblies/1.1/</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Compile Include="AutoPriorities_Dialog.cs" />
-        <Compile Include="Core\Controller.cs" />
-        <Compile Include="Core\PercentTableSaver.cs" />
-        <Compile Include="Core\Resources.cs" />
-        <Compile Include="Extensions\PawnExtensions.cs" />
-        <Compile Include="Extensions\CollectionExtensions.cs" />
-        <Compile Include="HarmonyPatches\WorkTab_AddButtonToOpenAutoPrioritiesWindow.cs" />
-        <Compile Include="PawnsData.cs" />
-        <Compile Include="Percents\IPercent.cs" />
-        <Compile Include="Percents\Number.cs" />
-        <Compile Include="Percents\Percent.cs" />
-        <Compile Include="PrioritiesAssigner.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Utils\DrawUtil.cs" />
-        <Compile Include="Utils\ExceptionUtil.cs" />
-        <Compile Include="Utils\PoolFactory.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <Reference Include="Assembly-CSharp">
+        <Reference Include="Assembly-CSharp, Version=1.1.7459.20236, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\Assembly-CSharp-firstpass.dll</HintPath>
         </Reference>
+        <Reference Include="DInterests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>..\..\InterestsFramework\1.1\Assemblies\DInterests.dll</HintPath>
+        </Reference>
         <Reference Include="ISharpZipLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\ISharpZipLib.dll</HintPath>
         </Reference>
-        <Reference Include="Microsoft.CSharp" />
         <Reference Include="Mono.Posix, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
             <HintPath>..\..\RimManaged\Mono.Posix.dll</HintPath>
         </Reference>
@@ -72,18 +56,19 @@
         <Reference Include="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
             <HintPath>..\..\RimManaged\mscorlib.dll</HintPath>
         </Reference>
+        <Reference Include="System"/>
         <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
             <HintPath>..\..\RimManaged\System.dll</HintPath>
         </Reference>
         <Reference Include="System.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
             <HintPath>..\..\RimManaged\System.Configuration.dll</HintPath>
         </Reference>
+        <Reference Include="System.Core"/>
         <Reference Include="System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
             <HintPath>..\..\RimManaged\System.Core.dll</HintPath>
         </Reference>
-        <Reference Include="System.Data" />
-        <Reference Include="System.Data.DataSetExtensions" />
-        <Reference Include="System.Runtime.InteropServices.RuntimeInformation" />
+        <Reference Include="System.Data"/>
+        <Reference Include="System.Runtime.InteropServices.RuntimeInformation"/>
         <Reference Include="System.Runtime.Serialization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
             <HintPath>..\..\RimManaged\System.Runtime.Serialization.dll</HintPath>
         </Reference>
@@ -93,6 +78,7 @@
         <Reference Include="System.ServiceModel.Internals, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
             <HintPath>..\..\RimManaged\System.ServiceModel.Internals.dll</HintPath>
         </Reference>
+        <Reference Include="System.Xml"/>
         <Reference Include="System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
             <HintPath>..\..\RimManaged\System.Xml.dll</HintPath>
         </Reference>
@@ -137,10 +123,6 @@
         </Reference>
         <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.CoreModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, CuyToken=null">
-            <HintPath>..\..\RimManaged\UnityEngine.ClusterRendererModule.dll</HintPath>
-            <Private>False</Private>
         </Reference>
         <Reference Include="UnityEngine.CrashReportingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.CrashReportingModule.dll</HintPath>
@@ -291,16 +273,28 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Lib.Harmony" Version="2.0.1" />
-        <PackageReference Include="UnlimitedHugs.Rimworld.HugsLib" Version="7.2.1" />
+        <Compile Include="Interests_Patch.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <ItemGroup>
+        <ProjectReference Include="..\AutoPriorities\AutoPriorities.csproj">
+            <Project>{f2a88e78-d16d-4771-8baa-97a15d606a66}</Project>
+            <Name>AutoPriorities</Name>
+            <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+            <Private>false</Private>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Lib.Harmony" Version="2.0.1"/>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <Import Project="..\.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-             Other similar extension points exist, see Microsoft.Common.targets.
-        <Target Name="BeforeBuild">
-        </Target>
-        <Target Name="AfterBuild">
-        </Target>
-        -->
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
 </Project>
