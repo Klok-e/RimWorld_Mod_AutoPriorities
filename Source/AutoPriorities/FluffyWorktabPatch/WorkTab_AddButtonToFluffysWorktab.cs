@@ -9,7 +9,7 @@ namespace FluffyWorktabPatch
     public static class WorkTab_AddButtonToFluffysWorktab
     {
         [HarmonyPostfix]
-        private static void Postfix(MainTabWindow_WorkTab __instance, Rect rect)
+        private static void Postfix(Rect rect)
         {
             var window = AutoPriorities.Core.Controller.Dialog;
 
