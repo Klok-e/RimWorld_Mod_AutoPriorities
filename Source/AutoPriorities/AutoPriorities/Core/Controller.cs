@@ -35,6 +35,7 @@ namespace AutoPriorities.Core
             if (PatchMod("fluffy.worktab", "FluffyWorktabPatch.dll"))
                 DrawUtil.MaxPriority = 9;
             PatchMod("dame.interestsframework", "InterestsPatch.dll");
+            HarmonyInst.PatchAll();
         }
 
         private bool PatchMod(string packageId, string patchName)
