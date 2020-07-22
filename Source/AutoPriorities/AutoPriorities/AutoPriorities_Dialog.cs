@@ -79,7 +79,7 @@ namespace AutoPriorities
         private const string PawnExcludeLabel = "Exclude Colonists";
         private readonly float _pawnExcludeLabelWidth = PawnExcludeLabel.GetWidthCached() + 10f;
 
-        const string Label = "Run AutoPriorities";
+        private const string Label = "Run AutoPriorities";
         private readonly float _labelWidth = Label.GetWidthCached() + 10f;
 
         public override void DoWindowContents(Rect inRect)
@@ -184,15 +184,24 @@ namespace AutoPriorities
 
                         var elementXPos = slidersRect.xMin + SliderMargin * (i + 1);
 
-                        var labelRect = new Rect(elementXPos - (workName.GetWidthCached() / 2),
+                        var (available, takenMoreThanTotal) =
+                            PawnsData.PercentColonistsAvailable(workType, pr.priority);
+                        var prevCol = GUI.color;
+                        if (takenMoreThanTotal)
+                            GUI.color = Color.red;
+
+                        var labelRect = new Rect(elementXPos - workName.GetWidthCached() / 2,
                             slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f, 100f, LabelHeight);
                         Widgets.Label(labelRect, workName);
 
+                        GUI.color = prevCol;
+
                         var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
+                        var currSliderVal = (float) pr.workTypes[workType].Value;
                         var newSliderValue =
-                            GUI.VerticalSlider(sliderRect, (float) pr.workTypes[workType].Value, 1f, 0f);
-                        var available = (float) PawnsData.PercentColonistsAvailable(workType, pr.priority);
-                        newSliderValue = Mathf.Clamp(newSliderValue, 0f, available);
+                            GUI.VerticalSlider(sliderRect, currSliderVal, Math.Max(1f, currSliderVal), 0f);
+
+                        newSliderValue = Mathf.Clamp(newSliderValue, 0f, Math.Max((float) available, currSliderVal));
 
                         var percentsText = (currentPercent switch
                         {
@@ -225,8 +234,16 @@ namespace AutoPriorities
                             //     $"priority is {sliderValRepr}, newSliderValue is {newSliderValue}");
                         }
 #endif
+                        prevCol = GUI.color;
+                        if (takenMoreThanTotal)
+                            GUI.color = Color.red;
 
                         Widgets.TextFieldNumeric(percentsRect, ref sliderValRepr, ref percentsText);
+
+                        GUI.color = prevCol;
+
+                        var prevSliderValText = newSliderValue;
+
                         var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
                         switch (currentPercent)
                         {
@@ -259,7 +276,8 @@ namespace AutoPriorities
                                 throw new ArgumentOutOfRangeException(nameof(currentPercent));
                         }
 
-                        newSliderValue = Mathf.Clamp(newSliderValue, 0f, available);
+                        newSliderValue = Mathf.Clamp(newSliderValue, 0f,
+                            Math.Max((float) available, prevSliderValText));
 
                         switch (currentPercent)
                         {

@@ -186,31 +186,24 @@ namespace AutoPriorities
             }
         }
 
-        public double PercentColonistsAvailable(WorkTypeDef workType, int priorityIgnore)
+        public (double percent, bool takenMoreThanTotal) PercentColonistsAvailable(WorkTypeDef workType,
+            int priorityIgnore)
         {
             var taken = 0d;
+            var takenTotal = 0d;
             foreach (var (priority, workTypes) in WorkTables)
             {
-                if (priority == priorityIgnore)
-                    continue;
-                taken += workTypes[workType].Value;
-#if DEBUG
-                if (taken > 1f)
-                    Log.Warning(
-                        $"Percent of colonists assigned to work type {workType.defName} is greater than 1: {taken}");
-#endif
+                var percent = workTypes[workType].Value;
+                if (priority != priorityIgnore)
+                    taken += percent;
+                takenTotal += percent;
             }
 
-            return 1d - taken;
+            // available can't be negative
+            return (Math.Max(1d - taken, 0d), takenTotal > 1.00001d);
         }
 
         public int NumberColonists(WorkTypeDef workType) => SortedPawnFitnessForEveryWork[workType].Count;
-
-        public int NumberOfColonistsAvailable(WorkTypeDef workType, int priorityIgnore)
-        {
-            return (int) (PercentColonistsAvailable(workType, priorityIgnore) *
-                          NumberColonists(workType));
-        }
 
         public static float PassionFactor(Passion passion)
         {
