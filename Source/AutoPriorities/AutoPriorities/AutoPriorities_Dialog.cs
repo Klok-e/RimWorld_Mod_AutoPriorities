@@ -206,7 +206,7 @@ namespace AutoPriorities
                         var percentsText = (currentPercent switch
                         {
                             Percent _ => Mathf.RoundToInt(newSliderValue * 100f),
-                            Number _ => Mathf.RoundToInt(newSliderValue * PawnsData.NumberColonists(workType)),
+                            Number n => Mathf.RoundToInt(newSliderValue * n.Total),
                             _ => throw new ArgumentOutOfRangeException(nameof(currentPercent))
                         }).ToString();
                         var percentsRect = new Rect(
@@ -222,7 +222,7 @@ namespace AutoPriorities
                         var sliderValRepr = currentPercent switch
                         {
                             Percent _ => newSliderValue * 100f,
-                            Number _ => newSliderValue * PawnsData.NumberColonists(workType),
+                            Number n => newSliderValue * n.Total,
                             _ => throw new ArgumentOutOfRangeException(nameof(currentPercent))
                         };
 
@@ -248,7 +248,7 @@ namespace AutoPriorities
                         switch (currentPercent)
                         {
                             case Number n:
-                                newSliderValue = sliderValRepr / PawnsData.NumberColonists(workType);
+                                newSliderValue = sliderValRepr / n.Total;
                                 if (Widgets.ButtonText(symbolRect, "№"))
                                 {
                                     Controller.PoolNumbers.Pool(n);
@@ -292,7 +292,7 @@ namespace AutoPriorities
                                 Controller.PoolNumbers.Pool(n);
                                 pr.workTypes[workType] = Controller.PoolNumbers.Acquire(new NumberPoolArgs
                                 {
-                                    Count = Mathf.RoundToInt(newSliderValue * PawnsData.NumberColonists(workType)),
+                                    Count = Mathf.RoundToInt(newSliderValue * n.Total),
                                     Total = PawnsData.NumberColonists(workType)
                                 });
                                 break;
