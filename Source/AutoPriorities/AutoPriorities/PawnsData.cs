@@ -194,9 +194,11 @@ namespace AutoPriorities
                 if (priority == priorityIgnore)
                     continue;
                 taken += workTypes[workType].Value;
+#if DEBUG
                 if (taken > 1f)
                     Log.Warning(
                         $"Percent of colonists assigned to work type {workType.defName} is greater than 1: {taken}");
+#endif
             }
 
             return 1d - taken;
