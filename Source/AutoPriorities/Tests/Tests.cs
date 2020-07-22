@@ -3,23 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using AutoPriorities.Extensions;
+using NUnit.Framework.Internal;
 
 namespace Tests
 {
     [TestFixture]
     public class Tests
     {
-        [Test]
-        public void TestIterPercents()
+        private static object[] _testIterPercentsSource =
         {
-            var e1 = new[] {(0, 0), (1, 1), (2, 1), (3, 2), (4, 2), (5, 2)};
-            var a1 = new[] {0.1, 0.2, 0.3}.IterPercents(10).ToArray();
-            Assert.AreEqual(e1, a1);
+            new object[]
+            {
+                new[] {(0, 0), (1, 1), (2, 1), (3, 2), (4, 2), (5, 2)},
+                new[] {0.1, 0.2, 0.3},
+                10
+            },
+            new object[]
+            {
+                new[] {(0, 0), (1, 0)},
+                new[] {0.2d},
+                10
+            },
+            new object[]
+            {
+                new[] {(0, 0), (1, 0), (2, 0), (3, 0), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (9, 2)},
+                new[] {0.4, 0.5, 0.3},
+                10
+            }
+        };
 
+        [Test]
+        [TestCaseSource(nameof(_testIterPercentsSource))]
+        public void TestIterPercents((int, int)[] expected, double[] percents, int total)
+        {
+            // act
+            var actual = percents.IterPercents(total).ToArray();
 
-            var e2 = new[] {(0, 0), (1, 0)};
-            var a2 = new[] {0.2d}.IterPercents(10).ToArray();
-            Assert.AreEqual(e2, a2);
+            // assert
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]
