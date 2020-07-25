@@ -42,5 +42,11 @@ namespace AutoPriorities.Extensions
                 percentInd += 1;
             }
         }
+
+        public static void ApplyValue<T1, T2>(this IDictionary<T1, T2> dict, T1 key, Func<T2, T2> func)
+        {
+            var v = dict[key];
+            dict[key] = func(v);
+        }
     }
 }

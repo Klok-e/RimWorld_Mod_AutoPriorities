@@ -36,6 +36,7 @@
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="AutoPriorities_Dialog.cs" />
+        <Compile Include="Core\AuxillaryStructures.cs" />
         <Compile Include="Core\Controller.cs" />
         <Compile Include="Core\PercentTableSaver.cs" />
         <Compile Include="Core\Resources.cs" />
