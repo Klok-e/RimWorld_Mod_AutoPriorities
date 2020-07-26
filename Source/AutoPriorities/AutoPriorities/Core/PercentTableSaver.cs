@@ -7,7 +7,6 @@ using AutoPriorities.Percents;
 using AutoPriorities.Utils;
 using RimWorld;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Verse;
 
 namespace AutoPriorities.Core
@@ -23,13 +22,15 @@ namespace AutoPriorities.Core
         }
 
         public static void SaveState(
-            (List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)>, HashSet<(WorkTypeDef, Pawn)>) state)
+            (List<(Priority priority, JobCount maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>,
+                HashSet<(WorkTypeDef, Pawn)>) state)
         {
             using var stream = new FileStream(FullPath, FileMode.Create);
             new XmlSerializer(typeof(Ser)).Serialize(stream, Ser.Serialized(state));
         }
 
-        public static (Func<List<(int, Dictionary<WorkTypeDef, IPercent> )>> percents,
+        public static (Func<List<(Priority priority, JobCount? maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>>
+            percents,
             Func<HashSet<(WorkTypeDef, Pawn)>> excluded)
             GetStateLoaders()
         {
@@ -48,7 +49,8 @@ namespace AutoPriorities.Core
                 e.LogStackTrace();
             }
 
-            return (() => new List<(int, Dictionary<WorkTypeDef, IPercent>)>(),
+            return (
+                () => new List<(Priority priority, JobCount? maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>(),
                 () => new HashSet<(WorkTypeDef, Pawn)>());
         }
 
@@ -66,9 +68,9 @@ namespace AutoPriorities.Core
         {
             var res = Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer)
                 .FirstOrDefault(p => p.ThingID == pawnId);
-            if (!(res is null)) 
+            if (!(res is null))
                 return res;
-            
+
             Controller.Log!.Warning($"pawn {pawnId} wasn't found while deserializing data, skipping...");
             return null;
         }
@@ -78,7 +80,8 @@ namespace AutoPriorities.Core
             public List<Tupl> data = new List<Tupl>();
             public List<WorktypePawn> excludedPawns = new List<WorktypePawn>();
 
-            public List<(int, Dictionary<WorkTypeDef, IPercent>)> ParsedData() => data
+            public List<(Priority priority, JobCount? maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>
+                ParsedData() => data
                 .Select(x => x.Parsed())
                 .ToList();
 
@@ -89,7 +92,8 @@ namespace AutoPriorities.Core
                 .ToHashSet();
 
             public static Ser Serialized(
-                (List<(int, Dictionary<WorkTypeDef, IPercent> )> percents, HashSet<(WorkTypeDef, Pawn)> excluded) data)
+                (List<(Priority priority, JobCount maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)> percents,
+                    HashSet<(WorkTypeDef, Pawn)> excluded) data)
             {
                 return new Ser
                 {
@@ -124,15 +128,18 @@ namespace AutoPriorities.Core
         {
             public int priority;
             public Dic dict = new Dic();
+            public int? jobsMax;
 
-            public (int, Dictionary<WorkTypeDef, IPercent> ) Parsed() => (priority, dict.Parsed());
+            public (Priority, JobCount?, Dictionary<WorkTypeDef, IPercent> ) Parsed() =>
+                (priority, jobsMax, dict.Parsed());
 
-            public static Tupl Serialized((int, Dictionary<WorkTypeDef, IPercent>) val)
+            public static Tupl Serialized((Priority, JobCount, Dictionary<WorkTypeDef, IPercent>) val)
             {
                 return new Tupl
                 {
-                    priority = val.Item1,
-                    dict = Dic.Serialized(val.Item2)
+                    priority = val.Item1.V,
+                    jobsMax = val.Item2.V,
+                    dict = Dic.Serialized(val.Item3),
                 };
             }
         }

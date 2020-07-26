@@ -10,16 +10,11 @@ namespace AutoPriorities
 {
     internal class PrioritiesAssigner
     {
-        private List<(int priority, double percent)> PriorityPercentCached { get; } =
-            new List<(int priority, double percent)>();
+        private List<(Priority priority, JobCount maxJobs, double percent)> PriorityPercentCached { get; } =
+            new List<(Priority, JobCount, double)>();
 
         private Dictionary<Pawn, Dictionary<WorkTypeDef, Priority>> PawnJobsCached { get; } =
             new Dictionary<Pawn, Dictionary<WorkTypeDef, Priority>>();
-
-
-        public PrioritiesAssigner()
-        {
-        }
 
         public void AssignPriorities(PawnsData pawnsData)
         {
@@ -70,13 +65,14 @@ namespace AutoPriorities
                 Controller.Log!.Message($"worktype {work.defName}");
 #endif
 
-                foreach (var (priority, jobsToSet) in PriorityPercentCached
+                foreach (var (priority, maxJobs, jobsToSet) in PriorityPercentCached
                     .Distinct(x => x.priority)
                     .Select(a => a.percent)
                     .IterPercents(pawns.Count)
                     .GroupBy(v => v.percentIndex)
-                    .Select(g => (PriorityPercentCached[g.Key].priority, g.Count()))
-                    .OrderBy(x => x.priority))
+                    .Select(g =>
+                        (PriorityPercentCached[g.Key].priority, PriorityPercentCached[g.Key].maxJobs, g.Count()))
+                    .OrderBy(x => x.priority.V))
                 {
                     var jobsSet = 0;
                     // iterate over all the pawns for this job with current priority
@@ -87,15 +83,14 @@ namespace AutoPriorities
                         if ( // if this job was already set, skip
                             pawnJobs[pawn].ContainsKey(work) ||
                             // count amount of jobs assigned to pawn on this priority, then compare with max
-                            pawnsData.MaxJobsPawnPriority.TryGetValue(priority, out var maxJobCount) &&
                             pawnJobs[pawn].Count(
-                                kv => kv.Value.V == priority)
-                            >= maxJobCount.V)
+                                kv => kv.Value.V == priority.V)
+                            >= maxJobs.V)
                             continue;
 
                         pawnJobs[pawn][work] = priority;
                         jobsSet += 1;
-                        pawn.workSettings.SetPriority(work, priority);
+                        pawn.workSettings.SetPriority(work, priority.V);
                     }
                 }
 
@@ -114,13 +109,14 @@ namespace AutoPriorities
         }
 
         private static void FillListPriorityPercents(PawnsData pawnsData, WorkTypeDef work,
-            List<(int, double)> priorityPercents)
+            List<(Priority, JobCount, double)> priorities)
         {
-            priorityPercents.Clear();
-            priorityPercents.AddRange(pawnsData.WorkTables
-                .Select(priority => (priority.priority, priority.workTypes[work].Value))
-                .Where(a => a.priority > 0));
-            priorityPercents.Sort((x, y) => x.Item1.CompareTo(y.Item1));
+            priorities.Clear();
+            priorities.AddRange(pawnsData.WorkTables
+                .Select(tup => (tup.priority, tup.maxJobs, tup.workTypes[work].Value))
+                .Distinct(t => t.priority)
+                .Where(t => t.priority.V > 0));
+            priorities.Sort((x, y) => x.Item1.V.CompareTo(y.Item1.V));
         }
     }
 }

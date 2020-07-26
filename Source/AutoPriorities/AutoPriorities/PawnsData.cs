@@ -12,11 +12,10 @@ namespace AutoPriorities
 {
     public class PawnsData
     {
-        public List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)> WorkTables { get; }
-
-        public Dictionary<Priority, JobCount> MaxJobsPawnPriority { get; } = new Dictionary<Priority, JobCount>
+        public List<(Priority priority, JobCount maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)> WorkTables
         {
-        };
+            get;
+        }
 
         public HashSet<(WorkTypeDef, Pawn)> ExcludedPawns { get; }
 
@@ -54,14 +53,17 @@ namespace AutoPriorities
             return excluded ?? new HashSet<(WorkTypeDef, Pawn)>();
         }
 
-        private List<(int, Dictionary<WorkTypeDef, IPercent>)> LoadSavedState(
-            Func<List<(int, Dictionary<WorkTypeDef, IPercent>)>> loader)
+        private List<(Priority priority, JobCount maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)> LoadSavedState(
+            Func<List<(Priority priority, JobCount? maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>> loader)
         {
             Rebuild();
-            List<(int priority, Dictionary<WorkTypeDef, IPercent> workTypes)>? workTables;
+            List<(Priority priority, JobCount maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>? workTables;
             try
             {
-                workTables = loader();
+                workTables = loader()
+                    // fill max jobs with default value if there's no value already
+                    .Select(t => (t.priority, t.maxJobs ?? WorkTypes.Count, t.workTypes))
+                    .ToList();
 
                 // add totals, otherwise results in division by zero
                 foreach (var (work, percent) in workTables.SelectMany(table => table.workTypes))
@@ -72,7 +74,7 @@ namespace AutoPriorities
                 foreach (var work in workTables
                     .SelectMany(keyVal => WorkTypes
                         .Where(work => !keyVal.workTypes.ContainsKey(work))))
-                foreach (var (_, d) in workTables)
+                foreach (var (_, _, d) in workTables)
                 {
                     Controller.Log!.Message($"Work type {work} wasn't found in a save file. Setting percent to 0");
                     d.Add(work, Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = 0}));
@@ -85,7 +87,8 @@ namespace AutoPriorities
                 workTables = null;
             }
 
-            return workTables ?? new List<(int, Dictionary<WorkTypeDef, IPercent>)>();
+            return workTables ??
+                   new List<(Priority priority, JobCount maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>();
         }
 
         public void SaveState()
@@ -192,20 +195,21 @@ namespace AutoPriorities
         }
 
         public (double percent, bool takenMoreThanTotal) PercentColonistsAvailable(WorkTypeDef workType,
-            int priorityIgnore)
+            Priority priorityIgnore)
         {
             var taken = 0d;
             var takenTotal = 0d;
-            foreach (var (priority, workTypes) in WorkTables)
+            foreach (var (priority, _, workTypes) in WorkTables
+                .Distinct(x => x.priority))
             {
                 var percent = workTypes[workType].Value;
-                if (priority != priorityIgnore)
+                if (priority.V != priorityIgnore.V)
                     taken += percent;
                 takenTotal += percent;
             }
 
             // available can't be negative
-            return (Math.Max(1d - taken, 0d), takenTotal > 1.00001d);
+            return (Math.Max(1d - taken, 0d), takenTotal > 1.0001d);
         }
 
         public int NumberColonists(WorkTypeDef workType) => SortedPawnFitnessForEveryWork[workType].Count;

@@ -13,7 +13,7 @@ namespace AutoPriorities
 {
     public class AutoPriorities_Dialog : Window
     {
-        private HashSet<int> PrioritiesEncounteredCached { get; } = new HashSet<int>();
+        private HashSet<Priority> PrioritiesEncounteredCached { get; } = new HashSet<Priority>();
 
         private PawnsData PawnsData { get; } = new PawnsData();
 
@@ -157,8 +157,6 @@ namespace AutoPriorities
                 var pr = PawnsData.WorkTables[table];
                 var colOrig = GUI.color;
 
-                if (!PawnsData.MaxJobsPawnPriority.ContainsKey(pr.priority))
-                    PawnsData.MaxJobsPawnPriority[pr.priority] = PawnsData.WorkTypes.Count;
                 //shadow repeating priorities
                 if (PrioritiesEncounteredCached.Contains(pr.priority))
                     GUI.color = colOrig * GuiShadowedMult;
@@ -175,7 +173,7 @@ namespace AutoPriorities
                     new Vector2(slidersRect.xMax, slidersRect.yMax), new Color(0.7f, 0.7f, 0.7f), 1f);
 
                 pr.priority = DrawUtil.PriorityBox(slidersRect.xMin, slidersRect.yMin + slidersRect.height / 2f,
-                    pr.priority);
+                    pr.priority.V);
                 PawnsData.WorkTables[table] = pr;
 
                 var maxJobsElementXPos = slidersRect.xMin + SliderMargin;
@@ -188,7 +186,7 @@ namespace AutoPriorities
                 var maxJobsSliderRect = new Rect(maxJobsElementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
                 var newMaxJobsSliderValue =
                     GUI.VerticalSlider(maxJobsSliderRect,
-                        Mathf.Clamp(PawnsData.MaxJobsPawnPriority[pr.priority].V, 0f, PawnsData.WorkTypes.Count),
+                        Mathf.Clamp(pr.maxJobs.V, 0f, PawnsData.WorkTypes.Count),
                         PawnsData.WorkTypes.Count, 0f);
 
                 var jobCountMaxLabelRect = new Rect(
@@ -199,7 +197,8 @@ namespace AutoPriorities
                 var maxJobsText = Mathf.RoundToInt(newMaxJobsSliderValue).ToString();
                 Widgets.TextFieldNumeric(jobCountMaxLabelRect, ref newMaxJobsSliderValue, ref maxJobsText);
 
-                PawnsData.MaxJobsPawnPriority[pr.priority] = Mathf.RoundToInt(newMaxJobsSliderValue);
+                pr.maxJobs = Mathf.RoundToInt(newMaxJobsSliderValue);
+                PawnsData.WorkTables[table] = pr;
 
                 // draw line on thi right from max job sliders
                 Widgets.DrawLine(new Vector2(maxJobsLabelRect.xMax, slidersRect.yMin),
@@ -473,7 +472,7 @@ namespace AutoPriorities
         private void AddPriority()
         {
             var dict = new Dictionary<WorkTypeDef, IPercent>();
-            PawnsData.WorkTables.Add((0, dict));
+            PawnsData.WorkTables.Add((0, PawnsData.WorkTypes.Count, dict));
 
             foreach (var keyValue in PawnsData.WorkTypes)
                 dict.Add(keyValue, Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = 0}));
