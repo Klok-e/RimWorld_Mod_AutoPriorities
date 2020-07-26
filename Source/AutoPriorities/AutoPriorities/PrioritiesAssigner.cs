@@ -25,20 +25,35 @@ namespace AutoPriorities
                     PawnJobsCached.Add(pawn, new Dictionary<WorkTypeDef, Priority>());
 
 #if DEBUG
-                Controller.Log!.Message($"skilled");
+                Controller.Log!.Message("important");
 #endif
-                // assign skilled jobs
+                // assign `important` jobs because hardcoding is easy
+                var importantWorks = new[] {"Firefighter", "Patient", "PatientBedRest", "BasicWorker"}
+                    .Select(PercentTableSaver.StringToDef)
+                    .Where(def => !(def is null))
+                    .Select(x => x!)
+                    .ToHashSet();
+                AssignJobs(pawnsData, PawnJobsCached,
+                    importantWorks,
+                    work => pawnsData.SortedPawnFitnessForEveryWork[work]);
+
+#if DEBUG
+                Controller.Log!.Message("skilled");
+#endif
+                // assign skilled jobs except important jobs
                 AssignJobs(pawnsData, PawnJobsCached,
                     pawnsData.WorkTypes
+                        .Subtract(importantWorks)
                         .Where(work => !pawnsData.WorkTypesNotRequiringSkills.Contains(work)),
                     work => pawnsData.SortedPawnFitnessForEveryWork[work]);
 
 #if DEBUG
-                Controller.Log!.Message($"not skilled");
+                Controller.Log!.Message("non skilled");
 #endif
-                // assign non skilled jobs
+                // assign non skilled jobs except important jobs
                 AssignJobs(pawnsData, PawnJobsCached,
-                    pawnsData.WorkTypesNotRequiringSkills,
+                    pawnsData.WorkTypesNotRequiringSkills
+                        .Subtract(importantWorks),
                     work => pawnsData.SortedPawnFitnessForEveryWork[work]
                         .Select(p => (p.pawn, 1d / (1 + PawnJobsCached[p.pawn].Count)))
                         .OrderByDescending(p => p.Item2)

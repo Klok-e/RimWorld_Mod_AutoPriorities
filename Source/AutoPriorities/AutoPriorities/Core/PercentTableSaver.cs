@@ -54,7 +54,7 @@ namespace AutoPriorities.Core
                 () => new HashSet<(WorkTypeDef, Pawn)>());
         }
 
-        private static WorkTypeDef? StringToDef(string name)
+        public static WorkTypeDef? StringToDef(string name)
         {
             var work = WorkTypeDefsUtility.WorkTypeDefsInPriorityOrder.FirstOrDefault(w => w.defName == name);
             if (!(work is null))

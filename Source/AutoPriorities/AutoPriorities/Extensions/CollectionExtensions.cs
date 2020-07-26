@@ -43,6 +43,13 @@ namespace AutoPriorities.Extensions
             }
         }
 
+        public static HashSet<T> Subtract<T>(this IEnumerable<T> set, IEnumerable<T> other)
+        {
+            var copy = new HashSet<T>(set);
+            copy.ExceptWith(other);
+            return copy;
+        }
+
         public static void ApplyValue<T1, T2>(this IDictionary<T1, T2> dict, T1 key, Func<T2, T2> func)
         {
             var v = dict[key];
