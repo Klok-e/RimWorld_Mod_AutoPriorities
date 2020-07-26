@@ -16,10 +16,6 @@ namespace AutoPriorities
 
         public Dictionary<Priority, JobCount> MaxJobsPawnPriority { get; } = new Dictionary<Priority, JobCount>
         {
-            {1, 5},
-            {2, 8},
-            {3, 10},
-            {4, 12},
         };
 
         public HashSet<(WorkTypeDef, Pawn)> ExcludedPawns { get; }

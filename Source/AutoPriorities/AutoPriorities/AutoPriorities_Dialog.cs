@@ -142,7 +142,8 @@ namespace AutoPriorities
             var scrollRect = new Rect(inRect.xMin, inRect.yMin, inRect.width,
                 inRect.height - DistFromBottomBorder);
 
-            var tableSizeX = (worktypes + 1) * SliderMargin + SlidersDistFromLeftBorder + SlidersDistFromRightBorder;
+            var tableSizeX = (worktypes + 1) * SliderMargin + SlidersDistFromLeftBorder + SlidersDistFromRightBorder +
+                             SliderMargin;
 
             var tableSizeY = (SliderHeight + 3 * ButtonHeight) * PawnsData.WorkTables.Count;
             Widgets.BeginScrollView(scrollRect, ref _scrollPos, new Rect(0, 0, tableSizeX, tableSizeY));
@@ -155,6 +156,9 @@ namespace AutoPriorities
                 // table row
                 var pr = PawnsData.WorkTables[table];
                 var colOrig = GUI.color;
+
+                if (!PawnsData.MaxJobsPawnPriority.ContainsKey(pr.priority))
+                    PawnsData.MaxJobsPawnPriority[pr.priority] = PawnsData.WorkTypes.Count;
                 //shadow repeating priorities
                 if (PrioritiesEncounteredCached.Contains(pr.priority))
                     GUI.color = colOrig * GuiShadowedMult;
@@ -162,7 +166,7 @@ namespace AutoPriorities
                 var slidersRect = new Rect(
                     SlidersDistFromLeftBorder,
                     (SliderHeight + 3 * ButtonHeight) * row,
-                    tableSizeX + SlidersDistFromRightBorder,
+                    tableSizeX + SlidersDistFromRightBorder + SliderWidth,
                     SliderHeight + 3 * ButtonHeight + 5f
                 );
 
@@ -170,9 +174,37 @@ namespace AutoPriorities
                 Widgets.DrawLine(new Vector2(slidersRect.xMin, slidersRect.yMax),
                     new Vector2(slidersRect.xMax, slidersRect.yMax), new Color(0.7f, 0.7f, 0.7f), 1f);
 
-                pr.priority = DrawUtil.PriorityBox(slidersRect.xMin, slidersRect.yMin + (slidersRect.height / 2f),
+                pr.priority = DrawUtil.PriorityBox(slidersRect.xMin, slidersRect.yMin + slidersRect.height / 2f,
                     pr.priority);
                 PawnsData.WorkTables[table] = pr;
+
+                var maxJobsElementXPos = slidersRect.xMin + SliderMargin;
+                var maxJobsLabel = "Max jobs for pawn";
+
+                var maxJobsLabelRect = new Rect(maxJobsElementXPos - maxJobsLabel.GetWidthCached() / 2,
+                    slidersRect.yMin + 20f, 120f, LabelHeight);
+                Widgets.Label(maxJobsLabelRect, maxJobsLabel);
+
+                var maxJobsSliderRect = new Rect(maxJobsElementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
+                var newMaxJobsSliderValue =
+                    GUI.VerticalSlider(maxJobsSliderRect,
+                        Mathf.Clamp(PawnsData.MaxJobsPawnPriority[pr.priority].V, 0f, PawnsData.WorkTypes.Count),
+                        PawnsData.WorkTypes.Count, 0f);
+
+                var jobCountMaxLabelRect = new Rect(
+                    maxJobsSliderRect.xMax - PercentStringWidth,
+                    maxJobsSliderRect.yMax + 3f,
+                    PercentStringWidth,
+                    25f);
+                var maxJobsText = Mathf.RoundToInt(newMaxJobsSliderValue).ToString();
+                Widgets.TextFieldNumeric(jobCountMaxLabelRect, ref newMaxJobsSliderValue, ref maxJobsText);
+
+                PawnsData.MaxJobsPawnPriority[pr.priority] = Mathf.RoundToInt(newMaxJobsSliderValue);
+
+                // draw line on thi right from max job sliders
+                Widgets.DrawLine(new Vector2(maxJobsLabelRect.xMax, slidersRect.yMin),
+                    new Vector2(maxJobsLabelRect.xMax, slidersRect.yMax), new Color(0.5f, 0.5f, 0.5f),
+                    1f);
 
                 var i = 0;
                 foreach (var workType in PawnsData.WorkTypes)
@@ -182,7 +214,7 @@ namespace AutoPriorities
                     {
                         var currentPercent = pr.workTypes[workType];
 
-                        var elementXPos = slidersRect.xMin + SliderMargin * (i + 1);
+                        var elementXPos = maxJobsSliderRect.xMax + SliderMargin * (i + 1);
 
                         var (available, takenMoreThanTotal) =
                             PawnsData.PercentColonistsAvailable(workType, pr.priority);
