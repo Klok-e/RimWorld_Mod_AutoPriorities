@@ -3,6 +3,8 @@
 /Build.zip
 /ConditionalAssemblies
 /1.1
+/1.2
 
 .idea/
 obj/
+bin/
