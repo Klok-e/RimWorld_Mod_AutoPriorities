@@ -39,7 +39,7 @@ namespace AutoPriorities.Core
                 if (File.Exists(FullPath))
                 {
                     using var stream = new FileStream(FullPath, FileMode.OpenOrCreate);
-                    var ser = (Ser) new XmlSerializer(typeof(Ser)).Deserialize(stream);
+                    var ser = (Ser)new XmlSerializer(typeof(Ser)).Deserialize(stream);
                     return (() => ser.ParsedData(), () => ser.ParsedExcluded());
                 }
             }
@@ -57,8 +57,7 @@ namespace AutoPriorities.Core
         public static WorkTypeDef? StringToDef(string name)
         {
             var work = WorkTypeDefsUtility.WorkTypeDefsInPriorityOrder.FirstOrDefault(w => w.defName == name);
-            if (!(work is null))
-                return work;
+            if (!(work is null)) return work;
 
             Controller.Log!.Warning($"Work type {name} not found. Excluding {name} from the internal data structure.");
             return null;
@@ -67,9 +66,8 @@ namespace AutoPriorities.Core
         private static Pawn? IdToPawn(string pawnId)
         {
             var res = Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer)
-                .FirstOrDefault(p => p.ThingID == pawnId);
-            if (!(res is null))
-                return res;
+                          .FirstOrDefault(p => p.ThingID == pawnId);
+            if (!(res is null)) return res;
 
             Controller.Log!.Warning($"pawn {pawnId} wasn't found while deserializing data, skipping...");
             return null;
@@ -81,15 +79,17 @@ namespace AutoPriorities.Core
             public List<WorktypePawn> excludedPawns = new List<WorktypePawn>();
 
             public List<(Priority priority, JobCount? maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>
-                ParsedData() => data
-                .Select(x => x.Parsed())
-                .ToList();
+                ParsedData() =>
+                data
+                    .Select(x => x.Parsed())
+                    .ToList();
 
-            public HashSet<(WorkTypeDef, Pawn)> ParsedExcluded() => excludedPawns
-                .Select(x => x.Parsed())
-                .Where(p => p.Item1 != null && p.Item2 != null)
-                .Select(p => (p.Item1!, p.Item2!))
-                .ToHashSet();
+            public HashSet<(WorkTypeDef, Pawn)> ParsedExcluded() =>
+                excludedPawns
+                    .Select(x => x.Parsed())
+                    .Where(p => p.Item1 != null && p.Item2 != null)
+                    .Select(p => (p.Item1!, p.Item2!))
+                    .ToHashSet();
 
             public static Ser Serialized(
                 (List<(Priority priority, JobCount maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)> percents,
@@ -98,11 +98,11 @@ namespace AutoPriorities.Core
                 return new Ser
                 {
                     data = data.percents
-                        .Select(Tupl.Serialized)
-                        .ToList(),
+                               .Select(Tupl.Serialized)
+                               .ToList(),
                     excludedPawns = data.excluded
-                        .Select(WorktypePawn.Serialized)
-                        .ToList()
+                                        .Select(WorktypePawn.Serialized)
+                                        .ToList()
                 };
             }
         }
@@ -148,18 +148,19 @@ namespace AutoPriorities.Core
         {
             public List<StrPercent> percents = new List<StrPercent>();
 
-            public Dictionary<WorkTypeDef, IPercent> Parsed() => percents
-                .Select(x => x.Parsed())
-                .Where(x => x.Item1 != null)
-                .ToDictionary(x => x.Item1!, x => x.Item2);
+            public Dictionary<WorkTypeDef, IPercent> Parsed() =>
+                percents
+                    .Select(x => x.Parsed())
+                    .Where(x => x.Item1 != null)
+                    .ToDictionary(x => x.Item1!, x => x.Item2);
 
             public static Dic Serialized(Dictionary<WorkTypeDef, IPercent> dic)
             {
                 return new Dic
                 {
                     percents = dic
-                        .Select(kv => StrPercent.Serialized((kv.Key, kv.Value)))
-                        .ToList()
+                               .Select(kv => StrPercent.Serialized((kv.Key, kv.Value)))
+                               .ToList()
                 };
             }
         }
@@ -185,16 +186,16 @@ namespace AutoPriorities.Core
         {
             public Variant variant;
             public int number;
-
             public double percent;
 
             // Controller.PoolPercents.Acquire(new PercentPoolArgs{Value = workType._percent})
-            public IPercent Parsed() => variant switch
-            {
-                Variant.Number => Controller.PoolNumbers.Acquire(new NumberPoolArgs {Count = number, Total = 0}),
-                Variant.Percent => Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = percent}),
-                _ => throw new Exception()
-            };
+            public IPercent Parsed() =>
+                variant switch
+                {
+                    Variant.Number => Controller.PoolNumbers.Acquire(new NumberPoolArgs {Count = number, Total = 0}),
+                    Variant.Percent => Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = percent}),
+                    _ => throw new Exception()
+                };
 
             public static UnionPercent Serialized(IPercent percent)
             {

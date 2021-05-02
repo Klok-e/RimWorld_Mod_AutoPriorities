@@ -29,10 +29,10 @@ namespace AutoPriorities
 #endif
                 // assign `important` jobs because hardcoding is easy
                 var importantWorks = new[] {"Firefighter", "Patient", "PatientBedRest", "BasicWorker"}
-                    .Select(PercentTableSaver.StringToDef)
-                    .Where(def => !(def is null))
-                    .Select(x => x!)
-                    .ToHashSet();
+                                     .Select(PercentTableSaver.StringToDef)
+                                     .Where(def => !(def is null))
+                                     .Select(x => x!)
+                                     .ToHashSet();
                 AssignJobs(pawnsData, PawnJobsCached,
                     importantWorks,
                     work => pawnsData.SortedPawnFitnessForEveryWork[work]);
@@ -43,8 +43,8 @@ namespace AutoPriorities
                 // assign skilled jobs except important jobs
                 AssignJobs(pawnsData, PawnJobsCached,
                     pawnsData.WorkTypes
-                        .Subtract(importantWorks)
-                        .Where(work => !pawnsData.WorkTypesNotRequiringSkills.Contains(work)),
+                             .Subtract(importantWorks)
+                             .Where(work => !pawnsData.WorkTypesNotRequiringSkills.Contains(work)),
                     work => pawnsData.SortedPawnFitnessForEveryWork[work]);
 
 #if DEBUG
@@ -53,11 +53,12 @@ namespace AutoPriorities
                 // assign non skilled jobs except important jobs
                 AssignJobs(pawnsData, PawnJobsCached,
                     pawnsData.WorkTypesNotRequiringSkills
-                        .Subtract(importantWorks),
+                             .Subtract(importantWorks),
                     work => pawnsData.SortedPawnFitnessForEveryWork[work]
-                        .Select(p => (p.pawn, 1d / (1 + PawnJobsCached[p.pawn].Count)))
-                        .OrderByDescending(p => p.Item2)
-                        .ToList());
+                                     .Select(p => (p.pawn, 1d / (1 + PawnJobsCached[p.pawn]
+                                         .Count)))
+                                     .OrderByDescending(p => p.Item2)
+                                     .ToList());
             }
             catch (Exception e)
             {
@@ -81,25 +82,30 @@ namespace AutoPriorities
 #endif
 
                 foreach (var (priority, maxJobs, jobsToSet) in PriorityPercentCached
-                    .Distinct(x => x.priority)
-                    .Select(a => a.percent)
-                    .IterPercents(pawns.Count)
-                    .GroupBy(v => v.percentIndex)
-                    .Select(g =>
-                        (PriorityPercentCached[g.Key].priority, PriorityPercentCached[g.Key].maxJobs, g.Count()))
-                    .OrderBy(x => x.priority.V))
+                                                               .Distinct(x => x.priority)
+                                                               .Select(a => a.percent)
+                                                               .IterPercents(pawns.Count)
+                                                               .GroupBy(v => v.percentIndex)
+                                                               .Select(g =>
+                                                                   (PriorityPercentCached[g.Key]
+                                                                       .priority, PriorityPercentCached[g.Key]
+                                                                       .maxJobs, g.Count()))
+                                                               .OrderBy(x => x.priority.V))
                 {
                     var jobsSet = 0;
                     // iterate over all the pawns for this job with current priority
                     for (var i = 0; i < pawns.Count && jobsSet < jobsToSet; i++)
                     {
-                        var pawn = pawns[i].pawn;
+                        var pawn = pawns[i]
+                            .pawn;
 
                         if ( // if this job was already set, skip
-                            pawnJobs[pawn].ContainsKey(work) ||
+                            pawnJobs[pawn]
+                                .ContainsKey(work) ||
                             // count amount of jobs assigned to pawn on this priority, then compare with max
-                            pawnJobs[pawn].Count(
-                                kv => kv.Value.V == priority.V)
+                            pawnJobs[pawn]
+                                .Count(
+                                    kv => kv.Value.V == priority.V)
                             >= maxJobs.V)
                             continue;
 
@@ -112,10 +118,12 @@ namespace AutoPriorities
                 // set remaining to zero
                 for (var i = 0; i < pawns.Count; i++)
                 {
-                    var pawn = pawns[i].pawn;
+                    var pawn = pawns[i]
+                        .pawn;
 
                     // if this job was already set, skip
-                    if (pawnJobs[pawn].ContainsKey(work))
+                    if (pawnJobs[pawn]
+                        .ContainsKey(work))
                         continue;
 
                     pawn.workSettings.SetPriority(work, 0);
@@ -123,14 +131,16 @@ namespace AutoPriorities
             }
         }
 
-        private static void FillListPriorityPercents(PawnsData pawnsData, WorkTypeDef work,
+        private static void FillListPriorityPercents(PawnsData pawnsData,
+            WorkTypeDef work,
             List<(Priority, JobCount, double)> priorities)
         {
             priorities.Clear();
             priorities.AddRange(pawnsData.WorkTables
-                .Select(tup => (tup.priority, tup.maxJobs, tup.workTypes[work].Value))
-                .Distinct(t => t.priority)
-                .Where(t => t.priority.V > 0));
+                                         .Select(tup => (tup.priority, tup.maxJobs, tup.workTypes[work]
+                                             .Value))
+                                         .Distinct(t => t.priority)
+                                         .Where(t => t.priority.V > 0));
             priorities.Sort((x, y) => x.Item1.V.CompareTo(y.Item1.V));
         }
     }

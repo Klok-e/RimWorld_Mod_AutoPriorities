@@ -17,7 +17,7 @@ namespace AutoPriorities
             get;
         }
 
-        public HashSet<(WorkTypeDef, Pawn)> ExcludedPawns { get; }
+        public HashSet<(WorkTypeDef work, Pawn pawn)> ExcludedPawns { get; }
 
         public HashSet<WorkTypeDef> WorkTypes { get; } = new HashSet<WorkTypeDef>();
 
@@ -61,9 +61,9 @@ namespace AutoPriorities
             try
             {
                 workTables = loader()
-                    // fill max jobs with default value if there's no value already
-                    .Select(t => (t.priority, t.maxJobs ?? WorkTypes.Count, t.workTypes))
-                    .ToList();
+                             // fill max jobs with default value if there's no value already
+                             .Select(t => (t.priority, t.maxJobs ?? WorkTypes.Count, t.workTypes))
+                             .ToList();
 
                 // add totals, otherwise results in division by zero
                 foreach (var (work, percent) in workTables.SelectMany(table => table.workTypes))
@@ -127,13 +127,9 @@ namespace AutoPriorities
                 foreach (var work in workTypes)
                 {
                     SortedPawnFitnessForEveryWork[work] = new List<(Pawn pawn, double fitness)>();
-                    foreach (var pawn in pawns)
+                    foreach (var pawn in pawns.Where(pawn => !pawn.AnimalOrWildMan()))
                     {
-                        if (pawn.AnimalOrWildMan())
-                            continue;
-
-                        if (!AllPlayerPawns.Contains(pawn))
-                            AllPlayerPawns.Add(pawn);
+                        if (!AllPlayerPawns.Contains(pawn)) AllPlayerPawns.Add(pawn);
 
                         var fitness = -1d;
                         try
@@ -168,14 +164,14 @@ namespace AutoPriorities
                         }
 
                         if (fitness >= 0d)
-                            SortedPawnFitnessForEveryWork[work].Add((pawn, fitness));
+                            SortedPawnFitnessForEveryWork[work]
+                                .Add((pawn, fitness));
                     }
 
                     if (!WorkTypes.Contains(work))
                     {
                         WorkTypes.Add(work);
-                        if (work.relevantSkills.Count == 0)
-                            WorkTypesNotRequiringSkills.Add(work);
+                        if (work.relevantSkills.Count == 0) WorkTypesNotRequiringSkills.Add(work);
                     }
                 }
 
@@ -185,7 +181,7 @@ namespace AutoPriorities
                 }
 
                 // remove all non player pawns
-                ExcludedPawns.RemoveWhere(wp => !AllPlayerPawns.Contains(wp.Item2));
+                ExcludedPawns.RemoveWhere(wp => !AllPlayerPawns.Contains(wp.pawn));
             }
             catch (Exception e)
             {
@@ -202,9 +198,9 @@ namespace AutoPriorities
             foreach (var (priority, _, workTypes) in WorkTables
                 .Distinct(x => x.priority))
             {
-                var percent = workTypes[workType].Value;
-                if (priority.V != priorityIgnore.V)
-                    taken += percent;
+                var percent = workTypes[workType]
+                    .Value;
+                if (priority.V != priorityIgnore.V) taken += percent;
                 takenTotal += percent;
             }
 
@@ -212,7 +208,9 @@ namespace AutoPriorities
             return (Math.Max(1d - taken, 0d), takenTotal > 1.0001d);
         }
 
-        public int NumberColonists(WorkTypeDef workType) => SortedPawnFitnessForEveryWork[workType].Count;
+        public int NumberColonists(WorkTypeDef workType) =>
+            SortedPawnFitnessForEveryWork[workType]
+                .Count;
 
         public static float PassionFactor(Passion passion)
         {

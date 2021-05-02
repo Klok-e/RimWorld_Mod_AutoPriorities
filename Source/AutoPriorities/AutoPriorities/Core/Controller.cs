@@ -20,6 +20,7 @@ namespace AutoPriorities.Core
         public static ModLogger? Log { get; private set; }
 
         private static AutoPriorities_Dialog? _dialog;
+
         public static AutoPriorities_Dialog Dialog => _dialog ??= new AutoPriorities_Dialog();
 
         public static PoolFactory<Number, NumberPoolArgs> PoolNumbers { get; } =
@@ -32,8 +33,7 @@ namespace AutoPriorities.Core
         {
             base.Initialize();
             Log = Logger;
-            if (PatchMod("fluffy.worktab", "FluffyWorktabPatch.dll"))
-                DrawUtil.MaxPriority = 9;
+            if (PatchMod("fluffy.worktab", "FluffyWorktabPatch.dll")) DrawUtil.MaxPriority = 9;
             PatchMod("dame.interestsframework", "InterestsPatch.dll");
             HarmonyInst.PatchAll();
         }
