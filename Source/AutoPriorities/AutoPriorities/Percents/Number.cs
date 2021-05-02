@@ -6,13 +6,13 @@ using Verse;
 
 namespace AutoPriorities.Percents
 {
-    public class Number : IPercent, IPoolable<Number,NumberPoolArgs>
+    public class Number : IPercent, IPoolable<Number, NumberPoolArgs>
     {
         public int Total { get; private set; }
 
         public int Count { get; private set; }
-        
-        public double Value => (double) Count / Total;
+
+        public double Value => (double)Count / Total;
 
         public Number Initialize(NumberPoolArgs args)
         {
@@ -29,6 +29,7 @@ namespace AutoPriorities.Percents
     public struct NumberPoolArgs : IPoolArgs
     {
         public int Count { get; set; }
+
         public int Total { get; set; }
     }
 }

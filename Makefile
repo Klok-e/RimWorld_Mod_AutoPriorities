@@ -17,26 +17,26 @@ build: copy-assemblies
 	./build.sh
 
 cleanup:
-	echo 'removing old build...';\
-	rm -f ./Build.zip;\
-	rm -rf ./Build;\
-	rm -rf ./$(RIMWORLD_VERSION)/;\
-	rm -rf ./ConditionalAssemblies/$(RIMWORLD_VERSION)/;\
+	echo 'removing old build...'
+	rm -f ./Build.zip
+	rm -rf ./Build
+	rm -rf ./$(RIMWORLD_VERSION)/
+	rm -rf ./ConditionalAssemblies/$(RIMWORLD_VERSION)/
 
 	echo 'removing deployed libs...'
-	rm -rf $(RIMWORLD_DEPLOY_PATH)/AutoPriorities;\
+	rm -rf $(RIMWORLD_DEPLOY_PATH)/AutoPriorities
 
-	echo 'removing old Rimworld assemblies...';\
-	rm -rf ./Source/RimManaged;\
+	echo 'removing old Rimworld assemblies...'
+	rm -rf ./Source/RimManaged
 
 	echo 'cleanup complete'
 
 deploy: build
-	echo deploying to $(RIMWORLD_DEPLOY_PATH);\
-	cp -r ./Build $(RIMWORLD_DEPLOY_PATH)/AutoPriorities;\
+	echo deploying to $(RIMWORLD_DEPLOY_PATH)
+	cp -r ./Build $(RIMWORLD_DEPLOY_PATH)/AutoPriorities
 	echo deployed to $(RIMWORLD_DEPLOY_PATH)
 
 compress-to-zip:
-	echo 'compressing the build to zip';\
-	zip -r ./Build.zip ./Build;\
+	echo 'compressing the build to zip'
+	zip -r ./Build.zip ./Build
 	echo 'compressed the build to ./Build.zip'

@@ -17,16 +17,15 @@ namespace AutoPriorities.HarmonyPatches
 
             var col = Color.white;
 
-            if (Verse.Widgets.ButtonImage(button, Core.Resources._autoPrioritiesButtonIcon, col, col * 0.9f))
+            if (!Verse.Widgets.ButtonImage(button, Core.Resources._autoPrioritiesButtonIcon, col, col * 0.9f)) return;
+
+            if (!window.IsOpen)
             {
-                if (!window.IsOpen)
-                {
-                    Verse.Find.WindowStack.Add(window);
-                }
-                else
-                {
-                    window.Close();
-                }
+                Verse.Find.WindowStack.Add(window);
+            }
+            else
+            {
+                window.Close();
             }
         }
     }
