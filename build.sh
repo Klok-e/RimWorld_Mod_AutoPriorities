@@ -1,19 +1,13 @@
-RIMWORLD_DEPLOY_PATH=~/.steam/steam/steamapps/common/RimWorld/Mods
+#!/usr/bin/env bash
 
-if [ "$1" = "Release" ]
-then
-    BUILD_CONFIGURATION=Release
-elif [ "$1" = "Debug" ]
-then
-    BUILD_CONFIGURATION=Debug
-else
-    BUILD_CONFIGURATION=Release
-fi
+set -e
+# set -x
+
 echo selected $BUILD_CONFIGURATION configuration
 
 echo removing old build...
-rm -r -f ./1.1/Assemblies/
-rm -r -f ./ConditionalAssemblies/1.1/
+rm -rf ./1.1/Assemblies/
+rm -rf ./ConditionalAssemblies/1.1/
 echo compiling...
 msbuild Source/AutoPriorities/AutoPriorities.sln -verbosity:quiet -p:Configuration=$BUILD_CONFIGURATION
 
@@ -34,7 +28,7 @@ echo compressed the build to ./Build.zip
 if ! [[ -z "$RIMWORLD_DEPLOY_PATH" ]]
 then
     echo deploying to $RIMWORLD_DEPLOY_PATH
-    rm -r -f $RIMWORLD_DEPLOY_PATH/AutoPriorities
+    rm -rf $RIMWORLD_DEPLOY_PATH/AutoPriorities
     cp -r ./Build $RIMWORLD_DEPLOY_PATH/AutoPriorities
     echo deployed to $RIMWORLD_DEPLOY_PATH
 fi

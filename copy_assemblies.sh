@@ -1,7 +1,10 @@
-RIMWORLD_ASSEMBLIES_DIR=~/.steam/steam/steamapps/common/RimWorld/RimWorldLinux_Data/Managed
+#!/usr/bin/env bash
+
+set -e
+# set -x
 
 echo removing old Rimworld assemblies...
-rm -r -f ./Source/RimManaged
+rm -rf ./Source/RimManaged
 
 echo copying Rimworld assemblies...
 cp -r $RIMWORLD_ASSEMBLIES_DIR ./Source/RimManaged
