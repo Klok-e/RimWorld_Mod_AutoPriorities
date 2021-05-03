@@ -47,7 +47,7 @@ namespace AutoPriorities.Core
 #endif
 
                 var asm = Assembly.LoadFile(Path.Combine(ModContentPack.RootDir,
-                    Path.Combine("ConditionalAssemblies/1.1/", patchName)));
+                    Path.Combine("ConditionalAssemblies/1.2/", patchName)));
 
                 HarmonyInst.PatchAll(asm);
                 return true;
