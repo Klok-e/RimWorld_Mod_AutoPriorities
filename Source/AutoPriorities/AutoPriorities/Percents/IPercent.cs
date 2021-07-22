@@ -1,5 +1,3 @@
-using System;
-
 namespace AutoPriorities.Percents
 {
     public interface IPercent

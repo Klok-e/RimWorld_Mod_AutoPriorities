@@ -1,9 +1,9 @@
-﻿using System.Reflection;
-using UnityEngine;
+﻿using UnityEngine;
+using Verse;
 
 namespace AutoPriorities.Core
 {
-    [Verse.StaticConstructorOnStartup]
+    [StaticConstructorOnStartup]
     public static class Resources
     {
         public static readonly Texture2D _autoPrioritiesButtonIcon;
@@ -12,9 +12,9 @@ namespace AutoPriorities.Core
 
         static Resources()
         {
-            _autoPrioritiesButtonIcon = Verse.ContentFinder<Texture2D>.Get("work_button_icon");
-            _plusIcon = Verse.ContentFinder<Texture2D>.Get("Plus");
-            _minusIcon = Verse.ContentFinder<Texture2D>.Get("Minus");
+            _autoPrioritiesButtonIcon = ContentFinder<Texture2D>.Get("work_button_icon");
+            _plusIcon = ContentFinder<Texture2D>.Get("Plus");
+            _minusIcon = ContentFinder<Texture2D>.Get("Minus");
         }
     }
 }

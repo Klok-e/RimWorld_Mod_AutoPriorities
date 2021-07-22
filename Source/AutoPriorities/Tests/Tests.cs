@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using AutoPriorities.Extensions;
-using NUnit.Framework.Internal;
+using NUnit.Framework;
 
 namespace Tests
 {
@@ -37,7 +35,8 @@ namespace Tests
         public void TestIterPercents((int, int)[] expected, double[] percents, int total)
         {
             // act
-            var actual = percents.IterPercents(total).ToArray();
+            var actual = percents.IterPercents(total)
+                                 .ToArray();
 
             // assert
             Assert.AreEqual(expected, actual);
@@ -51,21 +50,21 @@ namespace Tests
                 var percents = new[] {i / 1000d, (1000 - i) / 1000d};
                 for (var k = 0; k < 1000; k++)
                 {
-                    var arr = percents.IterPercents(k).ToArray();
+                    var arr = percents.IterPercents(k)
+                                      .ToArray();
                     Assert.AreEqual(k, arr.Length);
                 }
             }
 
-            var p = new[] {new[] {0.3,}, new[] {0.1, 0.5}, new[] {0.2, 0.7}, new[] {0.4, 0.05}, new[] {0.5,}};
+            var p = new[] {new[] {0.3}, new[] {0.1, 0.5}, new[] {0.2, 0.7}, new[] {0.4, 0.05}, new[] {0.5}};
             foreach (var arr in p)
-            {
                 for (var i = 0; i < 100; i++)
                 {
-                    var covered = (int) Math.Ceiling(i * arr.Sum());
-                    var actual = arr.IterPercents(i).ToArray();
+                    var covered = (int)Math.Ceiling(i * arr.Sum());
+                    var actual = arr.IterPercents(i)
+                                    .ToArray();
                     Assert.AreEqual(covered, actual.Length);
                 }
-            }
         }
 
         [Test]
@@ -73,7 +72,8 @@ namespace Tests
         {
             var v = new[] {(1, 2d), (4, 1d), (2, 1d), (7, 1d), (8, 1d), (9, 2d), (1, 1d)};
 
-            var actual = v.Distinct(x => x.Item1).ToArray();
+            var actual = v.Distinct(x => x.Item1)
+                          .ToArray();
 
             Assert.AreEqual(new[] {(1, 2d), (4, 1d), (2, 1d), (7, 1d), (8, 1d), (9, 2d)}, actual);
         }

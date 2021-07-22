@@ -10,17 +10,15 @@ namespace AutoPriorities.Utils
         public static int MaxPriority { get; set; } = 4;
 
         /// <summary>
-        /// If false - only background is drawn
+        ///     If false - only background is drawn
         /// </summary>
         public static void EmptyCheckbox(float x, float y, ref bool value, float width = 24f, float height = 24f)
         {
             var rect = new Rect(x, y, width, height);
             DrawWorkBoxBackground(rect);
-            if (value)
-                GUI.DrawTexture(rect, WidgetsWork.WorkBoxCheckTex);
+            if (value) GUI.DrawTexture(rect, WidgetsWork.WorkBoxCheckTex);
 
-            if (Event.current.type != EventType.MouseDown || !Mouse.IsOver(rect))
-                return;
+            if (Event.current.type != EventType.MouseDown || !Mouse.IsOver(rect)) return;
 
             value = !value;
         }
@@ -40,8 +38,7 @@ namespace AutoPriorities.Utils
                 Text.Anchor = TextAnchor.UpperLeft;
             }
 
-            if (Event.current.type != EventType.MouseDown || !Mouse.IsOver(rect))
-                return priority;
+            if (Event.current.type != EventType.MouseDown || !Mouse.IsOver(rect)) return priority;
 
             var priorityOrig = priority;
             switch (Event.current.button)
@@ -49,8 +46,7 @@ namespace AutoPriorities.Utils
                 case 0:
                 {
                     var priority2 = priorityOrig - 1;
-                    if (priority2 < 0)
-                        priority2 = MaxPriority;
+                    if (priority2 < 0) priority2 = MaxPriority;
                     priority = priority2;
                     SoundDefOf.Click.PlayOneShotOnCamera();
                     break;
@@ -58,8 +54,7 @@ namespace AutoPriorities.Utils
                 case 1:
                 {
                     var priority2 = priorityOrig + 1;
-                    if (priority2 > MaxPriority)
-                        priority2 = 0;
+                    if (priority2 > MaxPriority) priority2 = 0;
                     priority = priority2;
                     SoundDefOf.Click.PlayOneShotOnCamera();
                     break;

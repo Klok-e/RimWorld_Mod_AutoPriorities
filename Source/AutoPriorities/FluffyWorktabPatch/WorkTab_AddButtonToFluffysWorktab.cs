@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
-using RimWorld;
 using UnityEngine;
+using Verse;
 using WorkTab;
+using Controller = AutoPriorities.Core.Controller;
+using Resources = AutoPriorities.Core.Resources;
 
 namespace FluffyWorktabPatch
 {
@@ -11,23 +13,19 @@ namespace FluffyWorktabPatch
         [HarmonyPostfix]
         private static void Postfix(Rect rect)
         {
-            var window = AutoPriorities.Core.Controller.Dialog;
+            var window = Controller.Dialog;
 
             var button = new Rect(rect.x + 160, rect.y + 5, 25, 25);
 
             var col = Color.white;
 
-            if (Verse.Widgets.ButtonImage(button, AutoPriorities.Core.Resources._autoPrioritiesButtonIcon, col,
+            if (Widgets.ButtonImage(button, Resources._autoPrioritiesButtonIcon, col,
                 col * 0.9f))
             {
                 if (!window.IsOpen)
-                {
-                    Verse.Find.WindowStack.Add(window);
-                }
+                    Find.WindowStack.Add(window);
                 else
-                {
                     window.Close();
-                }
             }
         }
     }

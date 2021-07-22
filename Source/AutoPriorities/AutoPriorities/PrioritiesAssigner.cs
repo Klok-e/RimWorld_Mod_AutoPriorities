@@ -1,9 +1,9 @@
-﻿using AutoPriorities.Extensions;
-using AutoPriorities.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoPriorities.Core;
+using AutoPriorities.Extensions;
+using AutoPriorities.Utils;
 using Verse;
 
 namespace AutoPriorities

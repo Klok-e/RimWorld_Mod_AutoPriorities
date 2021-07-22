@@ -2,6 +2,8 @@
 using HarmonyLib;
 using RimWorld;
 using UnityEngine;
+using Verse;
+using Resources = AutoPriorities.Core.Resources;
 
 namespace AutoPriorities.HarmonyPatches
 {
@@ -17,16 +19,12 @@ namespace AutoPriorities.HarmonyPatches
 
             var col = Color.white;
 
-            if (!Verse.Widgets.ButtonImage(button, Core.Resources._autoPrioritiesButtonIcon, col, col * 0.9f)) return;
+            if (!Widgets.ButtonImage(button, Resources._autoPrioritiesButtonIcon, col, col * 0.9f)) return;
 
             if (!window.IsOpen)
-            {
-                Verse.Find.WindowStack.Add(window);
-            }
+                Find.WindowStack.Add(window);
             else
-            {
                 window.Close();
-            }
         }
     }
 }

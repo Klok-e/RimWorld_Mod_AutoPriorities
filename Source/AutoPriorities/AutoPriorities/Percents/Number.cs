@@ -1,8 +1,4 @@
-using System;
 using AutoPriorities.Utils;
-using UnityEngine;
-using UnityEngine.Serialization;
-using Verse;
 
 namespace AutoPriorities.Percents
 {
@@ -12,7 +8,13 @@ namespace AutoPriorities.Percents
 
         public int Count { get; private set; }
 
+        #region IPercent Members
+
         public double Value => (double)Count / Total;
+
+        #endregion
+
+        #region IPoolable<Number,NumberPoolArgs> Members
 
         public Number Initialize(NumberPoolArgs args)
         {
@@ -24,6 +26,8 @@ namespace AutoPriorities.Percents
         public void Deinitialize()
         {
         }
+
+        #endregion
     }
 
     public struct NumberPoolArgs : IPoolArgs

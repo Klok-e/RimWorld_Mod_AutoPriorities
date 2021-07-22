@@ -1,13 +1,16 @@
-using System;
 using AutoPriorities.Utils;
-using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace AutoPriorities.Percents
 {
     public class Percent : IPercent, IPoolable<Percent, PercentPoolArgs>
     {
+        #region IPercent Members
+
         public double Value { get; private set; }
+
+        #endregion
+
+        #region IPoolable<Percent,PercentPoolArgs> Members
 
         public Percent Initialize(PercentPoolArgs args)
         {
@@ -18,6 +21,8 @@ namespace AutoPriorities.Percents
         public void Deinitialize()
         {
         }
+
+        #endregion
     }
 
     public struct PercentPoolArgs : IPoolArgs

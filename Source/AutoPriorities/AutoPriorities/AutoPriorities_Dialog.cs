@@ -1,46 +1,46 @@
-﻿using AutoPriorities.Utils;
-using RimWorld;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoPriorities.Core;
 using AutoPriorities.Percents;
+using AutoPriorities.Utils;
+using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
+using Resources = AutoPriorities.Core.Resources;
 
 namespace AutoPriorities
 {
     public class AutoPriorities_Dialog : Window
     {
-        private HashSet<Priority> PrioritiesEncounteredCached { get; } = new HashSet<Priority>();
-
-        private PawnsData PawnsData { get; } = new PawnsData();
-
-        private PrioritiesAssigner PrioritiesAssigner { get; } = new PrioritiesAssigner();
-
         private const float SliderWidth = 20f;
         private const float SliderHeight = 60f;
         private const float SliderMargin = 75f;
-
         private const float GuiShadowedMult = 0.5f;
-
         private const float SlidersDistFromLeftBorder = 30f;
         private const float SlidersDistFromRightBorder = 10f;
         private const float DistFromBottomBorder = 50f;
-
         private const float ButtonHeight = 30f;
         private const float LabelHeight = 22f;
         private const float LabelMargin = 5f;
         private const float WorkLabelWidth = 75f;
         private const float WorkLabelOffset = 25f;
         private const float WorkLabelHorizOffset = 40f;
-
         private const float PercentStringWidth = 30f;
         private const float PercentStringLabelWidth = 20f;
-
-        private Rect _rect;
+        private const string PrioritiesLabel = "Priorities";
+        private const string PawnExcludeLabel = "Exclude Colonists";
+        private const string Label = "Run AutoPriorities";
+        private const float PawnNameCoWidth = 150f;
+        private readonly float _labelWidth = Label.GetWidthCached() + 10f;
+        private readonly float _pawnExcludeLabelWidth = PawnExcludeLabel.GetWidthCached() + 10f;
+        private readonly float _prioritiesLabelWidth = PrioritiesLabel.GetWidthCached() + 10f;
+        private SelectedTab _currentlySelectedTab = SelectedTab.Priorities;
         private bool _openedOnce;
+        private Vector2 _pawnExcludeScrollPos;
+        private Rect _rect;
+        private Vector2 _scrollPos;
 
         public AutoPriorities_Dialog()
         {
@@ -48,6 +48,12 @@ namespace AutoPriorities
             draggable = true;
             resizeable = true;
         }
+
+        private HashSet<Priority> PrioritiesEncounteredCached { get; } = new HashSet<Priority>();
+
+        private PawnsData PawnsData { get; } = new PawnsData();
+
+        private PrioritiesAssigner PrioritiesAssigner { get; } = new PrioritiesAssigner();
 
         public override void PostClose()
         {
@@ -64,23 +70,6 @@ namespace AutoPriorities
             else
                 _openedOnce = true;
         }
-
-        private enum SelectedTab
-        {
-            Priorities = 1,
-            PawnExclusion = 2,
-        }
-
-        private SelectedTab _currentlySelectedTab = SelectedTab.Priorities;
-
-        private const string PrioritiesLabel = "Priorities";
-        private readonly float _prioritiesLabelWidth = PrioritiesLabel.GetWidthCached() + 10f;
-
-        private const string PawnExcludeLabel = "Exclude Colonists";
-        private readonly float _pawnExcludeLabelWidth = PawnExcludeLabel.GetWidthCached() + 10f;
-
-        private const string Label = "Run AutoPriorities";
-        private readonly float _labelWidth = Label.GetWidthCached() + 10f;
 
         public override void DoWindowContents(Rect inRect)
         {
@@ -133,8 +122,6 @@ namespace AutoPriorities
             }
         }
 
-        private Vector2 _scrollPos;
-
         private void PrioritiesTab(Rect inRect)
         {
             var worktypes = PawnsData.SortedPawnFitnessForEveryWork.Count;
@@ -158,8 +145,7 @@ namespace AutoPriorities
                 var colOrig = GUI.color;
 
                 //shadow repeating priorities
-                if (PrioritiesEncounteredCached.Contains(pr.priority))
-                    GUI.color = colOrig * GuiShadowedMult;
+                if (PrioritiesEncounteredCached.Contains(pr.priority)) GUI.color = colOrig * GuiShadowedMult;
 
                 var slidersRect = new Rect(
                     SlidersDistFromLeftBorder,
@@ -194,7 +180,8 @@ namespace AutoPriorities
                     maxJobsSliderRect.yMax + 3f,
                     PercentStringWidth,
                     25f);
-                var maxJobsText = Mathf.RoundToInt(newMaxJobsSliderValue).ToString();
+                var maxJobsText = Mathf.RoundToInt(newMaxJobsSliderValue)
+                                       .ToString();
                 Widgets.TextFieldNumeric(jobCountMaxLabelRect, ref newMaxJobsSliderValue, ref maxJobsText);
 
                 pr.maxJobs = Mathf.RoundToInt(newMaxJobsSliderValue);
@@ -218,8 +205,7 @@ namespace AutoPriorities
                         var (available, takenMoreThanTotal) =
                             PawnsData.PercentColonistsAvailable(workType, pr.priority);
                         var prevCol = GUI.color;
-                        if (takenMoreThanTotal)
-                            GUI.color = Color.red;
+                        if (takenMoreThanTotal) GUI.color = Color.red;
 
                         var labelRect = new Rect(elementXPos - workName.GetWidthCached() / 2,
                             slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f, 100f, LabelHeight);
@@ -228,11 +214,12 @@ namespace AutoPriorities
                         GUI.color = prevCol;
 
                         var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
-                        var currSliderVal = (float) pr.workTypes[workType].Value;
+                        var currSliderVal = (float)pr.workTypes[workType]
+                                                     .Value;
                         var newSliderValue =
                             GUI.VerticalSlider(sliderRect, currSliderVal, Math.Max(1f, currSliderVal), 0f);
 
-                        newSliderValue = Mathf.Clamp(newSliderValue, 0f, Math.Max((float) available, currSliderVal));
+                        newSliderValue = Mathf.Clamp(newSliderValue, 0f, Math.Max((float)available, currSliderVal));
 
                         var percentsText = (currentPercent switch
                         {
@@ -266,8 +253,7 @@ namespace AutoPriorities
                         }
 #endif
                         prevCol = GUI.color;
-                        if (takenMoreThanTotal)
-                            GUI.color = Color.red;
+                        if (takenMoreThanTotal) GUI.color = Color.red;
 
                         Widgets.TextFieldNumeric(percentsRect, ref sliderValRepr, ref percentsText);
 
@@ -308,7 +294,7 @@ namespace AutoPriorities
                         }
 
                         newSliderValue = Mathf.Clamp(newSliderValue, 0f,
-                            Math.Max((float) available, prevSliderValText));
+                            Math.Max((float)available, prevSliderValText));
 
                         switch (currentPercent)
                         {
@@ -351,7 +337,7 @@ namespace AutoPriorities
                 scrollRect.yMax + 9f,
                 ButtonHeight,
                 ButtonHeight);
-            if (Widgets.ButtonImage(removePriorityButtonRect, Core.Resources._minusIcon))
+            if (Widgets.ButtonImage(removePriorityButtonRect, Resources._minusIcon))
             {
                 RemovePriority();
                 SoundDefOf.Click.PlayOneShotOnCamera();
@@ -362,15 +348,12 @@ namespace AutoPriorities
                 scrollRect.yMax + 9f,
                 ButtonHeight,
                 ButtonHeight);
-            if (Widgets.ButtonImage(addPriorityButtonRect, Core.Resources._plusIcon))
+            if (Widgets.ButtonImage(addPriorityButtonRect, Resources._plusIcon))
             {
                 AddPriority();
                 SoundDefOf.Click.PlayOneShotOnCamera();
             }
         }
-
-        private Vector2 _pawnExcludeScrollPos;
-        private const float PawnNameCoWidth = 150f;
 
         private void PawnExcludeTab(Rect inRect)
         {
@@ -445,6 +428,7 @@ namespace AutoPriorities
                     DrawUtil.EmptyCheckbox(nameRect.xMax - (ButtonHeight - 1) / 2 + (i + 1) * WorkLabelHorizOffset,
                         nameRect.yMin, ref next);
                     if (prev == next) continue;
+
                     if (next)
                     {
                         PawnsData.ExcludedPawns.Add((workType, pawn));
@@ -480,8 +464,13 @@ namespace AutoPriorities
 
         private void RemovePriority()
         {
-            if (PawnsData.WorkTables.Count > 0)
-                PawnsData.WorkTables.RemoveLast();
+            if (PawnsData.WorkTables.Count > 0) PawnsData.WorkTables.RemoveLast();
+        }
+
+        private enum SelectedTab
+        {
+            Priorities = 1,
+            PawnExclusion = 2
         }
     }
 }

@@ -10,8 +10,7 @@ namespace AutoPriorities.Extensions
             var hashSet = new HashSet<K>();
             foreach (var item in enumer)
             {
-                if (!hashSet.Contains(key(item)))
-                    yield return item;
+                if (!hashSet.Contains(key(item))) yield return item;
 
                 hashSet.Add(key(item));
             }
@@ -36,8 +35,7 @@ namespace AutoPriorities.Extensions
             foreach (var percent in percents)
             {
                 toIter += percent * total;
-                for (; iter < toIter && iter < total; iter++)
-                    yield return (iter, percentInd);
+                for (; iter < toIter && iter < total; iter++) yield return (iter, percentInd);
 
                 percentInd += 1;
             }
