@@ -10,7 +10,7 @@ msbuild Source/AutoPriorities/AutoPriorities.sln -verbosity:quiet -p:Configurati
 
 mkdir ./Build
 echo building mod to $(realpath ./Build)
-for dir in $RIMWORLD_VERSION Textures About LICENSE ConditionalAssemblies
+for dir in 1.* Textures About LICENSE ConditionalAssemblies
 do
     cp -r ./$dir "./Build/$dir"
 done
