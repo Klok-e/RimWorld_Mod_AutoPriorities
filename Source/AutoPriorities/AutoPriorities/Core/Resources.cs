@@ -6,15 +6,15 @@ namespace AutoPriorities.Core
     [StaticConstructorOnStartup]
     public static class Resources
     {
-        public static readonly Texture2D _autoPrioritiesButtonIcon;
-        public static readonly Texture2D _plusIcon;
-        public static readonly Texture2D _minusIcon;
+        public static readonly Texture2D AutoPrioritiesButtonIcon;
+        public static readonly Texture2D PlusIcon;
+        public static readonly Texture2D MinusIcon;
 
         static Resources()
         {
-            _autoPrioritiesButtonIcon = ContentFinder<Texture2D>.Get("work_button_icon");
-            _plusIcon = ContentFinder<Texture2D>.Get("Plus");
-            _minusIcon = ContentFinder<Texture2D>.Get("Minus");
+            AutoPrioritiesButtonIcon = ContentFinder<Texture2D>.Get("work_button_icon");
+            PlusIcon = ContentFinder<Texture2D>.Get("Plus");
+            MinusIcon = ContentFinder<Texture2D>.Get("Minus");
         }
     }
 }

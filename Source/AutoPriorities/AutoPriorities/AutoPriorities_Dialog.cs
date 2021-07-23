@@ -337,7 +337,7 @@ namespace AutoPriorities
                 scrollRect.yMax + 9f,
                 ButtonHeight,
                 ButtonHeight);
-            if (Widgets.ButtonImage(removePriorityButtonRect, Resources._minusIcon))
+            if (Widgets.ButtonImage(removePriorityButtonRect, Resources.MinusIcon))
             {
                 RemovePriority();
                 SoundDefOf.Click.PlayOneShotOnCamera();
@@ -348,7 +348,7 @@ namespace AutoPriorities
                 scrollRect.yMax + 9f,
                 ButtonHeight,
                 ButtonHeight);
-            if (Widgets.ButtonImage(addPriorityButtonRect, Resources._plusIcon))
+            if (Widgets.ButtonImage(addPriorityButtonRect, Resources.PlusIcon))
             {
                 AddPriority();
                 SoundDefOf.Click.PlayOneShotOnCamera();

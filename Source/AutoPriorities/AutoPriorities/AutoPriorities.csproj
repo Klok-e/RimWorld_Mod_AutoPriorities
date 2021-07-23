@@ -42,7 +42,7 @@
         <Compile Include="Core\Resources.cs" />
         <Compile Include="Extensions\PawnExtensions.cs" />
         <Compile Include="Extensions\CollectionExtensions.cs" />
-        <Compile Include="HarmonyPatches\WorkTab_AddButtonToOpenAutoPrioritiesWindow.cs" />
+        <Compile Include="HarmonyPatches\WorkTabAddButtonToOpenAutoPrioritiesWindow.cs" />
         <Compile Include="PawnsData.cs" />
         <Compile Include="Percents\IPercent.cs" />
         <Compile Include="Percents\Number.cs" />

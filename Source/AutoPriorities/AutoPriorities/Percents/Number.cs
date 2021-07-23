@@ -30,7 +30,7 @@ namespace AutoPriorities.Percents
         #endregion
     }
 
-    public struct NumberPoolArgs : IPoolArgs
+    public struct NumberPoolArgs 
     {
         public int Count { get; set; }
 

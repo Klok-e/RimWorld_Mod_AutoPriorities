@@ -8,9 +8,11 @@ using Resources = AutoPriorities.Core.Resources;
 namespace AutoPriorities.HarmonyPatches
 {
     [HarmonyPatch(typeof(MainTabWindow_Work), nameof(MainTabWindow_Work.DoWindowContents))]
-    public static class WorkTab_AddButtonToOpenAutoPrioritiesWindow
+    // ReSharper disable once UnusedType.Global
+    public static class WorkTabAddButtonToOpenAutoPrioritiesWindow
     {
         [HarmonyPostfix]
+        // ReSharper disable once UnusedMember.Local
         private static void Postfix(Rect rect)
         {
             var window = Controller.Dialog;
@@ -19,7 +21,7 @@ namespace AutoPriorities.HarmonyPatches
 
             var col = Color.white;
 
-            if (!Widgets.ButtonImage(button, Resources._autoPrioritiesButtonIcon, col, col * 0.9f)) return;
+            if (!Widgets.ButtonImage(button, Resources.AutoPrioritiesButtonIcon, col, col * 0.9f)) return;
 
             if (!window.IsOpen)
                 Find.WindowStack.Add(window);

@@ -21,7 +21,7 @@ namespace FluffyWorktabPatch
 
             var col = Color.white;
 
-            if (Widgets.ButtonImage(button, Resources._autoPrioritiesButtonIcon, col,
+            if (Widgets.ButtonImage(button, Resources.AutoPrioritiesButtonIcon, col,
                 col * 0.9f))
             {
                 if (!window.IsOpen)

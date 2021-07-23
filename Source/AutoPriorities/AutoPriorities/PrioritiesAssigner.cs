@@ -8,7 +8,7 @@ using Verse;
 
 namespace AutoPriorities
 {
-    internal class PrioritiesAssigner
+    public class PrioritiesAssigner
     {
         private List<(Priority priority, JobCount maxJobs, double percent)> PriorityPercentCached { get; } =
             new();

@@ -4,7 +4,6 @@ namespace AutoPriorities.Utils
 {
     public class PoolFactory<TPoolable, TArgs>
         where TPoolable : IPoolable<TPoolable, TArgs>, new()
-        where TArgs : IPoolArgs
     {
         private readonly Queue<TPoolable> _pool = new();
 
@@ -23,14 +22,9 @@ namespace AutoPriorities.Utils
     }
 
     public interface IPoolable<TPoolable, TArgs>
-        where TArgs : IPoolArgs
     {
         TPoolable Initialize(TArgs args);
 
         void Deinitialize();
-    }
-
-    public interface IPoolArgs
-    {
     }
 }

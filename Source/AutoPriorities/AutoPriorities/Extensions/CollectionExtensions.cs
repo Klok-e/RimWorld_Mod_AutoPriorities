@@ -5,9 +5,9 @@ namespace AutoPriorities.Extensions
 {
     public static class CollectionExtensions
     {
-        public static IEnumerable<T> Distinct<T, K>(this IEnumerable<T> enumer, Func<T, K> key)
+        public static IEnumerable<T> Distinct<T, TK>(this IEnumerable<T> enumer, Func<T, TK> key)
         {
-            var hashSet = new HashSet<K>();
+            var hashSet = new HashSet<TK>();
             foreach (var item in enumer)
             {
                 if (!hashSet.Contains(key(item))) yield return item;
