@@ -6,7 +6,7 @@ namespace AutoPriorities.Utils
         where TPoolable : IPoolable<TPoolable, TArgs>, new()
         where TArgs : IPoolArgs
     {
-        private readonly Queue<TPoolable> _pool = new Queue<TPoolable>();
+        private readonly Queue<TPoolable> _pool = new();
 
         public TPoolable Acquire(TArgs args)
         {

@@ -11,10 +11,10 @@ namespace AutoPriorities
     internal class PrioritiesAssigner
     {
         private List<(Priority priority, JobCount maxJobs, double percent)> PriorityPercentCached { get; } =
-            new List<(Priority, JobCount, double)>();
+            new();
 
         private Dictionary<Pawn, Dictionary<WorkTypeDef, Priority>> PawnJobsCached { get; } =
-            new Dictionary<Pawn, Dictionary<WorkTypeDef, Priority>>();
+            new();
 
         public void AssignPriorities(PawnsData pawnsData)
         {

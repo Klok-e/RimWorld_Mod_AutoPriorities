@@ -11,17 +11,17 @@ namespace AutoPriorities.Core
 {
     public class Controller : ModBase
     {
-        private static AutoPriorities_Dialog? _dialog;
+        private static AutoPrioritiesDialog? _dialog;
 
         public static ModLogger? Log { get; private set; }
 
-        public static AutoPriorities_Dialog Dialog => _dialog ??= new AutoPriorities_Dialog();
+        public static AutoPrioritiesDialog Dialog => _dialog ??= new AutoPrioritiesDialog();
 
         public static PoolFactory<Number, NumberPoolArgs> PoolNumbers { get; } =
-            new PoolFactory<Number, NumberPoolArgs>();
+            new();
 
         public static PoolFactory<Percent, PercentPoolArgs> PoolPercents { get; } =
-            new PoolFactory<Percent, PercentPoolArgs>();
+            new();
 
         public static SettingHandle<double>? PassionMult { get; private set; }
 

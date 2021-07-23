@@ -12,7 +12,7 @@ using Resources = AutoPriorities.Core.Resources;
 
 namespace AutoPriorities
 {
-    public class AutoPriorities_Dialog : Window
+    public class AutoPrioritiesDialog : Window
     {
         private const float SliderWidth = 20f;
         private const float SliderHeight = 60f;
@@ -42,18 +42,18 @@ namespace AutoPriorities
         private Rect _rect;
         private Vector2 _scrollPos;
 
-        public AutoPriorities_Dialog()
+        public AutoPrioritiesDialog()
         {
             doCloseButton = true;
             draggable = true;
             resizeable = true;
         }
 
-        private HashSet<Priority> PrioritiesEncounteredCached { get; } = new HashSet<Priority>();
+        private HashSet<Priority> PrioritiesEncounteredCached { get; } = new();
 
-        private PawnsData PawnsData { get; } = new PawnsData();
+        private PawnsData PawnsData { get; } = new();
 
-        private PrioritiesAssigner PrioritiesAssigner { get; } = new PrioritiesAssigner();
+        private PrioritiesAssigner PrioritiesAssigner { get; } = new();
 
         public override void PostClose()
         {

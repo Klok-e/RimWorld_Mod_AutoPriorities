@@ -6,7 +6,7 @@ namespace AutoPriorities.Core
 
         public static implicit operator Priority(int value)
         {
-            return new Priority {V = value};
+            return new() {V = value};
         }
     }
 
@@ -16,7 +16,7 @@ namespace AutoPriorities.Core
 
         public static implicit operator JobCount(int value)
         {
-            return new JobCount {V = value};
+            return new() {V = value};
         }
     }
 
@@ -26,7 +26,7 @@ namespace AutoPriorities.Core
 
         public static implicit operator Fitness(double value)
         {
-            return new Fitness {V = value};
+            return new() {V = value};
         }
     }
 }

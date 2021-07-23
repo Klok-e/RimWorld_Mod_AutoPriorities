@@ -75,8 +75,8 @@ namespace AutoPriorities.Core
 
         public class Ser
         {
-            public List<Tupl> data = new List<Tupl>();
-            public List<WorktypePawn> excludedPawns = new List<WorktypePawn>();
+            public List<Tupl> data = new();
+            public List<WorktypePawn> excludedPawns = new();
 
             public List<(Priority priority, JobCount? maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>
                 ParsedData()
@@ -99,7 +99,7 @@ namespace AutoPriorities.Core
                 (List<(Priority priority, JobCount maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)> percents,
                     HashSet<(WorkTypeDef, Pawn)> excluded) data)
             {
-                return new Ser
+                return new()
                 {
                     data = data.percents
                                .Select(Tupl.Serialized)
@@ -123,7 +123,7 @@ namespace AutoPriorities.Core
 
             public static WorktypePawn Serialized((WorkTypeDef work, Pawn pawn) data)
             {
-                return new WorktypePawn
+                return new()
                 {
                     workType = data.work.defName,
                     pawnId = data.pawn.ThingID
@@ -133,7 +133,7 @@ namespace AutoPriorities.Core
 
         public class Tupl
         {
-            public Dic dict = new Dic();
+            public Dic dict = new();
             public int? jobsMax;
             public int priority;
 
@@ -144,7 +144,7 @@ namespace AutoPriorities.Core
 
             public static Tupl Serialized((Priority, JobCount, Dictionary<WorkTypeDef, IPercent>) val)
             {
-                return new Tupl
+                return new()
                 {
                     priority = val.Item1.V,
                     jobsMax = val.Item2.V,
@@ -155,7 +155,7 @@ namespace AutoPriorities.Core
 
         public class Dic
         {
-            public List<StrPercent> percents = new List<StrPercent>();
+            public List<StrPercent> percents = new();
 
             public Dictionary<WorkTypeDef, IPercent> Parsed()
             {
@@ -167,7 +167,7 @@ namespace AutoPriorities.Core
 
             public static Dic Serialized(Dictionary<WorkTypeDef, IPercent> dic)
             {
-                return new Dic
+                return new()
                 {
                     percents = dic
                                .Select(kv => StrPercent.Serialized((kv.Key, kv.Value)))
@@ -178,7 +178,7 @@ namespace AutoPriorities.Core
 
         public class StrPercent
         {
-            public UnionPercent percent = new UnionPercent();
+            public UnionPercent percent = new();
             public string workType = "";
 
             public (WorkTypeDef?, IPercent) Parsed()
@@ -188,7 +188,7 @@ namespace AutoPriorities.Core
 
             public static StrPercent Serialized((WorkTypeDef work, IPercent percent) val)
             {
-                return new StrPercent
+                return new()
                 {
                     workType = val.work.defName,
                     percent = UnionPercent.Serialized(val.percent)

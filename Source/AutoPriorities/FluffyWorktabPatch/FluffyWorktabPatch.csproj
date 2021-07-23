@@ -11,7 +11,7 @@
         <AssemblyName>FluffyWorktabPatch</AssemblyName>
         <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
-        <LangVersion>8</LangVersion>
+        <LangVersion>default</LangVersion>
         <Nullable>enable</Nullable>
         <CopyNuGetImplementations>false</CopyNuGetImplementations>
     </PropertyGroup>
@@ -35,7 +35,7 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="Assembly-CSharp, Version=1.2.7867.15537, Culture=neutral, PublicKeyToken=null">
+        <Reference Include="Assembly-CSharp, Version=1.3.7872.42013, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\RimManaged\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
@@ -63,12 +63,9 @@
         <Reference Include="System.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
           <HintPath>..\..\RimManaged\System.Configuration.dll</HintPath>
         </Reference>
-        <Reference Include="System.Core" />
         <Reference Include="System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
             <HintPath>..\..\RimManaged\System.Core.dll</HintPath>
         </Reference>
-        <Reference Include="System.Data" />
-        <Reference Include="System.Runtime.InteropServices.RuntimeInformation" />
         <Reference Include="System.Runtime.Serialization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <HintPath>..\..\RimManaged\System.Runtime.Serialization.dll</HintPath>
         </Reference>
@@ -103,9 +100,6 @@
         <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\RimManaged\UnityEngine.AnimationModule.dll</HintPath>
         </Reference>
-        <Reference Include="UnityEngine.ARModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\RimManaged\UnityEngine.ARModule.dll</HintPath>
-        </Reference>
         <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\RimManaged\UnityEngine.AssetBundleModule.dll</HintPath>
         </Reference>
@@ -132,9 +126,6 @@
         </Reference>
         <Reference Include="UnityEngine.DSPGraphModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\RimManaged\UnityEngine.DSPGraphModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.FileSystemHttpModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\RimManaged\UnityEngine.FileSystemHttpModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.GameCenterModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\RimManaged\UnityEngine.GameCenterModule.dll</HintPath>
@@ -195,6 +186,9 @@
         </Reference>
         <Reference Include="UnityEngine.SubstanceModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\RimManaged\UnityEngine.SubstanceModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SubsystemsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\..\RimManaged\UnityEngine.SubsystemsModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.TerrainModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\RimManaged\UnityEngine.TerrainModule.dll</HintPath>
@@ -276,7 +270,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="WorkTab_AddButtonToFluffysWorktab.cs" />
+        <Compile Include="WorkTabAddButtonToFluffysWorktab.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>

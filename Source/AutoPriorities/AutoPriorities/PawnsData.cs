@@ -27,14 +27,14 @@ namespace AutoPriorities
 
         public HashSet<(WorkTypeDef work, Pawn pawn)> ExcludedPawns { get; }
 
-        public HashSet<WorkTypeDef> WorkTypes { get; } = new HashSet<WorkTypeDef>();
+        public HashSet<WorkTypeDef> WorkTypes { get; } = new();
 
-        public HashSet<WorkTypeDef> WorkTypesNotRequiringSkills { get; } = new HashSet<WorkTypeDef>();
+        public HashSet<WorkTypeDef> WorkTypesNotRequiringSkills { get; } = new();
 
         public Dictionary<WorkTypeDef, List<(Pawn pawn, double fitness)>> SortedPawnFitnessForEveryWork { get; } =
-            new Dictionary<WorkTypeDef, List<(Pawn, double)>>();
+            new();
 
-        public HashSet<Pawn> AllPlayerPawns { get; } = new HashSet<Pawn>();
+        public HashSet<Pawn> AllPlayerPawns { get; } = new();
 
         public void SaveState()
         {

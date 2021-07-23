@@ -8,9 +8,11 @@ using Resources = AutoPriorities.Core.Resources;
 namespace FluffyWorktabPatch
 {
     [HarmonyPatch(typeof(MainTabWindow_WorkTab), nameof(MainTabWindow_WorkTab.DoWindowContents))]
-    public static class WorkTab_AddButtonToFluffysWorktab
+    // ReSharper disable once UnusedType.Global
+    public static class WorkTabAddButtonToFluffysWorktab
     {
         [HarmonyPostfix]
+        // ReSharper disable once UnusedMember.Local
         private static void Postfix(Rect rect)
         {
             var window = Controller.Dialog;
