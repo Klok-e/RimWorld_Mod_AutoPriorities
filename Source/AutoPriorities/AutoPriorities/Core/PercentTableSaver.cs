@@ -1,103 +1,39 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Xml.Serialization;
 using AutoPriorities.Percents;
-using AutoPriorities.Utils;
-using RimWorld;
-using UnityEngine;
-using Verse;
+using AutoPriorities.WorldInfoRetriever;
+using AutoPriorities.Wrappers;
 
 namespace AutoPriorities.Core
 {
     public static class PercentTableSaver
     {
-        private const string Filename = "ModAutoPrioritiesSaveNEW.xml";
-        private static readonly string FullPath;
-
-        static PercentTableSaver()
-        {
-            FullPath = Application.persistentDataPath + Filename;
-        }
-
-        public static void SaveState(
-            (List<(Priority priority, JobCount maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>,
-                HashSet<(WorkTypeDef, Pawn)>) state)
-        {
-            using var stream = new FileStream(FullPath, FileMode.Create);
-            new XmlSerializer(typeof(Ser)).Serialize(stream, Ser.Serialized(state));
-        }
-
-        public static (Func<List<(Priority priority, JobCount? maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>>
-            percents,
-            Func<HashSet<(WorkTypeDef, Pawn)>> excluded)
-            GetStateLoaders()
-        {
-            try
-            {
-                if (File.Exists(FullPath))
-                {
-                    using var stream = new FileStream(FullPath, FileMode.OpenOrCreate);
-                    var ser = (Ser)new XmlSerializer(typeof(Ser)).Deserialize(stream);
-                    return (() => ser.ParsedData(), () => ser.ParsedExcluded());
-                }
-            }
-            catch (Exception e)
-            {
-                Controller.Log!.Error("Error while deserializing state");
-                e.LogStackTrace();
-            }
-
-            return (
-                () => new List<(Priority priority, JobCount? maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>(),
-                () => new HashSet<(WorkTypeDef, Pawn)>());
-        }
-
-        public static WorkTypeDef? StringToDef(string name)
-        {
-            var work = WorkTypeDefsUtility.WorkTypeDefsInPriorityOrder.FirstOrDefault(w => w.defName == name);
-            if (!(work is null)) return work;
-
-            Controller.Log!.Warning($"Work type {name} not found. Excluding {name} from the internal data structure.");
-            return null;
-        }
-
-        private static Pawn? IdToPawn(string pawnId)
-        {
-            var res = Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer)
-                          .FirstOrDefault(p => p.ThingID == pawnId);
-            if (!(res is null)) return res;
-
-            Controller.Log!.Warning($"pawn {pawnId} wasn't found while deserializing data, skipping...");
-            return null;
-        }
-
         public class Ser
         {
             public List<Tupl> data = new();
             public List<WorktypePawn> excludedPawns = new();
 
-            public List<(Priority priority, JobCount? maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>
-                ParsedData()
+            public List<(Priority priority, JobCount? maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
+                ParsedData(IWorldInfoFacade serializer)
             {
                 return data
-                       .Select(x => x.Parsed())
+                       .Select(x => x.Parsed(serializer))
                        .ToList();
             }
 
-            public HashSet<(WorkTypeDef, Pawn)> ParsedExcluded()
+            public HashSet<(IWorkTypeWrapper, IPawnWrapper)> ParsedExcluded(IWorldInfoFacade serializer)
             {
                 return excludedPawns
-                       .Select(x => x.Parsed())
+                       .Select(x => x.Parsed(serializer))
                        .Where(p => p.Item1 != null && p.Item2 != null)
                        .Select(p => (p.Item1!, p.Item2!))
                        .ToHashSet();
             }
 
             public static Ser Serialized(
-                (List<(Priority priority, JobCount maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)> percents,
-                    HashSet<(WorkTypeDef, Pawn)> excluded) data)
+                (List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)> percents,
+                    HashSet<(IWorkTypeWrapper, IPawnWrapper)> excluded) data)
             {
                 return new()
                 {
@@ -116,12 +52,12 @@ namespace AutoPriorities.Core
             public string pawnId = "";
             public string workType = "";
 
-            public (WorkTypeDef?, Pawn?) Parsed()
+            public (IWorkTypeWrapper?, IPawnWrapper?) Parsed(IWorldInfoFacade serializer)
             {
-                return (StringToDef(workType), IdToPawn(pawnId));
+                return (serializer.StringToDef(workType), serializer.IdToPawn(pawnId));
             }
 
-            public static WorktypePawn Serialized((WorkTypeDef work, Pawn pawn) data)
+            public static WorktypePawn Serialized((IWorkTypeWrapper work, IPawnWrapper pawn) data)
             {
                 return new()
                 {
@@ -137,12 +73,12 @@ namespace AutoPriorities.Core
             public int? jobsMax;
             public int priority;
 
-            public (Priority, JobCount?, Dictionary<WorkTypeDef, IPercent> ) Parsed()
+            public (Priority, JobCount?, Dictionary<IWorkTypeWrapper, IPercent> ) Parsed(IWorldInfoFacade serializer)
             {
-                return (priority, jobsMax, dict.Parsed());
+                return (priority, jobsMax, dict.Parsed(serializer));
             }
 
-            public static Tupl Serialized((Priority, JobCount, Dictionary<WorkTypeDef, IPercent>) val)
+            public static Tupl Serialized((Priority, JobCount, Dictionary<IWorkTypeWrapper, IPercent>) val)
             {
                 return new()
                 {
@@ -157,15 +93,15 @@ namespace AutoPriorities.Core
         {
             public List<StrPercent> percents = new();
 
-            public Dictionary<WorkTypeDef, IPercent> Parsed()
+            public Dictionary<IWorkTypeWrapper, IPercent> Parsed(IWorldInfoFacade serializer)
             {
                 return percents
-                       .Select(x => x.Parsed())
+                       .Select(x => x.Parsed(serializer))
                        .Where(x => x.Item1 != null)
                        .ToDictionary(x => x.Item1!, x => x.Item2);
             }
 
-            public static Dic Serialized(Dictionary<WorkTypeDef, IPercent> dic)
+            public static Dic Serialized(Dictionary<IWorkTypeWrapper, IPercent> dic)
             {
                 return new()
                 {
@@ -181,12 +117,12 @@ namespace AutoPriorities.Core
             public UnionPercent percent = new();
             public string workType = "";
 
-            public (WorkTypeDef?, IPercent) Parsed()
+            public (IWorkTypeWrapper?, IPercent) Parsed(IWorldInfoFacade serializer)
             {
-                return (StringToDef(workType), percent.Parsed());
+                return (serializer.StringToDef(workType), percent.Parsed());
             }
 
-            public static StrPercent Serialized((WorkTypeDef work, IPercent percent) val)
+            public static StrPercent Serialized((IWorkTypeWrapper work, IPercent percent) val)
             {
                 return new()
                 {

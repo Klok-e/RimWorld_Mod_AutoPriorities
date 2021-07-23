@@ -45,10 +45,10 @@ namespace Tests
         [Test]
         public void TestIterPercentsCoverage()
         {
-            for (var i = 0; i < 1000; i++)
+            for (var i = 0; i < 100; i++)
             {
-                var percents = new[] {i / 1000d, (1000 - i) / 1000d};
-                for (var k = 0; k < 1000; k++)
+                var percents = new[] {i / 100d, (100 - i) / 100d};
+                for (var k = 0; k < 100; k++)
                 {
                     var arr = percents.IterPercents(k)
                                       .ToArray();

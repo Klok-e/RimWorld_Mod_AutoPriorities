@@ -3,44 +3,60 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoPriorities.Core;
 using AutoPriorities.Extensions;
+using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.Percents;
 using AutoPriorities.Utils;
+using AutoPriorities.WorldInfoRetriever;
+using AutoPriorities.Wrappers;
 using RimWorld;
-using Verse;
 
 namespace AutoPriorities
 {
     public class PawnsData
     {
-        public PawnsData()
+        private readonly IPawnsDataSerializer _serializer;
+        private readonly IWorldInfoRetriever _worldInfoRetriever;
+
+        public PawnsData(IPawnsDataSerializer serializer, IWorldInfoRetriever worldInfoRetriever)
         {
-            var (percents, excluded) = PercentTableSaver.GetStateLoaders();
+            _serializer = serializer;
+            _worldInfoRetriever = worldInfoRetriever;
+
+            var save = _serializer.LoadSavedData();
+
             // Excluded must be loaded first because State depends on ExcludedPawns being filled
-            ExcludedPawns = LoadSavedExcluded(excluded);
-            WorkTables = LoadSavedState(percents);
+            ExcludedPawns = LoadSavedExcluded(save.ExcludedPawns);
+            WorkTables = LoadSavedState(save.WorkTablesData);
         }
 
-        public List<(Priority priority, JobCount maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)> WorkTables
+        public List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)> WorkTables
         {
             get;
         }
 
-        public HashSet<(WorkTypeDef work, Pawn pawn)> ExcludedPawns { get; }
+        public HashSet<(IWorkTypeWrapper work, IPawnWrapper pawn)> ExcludedPawns { get; }
 
-        public HashSet<WorkTypeDef> WorkTypes { get; } = new();
+        public HashSet<IWorkTypeWrapper> WorkTypes { get; } = new();
 
-        public HashSet<WorkTypeDef> WorkTypesNotRequiringSkills { get; } = new();
+        public HashSet<IWorkTypeWrapper> WorkTypesNotRequiringSkills { get; } = new();
 
-        public Dictionary<WorkTypeDef, List<(Pawn pawn, double fitness)>> SortedPawnFitnessForEveryWork { get; } =
+        public Dictionary<IWorkTypeWrapper, List<(IPawnWrapper pawn, double fitness)>> SortedPawnFitnessForEveryWork
+        {
+            get;
+        } =
             new();
 
-        public HashSet<Pawn> AllPlayerPawns { get; } = new();
+        public HashSet<IPawnWrapper> AllPlayerPawns { get; } = new();
 
         public void SaveState()
         {
             try
             {
-                PercentTableSaver.SaveState((WorkTables, ExcludedPawns));
+                _serializer.SaveData(new SaveDataRequest
+                {
+                    ExcludedPawns = ExcludedPawns,
+                    WorkTablesData = WorkTables
+                });
             }
             catch (Exception e)
             {
@@ -53,7 +69,8 @@ namespace AutoPriorities
             try
             {
                 // get all work types
-                var workTypes = WorkTypeDefsUtility.WorkTypeDefsInPriorityOrder.ToArray();
+                var workTypes = _worldInfoRetriever.WorkTypeDefsInPriorityOrder()
+                                                   .ToArray();
 
 #if DEBUG
                 Controller.Log!.Message(
@@ -64,14 +81,15 @@ namespace AutoPriorities
 #endif
 
                 // get all pawns owned by player
-                var pawns = Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer);
+                var pawns = _worldInfoRetriever.PawnsInPlayerFaction()
+                                               .ToArray();
 
                 // get all skills associated with the work types
                 AllPlayerPawns.Clear();
                 SortedPawnFitnessForEveryWork.Clear();
                 foreach (var work in workTypes)
                 {
-                    SortedPawnFitnessForEveryWork[work] = new List<(Pawn pawn, double fitness)>();
+                    SortedPawnFitnessForEveryWork[work] = new List<(IPawnWrapper pawn, double fitness)>();
                     foreach (var pawn in pawns.Where(pawn => !pawn.AnimalOrWildMan()))
                     {
                         if (!AllPlayerPawns.Contains(pawn)) AllPlayerPawns.Add(pawn);
@@ -87,8 +105,8 @@ namespace AutoPriorities
 #endif
                             if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains((work, pawn)))
                             {
-                                double skill = pawn.skills.AverageOfRelevantSkillsFor(work);
-                                double passion = PassionFactor(pawn.skills.MaxPassionOfRelevantSkillsFor(work));
+                                var skill = pawn.AverageOfRelevantSkillsFor(work);
+                                double passion = PassionFactor(pawn.MaxPassionOfRelevantSkillsFor(work));
 
                                 fitness = skill + skill * passion * Math.Max(Controller.PassionMult, 0d);
 
@@ -116,7 +134,7 @@ namespace AutoPriorities
                     if (!WorkTypes.Contains(work))
                     {
                         WorkTypes.Add(work);
-                        if (work.relevantSkills.Count == 0) WorkTypesNotRequiringSkills.Add(work);
+                        if (work.relevantSkillsCount == 0) WorkTypesNotRequiringSkills.Add(work);
                     }
                 }
 
@@ -133,7 +151,7 @@ namespace AutoPriorities
             }
         }
 
-        public (double percent, bool takenMoreThanTotal) PercentColonistsAvailable(WorkTypeDef workType,
+        public (double percent, bool takenMoreThanTotal) PercentColonistsAvailable(IWorkTypeWrapper workType,
             Priority priorityIgnore)
         {
             var taken = 0d;
@@ -151,7 +169,7 @@ namespace AutoPriorities
             return (Math.Max(1d - taken, 0d), takenTotal > 1.0001d);
         }
 
-        public int NumberColonists(WorkTypeDef workType)
+        public int NumberColonists(IWorkTypeWrapper workType)
         {
             return SortedPawnFitnessForEveryWork[workType]
                 .Count;
@@ -167,12 +185,13 @@ namespace AutoPriorities
             };
         }
 
-        private HashSet<(WorkTypeDef, Pawn)> LoadSavedExcluded(Func<HashSet<(WorkTypeDef, Pawn)>> loader)
+        private HashSet<(IWorkTypeWrapper, IPawnWrapper)> LoadSavedExcluded(
+            HashSet<(IWorkTypeWrapper, IPawnWrapper)> loader)
         {
-            HashSet<(WorkTypeDef, Pawn)>? excluded;
+            HashSet<(IWorkTypeWrapper, IPawnWrapper)>? excluded;
             try
             {
-                excluded = loader();
+                excluded = loader;
             }
             catch (Exception e)
             {
@@ -181,17 +200,18 @@ namespace AutoPriorities
                 excluded = null;
             }
 
-            return excluded ?? new HashSet<(WorkTypeDef, Pawn)>();
+            return excluded ?? new HashSet<(IWorkTypeWrapper, IPawnWrapper)>();
         }
 
-        private List<(Priority priority, JobCount maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)> LoadSavedState(
-            Func<List<(Priority priority, JobCount? maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>> loader)
+        private List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
+            LoadSavedState(
+                List<(Priority priority, JobCount? maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)> loader)
         {
             Rebuild();
-            List<(Priority priority, JobCount maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>? workTables;
+            List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>? workTables;
             try
             {
-                workTables = loader()
+                workTables = loader
                              // fill max jobs with default value if there's no value already
                              .Select(t => (t.priority, t.maxJobs ?? WorkTypes.Count, t.workTypes))
                              .ToList();
@@ -219,7 +239,7 @@ namespace AutoPriorities
             }
 
             return workTables ??
-                   new List<(Priority priority, JobCount maxJobs, Dictionary<WorkTypeDef, IPercent> workTypes)>();
+                   new List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>();
         }
     }
 }

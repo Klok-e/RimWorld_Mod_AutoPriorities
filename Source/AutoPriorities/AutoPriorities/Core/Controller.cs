@@ -1,11 +1,15 @@
 using System.IO;
 using System.Reflection;
+using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.Percents;
 using AutoPriorities.Utils;
+using AutoPriorities.WorldInfoRetriever;
 using HugsLib;
 using HugsLib.Settings;
 using HugsLib.Utils;
+using UnityEngine;
 using Verse;
+using Logger = AutoPriorities.APLogger.Logger;
 
 namespace AutoPriorities.Core
 {
@@ -15,7 +19,7 @@ namespace AutoPriorities.Core
 
         public static ModLogger? Log { get; private set; }
 
-        public static AutoPrioritiesDialog Dialog => _dialog ??= new AutoPrioritiesDialog();
+        public static AutoPrioritiesDialog Dialog => _dialog ??= CreateDialog();
 
         public static PoolFactory<Number, NumberPoolArgs> PoolNumbers { get; } =
             new();
@@ -59,6 +63,21 @@ namespace AutoPriorities.Core
             Log!.Message($"No {packageId} detected");
 #endif
             return false;
+        }
+
+        private static AutoPrioritiesDialog CreateDialog()
+        {
+            const string filename = "ModAutoPrioritiesSaveNEW.xml";
+            string fullPath = Application.persistentDataPath + filename;
+
+            var worldInfo = new WorldInfoRetriever.WorldInfoRetriever();
+            var logger = new Logger();
+            var worldFacade = new WorldInfoFacade(worldInfo, logger);
+            var serializer = new PawnsDataSerializer(logger, fullPath, worldFacade);
+            var pawnData = new PawnsData(serializer, worldInfo);
+            var priorityAssigner = new PrioritiesAssigner(worldFacade);
+
+            return new AutoPrioritiesDialog(pawnData, priorityAssigner);
         }
     }
 }

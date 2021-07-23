@@ -4,16 +4,24 @@ using System.Linq;
 using AutoPriorities.Core;
 using AutoPriorities.Extensions;
 using AutoPriorities.Utils;
-using Verse;
+using AutoPriorities.WorldInfoRetriever;
+using AutoPriorities.Wrappers;
 
 namespace AutoPriorities
 {
     public class PrioritiesAssigner
     {
+        private readonly IWorldInfoFacade _worldInfo;
+
+        public PrioritiesAssigner(IWorldInfoFacade worldInfo)
+        {
+            _worldInfo = worldInfo;
+        }
+
         private List<(Priority priority, JobCount maxJobs, double percent)> PriorityPercentCached { get; } =
             new();
 
-        private Dictionary<Pawn, Dictionary<WorkTypeDef, Priority>> PawnJobsCached { get; } =
+        private Dictionary<IPawnWrapper, Dictionary<IWorkTypeWrapper, Priority>> PawnJobsCached { get; } =
             new();
 
         public void AssignPriorities(PawnsData pawnsData)
@@ -22,15 +30,15 @@ namespace AutoPriorities
             {
                 PawnJobsCached.Clear();
                 foreach (var pawn in pawnsData.AllPlayerPawns)
-                    PawnJobsCached.Add(pawn, new Dictionary<WorkTypeDef, Priority>());
+                    PawnJobsCached.Add(pawn, new Dictionary<IWorkTypeWrapper, Priority>());
 
 #if DEBUG
                 Controller.Log!.Message("important");
 #endif
                 // assign `important` jobs because hardcoding is easy
                 var importantWorks = new[] {"Firefighter", "Patient", "PatientBedRest", "BasicWorker"}
-                                     .Select(PercentTableSaver.StringToDef)
-                                     .Where(def => !(def is null))
+                                     .Select(_worldInfo.StringToDef)
+                                     .Where(def => def is not null)
                                      .Select(x => x!)
                                      .ToHashSet();
                 AssignJobs(pawnsData, PawnJobsCached,
@@ -67,9 +75,9 @@ namespace AutoPriorities
         }
 
         private void AssignJobs(PawnsData pawnsData,
-            IDictionary<Pawn, Dictionary<WorkTypeDef, Priority>> pawnJobs,
-            IEnumerable<WorkTypeDef> workTypes,
-            Func<WorkTypeDef, List<(Pawn pawn, double fitness)>> fitnessGetter)
+            IDictionary<IPawnWrapper, Dictionary<IWorkTypeWrapper, Priority>> pawnJobs,
+            IEnumerable<IWorkTypeWrapper> workTypes,
+            Func<IWorkTypeWrapper, List<(IPawnWrapper pawn, double fitness)>> fitnessGetter)
         {
             //skip works not requiring skills because they will be handled later
             foreach (var work in workTypes)
@@ -111,7 +119,7 @@ namespace AutoPriorities
 
                         pawnJobs[pawn][work] = priority;
                         jobsSet += 1;
-                        pawn.workSettings.SetPriority(work, priority.V);
+                        pawn.workSettingsSetPriority(work, priority.V);
                     }
                 }
 
@@ -126,13 +134,13 @@ namespace AutoPriorities
                         .ContainsKey(work))
                         continue;
 
-                    pawn.workSettings.SetPriority(work, 0);
+                    pawn.workSettingsSetPriority(work, 0);
                 }
             }
         }
 
         private static void FillListPriorityPercents(PawnsData pawnsData,
-            WorkTypeDef work,
+            IWorkTypeWrapper work,
             List<(Priority, JobCount, double)> priorities)
         {
             priorities.Clear();

@@ -5,6 +5,7 @@ namespace AutoPriorities.Utils
 {
     internal static class ExceptionUtil
     {
+        [Obsolete]
         public static void LogStackTrace(this Exception? e)
         {
             Controller.Log!.Error("Messages:");

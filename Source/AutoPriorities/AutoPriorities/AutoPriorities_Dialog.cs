@@ -4,6 +4,7 @@ using System.Linq;
 using AutoPriorities.Core;
 using AutoPriorities.Percents;
 using AutoPriorities.Utils;
+using AutoPriorities.Wrappers;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -35,6 +36,9 @@ namespace AutoPriorities
         private const float PawnNameCoWidth = 150f;
         private readonly float _labelWidth = Label.GetWidthCached() + 10f;
         private readonly float _pawnExcludeLabelWidth = PawnExcludeLabel.GetWidthCached() + 10f;
+        private readonly PawnsData _pawnsData;
+        private readonly PrioritiesAssigner _prioritiesAssigner;
+        private readonly HashSet<Priority> _prioritiesEncounteredCached = new();
         private readonly float _prioritiesLabelWidth = PrioritiesLabel.GetWidthCached() + 10f;
         private SelectedTab _currentlySelectedTab = SelectedTab.Priorities;
         private bool _openedOnce;
@@ -42,24 +46,20 @@ namespace AutoPriorities
         private Rect _rect;
         private Vector2 _scrollPos;
 
-        public AutoPrioritiesDialog()
+        public AutoPrioritiesDialog(PawnsData pawnsData, PrioritiesAssigner prioritiesAssigner)
         {
+            _pawnsData = pawnsData;
+            _prioritiesAssigner = prioritiesAssigner;
             doCloseButton = true;
             draggable = true;
             resizeable = true;
         }
 
-        private HashSet<Priority> PrioritiesEncounteredCached { get; } = new();
-
-        private PawnsData PawnsData { get; } = new();
-
-        private PrioritiesAssigner PrioritiesAssigner { get; } = new();
-
         public override void PostClose()
         {
             base.PostClose();
             _rect = windowRect;
-            PawnsData.SaveState();
+            _pawnsData.SaveState();
         }
 
         public override void PostOpen()
@@ -79,7 +79,7 @@ namespace AutoPriorities
             if (Widgets.ButtonText(prioritiesButtonRect, PrioritiesLabel))
             {
                 _currentlySelectedTab = SelectedTab.Priorities;
-                PawnsData.Rebuild();
+                _pawnsData.Rebuild();
             }
 
             var pawnsButtonRect =
@@ -88,7 +88,7 @@ namespace AutoPriorities
             if (Widgets.ButtonText(pawnsButtonRect, PawnExcludeLabel))
             {
                 _currentlySelectedTab = SelectedTab.PawnExclusion;
-                PawnsData.Rebuild();
+                _pawnsData.Rebuild();
             }
 
             // draw tab contents lower than buttons
@@ -115,16 +115,16 @@ namespace AutoPriorities
                 ButtonHeight);
             if (Widgets.ButtonText(buttonRect, Label))
             {
-                PawnsData.Rebuild();
-                PrioritiesAssigner.AssignPriorities(PawnsData);
-                PawnsData.SaveState();
+                _pawnsData.Rebuild();
+                _prioritiesAssigner.AssignPriorities(_pawnsData);
+                _pawnsData.SaveState();
                 SoundDefOf.Click.PlayOneShotOnCamera();
             }
         }
 
         private void PrioritiesTab(Rect inRect)
         {
-            var worktypes = PawnsData.SortedPawnFitnessForEveryWork.Count;
+            var worktypes = _pawnsData.SortedPawnFitnessForEveryWork.Count;
 
             var scrollRect = new Rect(inRect.xMin, inRect.yMin, inRect.width,
                 inRect.height - DistFromBottomBorder);
@@ -132,20 +132,20 @@ namespace AutoPriorities
             var tableSizeX = (worktypes + 1) * SliderMargin + SlidersDistFromLeftBorder + SlidersDistFromRightBorder +
                              SliderMargin;
 
-            var tableSizeY = (SliderHeight + 3 * ButtonHeight) * PawnsData.WorkTables.Count;
+            var tableSizeY = (SliderHeight + 3 * ButtonHeight) * _pawnsData.WorkTables.Count;
             Widgets.BeginScrollView(scrollRect, ref _scrollPos, new Rect(0, 0, tableSizeX, tableSizeY));
 
-            PrioritiesEncounteredCached.Clear();
+            _prioritiesEncounteredCached.Clear();
             var row = 0;
-            var workTables = PawnsData.WorkTables;
+            var workTables = _pawnsData.WorkTables;
             for (var table = 0; table < workTables.Count; table++)
             {
                 // table row
-                var pr = PawnsData.WorkTables[table];
+                var pr = _pawnsData.WorkTables[table];
                 var colOrig = GUI.color;
 
                 //shadow repeating priorities
-                if (PrioritiesEncounteredCached.Contains(pr.priority)) GUI.color = colOrig * GuiShadowedMult;
+                if (_prioritiesEncounteredCached.Contains(pr.priority)) GUI.color = colOrig * GuiShadowedMult;
 
                 var slidersRect = new Rect(
                     SlidersDistFromLeftBorder,
@@ -160,7 +160,7 @@ namespace AutoPriorities
 
                 pr.priority = DrawUtil.PriorityBox(slidersRect.xMin, slidersRect.yMin + slidersRect.height / 2f,
                     pr.priority.V);
-                PawnsData.WorkTables[table] = pr;
+                _pawnsData.WorkTables[table] = pr;
 
                 var maxJobsElementXPos = slidersRect.xMin + SliderMargin;
                 var maxJobsLabel = "Max jobs for pawn";
@@ -172,8 +172,8 @@ namespace AutoPriorities
                 var maxJobsSliderRect = new Rect(maxJobsElementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
                 var newMaxJobsSliderValue =
                     GUI.VerticalSlider(maxJobsSliderRect,
-                        Mathf.Clamp(pr.maxJobs.V, 0f, PawnsData.WorkTypes.Count),
-                        PawnsData.WorkTypes.Count, 0f);
+                        Mathf.Clamp(pr.maxJobs.V, 0f, _pawnsData.WorkTypes.Count),
+                        _pawnsData.WorkTypes.Count, 0f);
 
                 var jobCountMaxLabelRect = new Rect(
                     maxJobsSliderRect.xMax - PercentStringWidth,
@@ -185,7 +185,7 @@ namespace AutoPriorities
                 Widgets.TextFieldNumeric(jobCountMaxLabelRect, ref newMaxJobsSliderValue, ref maxJobsText);
 
                 pr.maxJobs = Mathf.RoundToInt(newMaxJobsSliderValue);
-                PawnsData.WorkTables[table] = pr;
+                _pawnsData.WorkTables[table] = pr;
 
                 // draw line on thi right from max job sliders
                 Widgets.DrawLine(new Vector2(maxJobsLabelRect.xMax, slidersRect.yMin),
@@ -193,7 +193,7 @@ namespace AutoPriorities
                     1f);
 
                 var i = 0;
-                foreach (var workType in PawnsData.WorkTypes)
+                foreach (var workType in _pawnsData.WorkTypes)
                 {
                     var workName = workType.labelShort;
                     try
@@ -203,7 +203,7 @@ namespace AutoPriorities
                         var elementXPos = maxJobsSliderRect.xMax + SliderMargin * (i + 1);
 
                         var (available, takenMoreThanTotal) =
-                            PawnsData.PercentColonistsAvailable(workType, pr.priority);
+                            _pawnsData.PercentColonistsAvailable(workType, pr.priority);
                         var prevCol = GUI.color;
                         if (takenMoreThanTotal) GUI.color = Color.red;
 
@@ -283,8 +283,8 @@ namespace AutoPriorities
                                     Controller.PoolPercents.Pool(p);
                                     currentPercent = Controller.PoolNumbers.Acquire(new NumberPoolArgs
                                     {
-                                        Count = Mathf.RoundToInt(newSliderValue * PawnsData.NumberColonists(workType)),
-                                        Total = PawnsData.NumberColonists(workType)
+                                        Count = Mathf.RoundToInt(newSliderValue * _pawnsData.NumberColonists(workType)),
+                                        Total = _pawnsData.NumberColonists(workType)
                                     });
                                 }
 
@@ -310,7 +310,7 @@ namespace AutoPriorities
                                 pr.workTypes[workType] = Controller.PoolNumbers.Acquire(new NumberPoolArgs
                                 {
                                     Count = Mathf.RoundToInt(newSliderValue * n.Total),
-                                    Total = PawnsData.NumberColonists(workType)
+                                    Total = _pawnsData.NumberColonists(workType)
                                 });
                                 break;
                         }
@@ -325,7 +325,7 @@ namespace AutoPriorities
                 }
 
                 row += 1;
-                PrioritiesEncounteredCached.Add(pr.priority);
+                _prioritiesEncounteredCached.Add(pr.priority);
                 //return to normal
                 GUI.color = colOrig;
             }
@@ -363,9 +363,10 @@ namespace AutoPriorities
                 inRect.height - DistFromBottomBorder);
 
             var tableSizeX = PawnNameCoWidth + WorkLabelWidth / 2 +
-                             WorkLabelHorizOffset * PawnsData.WorkTypes.Count;
+                             WorkLabelHorizOffset * _pawnsData.WorkTypes.Count;
 
-            var tableSizeY = fromTopToTickboxesVertical + (LabelMargin + ButtonHeight) * PawnsData.AllPlayerPawns.Count;
+            var tableSizeY = fromTopToTickboxesVertical
+                             + (LabelMargin + ButtonHeight) * _pawnsData.AllPlayerPawns.Count;
             Widgets.BeginScrollView(scrollRect, ref _pawnExcludeScrollPos, new Rect(0, 0, tableSizeX, tableSizeY));
 
             var tickboxesRect = new Rect(PawnNameCoWidth, fromTopToTickboxesVertical,
@@ -376,8 +377,8 @@ namespace AutoPriorities
 #endif
             // draw worktypes
             Text.Anchor = TextAnchor.UpperCenter;
-            foreach (var (workType, i) in PawnsData.WorkTypes.Zip(
-                Enumerable.Range(0, PawnsData.WorkTypes.Count),
+            foreach (var (workType, i) in _pawnsData.WorkTypes.Zip(
+                Enumerable.Range(0, _pawnsData.WorkTypes.Count),
                 (w, i) => (w, i)))
             {
                 var workLabel = workType.labelShort;
@@ -395,8 +396,8 @@ namespace AutoPriorities
             }
 
             Text.Anchor = TextAnchor.UpperLeft;
-            foreach (var (pawn, rowi) in PawnsData.AllPlayerPawns.Zip(
-                Enumerable.Range(0, PawnsData.AllPlayerPawns.Count),
+            foreach (var (pawn, rowi) in _pawnsData.AllPlayerPawns.Zip(
+                Enumerable.Range(0, _pawnsData.AllPlayerPawns.Count),
                 (w, i) => (w, i)))
             {
                 // draw pawn name
@@ -406,12 +407,12 @@ namespace AutoPriorities
                 TooltipHandler.TipRegion(nameRect, "Click here to toggle all jobs");
                 if (Widgets.ButtonInvisible(nameRect))
                 {
-                    var c = PawnsData.ExcludedPawns.Count(x => x.Item2 == pawn);
-                    if (c > PawnsData.WorkTypes.Count / 2)
-                        PawnsData.ExcludedPawns.RemoveWhere(x => x.Item2 == pawn);
+                    var c = _pawnsData.ExcludedPawns.Count(x => x.Item2 == pawn);
+                    if (c > _pawnsData.WorkTypes.Count / 2)
+                        _pawnsData.ExcludedPawns.RemoveWhere(x => x.Item2 == pawn);
                     else
-                        foreach (var work in PawnsData.WorkTypes)
-                            PawnsData.ExcludedPawns.Add((work, pawn));
+                        foreach (var work in _pawnsData.WorkTypes)
+                            _pawnsData.ExcludedPawns.Add((work, pawn));
                 }
 
                 Widgets.DrawLine(new Vector2(nameRect.xMin, nameRect.yMax),
@@ -419,11 +420,11 @@ namespace AutoPriorities
                     Color.grey, 1f);
 
                 // draw tickboxes
-                foreach (var (workType, i) in PawnsData.WorkTypes.Zip(
-                    Enumerable.Range(0, PawnsData.WorkTypes.Count),
+                foreach (var (workType, i) in _pawnsData.WorkTypes.Zip(
+                    Enumerable.Range(0, _pawnsData.WorkTypes.Count),
                     (w, i) => (w, i)))
                 {
-                    var prev = PawnsData.ExcludedPawns.Contains((workType, pawn));
+                    var prev = _pawnsData.ExcludedPawns.Contains((workType, pawn));
                     var next = prev;
                     DrawUtil.EmptyCheckbox(nameRect.xMax - (ButtonHeight - 1) / 2 + (i + 1) * WorkLabelHorizOffset,
                         nameRect.yMin, ref next);
@@ -431,7 +432,7 @@ namespace AutoPriorities
 
                     if (next)
                     {
-                        PawnsData.ExcludedPawns.Add((workType, pawn));
+                        _pawnsData.ExcludedPawns.Add((workType, pawn));
 #if DEBUG
                         Controller.Log!.Message(
                             $"Pawn {pawn.NameFullColored} with work {workType.defName} was added to the Excluded list");
@@ -439,7 +440,7 @@ namespace AutoPriorities
                     }
                     else
                     {
-                        PawnsData.ExcludedPawns.Remove((workType, pawn));
+                        _pawnsData.ExcludedPawns.Remove((workType, pawn));
 #if DEBUG
                         Controller.Log!.Message(
                             $"Pawn {pawn.NameFullColored} with work {workType.defName} was removed from the Excluded list");
@@ -455,16 +456,16 @@ namespace AutoPriorities
 
         private void AddPriority()
         {
-            var dict = new Dictionary<WorkTypeDef, IPercent>();
-            PawnsData.WorkTables.Add((0, PawnsData.WorkTypes.Count, dict));
+            var dict = new Dictionary<IWorkTypeWrapper, IPercent>();
+            _pawnsData.WorkTables.Add((0, _pawnsData.WorkTypes.Count, dict));
 
-            foreach (var keyValue in PawnsData.WorkTypes)
+            foreach (var keyValue in _pawnsData.WorkTypes)
                 dict.Add(keyValue, Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = 0}));
         }
 
         private void RemovePriority()
         {
-            if (PawnsData.WorkTables.Count > 0) PawnsData.WorkTables.RemoveLast();
+            if (_pawnsData.WorkTables.Count > 0) _pawnsData.WorkTables.RemoveLast();
         }
 
         private enum SelectedTab
