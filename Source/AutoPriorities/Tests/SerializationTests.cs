@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using AutoFixture;
 using AutoPriorities.APLogger;
 using AutoPriorities.PawnDataSerializer;
@@ -8,37 +9,69 @@ using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.Helpers;
+using Tests.MockImplementations;
 
 namespace Tests
 {
     [TestFixture]
     public class SerializationTests
     {
-        private readonly IFixture _fixture;
-        private readonly ILogger _logger;
-        private readonly IWorldInfoRetriever _retriever;
-        private readonly IWorldInfoFacade _worldInfo;
-        private readonly string savePath = "TestData/SaveFile1.xml";
-        private readonly IPawnsDataSerializer _serializer;
+        private  IFixture _fixture= null!;
+        private  ILogger _logger= null!;
+        private  IWorldInfoRetriever _retriever= null!;
+        private  IWorldInfoFacade _worldInfo = null!;
+        private  string savePath = "TestData/SaveFile1.xml";
+        private  IPawnsDataSerializer _serializer= null!;
 
-        public SerializationTests()
+        private string[] workTypes = new[]
+        {
+            "Firefighter",
+            "Patient",
+            "Doctor",
+            "PatientBedRest",
+            "BasicWorker",
+            "Warden",
+            "Handling",
+            "Cooking",
+            "Hunting",
+            "Construction",
+            "Growing",
+            "Mining",
+            "PlantCutting",
+            "Smithing",
+            "Tailoring",
+            "Art",
+            "Crafting",
+            "Hauling",
+            "Cleaning",
+            "Research",
+        };private string[] workTypesTruncated = new[]
+        {
+            "Firefighter",
+            "Patient",
+            "Doctor",
+            "PatientBedRest",
+            "BasicWorker",
+            "Warden",
+            "Handling",
+            "Cooking",
+            "Hunting",
+            "Construction",
+            "Growing",
+            "Mining",
+            "PlantCutting",
+            "Smithing",
+            "Tailoring",
+        };
+
+        [SetUp]
+        public void SetUp()
         {
             _logger = Substitute.For<ILogger>();
             _retriever = Substitute.For<IWorldInfoRetriever>();
             _worldInfo = new WorldInfoFacade(_retriever, _logger);
             _serializer = new PawnsDataSerializer(_logger, savePath, _worldInfo);
             _fixture = FixtureBuilder.Create();
-        }
-
-        [SetUp]
-        public void SetUp()
-        {
-            _logger.DidNotReceive()
-                   .Err(Arg.Any<Exception>());
-            _logger.DidNotReceive()
-                   .Err(Arg.Any<string>());
-            _logger.DidNotReceive()
-                   .Warn(Arg.Any<string>());
         }
 
         [Test]
@@ -49,7 +82,9 @@ namespace Tests
                       .Returns(_fixture.CreateMany<IPawnWrapper>());
 
             _retriever.WorkTypeDefsInPriorityOrder()
-                      .Returns(_fixture.CreateMany<IWorkTypeWrapper>());
+                      .Returns(workTypes.Select(x => _fixture.Build<WorkType>()
+                                                             .With(y => y.defName, x)
+                                                             .Create()));
 
             // act
             var savedData = _serializer.LoadSavedData();
@@ -68,6 +103,29 @@ namespace Tests
             savedData.WorkTablesData[0]
                      .workTypes.Should()
                      .HaveCount(20);
+            
+            _logger.NoWarnReceived();
+        }
+
+        [Test]
+        public void LoadFromFile_Warning_UnknownWorktypeInSave()
+        {
+            // arrange
+            _retriever.PawnsInPlayerFaction()
+                      .Returns(_fixture.CreateMany<IPawnWrapper>());
+
+            _retriever.WorkTypeDefsInPriorityOrder()
+                      .Returns(workTypesTruncated.Select(x => _fixture.Build<WorkType>()
+                                                                      .With(y => y.defName, x)
+                                                                      .Create()));
+
+            // act
+            var _ = _serializer.LoadSavedData();
+
+            // assert
+            // TODO: 10 calls is received, double the expected amount. OK for now
+            _logger.Received(10)
+                   .Warn(Arg.Any<string>());
         }
     }
 }

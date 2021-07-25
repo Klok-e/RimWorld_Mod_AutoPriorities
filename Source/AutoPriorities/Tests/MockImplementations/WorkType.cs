@@ -5,23 +5,15 @@ namespace Tests.MockImplementations
 {
     public class WorkType : IWorkTypeWrapper
     {
-        public WorkType(string defName, WorkTags workTags, int relevantSkillsCount, string labelShort)
-        {
-            this.defName = defName;
-            this.workTags = workTags;
-            this.relevantSkillsCount = relevantSkillsCount;
-            this.labelShort = labelShort;
-        }
-
         #region IWorkTypeWrapper Members
 
-        public string defName { get; }
+        public string defName { get; set; }
 
-        public WorkTags workTags { get; }
+        public WorkTags workTags { get; set; }
 
-        public int relevantSkillsCount { get; }
+        public int relevantSkillsCount { get; set; }
 
-        public string labelShort { get; }
+        public string labelShort { get; set; }
 
         #endregion
     }
