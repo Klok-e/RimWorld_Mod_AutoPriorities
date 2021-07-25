@@ -9,11 +9,11 @@ namespace Tests.Helpers
         public static void NoWarnReceived(this ILogger logger)
         {
             logger.DidNotReceive()
-                   .Err(Arg.Any<Exception>());
+                  .Err(Arg.Any<Exception>());
             logger.DidNotReceive()
-                   .Err(Arg.Any<string>());
+                  .Err(Arg.Any<string>());
             logger.DidNotReceive()
-                   .Warn(Arg.Any<string>());
+                  .Warn(Arg.Any<string>());
         }
     }
 }

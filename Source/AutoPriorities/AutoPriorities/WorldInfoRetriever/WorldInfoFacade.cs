@@ -6,8 +6,8 @@ namespace AutoPriorities.WorldInfoRetriever
 {
     public class WorldInfoFacade : IWorldInfoFacade
     {
-        private readonly IWorldInfoRetriever _worldInfo;
         private readonly ILogger _logger;
+        private readonly IWorldInfoRetriever _worldInfo;
 
         public WorldInfoFacade(IWorldInfoRetriever worldInfo, ILogger logger)
         {

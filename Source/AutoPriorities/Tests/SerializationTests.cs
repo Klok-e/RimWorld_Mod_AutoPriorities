@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using AutoFixture;
 using AutoPriorities.APLogger;
@@ -16,14 +15,14 @@ namespace Tests
     [TestFixture]
     public class SerializationTests
     {
-        private  IFixture _fixture= null!;
-        private  ILogger _logger= null!;
-        private  IWorldInfoRetriever _retriever= null!;
-        private  IWorldInfoFacade _worldInfo = null!;
-        private  string savePath = "TestData/SaveFile1.xml";
-        private  IPawnsDataSerializer _serializer= null!;
+        private IFixture _fixture = null!;
+        private ILogger _logger = null!;
+        private IWorldInfoRetriever _retriever = null!;
+        private IPawnsDataSerializer _serializer = null!;
+        private IWorldInfoFacade _worldInfo = null!;
+        private readonly string savePath = "TestData/SaveFile1.xml";
 
-        private string[] workTypes = new[]
+        private readonly string[] workTypes =
         {
             "Firefighter",
             "Patient",
@@ -44,8 +43,10 @@ namespace Tests
             "Crafting",
             "Hauling",
             "Cleaning",
-            "Research",
-        };private string[] workTypesTruncated = new[]
+            "Research"
+        };
+
+        private readonly string[] workTypesTruncated =
         {
             "Firefighter",
             "Patient",
@@ -61,7 +62,7 @@ namespace Tests
             "Mining",
             "PlantCutting",
             "Smithing",
-            "Tailoring",
+            "Tailoring"
         };
 
         [SetUp]
@@ -103,7 +104,7 @@ namespace Tests
             savedData.WorkTablesData[0]
                      .workTypes.Should()
                      .HaveCount(20);
-            
+
             _logger.NoWarnReceived();
         }
 
