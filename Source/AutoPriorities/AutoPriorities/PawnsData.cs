@@ -227,7 +227,7 @@ namespace AutoPriorities
                         .Where(work => !keyVal.workTypes.ContainsKey(work))))
                 foreach (var (_, _, d) in workTables)
                 {
-                    Controller.Log!.Message($"Work type {work} wasn't found in a save file. Setting percent to 0");
+                    Controller.Log!.Warning($"Work type {work} wasn't found in a save file. Setting percent to 0");
                     d.Add(work, Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = 0}));
                 }
             }

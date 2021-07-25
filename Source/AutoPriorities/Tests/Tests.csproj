@@ -270,7 +270,8 @@
         <Compile Include="Helpers\FixtureBuilder.cs" />
         <Compile Include="Helpers\TestHelper.cs" />
         <Compile Include="MockImplementations\WorkType.cs" />
-        <Compile Include="SerializationTests.cs" />
+        <Compile Include="PawnsDataSerializerLoadTests.cs" />
+        <Compile Include="PawnsDataSerializerSaveTests.cs" />
         <Compile Include="Tests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

@@ -3,7 +3,7 @@ using Verse;
 
 namespace Tests.MockImplementations
 {
-    public class WorkType : IWorkTypeWrapper
+    public record WorkType : IWorkTypeWrapper
     {
         #region IWorkTypeWrapper Members
 

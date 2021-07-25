@@ -14,13 +14,18 @@ namespace AutoPriorities.PawnDataSerializer
     {
         private readonly string _fullPath;
         private readonly ILogger _logger;
+        private readonly IStreamProvider _streamProvider;
         private readonly IWorldInfoFacade _worldInfo;
 
-        public PawnsDataSerializer(ILogger logger, string fullPath, IWorldInfoFacade worldInfo)
+        public PawnsDataSerializer(ILogger logger,
+            string fullPath,
+            IWorldInfoFacade worldInfo,
+            IStreamProvider streamProvider)
         {
             _logger = logger;
             _fullPath = fullPath;
             _worldInfo = worldInfo;
+            _streamProvider = streamProvider;
         }
 
         #region IPawnsDataSerializer Members
@@ -47,8 +52,11 @@ namespace AutoPriorities.PawnDataSerializer
             (List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>,
                 HashSet<(IWorkTypeWrapper, IPawnWrapper)>) state)
         {
-            using var stream = new FileStream(_fullPath, FileMode.Create);
-            new XmlSerializer(typeof(PercentTableSaver.Ser)).Serialize(stream, PercentTableSaver.Ser.Serialized(state));
+            _streamProvider.WithStream(_fullPath, FileMode.Create, stream =>
+            {
+                new XmlSerializer(typeof(PercentTableSaver.Ser)).Serialize(stream,
+                    PercentTableSaver.Ser.Serialized(state));
+            });
         }
 
         private (List<(Priority priority, JobCount? maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
@@ -58,13 +66,13 @@ namespace AutoPriorities.PawnDataSerializer
         {
             try
             {
-                if (File.Exists(_fullPath))
-                {
-                    using var stream = new FileStream(_fullPath, FileMode.OpenOrCreate);
-                    var ser =
-                        (PercentTableSaver.Ser)new XmlSerializer(typeof(PercentTableSaver.Ser)).Deserialize(stream);
-                    return (ser.ParsedData(_worldInfo), ser.ParsedExcluded(_worldInfo));
-                }
+                if (_streamProvider.FileExists(_fullPath))
+                    return _streamProvider.WithStream(_fullPath, FileMode.OpenOrCreate, stream =>
+                    {
+                        var ser =
+                            (PercentTableSaver.Ser)new XmlSerializer(typeof(PercentTableSaver.Ser)).Deserialize(stream);
+                        return (ser.ParsedData(_worldInfo), ser.ParsedExcluded(_worldInfo));
+                    });
             }
             catch (Exception e)
             {

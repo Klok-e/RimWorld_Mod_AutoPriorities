@@ -40,6 +40,7 @@
         <Compile Include="Core\Controller.cs" />
         <Compile Include="Core\PercentTableSaver.cs" />
         <Compile Include="Core\Resources.cs" />
+        <Compile Include="Core\Unit.cs" />
         <Compile Include="Extensions\PawnExtensions.cs" />
         <Compile Include="Extensions\CollectionExtensions.cs" />
         <Compile Include="IsExternalInit.cs" />
@@ -48,6 +49,9 @@
         <Compile Include="APLogger\Logger.cs" />
         <Compile Include="PawnDataSerializer\IPawnsDataSerializer.cs" />
         <Compile Include="PawnDataSerializer\PawnsDataSerializer.cs" />
+        <Compile Include="PawnDataSerializer\StreamProviders\IStreamProvider.cs" />
+        <Compile Include="PawnDataSerializer\StreamProviders\MemoryStreamProvider.cs" />
+        <Compile Include="PawnDataSerializer\StreamProviders\StreamProvider.cs" />
         <Compile Include="PawnsData.cs" />
         <Compile Include="Percents\IPercent.cs" />
         <Compile Include="Percents\Number.cs" />

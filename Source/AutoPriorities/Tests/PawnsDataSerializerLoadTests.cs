@@ -13,57 +13,13 @@ using Tests.MockImplementations;
 namespace Tests
 {
     [TestFixture]
-    public class SerializationTests
+    public class PawnsDataSerializerLoadTests
     {
         private IFixture _fixture = null!;
         private ILogger _logger = null!;
         private IWorldInfoRetriever _retriever = null!;
         private IPawnsDataSerializer _serializer = null!;
         private IWorldInfoFacade _worldInfo = null!;
-        private readonly string savePath = "TestData/SaveFile1.xml";
-
-        private readonly string[] workTypes =
-        {
-            "Firefighter",
-            "Patient",
-            "Doctor",
-            "PatientBedRest",
-            "BasicWorker",
-            "Warden",
-            "Handling",
-            "Cooking",
-            "Hunting",
-            "Construction",
-            "Growing",
-            "Mining",
-            "PlantCutting",
-            "Smithing",
-            "Tailoring",
-            "Art",
-            "Crafting",
-            "Hauling",
-            "Cleaning",
-            "Research"
-        };
-
-        private readonly string[] workTypesTruncated =
-        {
-            "Firefighter",
-            "Patient",
-            "Doctor",
-            "PatientBedRest",
-            "BasicWorker",
-            "Warden",
-            "Handling",
-            "Cooking",
-            "Hunting",
-            "Construction",
-            "Growing",
-            "Mining",
-            "PlantCutting",
-            "Smithing",
-            "Tailoring"
-        };
 
         [SetUp]
         public void SetUp()
@@ -71,7 +27,7 @@ namespace Tests
             _logger = Substitute.For<ILogger>();
             _retriever = Substitute.For<IWorldInfoRetriever>();
             _worldInfo = new WorldInfoFacade(_retriever, _logger);
-            _serializer = new PawnsDataSerializer(_logger, savePath, _worldInfo);
+            _serializer = new PawnsDataSerializer(_logger, TestHelper.SavePath, _worldInfo, new StreamProvider());
             _fixture = FixtureBuilder.Create();
         }
 
@@ -83,9 +39,9 @@ namespace Tests
                       .Returns(_fixture.CreateMany<IPawnWrapper>());
 
             _retriever.WorkTypeDefsInPriorityOrder()
-                      .Returns(workTypes.Select(x => _fixture.Build<WorkType>()
-                                                             .With(y => y.defName, x)
-                                                             .Create()));
+                      .Returns(TestHelper.WorkTypes.Select(x => _fixture.Build<WorkType>()
+                                                                        .With(y => y.defName, x)
+                                                                        .Create()));
 
             // act
             var savedData = _serializer.LoadSavedData();
@@ -109,16 +65,16 @@ namespace Tests
         }
 
         [Test]
-        public void LoadFromFile_Warning_UnknownWorktypeInSave()
+        public void LoadSavedData_Warning_UnknownWorktypeInSave()
         {
             // arrange
             _retriever.PawnsInPlayerFaction()
                       .Returns(_fixture.CreateMany<IPawnWrapper>());
 
             _retriever.WorkTypeDefsInPriorityOrder()
-                      .Returns(workTypesTruncated.Select(x => _fixture.Build<WorkType>()
-                                                                      .With(y => y.defName, x)
-                                                                      .Create()));
+                      .Returns(TestHelper.WorkTypesTruncated.Select(x => _fixture.Build<WorkType>()
+                          .With(y => y.defName, x)
+                          .Create()));
 
             // act
             var _ = _serializer.LoadSavedData();
