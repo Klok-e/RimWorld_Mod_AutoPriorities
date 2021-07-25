@@ -1,6 +1,7 @@
 using System.IO;
 using System.Reflection;
 using AutoPriorities.PawnDataSerializer;
+using AutoPriorities.PawnDataSerializer.StreamProviders;
 using AutoPriorities.Percents;
 using AutoPriorities.Utils;
 using AutoPriorities.WorldInfoRetriever;
@@ -73,7 +74,7 @@ namespace AutoPriorities.Core
             var worldInfo = new WorldInfoRetriever.WorldInfoRetriever();
             var logger = new Logger();
             var worldFacade = new WorldInfoFacade(worldInfo, logger);
-            var streamProvider = new StreamProvider();
+            var streamProvider = new FileStreamProvider();
             var serializer = new PawnsDataSerializer(logger, fullPath, worldFacade, streamProvider);
             var pawnData = new PawnsData(serializer, worldInfo);
             var priorityAssigner = new PrioritiesAssigner(worldFacade);

@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml.Serialization;
 using AutoPriorities.APLogger;
 using AutoPriorities.Core;
+using AutoPriorities.PawnDataSerializer.StreamProviders;
 using AutoPriorities.Percents;
 using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
@@ -14,13 +15,13 @@ namespace AutoPriorities.PawnDataSerializer
     {
         private readonly string _fullPath;
         private readonly ILogger _logger;
-        private readonly IStreamProvider _streamProvider;
+        private readonly StreamProvider _streamProvider;
         private readonly IWorldInfoFacade _worldInfo;
 
         public PawnsDataSerializer(ILogger logger,
             string fullPath,
             IWorldInfoFacade worldInfo,
-            IStreamProvider streamProvider)
+            StreamProvider streamProvider)
         {
             _logger = logger;
             _fullPath = fullPath;

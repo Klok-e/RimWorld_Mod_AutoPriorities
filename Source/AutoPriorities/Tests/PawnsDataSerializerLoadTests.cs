@@ -2,6 +2,7 @@ using System.Linq;
 using AutoFixture;
 using AutoPriorities.APLogger;
 using AutoPriorities.PawnDataSerializer;
+using AutoPriorities.PawnDataSerializer.StreamProviders;
 using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
 using FluentAssertions;
@@ -27,7 +28,7 @@ namespace Tests
             _logger = Substitute.For<ILogger>();
             _retriever = Substitute.For<IWorldInfoRetriever>();
             _worldInfo = new WorldInfoFacade(_retriever, _logger);
-            _serializer = new PawnsDataSerializer(_logger, TestHelper.SavePath, _worldInfo, new StreamProvider());
+            _serializer = new PawnsDataSerializer(_logger, TestHelper.SavePath, _worldInfo, new FileStreamProvider());
             _fixture = FixtureBuilder.Create();
         }
 

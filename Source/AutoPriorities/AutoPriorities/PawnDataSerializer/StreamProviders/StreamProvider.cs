@@ -2,12 +2,11 @@ using System;
 using System.IO;
 using AutoPriorities.Core;
 
-namespace AutoPriorities.PawnDataSerializer
+namespace AutoPriorities.PawnDataSerializer.StreamProviders
 {
-    internal class StreamProvider : IStreamProvider
+    // until default interface impls are supported by target
+    public abstract class StreamProvider
     {
-        #region IStreamProvider Members
-
         public void WithStream(string path, FileMode mode, Action<Stream> callback)
         {
             WithStream<Unit>(path, mode, stream =>
@@ -17,17 +16,8 @@ namespace AutoPriorities.PawnDataSerializer
             });
         }
 
-        public T WithStream<T>(string path, FileMode mode, Func<Stream, T> callback)
-        {
-            using var stream = new FileStream(path, mode);
-            return callback(stream);
-        }
+        public abstract T WithStream<T>(string path, FileMode mode, Func<Stream, T> callback);
 
-        public bool FileExists(string path)
-        {
-            return File.Exists(path);
-        }
-
-        #endregion
+        public abstract bool FileExists(string path);
     }
 }

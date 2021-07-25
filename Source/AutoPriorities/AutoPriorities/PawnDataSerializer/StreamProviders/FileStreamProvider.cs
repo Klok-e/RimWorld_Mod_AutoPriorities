@@ -3,23 +3,17 @@ using System.IO;
 
 namespace AutoPriorities.PawnDataSerializer.StreamProviders
 {
-    internal class MemoryStreamProvider : StreamProvider
+    internal class FileStreamProvider : StreamProvider
     {
-        private readonly MemoryStream _stream;
-
-        public MemoryStreamProvider(MemoryStream stream)
-        {
-            _stream = stream;
-        }
-
         public override T WithStream<T>(string path, FileMode mode, Func<Stream, T> callback)
         {
-            return callback(_stream);
+            using var stream = new FileStream(path, mode);
+            return callback(stream);
         }
 
         public override bool FileExists(string path)
         {
-            return true;
+            return File.Exists(path);
         }
     }
 }

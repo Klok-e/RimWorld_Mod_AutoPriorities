@@ -49,9 +49,9 @@
         <Compile Include="APLogger\Logger.cs" />
         <Compile Include="PawnDataSerializer\IPawnsDataSerializer.cs" />
         <Compile Include="PawnDataSerializer\PawnsDataSerializer.cs" />
-        <Compile Include="PawnDataSerializer\StreamProviders\IStreamProvider.cs" />
-        <Compile Include="PawnDataSerializer\StreamProviders\MemoryStreamProvider.cs" />
         <Compile Include="PawnDataSerializer\StreamProviders\StreamProvider.cs" />
+        <Compile Include="PawnDataSerializer\StreamProviders\MemoryStreamProvider.cs" />
+        <Compile Include="PawnDataSerializer\StreamProviders\FileStreamProvider.cs" />
         <Compile Include="PawnsData.cs" />
         <Compile Include="Percents\IPercent.cs" />
         <Compile Include="Percents\Number.cs" />
