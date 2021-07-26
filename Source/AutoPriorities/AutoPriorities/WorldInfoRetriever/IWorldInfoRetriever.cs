@@ -8,5 +8,8 @@ namespace AutoPriorities.WorldInfoRetriever
         IEnumerable<IWorkTypeWrapper> WorkTypeDefsInPriorityOrder();
 
         IEnumerable<IPawnWrapper> PawnsInPlayerFaction();
+
+        double PassionMultiplier { get; }
     }
+    
 }

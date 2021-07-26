@@ -12,10 +12,12 @@ namespace AutoPriorities
     public class PrioritiesAssigner
     {
         private readonly IWorldInfoFacade _worldInfo;
+        private readonly PawnsData _pawnsData;
 
-        public PrioritiesAssigner(IWorldInfoFacade worldInfo)
+        public PrioritiesAssigner(IWorldInfoFacade worldInfo,PawnsData pawnsData)
         {
             _worldInfo = worldInfo;
+            _pawnsData = pawnsData;
         }
 
         private List<(Priority priority, JobCount maxJobs, double percent)> PriorityPercentCached { get; } =
@@ -24,12 +26,12 @@ namespace AutoPriorities
         private Dictionary<IPawnWrapper, Dictionary<IWorkTypeWrapper, Priority>> PawnJobsCached { get; } =
             new();
 
-        public void AssignPriorities(PawnsData pawnsData)
+        public void AssignPriorities()
         {
             try
             {
                 PawnJobsCached.Clear();
-                foreach (var pawn in pawnsData.AllPlayerPawns)
+                foreach (var pawn in _pawnsData.AllPlayerPawns)
                     PawnJobsCached.Add(pawn, new Dictionary<IWorkTypeWrapper, Priority>());
 
 #if DEBUG
@@ -41,32 +43,32 @@ namespace AutoPriorities
                                      .Where(def => def is not null)
                                      .Select(x => x!)
                                      .ToHashSet();
-                AssignJobs(pawnsData, PawnJobsCached,
+                AssignJobs(_pawnsData, PawnJobsCached,
                     importantWorks,
-                    work => pawnsData.SortedPawnFitnessForEveryWork[work]);
+                    work => _pawnsData.SortedPawnFitnessForEveryWork[work]);
 
 #if DEBUG
                 Controller.Log!.Message("skilled");
 #endif
                 // assign skilled jobs except important jobs
-                AssignJobs(pawnsData, PawnJobsCached,
-                    pawnsData.WorkTypes
-                             .Subtract(importantWorks)
-                             .Where(work => !pawnsData.WorkTypesNotRequiringSkills.Contains(work)),
-                    work => pawnsData.SortedPawnFitnessForEveryWork[work]);
+                AssignJobs(_pawnsData, PawnJobsCached,
+                    _pawnsData.WorkTypes
+                              .Subtract(importantWorks)
+                              .Where(work => !_pawnsData.WorkTypesNotRequiringSkills.Contains(work)),
+                    work => _pawnsData.SortedPawnFitnessForEveryWork[work]);
 
 #if DEBUG
                 Controller.Log!.Message("non skilled");
 #endif
                 // assign non skilled jobs except important jobs
-                AssignJobs(pawnsData, PawnJobsCached,
-                    pawnsData.WorkTypesNotRequiringSkills
-                             .Subtract(importantWorks),
-                    work => pawnsData.SortedPawnFitnessForEveryWork[work]
-                                     .Select(p => (p.pawn, 1d / (1 + PawnJobsCached[p.pawn]
-                                         .Count)))
-                                     .OrderByDescending(p => p.Item2)
-                                     .ToList());
+                AssignJobs(_pawnsData, PawnJobsCached,
+                    _pawnsData.WorkTypesNotRequiringSkills
+                              .Subtract(importantWorks),
+                    work => _pawnsData.SortedPawnFitnessForEveryWork[work]
+                                      .Select(p => (p.pawn, 1d / (1 + PawnJobsCached[p.pawn]
+                                          .Count)))
+                                      .OrderByDescending(p => p.Item2)
+                                      .ToList());
             }
             catch (Exception e)
             {

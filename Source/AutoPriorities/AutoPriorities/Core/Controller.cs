@@ -76,8 +76,8 @@ namespace AutoPriorities.Core
             var worldFacade = new WorldInfoFacade(worldInfo, logger);
             var streamProvider = new FileStreamProvider();
             var serializer = new PawnsDataSerializer(logger, fullPath, worldFacade, streamProvider);
-            var pawnData = new PawnsData(serializer, worldInfo);
-            var priorityAssigner = new PrioritiesAssigner(worldFacade);
+            var pawnData = new PawnsDataBuilder(serializer, worldInfo, logger).Build();
+            var priorityAssigner = new PrioritiesAssigner(worldFacade, pawnData);
 
             return new AutoPrioritiesDialog(pawnData, priorityAssigner);
         }

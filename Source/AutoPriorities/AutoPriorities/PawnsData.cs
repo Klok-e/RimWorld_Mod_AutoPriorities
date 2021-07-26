@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 using AutoPriorities.Extensions;
 using AutoPriorities.PawnDataSerializer;
@@ -16,25 +17,22 @@ namespace AutoPriorities
     {
         private readonly IPawnsDataSerializer _serializer;
         private readonly IWorldInfoRetriever _worldInfoRetriever;
+        private readonly ILogger _logger;
 
-        public PawnsData(IPawnsDataSerializer serializer, IWorldInfoRetriever worldInfoRetriever)
+        public PawnsData(IPawnsDataSerializer serializer, IWorldInfoRetriever worldInfoRetriever,ILogger logger)
         {
             _serializer = serializer;
             _worldInfoRetriever = worldInfoRetriever;
-
-            var save = _serializer.LoadSavedData();
-
-            // Excluded must be loaded first because State depends on ExcludedPawns being filled
-            ExcludedPawns = LoadSavedExcluded(save.ExcludedPawns);
-            WorkTables = LoadSavedState(save.WorkTablesData);
+            _logger = logger;
         }
 
         public List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)> WorkTables
         {
             get;
-        }
+            private set;
+        } = new();
 
-        public HashSet<(IWorkTypeWrapper work, IPawnWrapper pawn)> ExcludedPawns { get; }
+        public HashSet<(IWorkTypeWrapper work, IPawnWrapper pawn)> ExcludedPawns { get; private set; } = new();
 
         public HashSet<IWorkTypeWrapper> WorkTypes { get; } = new();
 
@@ -48,6 +46,13 @@ namespace AutoPriorities
 
         public HashSet<IPawnWrapper> AllPlayerPawns { get; } = new();
 
+        public void SetData(SaveData data)
+        {
+            // Excluded must be loaded first because State depends on ExcludedPawns being filled
+            ExcludedPawns = data.ExcludedPawns;
+            WorkTables = LoadSavedState(data.WorkTablesData);
+        }
+
         public void SaveState()
         {
             try
@@ -60,7 +65,7 @@ namespace AutoPriorities
             }
             catch (Exception e)
             {
-                e.LogStackTrace();
+                _logger.Err(e);
             }
         }
 
@@ -71,14 +76,6 @@ namespace AutoPriorities
                 // get all work types
                 var workTypes = _worldInfoRetriever.WorkTypeDefsInPriorityOrder()
                                                    .ToArray();
-
-#if DEBUG
-                Controller.Log!.Message(
-                    $"work types: {string.Join(" ", workTypes.Select(w => w.defName))}");
-                var exclStr = ExcludedPawns.Select(wp => $"({wp.Item1.defName}; {wp.Item2.LabelNoCount})");
-                Controller.Log!.Message(
-                    $"excluded pawns: {string.Join(" ", exclStr)}");
-#endif
 
                 // get all pawns owned by player
                 var pawns = _worldInfoRetriever.PawnsInPlayerFaction()
@@ -97,33 +94,18 @@ namespace AutoPriorities
                         var fitness = -1d;
                         try
                         {
-#if DEBUG
-                            if (!pawn.IsCapableOfWholeWorkType(work))
-                            {
-                                // Controller.Log!.Message($"{pawn.NameFullColored} is incapable of {work}");
-                            }
-#endif
                             if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains((work, pawn)))
                             {
                                 var skill = pawn.AverageOfRelevantSkillsFor(work);
                                 double passion = PassionFactor(pawn.MaxPassionOfRelevantSkillsFor(work));
 
-                                fitness = skill + skill * passion * Math.Max(Controller.PassionMult, 0d);
-
-#if DEBUG
-                                if (work.defName == "Firefighter")
-                                {
-                                    // Controller.Log!.Message(
-                                    //     $"{pawn.NameFullColored} is capable of {work} with fitness of {fitness}" +
-                                    //     $" (skill avg {skill}, passion {passion}, mult {Controller.PassionMult})");
-                                }
-#endif
+                                fitness = skill * (1 + passion * Math.Max(_worldInfoRetriever.PassionMultiplier, 0d));
                             }
                         }
                         catch (Exception e)
                         {
-                            Controller.Log!.Error($"error: {e} for pawn {pawn.NameFullColored}");
-                            e.LogStackTrace();
+                            _logger.Err($"error: {e} for pawn {pawn.NameFullColored}");
+                            _logger.Err(e);
                         }
 
                         if (fitness >= 0d)
@@ -131,11 +113,10 @@ namespace AutoPriorities
                                 .Add((pawn, fitness));
                     }
 
-                    if (!WorkTypes.Contains(work))
-                    {
-                        WorkTypes.Add(work);
-                        if (work.relevantSkillsCount == 0) WorkTypesNotRequiringSkills.Add(work);
-                    }
+                    if (WorkTypes.Contains(work)) continue;
+
+                    WorkTypes.Add(work);
+                    if (work.relevantSkillsCount == 0) WorkTypesNotRequiringSkills.Add(work);
                 }
 
                 foreach (var keyValue in SortedPawnFitnessForEveryWork)
@@ -146,8 +127,8 @@ namespace AutoPriorities
             }
             catch (Exception e)
             {
-                Controller.Log!.Error("An error occured when rebuilding PawnData:");
-                e.LogStackTrace();
+                _logger.Err("An error occured when rebuilding PawnData:");
+                _logger.Err(e);
             }
         }
 
@@ -185,27 +166,10 @@ namespace AutoPriorities
             };
         }
 
-        private HashSet<(IWorkTypeWrapper, IPawnWrapper)> LoadSavedExcluded(
-            HashSet<(IWorkTypeWrapper, IPawnWrapper)> loader)
-        {
-            HashSet<(IWorkTypeWrapper, IPawnWrapper)>? excluded;
-            try
-            {
-                excluded = loader;
-            }
-            catch (Exception e)
-            {
-                Controller.Log!.Error("Error while loading percents state");
-                e.LogStackTrace();
-                excluded = null;
-            }
-
-            return excluded ?? new HashSet<(IWorkTypeWrapper, IPawnWrapper)>();
-        }
-
         private List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
             LoadSavedState(
-                List<(Priority priority, JobCount? maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)> loader)
+                IEnumerable<(Priority priority, JobCount? maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
+                    loader)
         {
             Rebuild();
             List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>? workTables;
@@ -227,14 +191,14 @@ namespace AutoPriorities
                         .Where(work => !keyVal.workTypes.ContainsKey(work))))
                 foreach (var (_, _, d) in workTables)
                 {
-                    Controller.Log!.Warning($"Work type {work} wasn't found in a save file. Setting percent to 0");
+                    _logger.Warn($"Work type {work} wasn't found in a save file. Setting percent to 0");
                     d.Add(work, Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = 0}));
                 }
             }
             catch (Exception e)
             {
-                Controller.Log!.Error("Error while loading percents state");
-                e.LogStackTrace();
+                _logger.Err("Error while loading percents state");
+                _logger.Err(e);
                 workTables = null;
             }
 

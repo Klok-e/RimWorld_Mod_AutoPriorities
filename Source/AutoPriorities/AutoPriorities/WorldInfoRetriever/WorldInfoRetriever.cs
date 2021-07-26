@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using AutoPriorities.Core;
 using AutoPriorities.Wrappers;
 using RimWorld;
 using Verse;
@@ -20,6 +21,8 @@ namespace AutoPriorities.WorldInfoRetriever
             return Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer)
                        .Select(x => new PawnWrapper(x));
         }
+
+        public double PassionMultiplier => Controller.PassionMult;
 
         #endregion
     }

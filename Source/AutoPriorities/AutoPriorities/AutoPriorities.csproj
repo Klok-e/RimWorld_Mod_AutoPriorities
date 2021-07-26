@@ -53,6 +53,7 @@
         <Compile Include="PawnDataSerializer\StreamProviders\MemoryStreamProvider.cs" />
         <Compile Include="PawnDataSerializer\StreamProviders\FileStreamProvider.cs" />
         <Compile Include="PawnsData.cs" />
+        <Compile Include="PawnsDataBuilder.cs" />
         <Compile Include="Percents\IPercent.cs" />
         <Compile Include="Percents\Number.cs" />
         <Compile Include="Percents\Percent.cs" />

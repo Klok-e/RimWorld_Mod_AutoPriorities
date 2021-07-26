@@ -116,7 +116,7 @@ namespace AutoPriorities
             if (Widgets.ButtonText(buttonRect, Label))
             {
                 _pawnsData.Rebuild();
-                _prioritiesAssigner.AssignPriorities(_pawnsData);
+                _prioritiesAssigner.AssignPriorities();
                 _pawnsData.SaveState();
                 SoundDefOf.Click.PlayOneShotOnCamera();
             }

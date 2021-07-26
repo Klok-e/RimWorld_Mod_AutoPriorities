@@ -272,6 +272,7 @@
         <Compile Include="MockImplementations\WorkType.cs" />
         <Compile Include="PawnsDataSerializerLoadTests.cs" />
         <Compile Include="PawnsDataSerializerSaveTests.cs" />
+        <Compile Include="PawnsDataTests.cs" />
         <Compile Include="Tests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
