@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 using AutoPriorities.Extensions;
 using AutoPriorities.Utils;
@@ -13,11 +14,13 @@ namespace AutoPriorities
     {
         private readonly IWorldInfoFacade _worldInfo;
         private readonly PawnsData _pawnsData;
+        private readonly ILogger _logger;
 
-        public PrioritiesAssigner(IWorldInfoFacade worldInfo,PawnsData pawnsData)
+        public PrioritiesAssigner(IWorldInfoFacade worldInfo,PawnsData pawnsData,ILogger logger)
         {
             _worldInfo = worldInfo;
             _pawnsData = pawnsData;
+            _logger = logger;
         }
 
         private List<(Priority priority, JobCount maxJobs, double percent)> PriorityPercentCached { get; } =
@@ -72,7 +75,7 @@ namespace AutoPriorities
             }
             catch (Exception e)
             {
-                e.LogStackTrace();
+                _logger.Err(e);
             }
         }
 
@@ -88,7 +91,7 @@ namespace AutoPriorities
 
                 var pawns = fitnessGetter(work);
 #if DEBUG
-                Controller.Log!.Message($"worktype {work.defName}");
+                _logger.Info($"worktype {work.defName}");
 #endif
 
                 foreach (var (priority, maxJobs, jobsToSet) in PriorityPercentCached
