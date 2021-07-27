@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using AutoPriorities.Utils;
+using HarmonyLib;
 using UnityEngine;
 using Verse;
 using WorkTab;
@@ -11,24 +12,27 @@ namespace FluffyWorktabPatch
     // ReSharper disable once UnusedType.Global
     public static class WorkTabAddButtonToFluffysWorktab
     {
+
         [HarmonyPostfix]
         // ReSharper disable once UnusedMember.Local
         private static void Postfix(Rect rect)
         {
+            DrawUtil.MaxPriority = 9;
+            
             var window = Controller.Dialog;
 
             var button = new Rect(rect.x + 160, rect.y + 5, 25, 25);
 
             var col = Color.white;
 
-            if (Widgets.ButtonImage(button, Resources.AutoPrioritiesButtonIcon, col,
+            if (!Widgets.ButtonImage(button, Resources.AutoPrioritiesButtonIcon, col,
                 col * 0.9f))
-            {
-                if (!window.IsOpen)
-                    Find.WindowStack.Add(window);
-                else
-                    window.Close();
-            }
+                return;
+
+            if (!window.IsOpen)
+                Find.WindowStack.Add(window);
+            else
+                window.Close();
         }
     }
 }
