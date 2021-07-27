@@ -78,7 +78,7 @@
         <PackageReference Include="UnlimitedHugs.Rimworld.HugsLib" Version="9.0.0" />
     </ItemGroup>
     <ItemGroup>
-      <Reference Include="Assembly-CSharp, Version=1.3.7877.21522, Culture=neutral, PublicKeyToken=null">
+      <Reference Include="Assembly-CSharp, Version=1.3.7877.30381, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\..\RimManaged\Assembly-CSharp.dll</HintPath>
       </Reference>
       <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
