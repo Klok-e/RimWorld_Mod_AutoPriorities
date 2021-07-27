@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AutoPriorities.Core;
 using AutoPriorities.Percents;
@@ -21,7 +22,7 @@ namespace AutoPriorities
         private const float SliderMargin = 75f;
         private const float GuiShadowedMult = 0.5f;
         private const float SlidersDistFromLeftBorder = 30f;
-        private const float SlidersDistFromRightBorder = 10f;
+        private const float SlidersDistFromRightBorder = 20f;
         private const float DistFromBottomBorder = 50f;
         private const float ButtonHeight = 30f;
         private const float LabelHeight = 22f;
@@ -127,12 +128,12 @@ namespace AutoPriorities
 
         private void PrioritiesTab(Rect inRect)
         {
-            var worktypes = _pawnsData.SortedPawnFitnessForEveryWork.Count;
+            var workTypes = _pawnsData.SortedPawnFitnessForEveryWork.Count;
 
             var scrollRect = new Rect(inRect.xMin, inRect.yMin, inRect.width,
                 inRect.height - DistFromBottomBorder);
 
-            var tableSizeX = (worktypes + 1) * SliderMargin + SlidersDistFromLeftBorder + SlidersDistFromRightBorder +
+            var tableSizeX = (workTypes + 1) * SliderMargin + SlidersDistFromLeftBorder + SlidersDistFromRightBorder +
                              SliderMargin;
 
             var tableSizeY = (SliderHeight + 3 * ButtonHeight) * _pawnsData.WorkTables.Count;
@@ -183,6 +184,7 @@ namespace AutoPriorities
                     maxJobsSliderRect.yMax + 3f,
                     PercentStringWidth,
                     25f);
+                // Widgets.DrawBox(jobCountMaxLabelRect);
                 var maxJobsText = Mathf.RoundToInt(newMaxJobsSliderValue)
                                        .ToString();
                 Widgets.TextFieldNumeric(jobCountMaxLabelRect, ref newMaxJobsSliderValue, ref maxJobsText);
@@ -195,137 +197,8 @@ namespace AutoPriorities
                     new Vector2(maxJobsLabelRect.xMax, slidersRect.yMax), new Color(0.5f, 0.5f, 0.5f),
                     1f);
 
-                var i = 0;
-                foreach (var workType in _pawnsData.WorkTypes)
-                {
-                    var workName = workType.labelShort;
-                    try
-                    {
-                        var currentPercent = pr.workTypes[workType];
-
-                        var elementXPos = maxJobsSliderRect.xMax + SliderMargin * (i + 1);
-
-                        var (available, takenMoreThanTotal) =
-                            _pawnsData.PercentColonistsAvailable(workType, pr.priority);
-                        var prevCol = GUI.color;
-                        if (takenMoreThanTotal) GUI.color = Color.red;
-
-                        var labelRect = new Rect(elementXPos - workName.GetWidthCached() / 2,
-                            slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f, 100f, LabelHeight);
-                        Widgets.Label(labelRect, workName);
-
-                        GUI.color = prevCol;
-
-                        var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
-                        var currSliderVal = (float)pr.workTypes[workType]
-                                                     .Value;
-                        var newSliderValue =
-                            GUI.VerticalSlider(sliderRect, currSliderVal, Math.Max(1f, currSliderVal), 0f);
-
-                        newSliderValue = Mathf.Clamp(newSliderValue, 0f, Math.Max((float)available, currSliderVal));
-
-                        var percentsText = (currentPercent switch
-                        {
-                            Percent _ => Mathf.RoundToInt(newSliderValue * 100f),
-                            Number n => Mathf.RoundToInt(newSliderValue * n.Total),
-                            _ => throw new ArgumentOutOfRangeException(nameof(currentPercent))
-                        }).ToString();
-                        var percentsRect = new Rect(
-                            sliderRect.xMax - PercentStringWidth,
-                            sliderRect.yMax + 3f,
-                            PercentStringWidth,
-                            25f);
-
-                        // percents and numbers switch button
-                        var switchRect = new Rect(percentsRect.min +
-                                                  new Vector2(5f + PercentStringLabelWidth, 0f), percentsRect.size);
-
-                        var sliderValRepr = currentPercent switch
-                        {
-                            Percent _ => newSliderValue * 100f,
-                            Number n => newSliderValue * n.Total,
-                            _ => throw new ArgumentOutOfRangeException(nameof(currentPercent))
-                        };
-
-#if DEBUG
-                        if (sliderValRepr > 0f)
-                        {
-                            // Controller.Log!.Trace(
-                            //     $"sliderValRepr for {workType} worktype and {pr.priority} " +
-                            //     $"priority is {sliderValRepr}, newSliderValue is {newSliderValue}");
-                        }
-#endif
-                        prevCol = GUI.color;
-                        if (takenMoreThanTotal) GUI.color = Color.red;
-
-                        Widgets.TextFieldNumeric(percentsRect, ref sliderValRepr, ref percentsText);
-
-                        GUI.color = prevCol;
-
-                        var prevSliderValText = newSliderValue;
-
-                        var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
-                        switch (currentPercent)
-                        {
-                            case Number n:
-                                newSliderValue = sliderValRepr / n.Total;
-                                if (Widgets.ButtonText(symbolRect, "№"))
-                                {
-                                    Controller.PoolNumbers.Pool(n);
-                                    currentPercent = Controller.PoolPercents.Acquire(new PercentPoolArgs
-                                    {
-                                        Value = newSliderValue
-                                    });
-                                }
-
-                                break;
-                            case Percent p:
-                                newSliderValue = sliderValRepr / 100f;
-                                if (Widgets.ButtonText(symbolRect, "%"))
-                                {
-                                    Controller.PoolPercents.Pool(p);
-                                    currentPercent = Controller.PoolNumbers.Acquire(new NumberPoolArgs
-                                    {
-                                        Count = Mathf.RoundToInt(newSliderValue * _pawnsData.NumberColonists(workType)),
-                                        Total = _pawnsData.NumberColonists(workType)
-                                    });
-                                }
-
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException(nameof(currentPercent));
-                        }
-
-                        newSliderValue = Mathf.Clamp(newSliderValue, 0f,
-                            Math.Max((float)available, prevSliderValText));
-
-                        switch (currentPercent)
-                        {
-                            case Percent p:
-                                Controller.PoolPercents.Pool(p);
-                                pr.workTypes[workType] = Controller.PoolPercents.Acquire(new PercentPoolArgs
-                                {
-                                    Value = newSliderValue
-                                });
-                                break;
-                            case Number n:
-                                Controller.PoolNumbers.Pool(n);
-                                pr.workTypes[workType] = Controller.PoolNumbers.Acquire(new NumberPoolArgs
-                                {
-                                    Count = Mathf.RoundToInt(newSliderValue * n.Total),
-                                    Total = _pawnsData.NumberColonists(workType)
-                                });
-                                break;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.Err($"Error for work type {workName}:");
-                        _logger.Err(e);
-                    }
-
-                    i += 1;
-                }
+                DrawWorkListForPriority(pr,
+                    new Rect(maxJobsLabelRect.xMax, slidersRect.y, slidersRect.width, slidersRect.height));
 
                 row += 1;
                 _prioritiesEncounteredCached.Add(pr.priority);
@@ -355,6 +228,129 @@ namespace AutoPriorities
             {
                 AddPriority();
                 SoundDefOf.Click.PlayOneShotOnCamera();
+            }
+        }
+
+        private void DrawWorkListForPriority(
+            (Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes) pr,
+            Rect slidersRect)
+        {
+            // Widgets.DrawBox(slidersRect);
+            foreach (var (i, workType) in _pawnsData.WorkTypes.Select((x, i) => (i, x)))
+            {
+                var workName = workType.labelShort;
+                try
+                {
+                    var currentPercent = pr.workTypes[workType];
+
+                    var elementXPos = slidersRect.x + SliderMargin / 2 + SliderMargin * i;
+
+                    var (available, takenMoreThanTotal) =
+                        _pawnsData.PercentColonistsAvailable(workType, pr.priority);
+                    var prevCol = GUI.color;
+                    if (takenMoreThanTotal) GUI.color = Color.red;
+
+                    var labelRect = new Rect(elementXPos - workName.GetWidthCached() / 2,
+                        slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f, 100f, LabelHeight);
+                    Widgets.Label(labelRect, workName);
+
+                    GUI.color = prevCol;
+
+                    var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
+                    var currSliderVal = (float)pr.workTypes[workType]
+                                                 .Value;
+                    var newSliderValue =
+                        GUI.VerticalSlider(sliderRect, currSliderVal, Math.Max(1f, currSliderVal), 0f);
+
+                    newSliderValue = Mathf.Clamp(newSliderValue, 0f, Math.Max((float)available, currSliderVal));
+
+                    var sliderVal = currentPercent switch
+                    {
+                        Percent => newSliderValue * 100f,
+                        Number n => newSliderValue * n.Total,
+                        _ => throw new ArgumentOutOfRangeException(nameof(currentPercent))
+                    };
+
+                    var percentsText = Mathf.RoundToInt(sliderVal)
+                                            .ToString(CultureInfo.InvariantCulture);
+                    var percentsRect = new Rect(
+                        sliderRect.xMax - PercentStringWidth,
+                        sliderRect.yMax + 3f,
+                        PercentStringWidth,
+                        25f);
+
+                    // percents and numbers switch button
+                    var switchRect = new Rect(percentsRect.min +
+                                              new Vector2(5f + PercentStringLabelWidth, 0f), percentsRect.size);
+
+                    prevCol = GUI.color;
+                    if (takenMoreThanTotal) GUI.color = Color.red;
+
+                    Widgets.TextFieldNumeric(percentsRect, ref sliderVal, ref percentsText);
+
+                    GUI.color = prevCol;
+
+                    var prevSliderValText = newSliderValue;
+
+                    var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
+                    switch (currentPercent)
+                    {
+                        case Number n:
+                            newSliderValue = sliderVal / n.Total;
+                            if (Widgets.ButtonText(symbolRect, "№"))
+                            {
+                                Controller.PoolNumbers.Pool(n);
+                                currentPercent = Controller.PoolPercents.Acquire(new PercentPoolArgs
+                                {
+                                    Value = newSliderValue
+                                });
+                            }
+
+                            break;
+                        case Percent p:
+                            newSliderValue = sliderVal / 100f;
+                            if (Widgets.ButtonText(symbolRect, "%"))
+                            {
+                                Controller.PoolPercents.Pool(p);
+                                currentPercent = Controller.PoolNumbers.Acquire(new NumberPoolArgs
+                                {
+                                    Count = Mathf.RoundToInt(newSliderValue * _pawnsData.NumberColonists(workType)),
+                                    Total = _pawnsData.NumberColonists(workType)
+                                });
+                            }
+
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(currentPercent));
+                    }
+
+                    newSliderValue = Mathf.Clamp(newSliderValue, 0f,
+                        Math.Max((float)available, prevSliderValText));
+
+                    switch (currentPercent)
+                    {
+                        case Percent p:
+                            Controller.PoolPercents.Pool(p);
+                            pr.workTypes[workType] = Controller.PoolPercents.Acquire(new PercentPoolArgs
+                            {
+                                Value = newSliderValue
+                            });
+                            break;
+                        case Number n:
+                            Controller.PoolNumbers.Pool(n);
+                            pr.workTypes[workType] = Controller.PoolNumbers.Acquire(new NumberPoolArgs
+                            {
+                                Count = Mathf.RoundToInt(newSliderValue * n.Total),
+                                Total = _pawnsData.NumberColonists(workType)
+                            });
+                            break;
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.Err($"Error for work type {workName}:");
+                    _logger.Err(e);
+                }
             }
         }
 
