@@ -7,9 +7,9 @@ using AutoPriorities.Utils;
 using AutoPriorities.WorldInfoRetriever;
 using HugsLib;
 using HugsLib.Settings;
-using HugsLib.Utils;
 using UnityEngine;
 using Verse;
+using ILogger = AutoPriorities.APLogger.ILogger;
 using Logger = AutoPriorities.APLogger.Logger;
 
 namespace AutoPriorities.Core
@@ -17,8 +17,7 @@ namespace AutoPriorities.Core
     public class Controller : ModBase
     {
         private static AutoPrioritiesDialog? _dialog;
-
-        public static ModLogger? Log { get; private set; }
+        private static ILogger? _logger;
 
         public static AutoPrioritiesDialog Dialog => _dialog ??= CreateDialog();
 
@@ -33,8 +32,9 @@ namespace AutoPriorities.Core
         public override void Initialize()
         {
             base.Initialize();
-            Log = Logger;
-            if (PatchMod("fluffy.worktab", "FluffyWorktabPatch.dll")) DrawUtil.MaxPriority = 9;
+            _logger = new Logger(Logger);
+
+            PatchMod("fluffy.worktab", "FluffyWorktabPatch.dll");
             PatchMod("dame.interestsframework", "InterestsPatch.dll");
             HarmonyInst.PatchAll();
         }
@@ -48,22 +48,15 @@ namespace AutoPriorities.Core
 
         private bool PatchMod(string packageId, string patchName)
         {
-            if (LoadedModManager.RunningModsListForReading.Exists(m => m.PackageId == packageId))
-            {
-#if DEBUG
-                Log!.Message($"{packageId} detected");
-#endif
+            if (!LoadedModManager.RunningModsListForReading.Exists(m => m.PackageId == packageId)) return false;
 
-                var asm = Assembly.LoadFile(Path.Combine(ModContentPack.RootDir,
-                    Path.Combine("ConditionalAssemblies/1.3/", patchName)));
+            _logger?.Info($"Patching for: {packageId}");
 
-                HarmonyInst.PatchAll(asm);
-                return true;
-            }
-#if DEBUG
-            Log!.Message($"No {packageId} detected");
-#endif
-            return false;
+            var asm = Assembly.LoadFile(Path.Combine(ModContentPack.RootDir,
+                Path.Combine("ConditionalAssemblies/1.3/", patchName)));
+
+            HarmonyInst.PatchAll(asm);
+            return true;
         }
 
         private static AutoPrioritiesDialog CreateDialog()
@@ -72,7 +65,7 @@ namespace AutoPriorities.Core
             string fullPath = Application.persistentDataPath + filename;
 
             var worldInfo = new WorldInfoRetriever.WorldInfoRetriever();
-            var logger = new Logger();
+            var logger = _logger!;
             var worldFacade = new WorldInfoFacade(worldInfo, logger);
             var streamProvider = new FileStreamProvider();
             var serializer = new PawnsDataSerializer(logger, fullPath, worldFacade, streamProvider);

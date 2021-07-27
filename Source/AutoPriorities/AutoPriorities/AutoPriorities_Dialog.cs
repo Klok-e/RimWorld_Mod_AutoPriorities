@@ -437,7 +437,7 @@ namespace AutoPriorities
                     {
                         _pawnsData.ExcludedPawns.Add((workType, pawn));
 #if DEBUG
-                        Controller.Log!.Message(
+                        _logger.Info(
                             $"Pawn {pawn.NameFullColored} with work {workType.defName} was added to the Excluded list");
 #endif
                     }
@@ -445,7 +445,7 @@ namespace AutoPriorities
                     {
                         _pawnsData.ExcludedPawns.Remove((workType, pawn));
 #if DEBUG
-                        Controller.Log!.Message(
+                        _logger.Info(
                             $"Pawn {pawn.NameFullColored} with work {workType.defName} was removed from the Excluded list");
 #endif
                     }

@@ -1,30 +1,37 @@
 using System;
-using AutoPriorities.Core;
+using HugsLib.Utils;
 
 namespace AutoPriorities.APLogger
 {
     public class Logger : ILogger
     {
+        private readonly ModLogger _controller;
+
+        public Logger(ModLogger controller)
+        {
+            _controller = controller;
+        }
+
         #region ILogger Members
 
         public void Err(string message)
         {
-            Controller.Log?.Error(message);
+            _controller.Error(message);
         }
 
         public void Err(Exception exception)
         {
-            Controller.Log?.ReportException(exception);
+            _controller.ReportException(exception);
         }
 
         public void Warn(string message)
         {
-            Controller.Log?.Warning(message);
+            _controller.Warning(message);
         }
 
         public void Info(string message)
         {
-            Controller.Log?.Message(message);
+            _controller.Message(message);
         }
 
         #endregion

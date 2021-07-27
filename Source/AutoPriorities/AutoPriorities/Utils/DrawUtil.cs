@@ -5,7 +5,7 @@ using Verse.Sound;
 
 namespace AutoPriorities.Utils
 {
-    internal static class DrawUtil
+    public static class DrawUtil
     {
         public static int MaxPriority { get; set; } = 4;
 

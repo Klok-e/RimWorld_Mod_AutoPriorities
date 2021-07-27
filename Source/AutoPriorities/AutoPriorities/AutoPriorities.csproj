@@ -62,7 +62,6 @@
         <Compile Include="SaveData.cs" />
         <Compile Include="SaveDataRequest.cs" />
         <Compile Include="Utils\DrawUtil.cs" />
-        <Compile Include="Utils\ExceptionUtil.cs" />
         <Compile Include="Utils\PoolFactory.cs" />
         <Compile Include="WorldInfoRetriever\IWorldInfoFacade.cs" />
         <Compile Include="WorldInfoRetriever\IWorldInfoRetriever.cs" />

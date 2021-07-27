@@ -37,7 +37,7 @@ namespace AutoPriorities
                     PawnJobsCached.Add(pawn, new Dictionary<IWorkTypeWrapper, Priority>());
 
 #if DEBUG
-                Controller.Log!.Message("important");
+                _logger.Info("important");
 #endif
                 // assign `important` jobs because hardcoding is easy
                 var importantWorks = new[] {"Firefighter", "Patient", "PatientBedRest", "BasicWorker"}
@@ -50,7 +50,7 @@ namespace AutoPriorities
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work]);
 
 #if DEBUG
-                Controller.Log!.Message("skilled");
+                _logger.Info("skilled");
 #endif
                 // assign skilled jobs except important jobs
                 AssignJobs(_pawnsData, PawnJobsCached,
@@ -60,7 +60,7 @@ namespace AutoPriorities
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work]);
 
 #if DEBUG
-                Controller.Log!.Message("non skilled");
+                _logger.Info("non skilled");
 #endif
                 // assign non skilled jobs except important jobs
                 AssignJobs(_pawnsData, PawnJobsCached,
