@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace AutoPriorities.Extensions
 {
@@ -52,6 +54,14 @@ namespace AutoPriorities.Extensions
         {
             var v = dict[key];
             dict[key] = func(v);
+        }
+
+        public static IEnumerable<MethodInfo> GetMethodsWithHelpAttribute<T>(this Assembly assembly) where T : Attribute
+        {
+            return assembly.GetTypes()
+                           .SelectMany(t => t.GetMethods())
+                           .Where(type => type.GetCustomAttributes(typeof(T), true)
+                                              .Length > 0 && type.IsStatic);
         }
     }
 }

@@ -47,6 +47,7 @@
         <Compile Include="HarmonyPatches\WorkTabAddButtonToOpenAutoPrioritiesWindow.cs" />
         <Compile Include="APLogger\ILogger.cs" />
         <Compile Include="APLogger\Logger.cs" />
+        <Compile Include="PatchInitializeAttribute.cs" />
         <Compile Include="PawnDataSerializer\IPawnsDataSerializer.cs" />
         <Compile Include="PawnDataSerializer\PawnsDataSerializer.cs" />
         <Compile Include="PawnDataSerializer\StreamProviders\StreamProvider.cs" />

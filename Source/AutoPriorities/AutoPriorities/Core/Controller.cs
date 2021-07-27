@@ -1,5 +1,6 @@
 using System.IO;
 using System.Reflection;
+using AutoPriorities.Extensions;
 using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.PawnDataSerializer.StreamProviders;
 using AutoPriorities.Percents;
@@ -54,8 +55,11 @@ namespace AutoPriorities.Core
 
             var asm = Assembly.LoadFile(Path.Combine(ModContentPack.RootDir,
                 Path.Combine("ConditionalAssemblies/1.3/", patchName)));
-
             HarmonyInst.PatchAll(asm);
+
+            var methods = asm.GetMethodsWithHelpAttribute<PatchInitializeAttribute>();
+            foreach (var method in methods) method.Invoke(null, null);
+
             return true;
         }
 
