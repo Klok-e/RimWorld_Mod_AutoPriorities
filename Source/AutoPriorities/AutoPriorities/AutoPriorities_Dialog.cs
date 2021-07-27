@@ -243,108 +243,43 @@ namespace AutoPriorities
                 {
                     var currentPercent = pr.workTypes[workType];
 
-                    var elementXPos = slidersRect.x + SliderMargin / 2 + SliderMargin * i;
+                    var numberColonists = _pawnsData.NumberColonists(workType);
+                    var colonistsSelected = Mathf.RoundToInt((float)currentPercent.Value * numberColonists);
 
                     var (available, takenMoreThanTotal) =
                         _pawnsData.PercentColonistsAvailable(workType, pr.priority);
-                    var prevCol = GUI.color;
-                    if (takenMoreThanTotal) GUI.color = Color.red;
 
+                    var elementXPos = slidersRect.x + SliderMargin / 2 + SliderMargin * i;
                     var labelRect = new Rect(elementXPos - workName.GetWidthCached() / 2,
                         slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f, 100f, LabelHeight);
-                    Widgets.Label(labelRect, workName);
+                    WorkTypeLabel(takenMoreThanTotal, labelRect, workName);
 
-                    GUI.color = prevCol;
 
                     var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
-                    var currSliderVal = (float)pr.workTypes[workType]
-                                                 .Value;
-                    var newSliderValue =
-                        GUI.VerticalSlider(sliderRect, currSliderVal, Math.Max(1f, currSliderVal), 0f);
+                    var currSliderVal = colonistsSelected / (float)numberColonists;
+                    currSliderVal = SliderPercentsInput(sliderRect, (float)available, currSliderVal);
 
-                    newSliderValue = Mathf.Clamp(newSliderValue, 0f, Math.Max((float)available, currSliderVal));
 
-                    var sliderVal = currentPercent switch
-                    {
-                        Percent => newSliderValue * 100f,
-                        Number n => newSliderValue * n.Total,
-                        _ => throw new ArgumentOutOfRangeException(nameof(currentPercent))
-                    };
-
-                    var percentsText = Mathf.RoundToInt(sliderVal)
-                                            .ToString(CultureInfo.InvariantCulture);
                     var percentsRect = new Rect(
                         sliderRect.xMax - PercentStringWidth,
                         sliderRect.yMax + 3f,
                         PercentStringWidth,
                         25f);
+                    currSliderVal =
+                        TextPercentsInput(percentsRect, currentPercent, currSliderVal, takenMoreThanTotal);
 
-                    // percents and numbers switch button
-                    var switchRect = new Rect(percentsRect.min +
-                                              new Vector2(5f + PercentStringLabelWidth, 0f), percentsRect.size);
+                    var prevSliderValText = currSliderVal;
 
-                    prevCol = GUI.color;
-                    if (takenMoreThanTotal) GUI.color = Color.red;
-
-                    Widgets.TextFieldNumeric(percentsRect, ref sliderVal, ref percentsText);
-
-                    GUI.color = prevCol;
-
-                    var prevSliderValText = newSliderValue;
-
-                    var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
-                    switch (currentPercent)
-                    {
-                        case Number n:
-                            newSliderValue = sliderVal / n.Total;
-                            if (Widgets.ButtonText(symbolRect, "№"))
-                            {
-                                Controller.PoolNumbers.Pool(n);
-                                currentPercent = Controller.PoolPercents.Acquire(new PercentPoolArgs
-                                {
-                                    Value = newSliderValue
-                                });
-                            }
-
-                            break;
-                        case Percent p:
-                            newSliderValue = sliderVal / 100f;
-                            if (Widgets.ButtonText(symbolRect, "%"))
-                            {
-                                Controller.PoolPercents.Pool(p);
-                                currentPercent = Controller.PoolNumbers.Acquire(new NumberPoolArgs
-                                {
-                                    Count = Mathf.RoundToInt(newSliderValue * _pawnsData.NumberColonists(workType)),
-                                    Total = _pawnsData.NumberColonists(workType)
-                                });
-                            }
-
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException(nameof(currentPercent));
-                    }
-
-                    newSliderValue = Mathf.Clamp(newSliderValue, 0f,
+                    currSliderVal = Mathf.Clamp(currSliderVal, 0f,
                         Math.Max((float)available, prevSliderValText));
 
-                    switch (currentPercent)
-                    {
-                        case Percent p:
-                            Controller.PoolPercents.Pool(p);
-                            pr.workTypes[workType] = Controller.PoolPercents.Acquire(new PercentPoolArgs
-                            {
-                                Value = newSliderValue
-                            });
-                            break;
-                        case Number n:
-                            Controller.PoolNumbers.Pool(n);
-                            pr.workTypes[workType] = Controller.PoolNumbers.Acquire(new NumberPoolArgs
-                            {
-                                Count = Mathf.RoundToInt(newSliderValue * n.Total),
-                                Total = _pawnsData.NumberColonists(workType)
-                            });
-                            break;
-                    }
+                    colonistsSelected = Mathf.RoundToInt(currSliderVal * numberColonists);
+
+                    var switchRect = new Rect(percentsRect.min +
+                                              new Vector2(5f + PercentStringLabelWidth, 0f), percentsRect.size);
+                    var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
+                    pr.workTypes[workType] =
+                        SwitchPercentsNumbersButton(symbolRect, currentPercent, numberColonists, colonistsSelected);
                 }
                 catch (Exception e)
                 {
@@ -352,6 +287,103 @@ namespace AutoPriorities
                     _logger.Err(e);
                 }
             }
+        }
+
+        private static void WorkTypeLabel(bool takenMoreThanTotal, Rect rect, string workName)
+        {
+            var prevCol = GUI.color;
+            if (takenMoreThanTotal) GUI.color = Color.red;
+
+            Widgets.Label(rect, workName);
+
+            GUI.color = prevCol;
+        }
+
+        private static float SliderPercentsInput(Rect sliderRect, float available, float currSliderVal)
+        {
+            var newSliderValue =
+                GUI.VerticalSlider(sliderRect, currSliderVal, Math.Max(1f, currSliderVal), 0f);
+
+            return Mathf.Clamp(newSliderValue, 0f, Math.Max(available, currSliderVal));
+        }
+
+        private static float TextPercentsInput(Rect rect,
+            IPercent currentPercent,
+            float currentValue,
+            bool takenMoreThanTotal)
+        {
+            var sliderVal = currentPercent switch
+            {
+                Percent => currentValue * 100f,
+                Number n => currentValue * n.Total,
+                _ => throw new ArgumentOutOfRangeException(nameof(currentPercent), currentPercent, null)
+            };
+
+            var percentsText = Mathf.RoundToInt(sliderVal)
+                                    .ToString(CultureInfo.InvariantCulture);
+
+            var prevCol = GUI.color;
+            if (takenMoreThanTotal) GUI.color = Color.red;
+
+            Widgets.TextFieldNumeric(rect, ref sliderVal, ref percentsText);
+
+            GUI.color = prevCol;
+            return currentPercent switch
+            {
+                Percent => sliderVal / 100f,
+                Number n => sliderVal / n.Total,
+                _ => throw new ArgumentOutOfRangeException(nameof(currentPercent), currentPercent, null)
+            };
+        }
+
+        private static IPercent SwitchPercentsNumbersButton(Rect rect,
+            IPercent currentPercent,
+            int numberColonists,
+            int numberSelected)
+        {
+            switch (currentPercent)
+            {
+                case Number n:
+                    if (Widgets.ButtonText(rect, "№"))
+                    {
+                        Controller.PoolNumbers.Pool(n);
+                        return Controller.PoolPercents.Acquire(new PercentPoolArgs
+                        {
+                            Value = numberSelected / (double)numberColonists
+                        });
+                    }
+                    else
+                    {
+                        n.Initialize(new NumberPoolArgs
+                        {
+                            Count = numberSelected,
+                            Total = numberColonists
+                        });
+                    }
+
+                    break;
+                case Percent p:
+                    if (Widgets.ButtonText(rect, "%"))
+                    {
+                        Controller.PoolPercents.Pool(p);
+                        return Controller.PoolNumbers.Acquire(new NumberPoolArgs
+                        {
+                            Count = numberSelected,
+                            Total = numberColonists
+                        });
+                    }
+                    else
+                    {
+                        p.Initialize(new PercentPoolArgs
+                        {
+                            Value = numberSelected / (double)numberColonists
+                        });
+                    }
+
+                    break;
+            }
+
+            return currentPercent;
         }
 
         private void PawnExcludeTab(Rect inRect)
