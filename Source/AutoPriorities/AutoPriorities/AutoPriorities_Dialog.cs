@@ -43,12 +43,12 @@ namespace AutoPriorities
         private readonly PrioritiesAssigner _prioritiesAssigner;
         private readonly HashSet<Priority> _prioritiesEncounteredCached = new();
         private readonly float _prioritiesLabelWidth = PrioritiesLabel.GetWidthCached() + 10f;
+        private readonly Dictionary<Rect, string?> _textFieldBuffers = new();
         private SelectedTab _currentlySelectedTab = SelectedTab.Priorities;
         private bool _openedOnce;
         private Vector2 _pawnExcludeScrollPos;
         private Rect _rect;
         private Vector2 _scrollPos;
-        private readonly Dictionary<Rect, string?> _textFieldBuffers = new Dictionary<Rect, string?>();
 
         public AutoPrioritiesDialog(PawnsData pawnsData, PrioritiesAssigner prioritiesAssigner, ILogger logger)
         {
@@ -141,12 +141,11 @@ namespace AutoPriorities
             Widgets.BeginScrollView(scrollRect, ref _scrollPos, new Rect(0, 0, tableSizeX, tableSizeY));
 
             _prioritiesEncounteredCached.Clear();
-            var row = 0;
             var workTables = _pawnsData.WorkTables;
-            for (var table = 0; table < workTables.Count; table++)
+            for (int table = 0, row = 0; table < workTables.Count; table++, row++)
             {
                 // table row
-                var pr = _pawnsData.WorkTables[table];
+                var pr = workTables[table];
                 var colOrig = GUI.color;
 
                 //shadow repeating priorities
@@ -165,7 +164,7 @@ namespace AutoPriorities
 
                 pr.priority = DrawUtil.PriorityBox(slidersRect.xMin, slidersRect.yMin + slidersRect.height / 2f,
                     pr.priority.V);
-                _pawnsData.WorkTables[table] = pr;
+                workTables[table] = pr;
 
                 var maxJobsElementXPos = slidersRect.xMin + SliderMargin;
                 var maxJobsLabel = "Max jobs for pawn";
@@ -191,9 +190,9 @@ namespace AutoPriorities
                 Widgets.TextFieldNumeric(jobCountMaxLabelRect, ref newMaxJobsSliderValue, ref maxJobsText);
 
                 pr.maxJobs = Mathf.RoundToInt(newMaxJobsSliderValue);
-                _pawnsData.WorkTables[table] = pr;
+                workTables[table] = pr;
 
-                // draw line on thi right from max job sliders
+                // draw line on the right from max job sliders
                 Widgets.DrawLine(new Vector2(maxJobsLabelRect.xMax, slidersRect.yMin),
                     new Vector2(maxJobsLabelRect.xMax, slidersRect.yMax), new Color(0.5f, 0.5f, 0.5f),
                     1f);
@@ -201,7 +200,6 @@ namespace AutoPriorities
                 DrawWorkListForPriority(pr,
                     new Rect(maxJobsLabelRect.xMax, slidersRect.y, slidersRect.width, slidersRect.height));
 
-                row += 1;
                 _prioritiesEncounteredCached.Add(pr.priority);
                 //return to normal
                 GUI.color = colOrig;
@@ -257,27 +255,39 @@ namespace AutoPriorities
 
                     var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
                     var currSliderVal = (float)currentPercent.Value;
-                    currSliderVal = SliderPercentsInput(sliderRect, (float)available, currSliderVal);
-
+                    // var prevcurrSliderVal = currSliderVal;
+                    currSliderVal = SliderPercentsInput(sliderRect, (float)available, currSliderVal,
+                        out var skipNextAssign);
+                    // if (Math.Abs(prevcurrSliderVal - currSliderVal) > 0.0001)
+                    // {
+                    //     _logger.Info($"1new: {prevcurrSliderVal}, curr: {currSliderVal}");
+                    // }
 
                     var percentsRect = new Rect(
                         sliderRect.xMax - PercentStringWidth,
                         sliderRect.yMax + 3f,
                         PercentStringWidth,
                         25f);
+                    // prevcurrSliderVal = currSliderVal;
                     currSliderVal =
-                        TextPercentsInput(percentsRect, currentPercent, currSliderVal, takenMoreThanTotal);
+                        TextPercentsInput(percentsRect, currentPercent, currSliderVal, takenMoreThanTotal,
+                            (float)available, skipNextAssign);
+                    // if (Math.Abs(prevcurrSliderVal - currSliderVal) > 0.0001)
+                    // {
+                    //     _logger.Info($"2new: {prevcurrSliderVal}, curr: {currSliderVal}");
+                    // }
 
-                    var prevSliderValText = currSliderVal;
-
-                    currSliderVal = Mathf.Clamp(currSliderVal, 0f,
-                        Math.Max((float)available, prevSliderValText));
-
+                    // prevcurrSliderVal = currSliderVal;
                     var switchRect = new Rect(percentsRect.min +
                                               new Vector2(5f + PercentStringLabelWidth, 0f), percentsRect.size);
                     var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
                     pr.workTypes[workType] =
                         SwitchPercentsNumbersButton(symbolRect, currentPercent, numberColonists, currSliderVal);
+                    // if (Math.Abs(prevcurrSliderVal - pr.workTypes[workType]
+                    //                                    .Value) > 0.0001)
+                    // {
+                    //     _logger.Info($"3new: {prevcurrSliderVal}, curr: {pr.workTypes[workType].Value}");
+                    // }
                 }
                 catch (Exception e)
                 {
@@ -297,10 +307,15 @@ namespace AutoPriorities
             GUI.color = prevCol;
         }
 
-        private static float SliderPercentsInput(Rect sliderRect, float available, float currSliderVal)
+        private float SliderPercentsInput(Rect sliderRect,
+            float available,
+            float currSliderVal,
+            out bool skipNextAssign)
         {
             var newSliderValue =
                 GUI.VerticalSlider(sliderRect, currSliderVal, Math.Max(1f, currSliderVal), 0f);
+
+            skipNextAssign = Math.Abs(newSliderValue - currSliderVal) > 0.0001;
 
             return Mathf.Clamp(newSliderValue, 0f, Math.Max(available, currSliderVal));
         }
@@ -308,7 +323,9 @@ namespace AutoPriorities
         private float TextPercentsInput(Rect rect,
             IPercent currentPercent,
             float currentValue,
-            bool takenMoreThanTotal)
+            bool takenMoreThanTotal,
+            float available,
+            bool skipAssign)
         {
             var value = Mathf.Round(currentPercent switch
             {
@@ -325,27 +342,31 @@ namespace AutoPriorities
 
             var prevSliderVal = value;
             Widgets.TextFieldNumeric(rect, ref value, ref percentsText);
-            if (Math.Abs(prevSliderVal - value) < 0.0001)
+            if (skipAssign)
             {
-                // _logger.Info($"no change. text: {percentsText}, value: {value}");
-                _textFieldBuffers[rect] = percentsText;
-            }
-            else
-            {
-                // _logger.Info($"change. text: {percentsText}, value: {value}, prev: {prevSliderVal}");
                 _textFieldBuffers[rect] = null;
+                return currentValue;
             }
 
+            if (Math.Abs(prevSliderVal - value) < 0.0001)
+                // _logger.Info($"no change. text: {percentsText}, value: {value}");
+                _textFieldBuffers[rect] = percentsText;
+            else
+                // _logger.Info($"change. text: {percentsText}, value: {value}, prev: {prevSliderVal}");
+                _textFieldBuffers[rect] = null;
+
             GUI.color = prevCol;
-            return currentPercent switch
+            var currSliderVal = currentPercent switch
             {
                 Percent => value / 100f,
                 Number n => value / n.Total,
                 _ => throw new ArgumentOutOfRangeException(nameof(currentPercent), currentPercent, null)
             };
+            return Mathf.Clamp(currSliderVal, 0f,
+                Math.Max(available, currentValue));
         }
 
-        private static IPercent SwitchPercentsNumbersButton(Rect rect,
+        private IPercent SwitchPercentsNumbersButton(Rect rect,
             IPercent currentPercent,
             int numberColonists,
             float sliderValue)
@@ -355,6 +376,9 @@ namespace AutoPriorities
                 case Number n:
                     if (Widgets.ButtonText(rect, "№"))
                     {
+                        // clear buffers so that text input uses new values
+                        _textFieldBuffers.Clear();
+
                         Controller.PoolNumbers.Pool(n);
                         return Controller.PoolPercents.Acquire(new PercentPoolArgs
                         {
@@ -374,6 +398,9 @@ namespace AutoPriorities
                 case Percent p:
                     if (Widgets.ButtonText(rect, "%"))
                     {
+                        // clear buffers so that text input uses new values
+                        _textFieldBuffers.Clear();
+
                         Controller.PoolPercents.Pool(p);
                         return Controller.PoolNumbers.Acquire(new NumberPoolArgs
                         {

@@ -19,7 +19,7 @@ namespace FluffyWorktabPatch
         {
             DrawUtil.MaxPriority = Settings.maxPriority;
         }
-        
+
         [HarmonyPostfix]
         // ReSharper disable once UnusedMember.Local
         private static void Postfix(Rect rect)
