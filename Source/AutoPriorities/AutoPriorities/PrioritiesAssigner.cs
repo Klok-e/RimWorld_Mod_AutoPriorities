@@ -4,7 +4,6 @@ using System.Linq;
 using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 using AutoPriorities.Extensions;
-using AutoPriorities.Utils;
 using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
 
@@ -12,11 +11,11 @@ namespace AutoPriorities
 {
     public class PrioritiesAssigner
     {
-        private readonly IWorldInfoFacade _worldInfo;
-        private readonly PawnsData _pawnsData;
         private readonly ILogger _logger;
+        private readonly PawnsData _pawnsData;
+        private readonly IWorldInfoFacade _worldInfo;
 
-        public PrioritiesAssigner(IWorldInfoFacade worldInfo,PawnsData pawnsData,ILogger logger)
+        public PrioritiesAssigner(IWorldInfoFacade worldInfo, PawnsData pawnsData, ILogger logger)
         {
             _worldInfo = worldInfo;
             _pawnsData = pawnsData;

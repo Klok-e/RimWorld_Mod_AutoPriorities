@@ -2,7 +2,7 @@ using Verse;
 
 namespace AutoPriorities.Wrappers
 {
-    internal class WorkTypeWrapper : IWorkTypeWrapper
+    internal record WorkTypeWrapper : IWorkTypeWrapper
     {
         public readonly WorkTypeDef workTypeDef;
 

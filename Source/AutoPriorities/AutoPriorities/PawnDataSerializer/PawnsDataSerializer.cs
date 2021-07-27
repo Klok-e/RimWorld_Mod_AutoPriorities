@@ -60,7 +60,7 @@ namespace AutoPriorities.PawnDataSerializer
             });
         }
 
-        private (List<(Priority priority, JobCount? maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
+        private (List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
             percents,
             HashSet<(IWorkTypeWrapper, IPawnWrapper)> excluded)
             GetStateLoaders()
@@ -82,7 +82,7 @@ namespace AutoPriorities.PawnDataSerializer
             }
 
             return (
-                new List<(Priority, JobCount?, Dictionary<IWorkTypeWrapper, IPercent>)>(),
+                new List<(Priority, JobCount, Dictionary<IWorkTypeWrapper, IPercent>)>(),
                 new HashSet<(IWorkTypeWrapper, IPawnWrapper)>());
         }
     }

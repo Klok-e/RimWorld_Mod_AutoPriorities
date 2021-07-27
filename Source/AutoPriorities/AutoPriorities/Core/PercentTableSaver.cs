@@ -14,7 +14,7 @@ namespace AutoPriorities.Core
             public List<Tupl> data = new();
             public List<WorktypePawn> excludedPawns = new();
 
-            public List<(Priority priority, JobCount? maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
+            public List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
                 ParsedData(IWorldInfoFacade serializer)
             {
                 return data
@@ -70,10 +70,10 @@ namespace AutoPriorities.Core
         public class Tupl
         {
             public Dic dict = new();
-            public int? jobsMax;
+            public int jobsMax;
             public int priority;
 
-            public (Priority, JobCount?, Dictionary<IWorkTypeWrapper, IPercent> ) Parsed(IWorldInfoFacade serializer)
+            public (Priority, JobCount, Dictionary<IWorkTypeWrapper, IPercent> ) Parsed(IWorldInfoFacade serializer)
             {
                 return (priority, jobsMax, dict.Parsed(serializer));
             }

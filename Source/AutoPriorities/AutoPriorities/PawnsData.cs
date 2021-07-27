@@ -6,7 +6,6 @@ using AutoPriorities.Core;
 using AutoPriorities.Extensions;
 using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.Percents;
-using AutoPriorities.Utils;
 using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
 using RimWorld;
@@ -15,11 +14,11 @@ namespace AutoPriorities
 {
     public class PawnsData
     {
+        private readonly ILogger _logger;
         private readonly IPawnsDataSerializer _serializer;
         private readonly IWorldInfoRetriever _worldInfoRetriever;
-        private readonly ILogger _logger;
 
-        public PawnsData(IPawnsDataSerializer serializer, IWorldInfoRetriever worldInfoRetriever,ILogger logger)
+        public PawnsData(IPawnsDataSerializer serializer, IWorldInfoRetriever worldInfoRetriever, ILogger logger)
         {
             _serializer = serializer;
             _worldInfoRetriever = worldInfoRetriever;
@@ -168,17 +167,14 @@ namespace AutoPriorities
 
         private List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
             LoadSavedState(
-                IEnumerable<(Priority priority, JobCount? maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
+                IEnumerable<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
                     loader)
         {
             Rebuild();
             List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>? workTables;
             try
             {
-                workTables = loader
-                             // fill max jobs with default value if there's no value already
-                             .Select(t => (t.priority, t.maxJobs ?? WorkTypes.Count, t.workTypes))
-                             .ToList();
+                workTables = loader.ToList();
 
                 // add totals, otherwise results in division by zero
                 foreach (var (work, percent) in workTables.SelectMany(table => table.workTypes))

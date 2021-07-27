@@ -6,9 +6,9 @@ namespace AutoPriorities
 {
     public class PawnsDataBuilder
     {
+        private readonly ILogger _logger;
         private readonly IPawnsDataSerializer _serializer;
         private readonly IWorldInfoRetriever _worldInfoRetriever;
-        private readonly ILogger _logger;
 
         public PawnsDataBuilder(IPawnsDataSerializer serializer, IWorldInfoRetriever worldInfoRetriever, ILogger logger)
         {

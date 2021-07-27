@@ -5,7 +5,6 @@ using AutoPriorities;
 using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 using AutoPriorities.PawnDataSerializer;
-using AutoPriorities.PawnDataSerializer.StreamProviders;
 using AutoPriorities.Percents;
 using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
@@ -23,12 +22,12 @@ namespace Tests
     {
         private IFixture _fixture = null!;
         private ILogger _logger = null!;
+        private IPawnWrapper[] _pawns = null!;
+        private PawnsDataBuilder _pawnsData = null!;
         private IWorldInfoRetriever _retriever = null!;
         private IPawnsDataSerializer _serializer = null!;
-        private IWorldInfoFacade _worldInfo = null!;
-        private PawnsDataBuilder _pawnsData = null!;
         private IWorkTypeWrapper[] _workTypes = null!;
-        private IPawnWrapper[] _pawns = null!;
+        private IWorldInfoFacade _worldInfo = null!;
 
         [SetUp]
         public void SetUp()
@@ -54,10 +53,10 @@ namespace Tests
 
             var percents = new IPercent[]
             {
-                new Percent().Initialize(new PercentPoolArgs() {Value = 0.2}),
-                new Percent().Initialize(new PercentPoolArgs() {Value = 0.2}),
-                new Percent().Initialize(new PercentPoolArgs() {Value = 0.2}),
-                new Percent().Initialize(new PercentPoolArgs() {Value = 0.2}),
+                new Percent().Initialize(new PercentPoolArgs {Value = 0.2}),
+                new Percent().Initialize(new PercentPoolArgs {Value = 0.2}),
+                new Percent().Initialize(new PercentPoolArgs {Value = 0.2}),
+                new Percent().Initialize(new PercentPoolArgs {Value = 0.2})
             };
             var workTypePercent = _workTypes.Zip(percents, (x, y) => (x, y))
                                             .ToDictionary(k => k.x, v => v.y);
@@ -66,8 +65,8 @@ namespace Tests
                        {
                            ExcludedPawns = new HashSet<(IWorkTypeWrapper, IPawnWrapper)> {(_workTypes[1], _pawns[1])},
                            WorkTablesData =
-                               new List<(Priority priority, JobCount? maxJobs, Dictionary<IWorkTypeWrapper, IPercent>
-                                   workTypes)>()
+                               new List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent>
+                                   workTypes)>
                                {
                                    (1, 4, workTypePercent)
                                }
@@ -97,7 +96,7 @@ namespace Tests
                     .Equal(_pawns[3], _pawns[0], _pawns[1], _pawns[2]);
         }
 
-        IWorkTypeWrapper[] WorkTypes()
+        private IWorkTypeWrapper[] WorkTypes()
         {
             var cook = new WorkType
             {
@@ -130,7 +129,7 @@ namespace Tests
             return new IWorkTypeWrapper[] {cook, haul, mine, craft};
         }
 
-        IPawnWrapper[] Pawns()
+        private IPawnWrapper[] Pawns()
         {
             var pawn1 = Substitute.For<IPawnWrapper>();
             pawn1.ThingID.Returns("pawn1");

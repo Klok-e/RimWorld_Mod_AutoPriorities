@@ -61,8 +61,6 @@ namespace Tests
             {
                 ExcludedPawns = loaded.ExcludedPawns,
                 WorkTablesData = loaded.WorkTablesData
-                                       .Select(t => (t.priority, t.maxJobs ?? TestHelper.WorkTypes.Length, t.workTypes))
-                                       .ToList()
             });
             var actualString = Encoding.UTF8.GetString(_stream.ToArray());
 

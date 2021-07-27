@@ -36,10 +36,10 @@ namespace AutoPriorities
         private const string Label = "Run AutoPriorities";
         private const float PawnNameCoWidth = 150f;
         private readonly float _labelWidth = Label.GetWidthCached() + 10f;
+        private readonly ILogger _logger;
         private readonly float _pawnExcludeLabelWidth = PawnExcludeLabel.GetWidthCached() + 10f;
         private readonly PawnsData _pawnsData;
         private readonly PrioritiesAssigner _prioritiesAssigner;
-        private readonly ILogger _logger;
         private readonly HashSet<Priority> _prioritiesEncounteredCached = new();
         private readonly float _prioritiesLabelWidth = PrioritiesLabel.GetWidthCached() + 10f;
         private SelectedTab _currentlySelectedTab = SelectedTab.Priorities;
@@ -48,7 +48,7 @@ namespace AutoPriorities
         private Rect _rect;
         private Vector2 _scrollPos;
 
-        public AutoPrioritiesDialog(PawnsData pawnsData, PrioritiesAssigner prioritiesAssigner,ILogger logger)
+        public AutoPrioritiesDialog(PawnsData pawnsData, PrioritiesAssigner prioritiesAssigner, ILogger logger)
         {
             _pawnsData = pawnsData;
             _prioritiesAssigner = prioritiesAssigner;

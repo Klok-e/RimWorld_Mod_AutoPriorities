@@ -4,7 +4,7 @@ using Verse;
 
 namespace AutoPriorities.Wrappers
 {
-    internal class PawnWrapper : IPawnWrapper
+    internal record PawnWrapper : IPawnWrapper
     {
         private readonly Pawn _pawn;
 
