@@ -48,6 +48,7 @@ namespace AutoPriorities
         private Vector2 _pawnExcludeScrollPos;
         private Rect _rect;
         private Vector2 _scrollPos;
+        private readonly Dictionary<Rect, string?> _textFieldBuffers = new Dictionary<Rect, string?>();
 
         public AutoPrioritiesDialog(PawnsData pawnsData, PrioritiesAssigner prioritiesAssigner, ILogger logger)
         {
@@ -244,7 +245,6 @@ namespace AutoPriorities
                     var currentPercent = pr.workTypes[workType];
 
                     var numberColonists = _pawnsData.NumberColonists(workType);
-                    var colonistsSelected = Mathf.RoundToInt((float)currentPercent.Value * numberColonists);
 
                     var (available, takenMoreThanTotal) =
                         _pawnsData.PercentColonistsAvailable(workType, pr.priority);
@@ -256,7 +256,7 @@ namespace AutoPriorities
 
 
                     var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
-                    var currSliderVal = colonistsSelected / (float)numberColonists;
+                    var currSliderVal = (float)currentPercent.Value;
                     currSliderVal = SliderPercentsInput(sliderRect, (float)available, currSliderVal);
 
 
@@ -273,13 +273,11 @@ namespace AutoPriorities
                     currSliderVal = Mathf.Clamp(currSliderVal, 0f,
                         Math.Max((float)available, prevSliderValText));
 
-                    colonistsSelected = Mathf.RoundToInt(currSliderVal * numberColonists);
-
                     var switchRect = new Rect(percentsRect.min +
                                               new Vector2(5f + PercentStringLabelWidth, 0f), percentsRect.size);
                     var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
                     pr.workTypes[workType] =
-                        SwitchPercentsNumbersButton(symbolRect, currentPercent, numberColonists, colonistsSelected);
+                        SwitchPercentsNumbersButton(symbolRect, currentPercent, numberColonists, currSliderVal);
                 }
                 catch (Exception e)
                 {
@@ -307,31 +305,42 @@ namespace AutoPriorities
             return Mathf.Clamp(newSliderValue, 0f, Math.Max(available, currSliderVal));
         }
 
-        private static float TextPercentsInput(Rect rect,
+        private float TextPercentsInput(Rect rect,
             IPercent currentPercent,
             float currentValue,
             bool takenMoreThanTotal)
         {
-            var sliderVal = currentPercent switch
+            var value = Mathf.Round(currentPercent switch
             {
                 Percent => currentValue * 100f,
                 Number n => currentValue * n.Total,
                 _ => throw new ArgumentOutOfRangeException(nameof(currentPercent), currentPercent, null)
-            };
+            });
 
-            var percentsText = Mathf.RoundToInt(sliderVal)
-                                    .ToString(CultureInfo.InvariantCulture);
+            var percentsText = _textFieldBuffers.GetValueOrDefault(rect) ?? Mathf.RoundToInt(value)
+                .ToString(CultureInfo.InvariantCulture);
 
             var prevCol = GUI.color;
             if (takenMoreThanTotal) GUI.color = Color.red;
 
-            Widgets.TextFieldNumeric(rect, ref sliderVal, ref percentsText);
+            var prevSliderVal = value;
+            Widgets.TextFieldNumeric(rect, ref value, ref percentsText);
+            if (Math.Abs(prevSliderVal - value) < 0.0001)
+            {
+                // _logger.Info($"no change. text: {percentsText}, value: {value}");
+                _textFieldBuffers[rect] = percentsText;
+            }
+            else
+            {
+                // _logger.Info($"change. text: {percentsText}, value: {value}, prev: {prevSliderVal}");
+                _textFieldBuffers[rect] = null;
+            }
 
             GUI.color = prevCol;
             return currentPercent switch
             {
-                Percent => sliderVal / 100f,
-                Number n => sliderVal / n.Total,
+                Percent => value / 100f,
+                Number n => value / n.Total,
                 _ => throw new ArgumentOutOfRangeException(nameof(currentPercent), currentPercent, null)
             };
         }
@@ -339,7 +348,7 @@ namespace AutoPriorities
         private static IPercent SwitchPercentsNumbersButton(Rect rect,
             IPercent currentPercent,
             int numberColonists,
-            int numberSelected)
+            float sliderValue)
         {
             switch (currentPercent)
             {
@@ -349,14 +358,14 @@ namespace AutoPriorities
                         Controller.PoolNumbers.Pool(n);
                         return Controller.PoolPercents.Acquire(new PercentPoolArgs
                         {
-                            Value = numberSelected / (double)numberColonists
+                            Value = sliderValue
                         });
                     }
                     else
                     {
                         n.Initialize(new NumberPoolArgs
                         {
-                            Count = numberSelected,
+                            Count = Mathf.RoundToInt(sliderValue * numberColonists),
                             Total = numberColonists
                         });
                     }
@@ -368,7 +377,7 @@ namespace AutoPriorities
                         Controller.PoolPercents.Pool(p);
                         return Controller.PoolNumbers.Acquire(new NumberPoolArgs
                         {
-                            Count = numberSelected,
+                            Count = Mathf.RoundToInt(sliderValue * numberColonists),
                             Total = numberColonists
                         });
                     }
@@ -376,7 +385,7 @@ namespace AutoPriorities
                     {
                         p.Initialize(new PercentPoolArgs
                         {
-                            Value = numberSelected / (double)numberColonists
+                            Value = sliderValue
                         });
                     }
 
@@ -427,9 +436,7 @@ namespace AutoPriorities
             }
 
             Text.Anchor = TextAnchor.UpperLeft;
-            foreach (var (pawn, rowi) in _pawnsData.AllPlayerPawns.Zip(
-                Enumerable.Range(0, _pawnsData.AllPlayerPawns.Count),
-                (w, i) => (w, i)))
+            foreach (var (pawn, rowi) in _pawnsData.AllPlayerPawns.Select((w, i) => (w, i)))
             {
                 // draw pawn name
                 var nameRect = new Rect(0f, tickboxesRect.yMin + (LabelMargin + ButtonHeight) * rowi,
