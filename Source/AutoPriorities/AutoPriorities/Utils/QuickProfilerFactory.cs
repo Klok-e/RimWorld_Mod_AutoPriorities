@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace AutoPriorities.Utils
 {
@@ -11,10 +12,11 @@ namespace AutoPriorities.Utils
 
         public void SaveProfileData()
         {
-            var str = _profilers.Aggregate(string.Empty,
-                (current, profile) => current + $"{profile} took {profile.sw.ElapsedMilliseconds}ms\n");
+            var str = new StringBuilder();
+            foreach (var profiler in _profilers)
+                str.Append($"{profiler.name} took {profiler.sw.Elapsed.TotalMilliseconds}ms\n");
 
-            File.WriteAllText("/tmp/auto-priority-profile.txt", str);
+            File.WriteAllText("/tmp/auto-priority-profile.txt", str.ToString());
         }
 
         public QuickProfiler CreateProfiler(string name)

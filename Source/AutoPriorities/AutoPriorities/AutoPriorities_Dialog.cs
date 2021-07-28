@@ -50,6 +50,7 @@ namespace AutoPriorities
         private Rect _rect;
         private Vector2 _scrollPos;
         private QuickProfilerFactory _profilerFactory = new();
+        private int _windowContentsCalls;
 
         public AutoPrioritiesDialog(PawnsData pawnsData, PrioritiesAssigner prioritiesAssigner, ILogger logger)
         {
@@ -79,65 +80,72 @@ namespace AutoPriorities
 
         public override void DoWindowContents(Rect inRect)
         {
-            using var _ = _profilerFactory.CreateProfiler("DoWindowContents");
-
-            // draw select tab buttons
-            var prioritiesButtonRect =
-                new Rect(inRect.xMin, inRect.yMin, _prioritiesLabelWidth, LabelHeight);
-            if (Widgets.ButtonText(prioritiesButtonRect, PrioritiesLabel))
+            using (_profilerFactory.CreateProfiler("DoWindowContents"))
             {
-                _currentlySelectedTab = SelectedTab.Priorities;
-                _pawnsData.Rebuild();
+                // draw select tab buttons
+                var prioritiesButtonRect =
+                    new Rect(inRect.xMin, inRect.yMin, _prioritiesLabelWidth, LabelHeight);
+                if (Widgets.ButtonText(prioritiesButtonRect, PrioritiesLabel))
+                {
+                    _currentlySelectedTab = SelectedTab.Priorities;
+                    _pawnsData.Rebuild();
+                }
+
+                var pawnsButtonRect =
+                    new Rect(prioritiesButtonRect.xMax + 5f, prioritiesButtonRect.yMin,
+                        _pawnExcludeLabelWidth, LabelHeight);
+                if (Widgets.ButtonText(pawnsButtonRect, PawnExcludeLabel))
+                {
+                    _currentlySelectedTab = SelectedTab.PawnExclusion;
+                    _pawnsData.Rebuild();
+                }
+
+                // draw tab contents lower than buttons
+                inRect.yMin += LabelHeight + 10f;
+
+                // draw currently selected tab
+                switch (_currentlySelectedTab)
+                {
+                    case SelectedTab.Priorities:
+                        PrioritiesTab(inRect);
+                        break;
+                    case SelectedTab.PawnExclusion:
+                        PawnExcludeTab(inRect);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(_currentlySelectedTab));
+                }
+
+                // draw run auto priorities
+                var buttonRect = new Rect(
+                    inRect.xMin,
+                    inRect.yMax - ButtonHeight,
+                    _labelWidth,
+                    ButtonHeight);
+                if (Widgets.ButtonText(buttonRect, Label))
+                {
+                    _pawnsData.Rebuild();
+                    _prioritiesAssigner.AssignPriorities();
+                    _pawnsData.SaveState();
+                    SoundDefOf.Click.PlayOneShotOnCamera();
+                }
             }
 
-            var pawnsButtonRect =
-                new Rect(prioritiesButtonRect.xMax + 5f, prioritiesButtonRect.yMin,
-                    _pawnExcludeLabelWidth, LabelHeight);
-            if (Widgets.ButtonText(pawnsButtonRect, PawnExcludeLabel))
-            {
-                _currentlySelectedTab = SelectedTab.PawnExclusion;
-                _pawnsData.Rebuild();
-            }
+            if (_windowContentsCalls % 1000 == 0) _profilerFactory.SaveProfileData();
 
-            // draw tab contents lower than buttons
-            inRect.yMin += LabelHeight + 10f;
-
-            // draw currently selected tab
-            switch (_currentlySelectedTab)
-            {
-                case SelectedTab.Priorities:
-                    PrioritiesTab(inRect);
-                    break;
-                case SelectedTab.PawnExclusion:
-                    PawnExcludeTab(inRect);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(_currentlySelectedTab));
-            }
-
-            // draw run auto priorities
-            var buttonRect = new Rect(
-                inRect.xMin,
-                inRect.yMax - ButtonHeight,
-                _labelWidth,
-                ButtonHeight);
-            if (Widgets.ButtonText(buttonRect, Label))
-            {
-                _pawnsData.Rebuild();
-                _prioritiesAssigner.AssignPriorities();
-                _pawnsData.SaveState();
-                SoundDefOf.Click.PlayOneShotOnCamera();
-            }
+            _windowContentsCalls += 1;
         }
 
         private void PrioritiesTab(Rect inRect)
         {
+            // using (_profilerFactory.CreateProfiler("PrioritiesTab"))
             var workTypes = _pawnsData.SortedPawnFitnessForEveryWork.Count;
 
             var scrollRect = new Rect(inRect.xMin, inRect.yMin, inRect.width,
                 inRect.height - DistFromBottomBorder);
 
-            var tableSizeX = (workTypes + 1) * SliderMargin + SlidersDistFromLeftBorder + SlidersDistFromRightBorder +
+            var tableSizeX = (workTypes + 1) * SliderMargin + SlidersDistFromLeftBorder + SlidersDistFromRightBorder
+                             +
                              SliderMargin;
 
             var tableSizeY = (SliderHeight + 3 * ButtonHeight) * _pawnsData.WorkTables.Count;
@@ -176,7 +184,8 @@ namespace AutoPriorities
                     slidersRect.yMin + 20f, 120f, LabelHeight);
                 Widgets.Label(maxJobsLabelRect, maxJobsLabel);
 
-                var maxJobsSliderRect = new Rect(maxJobsElementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
+                var maxJobsSliderRect = new Rect(maxJobsElementXPos, slidersRect.yMin + 60f, SliderWidth,
+                    SliderHeight);
                 var newMaxJobsSliderValue =
                     GUI.VerticalSlider(maxJobsSliderRect,
                         Mathf.Clamp(pr.maxJobs.V, 0f, _pawnsData.WorkTypes.Count),
@@ -187,7 +196,7 @@ namespace AutoPriorities
                     maxJobsSliderRect.yMax + 3f,
                     PercentStringWidth,
                     25f);
-                // Widgets.DrawBox(jobCountMaxLabelRect);
+                
                 var maxJobsText = Mathf.RoundToInt(newMaxJobsSliderValue)
                                        .ToString();
                 Widgets.TextFieldNumeric(jobCountMaxLabelRect, ref newMaxJobsSliderValue, ref maxJobsText);
@@ -237,65 +246,81 @@ namespace AutoPriorities
             (Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes) pr,
             Rect slidersRect)
         {
-            // Widgets.DrawBox(slidersRect);
-            foreach (var (i, workType) in _pawnsData.WorkTypes.Select((x, i) => (i, x)))
+            using (_profilerFactory.CreateProfiler("DrawWorkListForPriority"))
             {
-                var workName = workType.labelShort;
-                try
+                foreach (var (i, workType) in _pawnsData.WorkTypes.Select((x, i) => (i, x)))
                 {
-                    var currentPercent = pr.workTypes[workType];
+                    using (_profilerFactory.CreateProfiler("DrawWorkListForPriority inner loop"))
+                    {
+                        var workName = workType.labelShort;
+                        try
+                        {
+                            var currentPercent = pr.workTypes[workType];
 
-                    var numberColonists = _pawnsData.NumberColonists(workType);
+                            var numberColonists = _pawnsData.NumberColonists(workType);
+                            float elementXPos;
+                            Rect labelRect;
+                            double available;
+                            bool takenMoreThanTotal;
+                            using (_profilerFactory.CreateProfiler("DrawWorkListForPriority PercentColonistsAvailable"))
+                            {
+                                var (available1, takenMoreThanTotal1) =
+                                    _pawnsData.PercentColonistsAvailable(workType, pr.priority);
+                                available = available1;
+                                takenMoreThanTotal = takenMoreThanTotal1;
+                                elementXPos = slidersRect.x + SliderMargin / 2 + SliderMargin * i;
+                                labelRect = new Rect(elementXPos - workName.GetWidthCached() / 2,
+                                    slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f, 100f, LabelHeight);
 
-                    var (available, takenMoreThanTotal) =
-                        _pawnsData.PercentColonistsAvailable(workType, pr.priority);
+                                WorkTypeLabel(takenMoreThanTotal, labelRect, workName);
+                            }
 
-                    var elementXPos = slidersRect.x + SliderMargin / 2 + SliderMargin * i;
-                    var labelRect = new Rect(elementXPos - workName.GetWidthCached() / 2,
-                        slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f, 100f, LabelHeight);
-                    WorkTypeLabel(takenMoreThanTotal, labelRect, workName);
+                            float currSliderVal;
+                            Rect sliderRect;
+                            bool skipNextAssign;
+                            using (_profilerFactory.CreateProfiler("DrawWorkListForPriority SliderPercentsInput"))
+                            {
+                                sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth,
+                                    SliderHeight);
+                                currSliderVal = (float)currentPercent.Value;
+                                
+                                currSliderVal = SliderPercentsInput(sliderRect, (float)available, currSliderVal,
+                                    out skipNextAssign);
+                            }
+                         
 
+                            Rect percentsRect;
+                            using (_profilerFactory.CreateProfiler("DrawWorkListForPriority TextPercentsInput"))
+                            {
+                                percentsRect = new Rect(
+                                    sliderRect.xMax - PercentStringWidth,
+                                    sliderRect.yMax + 3f,
+                                    PercentStringWidth,
+                                    25f);
+                                
+                                currSliderVal =
+                                    TextPercentsInput(percentsRect, currentPercent, currSliderVal, takenMoreThanTotal,
+                                        (float)available, skipNextAssign);
+                            }
 
-                    var sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
-                    var currSliderVal = (float)currentPercent.Value;
-                    // var prevcurrSliderVal = currSliderVal;
-                    currSliderVal = SliderPercentsInput(sliderRect, (float)available, currSliderVal,
-                        out var skipNextAssign);
-                    // if (Math.Abs(prevcurrSliderVal - currSliderVal) > 0.0001)
-                    // {
-                    //     _logger.Info($"1new: {prevcurrSliderVal}, curr: {currSliderVal}");
-                    // }
-
-                    var percentsRect = new Rect(
-                        sliderRect.xMax - PercentStringWidth,
-                        sliderRect.yMax + 3f,
-                        PercentStringWidth,
-                        25f);
-                    // prevcurrSliderVal = currSliderVal;
-                    currSliderVal =
-                        TextPercentsInput(percentsRect, currentPercent, currSliderVal, takenMoreThanTotal,
-                            (float)available, skipNextAssign);
-                    // if (Math.Abs(prevcurrSliderVal - currSliderVal) > 0.0001)
-                    // {
-                    //     _logger.Info($"2new: {prevcurrSliderVal}, curr: {currSliderVal}");
-                    // }
-
-                    // prevcurrSliderVal = currSliderVal;
-                    var switchRect = new Rect(percentsRect.min +
-                                              new Vector2(5f + PercentStringLabelWidth, 0f), percentsRect.size);
-                    var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
-                    pr.workTypes[workType] =
-                        SwitchPercentsNumbersButton(symbolRect, currentPercent, numberColonists, currSliderVal);
-                    // if (Math.Abs(prevcurrSliderVal - pr.workTypes[workType]
-                    //                                    .Value) > 0.0001)
-                    // {
-                    //     _logger.Info($"3new: {prevcurrSliderVal}, curr: {pr.workTypes[workType].Value}");
-                    // }
-                }
-                catch (Exception e)
-                {
-                    _logger.Err($"Error for work type {workName}:");
-                    _logger.Err(e);
+                            using (_profilerFactory.CreateProfiler(
+                                "DrawWorkListForPriority SwitchPercentsNumbersButton"))
+                            {
+                                var switchRect = new Rect(percentsRect.min +
+                                                          new Vector2(5f + PercentStringLabelWidth, 0f),
+                                    percentsRect.size);
+                                var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
+                                pr.workTypes[workType] =
+                                    SwitchPercentsNumbersButton(symbolRect, currentPercent, numberColonists,
+                                        currSliderVal);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.Err($"Error for work type {workName}:");
+                            _logger.Err(e);
+                        }
+                    }
                 }
             }
         }
