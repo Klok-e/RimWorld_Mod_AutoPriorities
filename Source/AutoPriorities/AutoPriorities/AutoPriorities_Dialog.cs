@@ -49,6 +49,7 @@ namespace AutoPriorities
         private Vector2 _pawnExcludeScrollPos;
         private Rect _rect;
         private Vector2 _scrollPos;
+        private QuickProfilerFactory _profilerFactory = new();
 
         public AutoPrioritiesDialog(PawnsData pawnsData, PrioritiesAssigner prioritiesAssigner, ILogger logger)
         {
@@ -78,6 +79,8 @@ namespace AutoPriorities
 
         public override void DoWindowContents(Rect inRect)
         {
+            using var _ = _profilerFactory.CreateProfiler("DoWindowContents");
+
             // draw select tab buttons
             var prioritiesButtonRect =
                 new Rect(inRect.xMin, inRect.yMin, _prioritiesLabelWidth, LabelHeight);
