@@ -48,9 +48,10 @@ namespace AutoPriorities
         private bool _openedOnce;
         private Vector2 _pawnExcludeScrollPos;
         private Rect _rect;
+
         private Vector2 _scrollPos;
-        private QuickProfilerFactory _profilerFactory = new();
-        private int _windowContentsCalls;
+        // private QuickProfilerFactory _profilerFactory = new();
+        // private int _windowContentsCalls;
 
         public AutoPrioritiesDialog(PawnsData pawnsData, PrioritiesAssigner prioritiesAssigner, ILogger logger)
         {
@@ -80,7 +81,7 @@ namespace AutoPriorities
 
         public override void DoWindowContents(Rect inRect)
         {
-            using (_profilerFactory.CreateProfiler("DoWindowContents"))
+            // using (_profilerFactory.CreateProfiler("DoWindowContents"))
             {
                 // draw select tab buttons
                 var prioritiesButtonRect =
@@ -131,9 +132,9 @@ namespace AutoPriorities
                 }
             }
 
-            if (_windowContentsCalls % 1000 == 0) _profilerFactory.SaveProfileData();
+            // if (_windowContentsCalls % 1000 == 0) _profilerFactory.SaveProfileData();
 
-            _windowContentsCalls += 1;
+            // _windowContentsCalls += 1;
         }
 
         private void PrioritiesTab(Rect inRect)
@@ -246,11 +247,11 @@ namespace AutoPriorities
             (Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes) pr,
             Rect slidersRect)
         {
-            using (_profilerFactory.CreateProfiler("DrawWorkListForPriority"))
+            // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority"))
             {
                 foreach (var (i, workType) in _pawnsData.WorkTypes.Select((x, i) => (i, x)))
                 {
-                    using (_profilerFactory.CreateProfiler("DrawWorkListForPriority inner loop"))
+                    // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority inner loop"))
                     {
                         var workName = workType.labelShort;
                         try
@@ -262,7 +263,7 @@ namespace AutoPriorities
                             Rect labelRect;
                             double available;
                             bool takenMoreThanTotal;
-                            using (_profilerFactory.CreateProfiler("DrawWorkListForPriority PercentColonistsAvailable"))
+                            // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority PercentColonistsAvailable"))
                             {
                                 var (available1, takenMoreThanTotal1) =
                                     _pawnsData.PercentColonistsAvailable(workType, pr.priority);
@@ -278,7 +279,7 @@ namespace AutoPriorities
                             float currSliderVal;
                             Rect sliderRect;
                             bool skipNextAssign;
-                            using (_profilerFactory.CreateProfiler("DrawWorkListForPriority SliderPercentsInput"))
+                            // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority SliderPercentsInput"))
                             {
                                 sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth,
                                     SliderHeight);
@@ -290,7 +291,7 @@ namespace AutoPriorities
 
 
                             Rect percentsRect;
-                            using (_profilerFactory.CreateProfiler("DrawWorkListForPriority TextPercentsInput"))
+                            // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority TextPercentsInput"))
                             {
                                 percentsRect = new Rect(
                                     sliderRect.xMax - PercentStringWidth,
@@ -303,8 +304,8 @@ namespace AutoPriorities
                                         (float)available, skipNextAssign, numberColonists);
                             }
 
-                            using (_profilerFactory.CreateProfiler(
-                                "DrawWorkListForPriority SwitchPercentsNumbersButton"))
+                            // using (_profilerFactory.CreateProfiler(
+                            //     "DrawWorkListForPriority SwitchPercentsNumbersButton"))
                             {
                                 var switchRect = new Rect(percentsRect.min +
                                                           new Vector2(5f + PercentStringLabelWidth, 0f),
@@ -407,8 +408,8 @@ namespace AutoPriorities
                     {
                         // clear buffers so that text input uses new values
                         _textFieldBuffers.Clear();
-
-                        return TablePercent.Percent(sliderValue);
+                        
+                        currentPercent = TablePercent.Percent(sliderValue);
                     }
                     else
                     {
@@ -422,8 +423,9 @@ namespace AutoPriorities
                     {
                         // clear buffers so that text input uses new values
                         _textFieldBuffers.Clear();
-
-                        return TablePercent.Number(numberColonists, Mathf.RoundToInt(sliderValue * numberColonists));
+                        
+                        currentPercent = TablePercent.Number(numberColonists,
+                            Mathf.RoundToInt(sliderValue * numberColonists));
                     }
                     else
                     {
@@ -431,6 +433,8 @@ namespace AutoPriorities
                     }
 
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             return currentPercent;

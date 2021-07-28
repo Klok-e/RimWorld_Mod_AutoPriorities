@@ -20,7 +20,7 @@ namespace AutoPriorities.Percents
 
         public int NumberCount { get; }
 
-        public TablePercent(PercentVariant variant, double percentValue, int numberTotal, int numberCount)
+        private TablePercent(PercentVariant variant, double percentValue, int numberTotal, int numberCount)
         {
             Variant = variant;
             PercentValue = percentValue;
@@ -32,10 +32,18 @@ namespace AutoPriorities.Percents
         {
             return new TablePercent(PercentVariant.Percent, value, 0, 0);
         }
-        
+
         public static TablePercent Number(int numberTotal, int numberCount)
         {
-            return new TablePercent(PercentVariant.Percent, 0, numberTotal, numberCount);
+            return new TablePercent(PercentVariant.Number, 0, numberTotal, numberCount);
+        }
+
+        public override string ToString()
+        {
+            return $"{nameof(Variant)}: {Variant}, "
+                   + $"{nameof(PercentValue)}: {PercentValue}, "
+                   + $"{nameof(NumberTotal)}: {NumberTotal}, "
+                   + $"{nameof(NumberCount)}: {NumberCount}";
         }
     }
 }

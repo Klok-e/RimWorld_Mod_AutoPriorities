@@ -56,7 +56,7 @@ namespace Tests
                 TablePercent.Percent(0.2),
                 TablePercent.Percent(0.2),
                 TablePercent.Percent(0.2),
-                TablePercent.Percent(0.2)
+                TablePercent.Number(0, 2)
             };
             var workTypePercent = _workTypes.Zip(percents, (x, y) => (x, y))
                                             .ToDictionary(k => k.x, v => v.y);
