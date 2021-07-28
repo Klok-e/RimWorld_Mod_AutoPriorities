@@ -51,12 +51,12 @@ namespace Tests
         {
             // arrange
 
-            var percents = new IPercent[]
+            var percents = new TablePercent[]
             {
-                new Percent().Initialize(new PercentPoolArgs {Value = 0.2}),
-                new Percent().Initialize(new PercentPoolArgs {Value = 0.2}),
-                new Percent().Initialize(new PercentPoolArgs {Value = 0.2}),
-                new Percent().Initialize(new PercentPoolArgs {Value = 0.2})
+                TablePercent.Percent(0.2),
+                TablePercent.Percent(0.2),
+                TablePercent.Percent(0.2),
+                TablePercent.Percent(0.2)
             };
             var workTypePercent = _workTypes.Zip(percents, (x, y) => (x, y))
                                             .ToDictionary(k => k.x, v => v.y);
@@ -65,7 +65,7 @@ namespace Tests
                        {
                            ExcludedPawns = new HashSet<(IWorkTypeWrapper, IPawnWrapper)> {(_workTypes[1], _pawns[1])},
                            WorkTablesData =
-                               new List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent>
+                               new List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent>
                                    workTypes)>
                                {
                                    (1, 4, workTypePercent)

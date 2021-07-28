@@ -50,7 +50,7 @@ namespace AutoPriorities.PawnDataSerializer
         #endregion
 
         private void SaveState(
-            (List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>,
+            (List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>,
                 HashSet<(IWorkTypeWrapper, IPawnWrapper)>) state)
         {
             _streamProvider.WithStream(_fullPath, FileMode.Create, stream =>
@@ -60,7 +60,7 @@ namespace AutoPriorities.PawnDataSerializer
             });
         }
 
-        private (List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
+        private (List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
             percents,
             HashSet<(IWorkTypeWrapper, IPawnWrapper)> excluded)
             GetStateLoaders()
@@ -82,7 +82,7 @@ namespace AutoPriorities.PawnDataSerializer
             }
 
             return (
-                new List<(Priority, JobCount, Dictionary<IWorkTypeWrapper, IPercent>)>(),
+                new List<(Priority, JobCount, Dictionary<IWorkTypeWrapper, TablePercent>)>(),
                 new HashSet<(IWorkTypeWrapper, IPawnWrapper)>());
         }
     }

@@ -25,11 +25,8 @@ namespace AutoPriorities
             _logger = logger;
         }
 
-        public List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)> WorkTables
-        {
-            get;
-            private set;
-        } = new();
+        public List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
+            WorkTables { get; private set; } = new();
 
         public HashSet<(IWorkTypeWrapper work, IPawnWrapper pawn)> ExcludedPawns { get; private set; } = new();
 
@@ -165,21 +162,34 @@ namespace AutoPriorities
             };
         }
 
-        private List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
+        private List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
             LoadSavedState(
-                IEnumerable<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
+                IEnumerable<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
                     loader)
         {
             Rebuild();
-            List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>? workTables;
+            List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>?
+                workTables;
             try
             {
                 workTables = loader.ToList();
 
                 // add totals, otherwise results in division by zero
-                foreach (var (work, percent) in workTables.SelectMany(table => table.workTypes))
-                    if (percent is Number n)
-                        n.Initialize(new NumberPoolArgs {Count = n.Count, Total = NumberColonists(work)});
+                for (var i = 0; i < workTables.Count; i++)
+                {
+                    var currentWorkTable = workTables[i]
+                        .workTypes;
+                    foreach (var key in currentWorkTable
+                        .Keys)
+                    {
+                        var currentPercent = currentWorkTable[key];
+                        if (currentPercent.Variant == PercentVariant.Number)
+                        {
+                            currentWorkTable[key] =
+                                TablePercent.Number(NumberColonists(key), currentPercent.NumberCount);
+                        }
+                    }
+                }
 
                 // if not present in built structure, then add with 0 percent
                 foreach (var work in workTables
@@ -188,7 +198,7 @@ namespace AutoPriorities
                 foreach (var (_, _, d) in workTables)
                 {
                     _logger.Warn($"Work type {work} wasn't found in a save file. Setting percent to 0");
-                    d.Add(work, Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = 0}));
+                    d.Add(work, TablePercent.Percent(0));
                 }
             }
             catch (Exception e)
@@ -199,7 +209,8 @@ namespace AutoPriorities
             }
 
             return workTables ??
-                   new List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>();
+                   new List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes
+                       )>();
         }
     }
 }

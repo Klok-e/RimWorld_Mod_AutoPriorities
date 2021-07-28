@@ -196,7 +196,7 @@ namespace AutoPriorities
                     maxJobsSliderRect.yMax + 3f,
                     PercentStringWidth,
                     25f);
-                
+
                 var maxJobsText = Mathf.RoundToInt(newMaxJobsSliderValue)
                                        .ToString();
                 Widgets.TextFieldNumeric(jobCountMaxLabelRect, ref newMaxJobsSliderValue, ref maxJobsText);
@@ -243,7 +243,7 @@ namespace AutoPriorities
         }
 
         private void DrawWorkListForPriority(
-            (Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes) pr,
+            (Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes) pr,
             Rect slidersRect)
         {
             using (_profilerFactory.CreateProfiler("DrawWorkListForPriority"))
@@ -283,11 +283,11 @@ namespace AutoPriorities
                                 sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth,
                                     SliderHeight);
                                 currSliderVal = (float)currentPercent.Value;
-                                
+
                                 currSliderVal = SliderPercentsInput(sliderRect, (float)available, currSliderVal,
                                     out skipNextAssign);
                             }
-                         
+
 
                             Rect percentsRect;
                             using (_profilerFactory.CreateProfiler("DrawWorkListForPriority TextPercentsInput"))
@@ -297,10 +297,10 @@ namespace AutoPriorities
                                     sliderRect.yMax + 3f,
                                     PercentStringWidth,
                                     25f);
-                                
+
                                 currSliderVal =
                                     TextPercentsInput(percentsRect, currentPercent, currSliderVal, takenMoreThanTotal,
-                                        (float)available, skipNextAssign);
+                                        (float)available, skipNextAssign, numberColonists);
                             }
 
                             using (_profilerFactory.CreateProfiler(
@@ -349,16 +349,17 @@ namespace AutoPriorities
         }
 
         private float TextPercentsInput(Rect rect,
-            IPercent currentPercent,
+            TablePercent currentPercent,
             float currentValue,
             bool takenMoreThanTotal,
             float available,
-            bool skipAssign)
+            bool skipAssign,
+            int totalColonists)
         {
-            var value = Mathf.Round(currentPercent switch
+            var value = Mathf.Round(currentPercent.Variant switch
             {
-                Percent => currentValue * 100f,
-                Number n => currentValue * n.Total,
+                PercentVariant.Percent => currentValue * 100f,
+                PercentVariant.Number => currentValue * totalColonists,
                 _ => throw new ArgumentOutOfRangeException(nameof(currentPercent), currentPercent, null)
             });
 
@@ -384,64 +385,49 @@ namespace AutoPriorities
                 _textFieldBuffers[rect] = null;
 
             GUI.color = prevCol;
-            var currSliderVal = currentPercent switch
+            var currSliderVal = currentPercent.Variant switch
             {
-                Percent => value / 100f,
-                Number n => value / n.Total,
+                PercentVariant.Percent => value / 100f,
+                PercentVariant.Number => value / totalColonists,
                 _ => throw new ArgumentOutOfRangeException(nameof(currentPercent), currentPercent, null)
             };
             return Mathf.Clamp(currSliderVal, 0f,
                 Math.Max(available, currentValue));
         }
 
-        private IPercent SwitchPercentsNumbersButton(Rect rect,
-            IPercent currentPercent,
+        private TablePercent SwitchPercentsNumbersButton(Rect rect,
+            TablePercent currentPercent,
             int numberColonists,
             float sliderValue)
         {
-            switch (currentPercent)
+            switch (currentPercent.Variant)
             {
-                case Number n:
+                case PercentVariant.Number:
                     if (Widgets.ButtonText(rect, "№"))
                     {
                         // clear buffers so that text input uses new values
                         _textFieldBuffers.Clear();
 
-                        Controller.PoolNumbers.Pool(n);
-                        return Controller.PoolPercents.Acquire(new PercentPoolArgs
-                        {
-                            Value = sliderValue
-                        });
+                        return TablePercent.Percent(sliderValue);
                     }
                     else
                     {
-                        n.Initialize(new NumberPoolArgs
-                        {
-                            Count = Mathf.RoundToInt(sliderValue * numberColonists),
-                            Total = numberColonists
-                        });
+                        currentPercent = TablePercent.Number(numberColonists,
+                            Mathf.RoundToInt(sliderValue * numberColonists));
                     }
 
                     break;
-                case Percent p:
+                case PercentVariant.Percent:
                     if (Widgets.ButtonText(rect, "%"))
                     {
                         // clear buffers so that text input uses new values
                         _textFieldBuffers.Clear();
 
-                        Controller.PoolPercents.Pool(p);
-                        return Controller.PoolNumbers.Acquire(new NumberPoolArgs
-                        {
-                            Count = Mathf.RoundToInt(sliderValue * numberColonists),
-                            Total = numberColonists
-                        });
+                        return TablePercent.Number(numberColonists, Mathf.RoundToInt(sliderValue * numberColonists));
                     }
                     else
                     {
-                        p.Initialize(new PercentPoolArgs
-                        {
-                            Value = sliderValue
-                        });
+                        currentPercent = TablePercent.Percent(sliderValue);
                     }
 
                     break;
@@ -549,11 +535,10 @@ namespace AutoPriorities
 
         private void AddPriority()
         {
-            var dict = new Dictionary<IWorkTypeWrapper, IPercent>();
+            var dict = new Dictionary<IWorkTypeWrapper, TablePercent>();
             _pawnsData.WorkTables.Add((0, _pawnsData.WorkTypes.Count, dict));
 
-            foreach (var keyValue in _pawnsData.WorkTypes)
-                dict.Add(keyValue, Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = 0}));
+            foreach (var keyValue in _pawnsData.WorkTypes) dict.Add(keyValue, TablePercent.Percent(0));
         }
 
         private void RemovePriority()

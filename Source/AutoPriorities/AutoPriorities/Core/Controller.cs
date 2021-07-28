@@ -22,12 +22,6 @@ namespace AutoPriorities.Core
 
         public static AutoPrioritiesDialog Dialog => _dialog ??= CreateDialog();
 
-        public static PoolFactory<Number, NumberPoolArgs> PoolNumbers { get; } =
-            new();
-
-        public static PoolFactory<Percent, PercentPoolArgs> PoolPercents { get; } =
-            new();
-
         public static SettingHandle<double>? PassionMult { get; private set; }
 
         public override void Initialize()

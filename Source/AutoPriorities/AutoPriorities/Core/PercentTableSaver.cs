@@ -14,7 +14,7 @@ namespace AutoPriorities.Core
             public List<Tupl> data = new();
             public List<WorktypePawn> excludedPawns = new();
 
-            public List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)>
+            public List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
                 ParsedData(IWorldInfoFacade serializer)
             {
                 return data
@@ -32,7 +32,8 @@ namespace AutoPriorities.Core
             }
 
             public static Ser Serialized(
-                (List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, IPercent> workTypes)> percents,
+                (List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
+                    percents,
                     HashSet<(IWorkTypeWrapper, IPawnWrapper)> excluded) data)
             {
                 return new()
@@ -73,12 +74,12 @@ namespace AutoPriorities.Core
             public int jobsMax;
             public int priority;
 
-            public (Priority, JobCount, Dictionary<IWorkTypeWrapper, IPercent> ) Parsed(IWorldInfoFacade serializer)
+            public (Priority, JobCount, Dictionary<IWorkTypeWrapper, TablePercent> ) Parsed(IWorldInfoFacade serializer)
             {
                 return (priority, jobsMax, dict.Parsed(serializer));
             }
 
-            public static Tupl Serialized((Priority, JobCount, Dictionary<IWorkTypeWrapper, IPercent>) val)
+            public static Tupl Serialized((Priority, JobCount, Dictionary<IWorkTypeWrapper, TablePercent>) val)
             {
                 return new()
                 {
@@ -93,7 +94,7 @@ namespace AutoPriorities.Core
         {
             public List<StrPercent> percents = new();
 
-            public Dictionary<IWorkTypeWrapper, IPercent> Parsed(IWorldInfoFacade serializer)
+            public Dictionary<IWorkTypeWrapper, TablePercent> Parsed(IWorldInfoFacade serializer)
             {
                 return percents
                        .Select(x => x.Parsed(serializer))
@@ -101,7 +102,7 @@ namespace AutoPriorities.Core
                        .ToDictionary(x => x.Item1!, x => x.Item2);
             }
 
-            public static Dic Serialized(Dictionary<IWorkTypeWrapper, IPercent> dic)
+            public static Dic Serialized(Dictionary<IWorkTypeWrapper, TablePercent> dic)
             {
                 return new()
                 {
@@ -117,12 +118,12 @@ namespace AutoPriorities.Core
             public UnionPercent percent = new();
             public string workType = "";
 
-            public (IWorkTypeWrapper?, IPercent) Parsed(IWorldInfoFacade serializer)
+            public (IWorkTypeWrapper?, TablePercent) Parsed(IWorldInfoFacade serializer)
             {
                 return (serializer.StringToDef(workType), percent.Parsed());
             }
 
-            public static StrPercent Serialized((IWorkTypeWrapper work, IPercent percent) val)
+            public static StrPercent Serialized((IWorkTypeWrapper work, TablePercent percent) val)
             {
                 return new()
                 {
@@ -139,29 +140,29 @@ namespace AutoPriorities.Core
             public Variant variant;
 
             // Controller.PoolPercents.Acquire(new PercentPoolArgs{Value = workType._percent})
-            public IPercent Parsed()
+            public TablePercent Parsed()
             {
                 return variant switch
                 {
-                    Variant.Number => Controller.PoolNumbers.Acquire(new NumberPoolArgs {Count = number, Total = 0}),
-                    Variant.Percent => Controller.PoolPercents.Acquire(new PercentPoolArgs {Value = percent}),
+                    Variant.Number => TablePercent.Number(0, number),
+                    Variant.Percent => TablePercent.Percent(percent),
                     _ => throw new Exception()
                 };
             }
 
-            public static UnionPercent Serialized(IPercent percent)
+            public static UnionPercent Serialized(TablePercent percent)
             {
-                return percent switch
+                return percent.Variant switch
                 {
-                    Number n => new UnionPercent
+                    PercentVariant.Number => new UnionPercent
                     {
                         variant = Variant.Number,
-                        number = n.Count
+                        number = percent.NumberCount
                     },
-                    Percent p => new UnionPercent
+                    PercentVariant.Percent  => new UnionPercent
                     {
                         variant = Variant.Percent,
-                        percent = p.Value
+                        percent = percent.PercentValue
                     },
                     _ => throw new Exception()
                 };
