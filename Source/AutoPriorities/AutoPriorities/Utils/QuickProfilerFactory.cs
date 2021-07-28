@@ -1,14 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace AutoPriorities.Utils
 {
     public class QuickProfilerFactory
     {
-        private List<QuickProfiler> _profilers = new();
+        private readonly List<QuickProfiler> _profilers = new();
 
         public void SaveProfileData()
         {

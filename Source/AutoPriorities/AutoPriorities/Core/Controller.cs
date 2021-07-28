@@ -3,8 +3,6 @@ using System.Reflection;
 using AutoPriorities.Extensions;
 using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.PawnDataSerializer.StreamProviders;
-using AutoPriorities.Percents;
-using AutoPriorities.Utils;
 using AutoPriorities.WorldInfoRetriever;
 using HugsLib;
 using HugsLib.Settings;

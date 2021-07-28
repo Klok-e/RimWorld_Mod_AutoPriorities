@@ -51,7 +51,7 @@ namespace Tests
         {
             // arrange
 
-            var percents = new TablePercent[]
+            var percents = new[]
             {
                 TablePercent.Percent(0.2),
                 TablePercent.Percent(0.2),

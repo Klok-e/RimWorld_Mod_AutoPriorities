@@ -179,17 +179,15 @@ namespace AutoPriorities
                 {
                     var currentWorkTable = workTables[i]
                         .workTypes;
-                    
+
                     // ToArray is needed to not modify the collection while iterating
                     foreach (var key in currentWorkTable
                                         .Keys.ToArray())
                     {
                         var currentPercent = currentWorkTable[key];
                         if (currentPercent.Variant == PercentVariant.Number)
-                        {
                             currentWorkTable[key] =
                                 TablePercent.Number(NumberColonists(key), currentPercent.NumberCount);
-                        }
                     }
                 }
 

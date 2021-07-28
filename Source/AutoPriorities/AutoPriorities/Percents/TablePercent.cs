@@ -10,7 +10,7 @@ namespace AutoPriorities.Percents
             Variant switch
             {
                 PercentVariant.Percent => PercentValue,
-                PercentVariant.Number => (double)NumberCount / (NumberTotal),
+                PercentVariant.Number => (double)NumberCount / NumberTotal,
                 _ => throw new ArgumentOutOfRangeException()
             };
 
@@ -30,12 +30,12 @@ namespace AutoPriorities.Percents
 
         public static TablePercent Percent(double value)
         {
-            return new TablePercent(PercentVariant.Percent, value, 0, 0);
+            return new(PercentVariant.Percent, value, 0, 0);
         }
 
         public static TablePercent Number(int numberTotal, int numberCount)
         {
-            return new TablePercent(PercentVariant.Number, 0, numberTotal, numberCount);
+            return new(PercentVariant.Number, 0, numberTotal, numberCount);
         }
 
         public override string ToString()

@@ -250,77 +250,75 @@ namespace AutoPriorities
             // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority"))
             {
                 foreach (var (i, workType) in _pawnsData.WorkTypes.Select((x, i) => (i, x)))
-                {
                     // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority inner loop"))
+                {
+                    var workName = workType.labelShort;
+                    try
                     {
-                        var workName = workType.labelShort;
-                        try
+                        var currentPercent = pr.workTypes[workType];
+
+                        var numberColonists = _pawnsData.NumberColonists(workType);
+                        float elementXPos;
+                        Rect labelRect;
+                        double available;
+                        bool takenMoreThanTotal;
+                        // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority PercentColonistsAvailable"))
                         {
-                            var currentPercent = pr.workTypes[workType];
+                            var (available1, takenMoreThanTotal1) =
+                                _pawnsData.PercentColonistsAvailable(workType, pr.priority);
+                            available = available1;
+                            takenMoreThanTotal = takenMoreThanTotal1;
+                            elementXPos = slidersRect.x + SliderMargin / 2 + SliderMargin * i;
+                            labelRect = new Rect(elementXPos - workName.GetWidthCached() / 2,
+                                slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f, 100f, LabelHeight);
 
-                            var numberColonists = _pawnsData.NumberColonists(workType);
-                            float elementXPos;
-                            Rect labelRect;
-                            double available;
-                            bool takenMoreThanTotal;
-                            // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority PercentColonistsAvailable"))
-                            {
-                                var (available1, takenMoreThanTotal1) =
-                                    _pawnsData.PercentColonistsAvailable(workType, pr.priority);
-                                available = available1;
-                                takenMoreThanTotal = takenMoreThanTotal1;
-                                elementXPos = slidersRect.x + SliderMargin / 2 + SliderMargin * i;
-                                labelRect = new Rect(elementXPos - workName.GetWidthCached() / 2,
-                                    slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f, 100f, LabelHeight);
-
-                                WorkTypeLabel(takenMoreThanTotal, labelRect, workName);
-                            }
-
-                            float currSliderVal;
-                            Rect sliderRect;
-                            bool skipNextAssign;
-                            // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority SliderPercentsInput"))
-                            {
-                                sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth,
-                                    SliderHeight);
-                                currSliderVal = (float)currentPercent.Value;
-
-                                currSliderVal = SliderPercentsInput(sliderRect, (float)available, currSliderVal,
-                                    out skipNextAssign);
-                            }
-
-
-                            Rect percentsRect;
-                            // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority TextPercentsInput"))
-                            {
-                                percentsRect = new Rect(
-                                    sliderRect.xMax - PercentStringWidth,
-                                    sliderRect.yMax + 3f,
-                                    PercentStringWidth,
-                                    25f);
-
-                                currSliderVal =
-                                    TextPercentsInput(percentsRect, currentPercent, currSliderVal, takenMoreThanTotal,
-                                        (float)available, skipNextAssign, numberColonists);
-                            }
-
-                            // using (_profilerFactory.CreateProfiler(
-                            //     "DrawWorkListForPriority SwitchPercentsNumbersButton"))
-                            {
-                                var switchRect = new Rect(percentsRect.min +
-                                                          new Vector2(5f + PercentStringLabelWidth, 0f),
-                                    percentsRect.size);
-                                var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
-                                pr.workTypes[workType] =
-                                    SwitchPercentsNumbersButton(symbolRect, currentPercent, numberColonists,
-                                        currSliderVal);
-                            }
+                            WorkTypeLabel(takenMoreThanTotal, labelRect, workName);
                         }
-                        catch (Exception e)
+
+                        float currSliderVal;
+                        Rect sliderRect;
+                        bool skipNextAssign;
+                        // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority SliderPercentsInput"))
                         {
-                            _logger.Err($"Error for work type {workName}:");
-                            _logger.Err(e);
+                            sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth,
+                                SliderHeight);
+                            currSliderVal = (float)currentPercent.Value;
+
+                            currSliderVal = SliderPercentsInput(sliderRect, (float)available, currSliderVal,
+                                out skipNextAssign);
                         }
+
+
+                        Rect percentsRect;
+                        // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority TextPercentsInput"))
+                        {
+                            percentsRect = new Rect(
+                                sliderRect.xMax - PercentStringWidth,
+                                sliderRect.yMax + 3f,
+                                PercentStringWidth,
+                                25f);
+
+                            currSliderVal =
+                                TextPercentsInput(percentsRect, currentPercent, currSliderVal, takenMoreThanTotal,
+                                    (float)available, skipNextAssign, numberColonists);
+                        }
+
+                        // using (_profilerFactory.CreateProfiler(
+                        //     "DrawWorkListForPriority SwitchPercentsNumbersButton"))
+                        {
+                            var switchRect = new Rect(percentsRect.min +
+                                                      new Vector2(5f + PercentStringLabelWidth, 0f),
+                                percentsRect.size);
+                            var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
+                            pr.workTypes[workType] =
+                                SwitchPercentsNumbersButton(symbolRect, currentPercent, numberColonists,
+                                    currSliderVal);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.Err($"Error for work type {workName}:");
+                        _logger.Err(e);
                     }
                 }
             }
@@ -408,7 +406,7 @@ namespace AutoPriorities
                     {
                         // clear buffers so that text input uses new values
                         _textFieldBuffers.Clear();
-                        
+
                         currentPercent = TablePercent.Percent(sliderValue);
                     }
                     else
@@ -423,7 +421,7 @@ namespace AutoPriorities
                     {
                         // clear buffers so that text input uses new values
                         _textFieldBuffers.Clear();
-                        
+
                         currentPercent = TablePercent.Number(numberColonists,
                             Mathf.RoundToInt(sliderValue * numberColonists));
                     }

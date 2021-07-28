@@ -159,7 +159,7 @@ namespace AutoPriorities.Core
                         variant = Variant.Number,
                         number = percent.NumberCount
                     },
-                    PercentVariant.Percent  => new UnionPercent
+                    PercentVariant.Percent => new UnionPercent
                     {
                         variant = Variant.Percent,
                         percent = percent.PercentValue
