@@ -10,7 +10,7 @@ namespace AutoPriorities.Percents
             Variant switch
             {
                 PercentVariant.Percent => PercentValue,
-                PercentVariant.Number => (double)NumberCount / NumberTotal,
+                PercentVariant.Number => (double)NumberCount / (NumberTotal),
                 _ => throw new ArgumentOutOfRangeException()
             };
 

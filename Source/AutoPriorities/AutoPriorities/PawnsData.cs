@@ -179,8 +179,10 @@ namespace AutoPriorities
                 {
                     var currentWorkTable = workTables[i]
                         .workTypes;
+                    
+                    // ToArray is needed to not modify the collection while iterating
                     foreach (var key in currentWorkTable
-                        .Keys)
+                                        .Keys.ToArray())
                     {
                         var currentPercent = currentWorkTable[key];
                         if (currentPercent.Variant == PercentVariant.Number)
@@ -191,7 +193,7 @@ namespace AutoPriorities
                     }
                 }
 
-                // if not present in built structure, then add with 0 percent
+                // if there are work types not present in built structure, then add with 0 percent
                 foreach (var work in workTables
                     .SelectMany(keyVal => WorkTypes
                         .Where(work => !keyVal.workTypes.ContainsKey(work))))
