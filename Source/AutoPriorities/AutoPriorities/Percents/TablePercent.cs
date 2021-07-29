@@ -40,10 +40,9 @@ namespace AutoPriorities.Percents
 
         public override string ToString()
         {
-            return $"{nameof(Variant)}: {Variant}, "
-                   + $"{nameof(PercentValue)}: {PercentValue}, "
-                   + $"{nameof(NumberTotal)}: {NumberTotal}, "
-                   + $"{nameof(NumberCount)}: {NumberCount}";
+            return $"{nameof(Variant)}: {Variant}, " + $"{nameof(PercentValue)}: {PercentValue}, "
+                                                     + $"{nameof(NumberTotal)}: {NumberTotal}, "
+                                                     + $"{nameof(NumberCount)}: {NumberCount}";
         }
     }
 }

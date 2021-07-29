@@ -30,9 +30,7 @@ namespace FluffyWorktabPatch
 
             var col = Color.white;
 
-            if (!Widgets.ButtonImage(button, Resources.AutoPrioritiesButtonIcon, col,
-                col * 0.9f))
-                return;
+            if (!Widgets.ButtonImage(button, Resources.AutoPrioritiesButtonIcon, col, col * 0.9f)) return;
 
             if (!window.IsOpen)
                 Find.WindowStack.Add(window);

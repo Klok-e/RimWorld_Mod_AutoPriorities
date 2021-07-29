@@ -6,8 +6,7 @@ namespace Tests.Helpers
     {
         public static IFixture Create()
         {
-            return new Fixture().Customize(
-                new AutoPopulatedNSubstitutePropertiesCustomization());
+            return new Fixture().Customize(new AutoPopulatedNSubstitutePropertiesCustomization());
         }
     }
 }

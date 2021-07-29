@@ -28,8 +28,7 @@ namespace AutoPriorities.Extensions
             }
         }
 
-        public static IEnumerable<(int i, int percentIndex)> IterPercents(this IEnumerable<double> percents,
-            int total)
+        public static IEnumerable<(int i, int percentIndex)> IterPercents(this IEnumerable<double> percents, int total)
         {
             var iter = 0;
             var toIter = 0d;

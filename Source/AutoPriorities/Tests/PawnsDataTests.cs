@@ -13,7 +13,6 @@ using NSubstitute;
 using NUnit.Framework;
 using Tests.Helpers;
 using Tests.MockImplementations;
-using Verse;
 
 namespace Tests
 {
@@ -23,10 +22,10 @@ namespace Tests
         private IFixture _fixture = null!;
         private ILogger _logger = null!;
         private PawnsDataBuilder _pawnsData = null!;
+        private PawnWorktypeCreator _pw = null!;
         private IWorldInfoRetriever _retriever = null!;
         private IPawnsDataSerializer _serializer = null!;
         private IWorldInfoFacade _worldInfo = null!;
-        private PawnWorktypeCreator _pw = null!;
 
         [SetUp]
         public void SetUp()
@@ -98,9 +97,9 @@ namespace Tests
             var percents = new[]
             {
                 TablePercent.Percent(0.2), TablePercent.Percent(0.2), TablePercent.Percent(0.2),
-                TablePercent.Number(0, 2),
+                TablePercent.Number(0, 2)
             };
-            var unknownWorkType = new WorkType() {defName = "unknown"};
+            var unknownWorkType = new WorkType {defName = "unknown"};
             _pw.workTypes.Add(unknownWorkType);
             var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y))
                                      .ToDictionary(k => k.x, v => v.y);

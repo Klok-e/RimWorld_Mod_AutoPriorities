@@ -35,11 +35,7 @@ namespace AutoPriorities.PawnDataSerializer
         {
             var (percents, excluded) = GetStateLoaders();
 
-            return new SaveData
-            {
-                ExcludedPawns = excluded,
-                WorkTablesData = percents
-            };
+            return new SaveData {ExcludedPawns = excluded, WorkTablesData = percents};
         }
 
         public void SaveData(SaveDataRequest request)
@@ -61,9 +57,7 @@ namespace AutoPriorities.PawnDataSerializer
         }
 
         private (List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
-            percents,
-            HashSet<(IWorkTypeWrapper, IPawnWrapper)> excluded)
-            GetStateLoaders()
+            percents, HashSet<(IWorkTypeWrapper, IPawnWrapper)> excluded) GetStateLoaders()
         {
             try
             {
@@ -81,8 +75,7 @@ namespace AutoPriorities.PawnDataSerializer
                 _logger.Err(e);
             }
 
-            return (
-                new List<(Priority, JobCount, Dictionary<IWorkTypeWrapper, TablePercent>)>(),
+            return (new List<(Priority, JobCount, Dictionary<IWorkTypeWrapper, TablePercent>)>(),
                 new HashSet<(IWorkTypeWrapper, IPawnWrapper)>());
         }
     }

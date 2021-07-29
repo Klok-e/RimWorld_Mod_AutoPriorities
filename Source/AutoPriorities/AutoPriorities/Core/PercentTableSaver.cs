@@ -17,32 +17,27 @@ namespace AutoPriorities.Core
             public List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
                 ParsedData(IWorldInfoFacade serializer)
             {
-                return data
-                       .Select(x => x.Parsed(serializer))
-                       .ToList();
+                return data.Select(x => x.Parsed(serializer))
+                           .ToList();
             }
 
             public HashSet<(IWorkTypeWrapper, IPawnWrapper)> ParsedExcluded(IWorldInfoFacade serializer)
             {
-                return excludedPawns
-                       .Select(x => x.Parsed(serializer))
-                       .Where(p => p.Item1 != null && p.Item2 != null)
-                       .Select(p => (p.Item1!, p.Item2!))
-                       .ToHashSet();
+                return excludedPawns.Select(x => x.Parsed(serializer))
+                                    .Where(p => p.Item1 != null && p.Item2 != null)
+                                    .Select(p => (p.Item1!, p.Item2!))
+                                    .ToHashSet();
             }
 
             public static Ser Serialized(
                 (List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
-                    percents,
-                    HashSet<(IWorkTypeWrapper, IPawnWrapper)> excluded) data)
+                    percents, HashSet<(IWorkTypeWrapper, IPawnWrapper)> excluded) data)
             {
                 return new()
                 {
-                    data = data.percents
-                               .Select(Tupl.Serialized)
+                    data = data.percents.Select(Tupl.Serialized)
                                .ToList(),
-                    excludedPawns = data.excluded
-                                        .Select(WorktypePawn.Serialized)
+                    excludedPawns = data.excluded.Select(WorktypePawn.Serialized)
                                         .ToList()
                 };
             }
@@ -60,11 +55,7 @@ namespace AutoPriorities.Core
 
             public static WorktypePawn Serialized((IWorkTypeWrapper work, IPawnWrapper pawn) data)
             {
-                return new()
-                {
-                    workType = data.work.defName,
-                    pawnId = data.pawn.ThingID
-                };
+                return new() {workType = data.work.defName, pawnId = data.pawn.ThingID};
             }
         }
 
@@ -81,12 +72,7 @@ namespace AutoPriorities.Core
 
             public static Tupl Serialized((Priority, JobCount, Dictionary<IWorkTypeWrapper, TablePercent>) val)
             {
-                return new()
-                {
-                    priority = val.Item1.V,
-                    jobsMax = val.Item2.V,
-                    dict = Dic.Serialized(val.Item3)
-                };
+                return new() {priority = val.Item1.V, jobsMax = val.Item2.V, dict = Dic.Serialized(val.Item3)};
             }
         }
 
@@ -96,19 +82,17 @@ namespace AutoPriorities.Core
 
             public Dictionary<IWorkTypeWrapper, TablePercent> Parsed(IWorldInfoFacade serializer)
             {
-                return percents
-                       .Select(x => x.Parsed(serializer))
-                       .Where(x => x.Item1 != null)
-                       .ToDictionary(x => x.Item1!, x => x.Item2);
+                return percents.Select(x => x.Parsed(serializer))
+                               .Where(x => x.Item1 != null)
+                               .ToDictionary(x => x.Item1!, x => x.Item2);
             }
 
             public static Dic Serialized(Dictionary<IWorkTypeWrapper, TablePercent> dic)
             {
                 return new()
                 {
-                    percents = dic
-                               .Select(kv => StrPercent.Serialized((kv.Key, kv.Value)))
-                               .ToList()
+                    percents = dic.Select(kv => StrPercent.Serialized((kv.Key, kv.Value)))
+                                  .ToList()
                 };
             }
         }
@@ -125,11 +109,7 @@ namespace AutoPriorities.Core
 
             public static StrPercent Serialized((IWorkTypeWrapper work, TablePercent percent) val)
             {
-                return new()
-                {
-                    workType = val.work.defName,
-                    percent = UnionPercent.Serialized(val.percent)
-                };
+                return new() {workType = val.work.defName, percent = UnionPercent.Serialized(val.percent)};
             }
         }
 
@@ -154,15 +134,10 @@ namespace AutoPriorities.Core
             {
                 return percent.Variant switch
                 {
-                    PercentVariant.Number => new UnionPercent
-                    {
-                        variant = Variant.Number,
-                        number = percent.NumberCount
-                    },
+                    PercentVariant.Number => new UnionPercent {variant = Variant.Number, number = percent.NumberCount},
                     PercentVariant.Percent => new UnionPercent
                     {
-                        variant = Variant.Percent,
-                        percent = percent.PercentValue
+                        variant = Variant.Percent, percent = percent.PercentValue
                     },
                     _ => throw new Exception()
                 };

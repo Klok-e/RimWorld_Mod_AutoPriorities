@@ -84,17 +84,15 @@ namespace AutoPriorities
             // using (_profilerFactory.CreateProfiler("DoWindowContents"))
             {
                 // draw select tab buttons
-                var prioritiesButtonRect =
-                    new Rect(inRect.xMin, inRect.yMin, _prioritiesLabelWidth, LabelHeight);
+                var prioritiesButtonRect = new Rect(inRect.xMin, inRect.yMin, _prioritiesLabelWidth, LabelHeight);
                 if (Widgets.ButtonText(prioritiesButtonRect, PrioritiesLabel))
                 {
                     _currentlySelectedTab = SelectedTab.Priorities;
                     _pawnsData.Rebuild();
                 }
 
-                var pawnsButtonRect =
-                    new Rect(prioritiesButtonRect.xMax + 5f, prioritiesButtonRect.yMin,
-                        _pawnExcludeLabelWidth, LabelHeight);
+                var pawnsButtonRect = new Rect(prioritiesButtonRect.xMax + 5f, prioritiesButtonRect.yMin,
+                    _pawnExcludeLabelWidth, LabelHeight);
                 if (Widgets.ButtonText(pawnsButtonRect, PawnExcludeLabel))
                 {
                     _currentlySelectedTab = SelectedTab.PawnExclusion;
@@ -118,11 +116,7 @@ namespace AutoPriorities
                 }
 
                 // draw run auto priorities
-                var buttonRect = new Rect(
-                    inRect.xMin,
-                    inRect.yMax - ButtonHeight,
-                    _labelWidth,
-                    ButtonHeight);
+                var buttonRect = new Rect(inRect.xMin, inRect.yMax - ButtonHeight, _labelWidth, ButtonHeight);
                 if (Widgets.ButtonText(buttonRect, Label))
                 {
                     _pawnsData.Rebuild();
@@ -142,12 +136,10 @@ namespace AutoPriorities
             // using (_profilerFactory.CreateProfiler("PrioritiesTab"))
             var workTypes = _pawnsData.SortedPawnFitnessForEveryWork.Count;
 
-            var scrollRect = new Rect(inRect.xMin, inRect.yMin, inRect.width,
-                inRect.height - DistFromBottomBorder);
+            var scrollRect = new Rect(inRect.xMin, inRect.yMin, inRect.width, inRect.height - DistFromBottomBorder);
 
             var tableSizeX = (workTypes + 1) * SliderMargin + SlidersDistFromLeftBorder + SlidersDistFromRightBorder
-                             +
-                             SliderMargin;
+                             + SliderMargin;
 
             var tableSizeY = (SliderHeight + 3 * ButtonHeight) * _pawnsData.WorkTables.Count;
             Widgets.BeginScrollView(scrollRect, ref _scrollPos, new Rect(0, 0, tableSizeX, tableSizeY));
@@ -163,12 +155,8 @@ namespace AutoPriorities
                 //shadow repeating priorities
                 if (_prioritiesEncounteredCached.Contains(pr.priority)) GUI.color = colOrig * GuiShadowedMult;
 
-                var slidersRect = new Rect(
-                    SlidersDistFromLeftBorder,
-                    (SliderHeight + 3 * ButtonHeight) * row,
-                    tableSizeX + SlidersDistFromRightBorder + SliderWidth,
-                    SliderHeight + 3 * ButtonHeight + 5f
-                );
+                var slidersRect = new Rect(SlidersDistFromLeftBorder, (SliderHeight + 3 * ButtonHeight) * row,
+                    tableSizeX + SlidersDistFromRightBorder + SliderWidth, SliderHeight + 3 * ButtonHeight + 5f);
 
                 //draw bottom line
                 Widgets.DrawLine(new Vector2(slidersRect.xMin, slidersRect.yMax),
@@ -185,17 +173,13 @@ namespace AutoPriorities
                     slidersRect.yMin + 20f, 120f, LabelHeight);
                 Widgets.Label(maxJobsLabelRect, maxJobsLabel);
 
-                var maxJobsSliderRect = new Rect(maxJobsElementXPos, slidersRect.yMin + 60f, SliderWidth,
-                    SliderHeight);
+                var maxJobsSliderRect = new Rect(maxJobsElementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
 
                 var newMaxJobsSliderValue = MaxJobsPerPawnSlider(maxJobsSliderRect,
                     Mathf.Clamp(pr.maxJobs.V, 0f, _pawnsData.WorkTypes.Count), out var skipTextAssign);
 
-                var jobCountMaxLabelRect = new Rect(
-                    maxJobsSliderRect.xMax - PercentStringWidth,
-                    maxJobsSliderRect.yMax + 3f,
-                    PercentStringWidth,
-                    25f);
+                var jobCountMaxLabelRect = new Rect(maxJobsSliderRect.xMax - PercentStringWidth,
+                    maxJobsSliderRect.yMax + 3f, PercentStringWidth, 25f);
 
                 newMaxJobsSliderValue =
                     MaxJobsPerPawnField(jobCountMaxLabelRect, newMaxJobsSliderValue, skipTextAssign);
@@ -205,8 +189,7 @@ namespace AutoPriorities
 
                 // draw line on the right from max job sliders
                 Widgets.DrawLine(new Vector2(maxJobsLabelRect.xMax, slidersRect.yMin),
-                    new Vector2(maxJobsLabelRect.xMax, slidersRect.yMax), new Color(0.5f, 0.5f, 0.5f),
-                    1f);
+                    new Vector2(maxJobsLabelRect.xMax, slidersRect.yMax), new Color(0.5f, 0.5f, 0.5f), 1f);
 
                 DrawWorkListForPriority(pr,
                     new Rect(maxJobsLabelRect.xMax, slidersRect.y, slidersRect.width, slidersRect.height));
@@ -219,10 +202,7 @@ namespace AutoPriorities
             Widgets.EndScrollView();
 
             var removePriorityButtonRect = new Rect(
-                inRect.xMax - SliderMargin,
-                scrollRect.yMax + 9f,
-                ButtonHeight,
-                ButtonHeight);
+                inRect.xMax - SliderMargin, scrollRect.yMax + 9f, ButtonHeight, ButtonHeight);
             if (Widgets.ButtonImage(removePriorityButtonRect, Resources.MinusIcon))
             {
                 RemovePriority();
@@ -230,10 +210,8 @@ namespace AutoPriorities
             }
 
             var addPriorityButtonRect = new Rect(
-                removePriorityButtonRect.xMin - StandardMargin - removePriorityButtonRect.width,
-                scrollRect.yMax + 9f,
-                ButtonHeight,
-                ButtonHeight);
+                removePriorityButtonRect.xMin - StandardMargin - removePriorityButtonRect.width, scrollRect.yMax + 9f,
+                ButtonHeight, ButtonHeight);
             if (Widgets.ButtonImage(addPriorityButtonRect, Resources.PlusIcon))
             {
                 AddPriority();
@@ -243,10 +221,7 @@ namespace AutoPriorities
 
         private float MaxJobsPerPawnSlider(Rect rect, float currentMaxJobs, out bool valueWasAssigned)
         {
-            var newMaxJobsSliderValue =
-                GUI.VerticalSlider(rect,
-                    currentMaxJobs,
-                    _pawnsData.WorkTypes.Count, 0f);
+            var newMaxJobsSliderValue = GUI.VerticalSlider(rect, currentMaxJobs, _pawnsData.WorkTypes.Count, 0f);
             valueWasAssigned = Math.Abs(newMaxJobsSliderValue - currentMaxJobs) > 0.0001;
             return newMaxJobsSliderValue;
         }
@@ -310,39 +285,31 @@ namespace AutoPriorities
                         bool skipNextAssign;
                         // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority SliderPercentsInput"))
                         {
-                            sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth,
-                                SliderHeight);
+                            sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
                             currSliderVal = (float)currentPercent.Value;
 
                             currSliderVal = SliderPercentsInput(sliderRect, (float)available, currSliderVal,
                                 out skipNextAssign);
                         }
 
-
                         Rect percentsRect;
                         // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority TextPercentsInput"))
                         {
-                            percentsRect = new Rect(
-                                sliderRect.xMax - PercentStringWidth,
-                                sliderRect.yMax + 3f,
-                                PercentStringWidth,
-                                25f);
+                            percentsRect = new Rect(sliderRect.xMax - PercentStringWidth, sliderRect.yMax + 3f,
+                                PercentStringWidth, 25f);
 
-                            currSliderVal =
-                                TextPercentsInput(percentsRect, currentPercent, currSliderVal, takenMoreThanTotal,
-                                    (float)available, skipNextAssign, numberColonists);
+                            currSliderVal = TextPercentsInput(percentsRect, currentPercent, currSliderVal,
+                                takenMoreThanTotal, (float)available, skipNextAssign, numberColonists);
                         }
 
                         // using (_profilerFactory.CreateProfiler(
                         //     "DrawWorkListForPriority SwitchPercentsNumbersButton"))
                         {
-                            var switchRect = new Rect(percentsRect.min +
-                                                      new Vector2(5f + PercentStringLabelWidth, 0f),
+                            var switchRect = new Rect(percentsRect.min + new Vector2(5f + PercentStringLabelWidth, 0f),
                                 percentsRect.size);
                             var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
-                            pr.workTypes[workType] =
-                                SwitchPercentsNumbersButton(symbolRect, currentPercent, numberColonists,
-                                    currSliderVal);
+                            pr.workTypes[workType] = SwitchPercentsNumbersButton(symbolRect, currentPercent,
+                                numberColonists, currSliderVal);
                         }
                     }
                     catch (Exception e)
@@ -369,8 +336,7 @@ namespace AutoPriorities
             float currSliderVal,
             out bool skipNextAssign)
         {
-            var newSliderValue =
-                GUI.VerticalSlider(sliderRect, currSliderVal, Math.Max(1f, currSliderVal), 0f);
+            var newSliderValue = GUI.VerticalSlider(sliderRect, currSliderVal, Math.Max(1f, currSliderVal), 0f);
 
             skipNextAssign = Math.Abs(newSliderValue - currSliderVal) > 0.0001;
 
@@ -418,8 +384,7 @@ namespace AutoPriorities
                 PercentVariant.Number => value / totalColonists,
                 _ => throw new ArgumentOutOfRangeException(nameof(currentPercent), currentPercent, null)
             };
-            return Mathf.Clamp(currSliderVal, 0f,
-                Math.Max(available, currentValue));
+            return Mathf.Clamp(currSliderVal, 0f, Math.Max(available, currentValue));
         }
 
         private TablePercent SwitchPercentsNumbersButton(Rect rect,
@@ -470,39 +435,34 @@ namespace AutoPriorities
         {
             const float fromTopToTickboxesVertical = WorkLabelOffset + LabelHeight + 15f;
 
-            var scrollRect = new Rect(inRect.xMin, inRect.yMin, inRect.width,
-                inRect.height - DistFromBottomBorder);
+            var scrollRect = new Rect(inRect.xMin, inRect.yMin, inRect.width, inRect.height - DistFromBottomBorder);
 
-            var tableSizeX = PawnNameCoWidth + WorkLabelWidth / 2 +
-                             WorkLabelHorizOffset * _pawnsData.WorkTypes.Count;
+            var tableSizeX = PawnNameCoWidth + WorkLabelWidth / 2 + WorkLabelHorizOffset * _pawnsData.WorkTypes.Count;
 
             var tableSizeY = fromTopToTickboxesVertical
                              + (LabelMargin + ButtonHeight) * _pawnsData.AllPlayerPawns.Count;
             Widgets.BeginScrollView(scrollRect, ref _pawnExcludeScrollPos, new Rect(0, 0, tableSizeX, tableSizeY));
 
-            var tickboxesRect = new Rect(PawnNameCoWidth, fromTopToTickboxesVertical,
-                tableSizeX - PawnNameCoWidth, tableSizeY - fromTopToTickboxesVertical);
+            var tickboxesRect = new Rect(PawnNameCoWidth, fromTopToTickboxesVertical, tableSizeX - PawnNameCoWidth,
+                tableSizeY - fromTopToTickboxesVertical);
             var anchor = Text.Anchor;
 #if DEBUG
             //Widgets.DrawBox(tickboxesRect); 
 #endif
             // draw worktypes
             Text.Anchor = TextAnchor.UpperCenter;
-            foreach (var (workType, i) in _pawnsData.WorkTypes.Zip(
-                Enumerable.Range(0, _pawnsData.WorkTypes.Count),
+            foreach (var (workType, i) in _pawnsData.WorkTypes.Zip(Enumerable.Range(0, _pawnsData.WorkTypes.Count),
                 (w, i) => (w, i)))
             {
                 var workLabel = workType.labelShort;
                 var rect = new Rect(tickboxesRect.xMin + WorkLabelHorizOffset * i, i % 2 == 0 ? 0f : WorkLabelOffset,
-                    WorkLabelWidth,
-                    LabelHeight);
+                    WorkLabelWidth, LabelHeight);
                 Widgets.Label(rect, workLabel);
 #if DEBUG
                 //Widgets.DrawBox(rect);
 #endif
                 var horizLinePos = rect.center.x;
-                Widgets.DrawLine(new Vector2(horizLinePos, rect.yMax),
-                    new Vector2(horizLinePos, tickboxesRect.yMin),
+                Widgets.DrawLine(new Vector2(horizLinePos, rect.yMax), new Vector2(horizLinePos, tickboxesRect.yMin),
                     Color.grey, 1f);
             }
 
@@ -510,8 +470,8 @@ namespace AutoPriorities
             foreach (var (pawn, rowi) in _pawnsData.AllPlayerPawns.Select((w, i) => (w, i)))
             {
                 // draw pawn name
-                var nameRect = new Rect(0f, tickboxesRect.yMin + (LabelMargin + ButtonHeight) * rowi,
-                    PawnNameCoWidth, LabelHeight + LabelMargin);
+                var nameRect = new Rect(0f, tickboxesRect.yMin + (LabelMargin + ButtonHeight) * rowi, PawnNameCoWidth,
+                    LabelHeight + LabelMargin);
                 Widgets.Label(nameRect, pawn.LabelNoCountColored);
                 TooltipHandler.TipRegion(nameRect, "Click here to toggle all jobs");
                 if (Widgets.ButtonInvisible(nameRect))
@@ -525,12 +485,10 @@ namespace AutoPriorities
                 }
 
                 Widgets.DrawLine(new Vector2(nameRect.xMin, nameRect.yMax),
-                    new Vector2(tickboxesRect.xMax, nameRect.yMax),
-                    Color.grey, 1f);
+                    new Vector2(tickboxesRect.xMax, nameRect.yMax), Color.grey, 1f);
 
                 // draw tickboxes
-                foreach (var (workType, i) in _pawnsData.WorkTypes.Zip(
-                    Enumerable.Range(0, _pawnsData.WorkTypes.Count),
+                foreach (var (workType, i) in _pawnsData.WorkTypes.Zip(Enumerable.Range(0, _pawnsData.WorkTypes.Count),
                     (w, i) => (w, i)))
                 {
                     var prev = _pawnsData.ExcludedPawns.Contains((workType, pawn));

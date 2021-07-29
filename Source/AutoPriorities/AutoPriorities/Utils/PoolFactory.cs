@@ -2,8 +2,7 @@ using System.Collections.Generic;
 
 namespace AutoPriorities.Utils
 {
-    public class PoolFactory<TPoolable, TArgs>
-        where TPoolable : IPoolable<TPoolable, TArgs>, new()
+    public class PoolFactory<TPoolable, TArgs> where TPoolable : IPoolable<TPoolable, TArgs>, new()
     {
         private readonly Queue<TPoolable> _pool = new();
 

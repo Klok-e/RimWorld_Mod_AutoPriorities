@@ -59,8 +59,7 @@ namespace Tests
             // act
             _serializer.SaveData(new SaveDataRequest
             {
-                ExcludedPawns = loaded.ExcludedPawns,
-                WorkTablesData = loaded.WorkTablesData
+                ExcludedPawns = loaded.ExcludedPawns, WorkTablesData = loaded.WorkTablesData
             });
             var actualString = Encoding.UTF8.GetString(_stream.ToArray());
 

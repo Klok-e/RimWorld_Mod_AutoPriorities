@@ -22,11 +22,9 @@ namespace AutoPriorities
             _logger = logger;
         }
 
-        private List<(Priority priority, JobCount maxJobs, double percent)> PriorityPercentCached { get; } =
-            new();
+        private List<(Priority priority, JobCount maxJobs, double percent)> PriorityPercentCached { get; } = new();
 
-        private Dictionary<IPawnWrapper, Dictionary<IWorkTypeWrapper, Priority>> PawnJobsCached { get; } =
-            new();
+        private Dictionary<IPawnWrapper, Dictionary<IWorkTypeWrapper, Priority>> PawnJobsCached { get; } = new();
 
         public void AssignPriorities()
         {
@@ -45,27 +43,24 @@ namespace AutoPriorities
                                      .Where(def => def is not null)
                                      .Select(x => x!)
                                      .ToHashSet();
-                AssignJobs(_pawnsData, PawnJobsCached,
-                    importantWorks,
+                AssignJobs(_pawnsData, PawnJobsCached, importantWorks,
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work]);
 
 #if DEBUG
                 _logger.Info("skilled");
 #endif
                 // assign skilled jobs except important jobs
-                AssignJobs(_pawnsData, PawnJobsCached,
-                    _pawnsData.WorkTypes
-                              .Subtract(importantWorks)
-                              .Where(work => !_pawnsData.WorkTypesNotRequiringSkills.Contains(work)),
+                AssignJobs(_pawnsData, PawnJobsCached, _pawnsData.WorkTypes.Subtract(importantWorks)
+                                                                 .Where(work =>
+                                                                     !_pawnsData.WorkTypesNotRequiringSkills.Contains(
+                                                                         work)),
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work]);
 
 #if DEBUG
                 _logger.Info("non skilled");
 #endif
                 // assign non skilled jobs except important jobs
-                AssignJobs(_pawnsData, PawnJobsCached,
-                    _pawnsData.WorkTypesNotRequiringSkills
-                              .Subtract(importantWorks),
+                AssignJobs(_pawnsData, PawnJobsCached, _pawnsData.WorkTypesNotRequiringSkills.Subtract(importantWorks),
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work]
                                       .Select(p => (p.pawn, 1d / (1 + PawnJobsCached[p.pawn]
                                           .Count)))
@@ -93,16 +88,14 @@ namespace AutoPriorities
                 _logger.Info($"worktype {work.defName}");
 #endif
 
-                foreach (var (priority, maxJobs, jobsToSet) in PriorityPercentCached
-                                                               .Distinct(x => x.priority)
-                                                               .Select(a => a.percent)
-                                                               .IterPercents(pawns.Count)
-                                                               .GroupBy(v => v.percentIndex)
-                                                               .Select(g =>
-                                                                   (PriorityPercentCached[g.Key]
-                                                                       .priority, PriorityPercentCached[g.Key]
-                                                                       .maxJobs, g.Count()))
-                                                               .OrderBy(x => x.priority.V))
+                foreach (var (priority, maxJobs, jobsToSet) in PriorityPercentCached.Distinct(x => x.priority)
+                    .Select(a => a.percent)
+                    .IterPercents(pawns.Count)
+                    .GroupBy(v => v.percentIndex)
+                    .Select(g => (PriorityPercentCached[g.Key]
+                        .priority, PriorityPercentCached[g.Key]
+                        .maxJobs, g.Count()))
+                    .OrderBy(x => x.priority.V))
                 {
                     var jobsSet = 0;
                     // iterate over all the pawns for this job with current priority
@@ -116,9 +109,7 @@ namespace AutoPriorities
                                 .ContainsKey(work) ||
                             // count amount of jobs assigned to pawn on this priority, then compare with max
                             pawnJobs[pawn]
-                                .Count(
-                                    kv => kv.Value.V == priority.V)
-                            >= maxJobs.V)
+                                .Count(kv => kv.Value.V == priority.V) >= maxJobs.V)
                             continue;
 
                         pawnJobs[pawn][work] = priority;
@@ -148,8 +139,7 @@ namespace AutoPriorities
             List<(Priority, JobCount, double)> priorities)
         {
             priorities.Clear();
-            priorities.AddRange(pawnsData.WorkTables
-                                         .Select(tup => (tup.priority, tup.maxJobs, tup.workTypes[work]
+            priorities.AddRange(pawnsData.WorkTables.Select(tup => (tup.priority, tup.maxJobs, tup.workTypes[work]
                                              .Value))
                                          .Distinct(t => t.priority)
                                          .Where(t => t.priority.V > 0));
