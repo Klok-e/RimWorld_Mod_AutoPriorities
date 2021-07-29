@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoPriorities.Core;
+using AutoPriorities.Extensions;
+using AutoPriorities.ImportantJobs;
 using AutoPriorities.Percents;
 using AutoPriorities.Utils;
 using AutoPriorities.Wrappers;
@@ -34,11 +36,14 @@ namespace AutoPriorities
         private const float PercentStringLabelWidth = 20f;
         private const string PrioritiesLabel = "Priorities";
         private const string PawnExcludeLabel = "Exclude Colonists";
+        private const string ImportantJobsLabel = "Important Jobs";
         private const string Label = "Run AutoPriorities";
         private const float PawnNameCoWidth = 150f;
         private readonly float _labelWidth = Label.GetWidthCached() + 10f;
         private readonly ILogger _logger;
+        private readonly IImportantJobsProvider _importantJobsProvider;
         private readonly float _pawnExcludeLabelWidth = PawnExcludeLabel.GetWidthCached() + 10f;
+        private readonly float _importantJobsLabelWidth = ImportantJobsLabel.GetWidthCached() + 10f;
         private readonly PawnsData _pawnsData;
         private readonly PrioritiesAssigner _prioritiesAssigner;
         private readonly HashSet<Priority> _prioritiesEncounteredCached = new();
@@ -53,11 +58,15 @@ namespace AutoPriorities
         // private QuickProfilerFactory _profilerFactory = new();
         // private int _windowContentsCalls;
 
-        public AutoPrioritiesDialog(PawnsData pawnsData, PrioritiesAssigner prioritiesAssigner, ILogger logger)
+        public AutoPrioritiesDialog(PawnsData pawnsData,
+            PrioritiesAssigner prioritiesAssigner,
+            ILogger logger,
+            IImportantJobsProvider importantJobsProvider)
         {
             _pawnsData = pawnsData;
             _prioritiesAssigner = prioritiesAssigner;
             _logger = logger;
+            _importantJobsProvider = importantJobsProvider;
             doCloseButton = true;
             draggable = true;
             resizeable = true;
@@ -99,6 +108,14 @@ namespace AutoPriorities
                     _pawnsData.Rebuild();
                 }
 
+                var importantButtonRect = new Rect(pawnsButtonRect.xMax + 5f, prioritiesButtonRect.yMin,
+                    _importantJobsLabelWidth, LabelHeight);
+                if (Widgets.ButtonText(importantButtonRect, ImportantJobsLabel))
+                {
+                    _currentlySelectedTab = SelectedTab.ImportantWorkTypes;
+                    _pawnsData.Rebuild();
+                }
+
                 // draw tab contents lower than buttons
                 inRect.yMin += LabelHeight + 10f;
 
@@ -110,6 +127,9 @@ namespace AutoPriorities
                         break;
                     case SelectedTab.PawnExclusion:
                         PawnExcludeTab(inRect);
+                        break;
+                    case SelectedTab.ImportantWorkTypes:
+                        ImportantWorkTypes(inRect);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(_currentlySelectedTab));
@@ -129,6 +149,63 @@ namespace AutoPriorities
             // if (_windowContentsCalls % 1000 == 0) _profilerFactory.SaveProfileData();
 
             // _windowContentsCalls += 1;
+        }
+
+        private void ImportantWorkTypes(Rect inRect)
+        {
+            const float fromTopToTickboxesVertical = WorkLabelOffset + LabelHeight + 15f;
+
+            var scrollRect = new Rect(inRect.xMin, inRect.yMin, inRect.width, inRect.height - DistFromBottomBorder);
+
+            var tableSizeX = WorkLabelWidth / 2 + WorkLabelHorizOffset * _pawnsData.WorkTypes.Count;
+
+            var tableSizeY = fromTopToTickboxesVertical + (LabelMargin + ButtonHeight);
+            Widgets.BeginScrollView(scrollRect, ref _pawnExcludeScrollPos, new Rect(0, 0, tableSizeX, tableSizeY));
+
+            var tickboxesRect = new Rect(0, fromTopToTickboxesVertical, tableSizeX,
+                tableSizeY - fromTopToTickboxesVertical);
+            var anchor = Text.Anchor;
+
+            // Widgets.DrawBox(tickboxesRect);
+
+            var workTypes = _importantJobsProvider.ImportantWorkTypes();
+
+            // draw worktypes
+            Text.Anchor = TextAnchor.UpperCenter;
+            foreach (var (workType, i) in _pawnsData.WorkTypes.Select((w, i) => (w, i)))
+            {
+                var workLabel = workType.labelShort;
+                var rect = new Rect(tickboxesRect.xMin + WorkLabelHorizOffset * i, i % 2 == 0 ? 0f : WorkLabelOffset,
+                    WorkLabelWidth, LabelHeight);
+                Widgets.Label(rect, workLabel);
+
+                // Widgets.DrawBox(rect);
+
+                var horizLinePos = rect.center.x;
+                Widgets.DrawLine(new Vector2(horizLinePos, rect.yMax), new Vector2(horizLinePos, tickboxesRect.yMin),
+                    Color.grey, 1f);
+
+                var prev = workTypes.Contains(workType);
+                var next = prev;
+                DrawUtil.EmptyCheckbox((ButtonHeight - 1) / 2 + i * WorkLabelHorizOffset + 11f, tickboxesRect.yMin,
+                    ref next);
+                if (prev == next) continue;
+
+                if (next)
+                {
+                    workTypes.Add(workType);
+                }
+                else
+                {
+                    workTypes.Remove(workType);
+                }
+
+                _importantJobsProvider.SaveImportantWorkTypes(workTypes.Select(x => x.defName));
+            }
+
+            Widgets.EndScrollView();
+
+            Text.Anchor = anchor;
         }
 
         private void PrioritiesTab(Rect inRect)
@@ -538,7 +615,8 @@ namespace AutoPriorities
         private enum SelectedTab
         {
             Priorities = 1,
-            PawnExclusion = 2
+            PawnExclusion = 2,
+            ImportantWorkTypes = 3,
         }
     }
 }

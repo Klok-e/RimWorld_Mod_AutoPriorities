@@ -6,5 +6,7 @@ namespace AutoPriorities.ImportantJobs
     public interface IImportantJobsProvider
     {
         HashSet<IWorkTypeWrapper> ImportantWorkTypes();
+
+        void SaveImportantWorkTypes(IEnumerable<string> workTypeDefNames);
     }
 }

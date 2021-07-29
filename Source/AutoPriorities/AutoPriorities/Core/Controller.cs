@@ -70,7 +70,7 @@ namespace AutoPriorities.Core
             var importantWorktypes = new ImportantJobsProvider(worldFacade);
             var priorityAssigner = new PrioritiesAssigner(worldFacade, pawnData, logger, importantWorktypes);
 
-            return new AutoPrioritiesDialog(pawnData, priorityAssigner, logger);
+            return new AutoPrioritiesDialog(pawnData, priorityAssigner, logger, importantWorktypes);
         }
     }
 }
