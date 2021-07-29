@@ -10,10 +10,6 @@ namespace AutoPriorities.Wrappers
 
         string LabelNoCount { get; }
 
-        string LabelNoCountColored { get; }
-
-        bool AnimalOrWildMan();
-
         bool IsCapableOfWholeWorkType(IWorkTypeWrapper work);
 
         double AverageOfRelevantSkillsFor(IWorkTypeWrapper work);

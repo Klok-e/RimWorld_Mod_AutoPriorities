@@ -21,13 +21,6 @@ namespace AutoPriorities.Wrappers
 
         public string LabelNoCount => _pawn.LabelNoCount;
 
-        public string LabelNoCountColored => _pawn.LabelNoCountColored;
-
-        public bool AnimalOrWildMan()
-        {
-            return _pawn.AnimalOrWildMan();
-        }
-
         public bool IsCapableOfWholeWorkType(IWorkTypeWrapper work)
         {
             return _pawn.IsCapableOfWholeWorkType(work);

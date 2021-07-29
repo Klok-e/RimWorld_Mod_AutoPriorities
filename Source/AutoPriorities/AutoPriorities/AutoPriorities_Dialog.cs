@@ -472,7 +472,7 @@ namespace AutoPriorities
                 // draw pawn name
                 var nameRect = new Rect(0f, tickboxesRect.yMin + (LabelMargin + ButtonHeight) * rowi, PawnNameCoWidth,
                     LabelHeight + LabelMargin);
-                Widgets.Label(nameRect, pawn.LabelNoCountColored);
+                Widgets.Label(nameRect, pawn.LabelNoCount);
                 TooltipHandler.TipRegion(nameRect, "Click here to toggle all jobs");
                 if (Widgets.ButtonInvisible(nameRect))
                 {

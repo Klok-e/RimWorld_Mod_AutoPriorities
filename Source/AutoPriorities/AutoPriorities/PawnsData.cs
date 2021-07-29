@@ -78,7 +78,7 @@ namespace AutoPriorities
                 foreach (var work in workTypes)
                 {
                     SortedPawnFitnessForEveryWork[work] = new List<(IPawnWrapper pawn, double fitness)>();
-                    foreach (var pawn in pawns.Where(pawn => !pawn.AnimalOrWildMan()))
+                    foreach (var pawn in pawns)
                     {
                         if (!AllPlayerPawns.Contains(pawn)) AllPlayerPawns.Add(pawn);
 

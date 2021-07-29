@@ -43,6 +43,8 @@
         <Compile Include="Core\Unit.cs" />
         <Compile Include="Extensions\PawnExtensions.cs" />
         <Compile Include="Extensions\CollectionExtensions.cs" />
+        <Compile Include="ImportantJobs\IImportantJobsProvider.cs" />
+        <Compile Include="ImportantJobs\ImportantJobsProvider.cs" />
         <Compile Include="IsExternalInit.cs" />
         <Compile Include="HarmonyPatches\WorkTabAddButtonToOpenAutoPrioritiesWindow.cs" />
         <Compile Include="APLogger\ILogger.cs" />

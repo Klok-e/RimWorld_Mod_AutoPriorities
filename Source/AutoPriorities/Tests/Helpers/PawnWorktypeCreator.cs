@@ -27,8 +27,6 @@ namespace Tests.Helpers
         {
             var pawn1 = Substitute.For<IPawnWrapper>();
             pawn1.ThingID.Returns("pawn1");
-            pawn1.AnimalOrWildMan()
-                 .Returns(false);
             pawn1.IsCapableOfWholeWorkType(workTypes[0])
                  .Returns(true);
             pawn1.IsCapableOfWholeWorkType(workTypes[1])
@@ -47,8 +45,6 @@ namespace Tests.Helpers
 
             var pawn2 = Substitute.For<IPawnWrapper>();
             pawn2.ThingID.Returns("pawn2");
-            pawn2.AnimalOrWildMan()
-                 .Returns(false);
             pawn2.IsCapableOfWholeWorkType(workTypes[0])
                  .Returns(true);
             pawn2.IsCapableOfWholeWorkType(workTypes[1])
@@ -68,8 +64,6 @@ namespace Tests.Helpers
 
             var pawn3 = Substitute.For<IPawnWrapper>();
             pawn3.ThingID.Returns("pawn3");
-            pawn3.AnimalOrWildMan()
-                 .Returns(false);
             pawn3.IsCapableOfWholeWorkType(workTypes[0])
                  .Returns(true);
             pawn3.IsCapableOfWholeWorkType(workTypes[1])
@@ -89,8 +83,6 @@ namespace Tests.Helpers
 
             var pawn4 = Substitute.For<IPawnWrapper>();
             pawn4.ThingID.Returns("pawn4");
-            pawn4.AnimalOrWildMan()
-                 .Returns(false);
             pawn4.IsCapableOfWholeWorkType(workTypes[0])
                  .Returns(true);
             pawn4.IsCapableOfWholeWorkType(workTypes[1])

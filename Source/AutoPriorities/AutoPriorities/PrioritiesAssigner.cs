@@ -4,6 +4,7 @@ using System.Linq;
 using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 using AutoPriorities.Extensions;
+using AutoPriorities.ImportantJobs;
 using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
 
@@ -11,15 +12,20 @@ namespace AutoPriorities
 {
     public class PrioritiesAssigner
     {
+        private readonly IImportantJobsProvider _importantJobsProvider;
         private readonly ILogger _logger;
         private readonly PawnsData _pawnsData;
         private readonly IWorldInfoFacade _worldInfo;
 
-        public PrioritiesAssigner(IWorldInfoFacade worldInfo, PawnsData pawnsData, ILogger logger)
+        public PrioritiesAssigner(IWorldInfoFacade worldInfo,
+            PawnsData pawnsData,
+            ILogger logger,
+            IImportantJobsProvider importantJobsProvider)
         {
             _worldInfo = worldInfo;
             _pawnsData = pawnsData;
             _logger = logger;
+            _importantJobsProvider = importantJobsProvider;
         }
 
         private List<(Priority priority, JobCount maxJobs, double percent)> PriorityPercentCached { get; } = new();
@@ -38,11 +44,7 @@ namespace AutoPriorities
                 _logger.Info("important");
 #endif
                 // assign `important` jobs because hardcoding is easy
-                var importantWorks = new[] {"Firefighter", "Patient", "PatientBedRest", "BasicWorker"}
-                                     .Select(_worldInfo.StringToDef)
-                                     .Where(def => def is not null)
-                                     .Select(x => x!)
-                                     .ToHashSet();
+                var importantWorks = _importantJobsProvider.ImportantWorkTypes();
                 AssignJobs(_pawnsData, PawnJobsCached, importantWorks,
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work]);
 

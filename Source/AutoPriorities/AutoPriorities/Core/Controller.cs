@@ -1,6 +1,7 @@
 using System.IO;
 using System.Reflection;
 using AutoPriorities.Extensions;
+using AutoPriorities.ImportantJobs;
 using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.PawnDataSerializer.StreamProviders;
 using AutoPriorities.WorldInfoRetriever;
@@ -66,7 +67,8 @@ namespace AutoPriorities.Core
             var streamProvider = new FileStreamProvider();
             var serializer = new PawnsDataSerializer(logger, fullPath, worldFacade, streamProvider);
             var pawnData = new PawnsDataBuilder(serializer, worldInfo, logger).Build();
-            var priorityAssigner = new PrioritiesAssigner(worldFacade, pawnData, logger);
+            var importantWorktypes = new ImportantJobsProvider(worldFacade);
+            var priorityAssigner = new PrioritiesAssigner(worldFacade, pawnData, logger, importantWorktypes);
 
             return new AutoPrioritiesDialog(pawnData, priorityAssigner, logger);
         }
