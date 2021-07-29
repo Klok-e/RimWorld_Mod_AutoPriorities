@@ -157,7 +157,7 @@ namespace AutoPriorities
 
             var scrollRect = new Rect(inRect.xMin, inRect.yMin, inRect.width, inRect.height - DistFromBottomBorder);
 
-            var tableSizeX = WorkLabelWidth / 2 + WorkLabelHorizOffset * _pawnsData.WorkTypes.Count;
+            var tableSizeX = WorkLabelWidth / 2 + WorkLabelHorizOffset * _pawnsData.WorkTypesNotRequiringSkills.Count;
 
             var tableSizeY = fromTopToTickboxesVertical + (LabelMargin + ButtonHeight);
             Widgets.BeginScrollView(scrollRect, ref _pawnExcludeScrollPos, new Rect(0, 0, tableSizeX, tableSizeY));
@@ -172,7 +172,7 @@ namespace AutoPriorities
 
             // draw worktypes
             Text.Anchor = TextAnchor.UpperCenter;
-            foreach (var (workType, i) in _pawnsData.WorkTypes.Select((w, i) => (w, i)))
+            foreach (var (workType, i) in _pawnsData.WorkTypesNotRequiringSkills.Select((w, i) => (w, i)))
             {
                 var workLabel = workType.labelShort;
                 var rect = new Rect(tickboxesRect.xMin + WorkLabelHorizOffset * i, i % 2 == 0 ? 0f : WorkLabelOffset,
