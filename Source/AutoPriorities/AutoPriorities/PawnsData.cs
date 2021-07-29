@@ -25,8 +25,7 @@ namespace AutoPriorities
             _logger = logger;
         }
 
-        public List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
-            WorkTables { get; private set; } = new();
+        public List<WorkTableEntry> WorkTables { get; private set; } = new();
 
         public HashSet<(IWorkTypeWrapper work, IPawnWrapper pawn)> ExcludedPawns { get; private set; } = new();
 
@@ -128,11 +127,11 @@ namespace AutoPriorities
         {
             var taken = 0d;
             var takenTotal = 0d;
-            foreach (var (priority, _, workTypes) in WorkTables.Distinct(x => x.priority))
+            foreach (var it in WorkTables.Distinct(x => x.priority))
             {
-                var percent = workTypes[workType]
-                    .Value;
-                if (priority.V != priorityIgnore.V) taken += percent;
+                var percent = it.workTypes[workType]
+                                .Value;
+                if (it.priority.V != priorityIgnore.V) taken += percent;
                 takenTotal += percent;
             }
 
@@ -156,14 +155,10 @@ namespace AutoPriorities
             };
         }
 
-        private List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
-            LoadSavedState(
-                IEnumerable<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
-                    loader)
+        private List<WorkTableEntry> LoadSavedState(IEnumerable<WorkTableEntry> loader)
         {
             Rebuild();
-            List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>?
-                workTables;
+            List<WorkTableEntry>? workTables;
             try
             {
                 workTables = loader.ToList();
@@ -187,10 +182,10 @@ namespace AutoPriorities
                 // if there are work types not present in built structure, then add with 0 percent
                 foreach (var work in workTables.SelectMany(keyVal =>
                     WorkTypes.Where(work => !keyVal.workTypes.ContainsKey(work))))
-                foreach (var (_, _, d) in workTables)
+                foreach (var it in workTables)
                 {
                     _logger.Warn($"Work type {work} wasn't found in a save file. Setting percent to 0");
-                    d.Add(work, TablePercent.Percent(0));
+                    it.workTypes.Add(work, TablePercent.Percent(0));
                 }
             }
             catch (Exception e)
@@ -200,9 +195,7 @@ namespace AutoPriorities
                 workTables = null;
             }
 
-            return workTables
-                   ?? new List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent>
-                       workTypes )>();
+            return workTables ?? new List<WorkTableEntry>();
         }
     }
 }

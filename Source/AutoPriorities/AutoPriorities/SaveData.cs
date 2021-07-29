@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using AutoPriorities.Core;
-using AutoPriorities.Percents;
 using AutoPriorities.Wrappers;
 
 namespace AutoPriorities
@@ -9,7 +7,6 @@ namespace AutoPriorities
     {
         public HashSet<(IWorkTypeWrapper, IPawnWrapper)> ExcludedPawns { get; init; } = null!;
 
-        public List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
-            WorkTablesData { get; init; } = null!;
+        public List<WorkTableEntry> WorkTablesData { get; init; } = null!;
     }
 }

@@ -141,7 +141,7 @@ namespace AutoPriorities
             List<(Priority, JobCount, double)> priorities)
         {
             priorities.Clear();
-            priorities.AddRange(pawnsData.WorkTables.Select(tup => (tup.priority, tup.maxJobs, tup.workTypes[work]
+            priorities.AddRange(pawnsData.WorkTables.Select(tup => (tup.priority, tup.jobCount, tup.workTypes[work]
                                              .Value))
                                          .Distinct(t => t.priority)
                                          .Where(t => t.priority.V > 0));

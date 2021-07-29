@@ -5,7 +5,6 @@ using System.Xml.Serialization;
 using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 using AutoPriorities.PawnDataSerializer.StreamProviders;
-using AutoPriorities.Percents;
 using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
 
@@ -45,9 +44,7 @@ namespace AutoPriorities.PawnDataSerializer
 
         #endregion
 
-        private void SaveState(
-            (List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>,
-                HashSet<(IWorkTypeWrapper, IPawnWrapper)>) state)
+        private void SaveState((List<WorkTableEntry>, HashSet<(IWorkTypeWrapper, IPawnWrapper)>) state)
         {
             _streamProvider.WithStream(_fullPath, FileMode.Create, stream =>
             {
@@ -56,8 +53,7 @@ namespace AutoPriorities.PawnDataSerializer
             });
         }
 
-        private (List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
-            percents, HashSet<(IWorkTypeWrapper, IPawnWrapper)> excluded) GetStateLoaders()
+        private (List<WorkTableEntry> percents, HashSet<(IWorkTypeWrapper, IPawnWrapper)> excluded) GetStateLoaders()
         {
             try
             {
@@ -75,8 +71,7 @@ namespace AutoPriorities.PawnDataSerializer
                 _logger.Err(e);
             }
 
-            return (new List<(Priority, JobCount, Dictionary<IWorkTypeWrapper, TablePercent>)>(),
-                new HashSet<(IWorkTypeWrapper, IPawnWrapper)>());
+            return (new List<WorkTableEntry>(), new HashSet<(IWorkTypeWrapper, IPawnWrapper)>());
         }
     }
 }

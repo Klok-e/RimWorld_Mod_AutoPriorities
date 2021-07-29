@@ -38,6 +38,7 @@
         <Compile Include="AutoPriorities_Dialog.cs" />
         <Compile Include="Core\AuxillaryStructures.cs" />
         <Compile Include="Core\Controller.cs" />
+        <Compile Include="Core\MapSpecificData.cs" />
         <Compile Include="Core\PercentTableSaver.cs" />
         <Compile Include="Core\Resources.cs" />
         <Compile Include="Core\Unit.cs" />
@@ -67,6 +68,7 @@
         <Compile Include="Utils\PoolFactory.cs" />
         <Compile Include="Utils\QuickProfiler.cs" />
         <Compile Include="Utils\QuickProfilerFactory.cs" />
+        <Compile Include="WorkTableEntry.cs" />
         <Compile Include="WorldInfoRetriever\IWorldInfoFacade.cs" />
         <Compile Include="WorldInfoRetriever\IWorldInfoRetriever.cs" />
         <Compile Include="WorldInfoRetriever\WorldInfoFacade.cs" />

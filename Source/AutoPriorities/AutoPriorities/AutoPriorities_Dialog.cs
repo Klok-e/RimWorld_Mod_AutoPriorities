@@ -176,7 +176,7 @@ namespace AutoPriorities
                 var maxJobsSliderRect = new Rect(maxJobsElementXPos, slidersRect.yMin + 60f, SliderWidth, SliderHeight);
 
                 var newMaxJobsSliderValue = MaxJobsPerPawnSlider(maxJobsSliderRect,
-                    Mathf.Clamp(pr.maxJobs.V, 0f, _pawnsData.WorkTypes.Count), out var skipTextAssign);
+                    Mathf.Clamp(pr.jobCount.V, 0f, _pawnsData.WorkTypes.Count), out var skipTextAssign);
 
                 var jobCountMaxLabelRect = new Rect(maxJobsSliderRect.xMax - PercentStringWidth,
                     maxJobsSliderRect.yMax + 3f, PercentStringWidth, 25f);
@@ -184,7 +184,7 @@ namespace AutoPriorities
                 newMaxJobsSliderValue =
                     MaxJobsPerPawnField(jobCountMaxLabelRect, newMaxJobsSliderValue, skipTextAssign);
 
-                pr.maxJobs = Mathf.RoundToInt(newMaxJobsSliderValue);
+                pr.jobCount = Mathf.RoundToInt(newMaxJobsSliderValue);
                 workTables[table] = pr;
 
                 // draw line on the right from max job sliders
@@ -248,9 +248,7 @@ namespace AutoPriorities
             return newMaxJobsSliderValue;
         }
 
-        private void DrawWorkListForPriority(
-            (Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes) pr,
-            Rect slidersRect)
+        private void DrawWorkListForPriority(WorkTableEntry pr, Rect slidersRect)
         {
             // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority"))
             {
@@ -524,7 +522,10 @@ namespace AutoPriorities
         private void AddPriority()
         {
             var dict = new Dictionary<IWorkTypeWrapper, TablePercent>();
-            _pawnsData.WorkTables.Add((0, _pawnsData.WorkTypes.Count, dict));
+            _pawnsData.WorkTables.Add(new WorkTableEntry
+            {
+                priority = 0, jobCount = _pawnsData.WorkTypes.Count, workTypes = dict
+            });
 
             foreach (var keyValue in _pawnsData.WorkTypes) dict.Add(keyValue, TablePercent.Percent(0));
         }

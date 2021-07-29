@@ -3,7 +3,6 @@ using System.Linq;
 using AutoFixture;
 using AutoPriorities;
 using AutoPriorities.APLogger;
-using AutoPriorities.Core;
 using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.Percents;
 using AutoPriorities.WorldInfoRetriever;
@@ -60,9 +59,10 @@ namespace Tests
                        {
                            ExcludedPawns =
                                new HashSet<(IWorkTypeWrapper, IPawnWrapper)> {(_pw.workTypes[1], _pw.pawns[1])},
-                           WorkTablesData =
-                               new List<(Priority priority, JobCount maxJobs,
-                                   Dictionary<IWorkTypeWrapper, TablePercent> workTypes)> {(1, 4, workTypePercent)}
+                           WorkTablesData = new List<WorkTableEntry>
+                           {
+                               new() {priority = 1, jobCount = 4, workTypes = workTypePercent}
+                           }
                        });
 
             // act
@@ -108,9 +108,10 @@ namespace Tests
                        {
                            ExcludedPawns =
                                new HashSet<(IWorkTypeWrapper, IPawnWrapper)> {(_pw.workTypes[1], _pw.pawns[1])},
-                           WorkTablesData =
-                               new List<(Priority priority, JobCount maxJobs,
-                                   Dictionary<IWorkTypeWrapper, TablePercent> workTypes)> {(1, 4, workTypePercent)}
+                           WorkTablesData = new List<WorkTableEntry>
+                           {
+                               new() {priority = 1, jobCount = 4, workTypes = workTypePercent}
+                           }
                        });
 
             // act

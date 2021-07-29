@@ -14,8 +14,7 @@ namespace AutoPriorities.Core
             public List<Tupl> data = new();
             public List<WorktypePawn> excludedPawns = new();
 
-            public List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
-                ParsedData(IWorldInfoFacade serializer)
+            public List<WorkTableEntry> ParsedData(IWorldInfoFacade serializer)
             {
                 return data.Select(x => x.Parsed(serializer))
                            .ToList();
@@ -30,8 +29,7 @@ namespace AutoPriorities.Core
             }
 
             public static Ser Serialized(
-                (List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent> workTypes)>
-                    percents, HashSet<(IWorkTypeWrapper, IPawnWrapper)> excluded) data)
+                (List<WorkTableEntry> percents, HashSet<(IWorkTypeWrapper, IPawnWrapper)> excluded) data)
             {
                 return new()
                 {
@@ -65,14 +63,17 @@ namespace AutoPriorities.Core
             public int jobsMax;
             public int priority;
 
-            public (Priority, JobCount, Dictionary<IWorkTypeWrapper, TablePercent> ) Parsed(IWorldInfoFacade serializer)
+            public WorkTableEntry Parsed(IWorldInfoFacade serializer)
             {
-                return (priority, jobsMax, dict.Parsed(serializer));
+                return new() {priority = priority, jobCount = jobsMax, workTypes = dict.Parsed(serializer)};
             }
 
-            public static Tupl Serialized((Priority, JobCount, Dictionary<IWorkTypeWrapper, TablePercent>) val)
+            public static Tupl Serialized(WorkTableEntry val)
             {
-                return new() {priority = val.Item1.V, jobsMax = val.Item2.V, dict = Dic.Serialized(val.Item3)};
+                return new()
+                {
+                    priority = val.priority.V, jobsMax = val.jobCount.V, dict = Dic.Serialized(val.workTypes)
+                };
             }
         }
 
