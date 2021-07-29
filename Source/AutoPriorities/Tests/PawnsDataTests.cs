@@ -22,12 +22,11 @@ namespace Tests
     {
         private IFixture _fixture = null!;
         private ILogger _logger = null!;
-        private IPawnWrapper[] _pawns = null!;
         private PawnsDataBuilder _pawnsData = null!;
         private IWorldInfoRetriever _retriever = null!;
         private IPawnsDataSerializer _serializer = null!;
-        private IWorkTypeWrapper[] _workTypes = null!;
         private IWorldInfoFacade _worldInfo = null!;
+        private PawnWorktypeCreator _pw = null!;
 
         [SetUp]
         public void SetUp()
@@ -38,12 +37,11 @@ namespace Tests
             _serializer = Substitute.For<IPawnsDataSerializer>();
             _pawnsData = new PawnsDataBuilder(_serializer, _retriever, _logger);
             _fixture = FixtureBuilder.Create();
-            _workTypes = WorkTypes();
-            _pawns = Pawns();
+            _pw = PawnWorktypeCreator.Create();
             _retriever.PawnsInPlayerFaction()
-                      .Returns(_pawns);
+                      .Returns(_pw.pawns);
             _retriever.WorkTypeDefsInPriorityOrder()
-                      .Returns(_workTypes);
+                      .Returns(_pw.workTypes);
         }
 
         [Test]
@@ -53,23 +51,19 @@ namespace Tests
 
             var percents = new[]
             {
-                TablePercent.Percent(0.2),
-                TablePercent.Percent(0.2),
-                TablePercent.Percent(0.2),
+                TablePercent.Percent(0.2), TablePercent.Percent(0.2), TablePercent.Percent(0.2),
                 TablePercent.Number(0, 2)
             };
-            var workTypePercent = _workTypes.Zip(percents, (x, y) => (x, y))
-                                            .ToDictionary(k => k.x, v => v.y);
+            var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y))
+                                     .ToDictionary(k => k.x, v => v.y);
             _serializer.LoadSavedData()
                        .Returns(new SaveData
                        {
-                           ExcludedPawns = new HashSet<(IWorkTypeWrapper, IPawnWrapper)> {(_workTypes[1], _pawns[1])},
+                           ExcludedPawns =
+                               new HashSet<(IWorkTypeWrapper, IPawnWrapper)> {(_pw.workTypes[1], _pw.pawns[1])},
                            WorkTablesData =
-                               new List<(Priority priority, JobCount maxJobs, Dictionary<IWorkTypeWrapper, TablePercent>
-                                   workTypes)>
-                               {
-                                   (1, 4, workTypePercent)
-                               }
+                               new List<(Priority priority, JobCount maxJobs,
+                                   Dictionary<IWorkTypeWrapper, TablePercent> workTypes)> {(1, 4, workTypePercent)}
                        });
 
             // act
@@ -78,143 +72,58 @@ namespace Tests
             // assert
             _logger.NoWarnReceived();
 
-            pawnData.SortedPawnFitnessForEveryWork[_workTypes[0]]
+            pawnData.SortedPawnFitnessForEveryWork[_pw.workTypes[0]]
                     .Select(x => x.pawn)
                     .Should()
-                    .Equal(_pawns[1], _pawns[0], _pawns[2], _pawns[3]);
-            pawnData.SortedPawnFitnessForEveryWork[_workTypes[1]]
+                    .Equal(_pw.pawns[1], _pw.pawns[0], _pw.pawns[2], _pw.pawns[3]);
+            pawnData.SortedPawnFitnessForEveryWork[_pw.workTypes[1]]
                     .Select(x => x.pawn)
                     .Should()
-                    .Equal(_pawns[0], _pawns[3], _pawns[2]);
-            pawnData.SortedPawnFitnessForEveryWork[_workTypes[2]]
+                    .Equal(_pw.pawns[0], _pw.pawns[3], _pw.pawns[2]);
+            pawnData.SortedPawnFitnessForEveryWork[_pw.workTypes[2]]
                     .Select(x => x.pawn)
                     .Should()
-                    .Equal(_pawns[3], _pawns[1], _pawns[2]);
-            pawnData.SortedPawnFitnessForEveryWork[_workTypes[3]]
+                    .Equal(_pw.pawns[3], _pw.pawns[1], _pw.pawns[2]);
+            pawnData.SortedPawnFitnessForEveryWork[_pw.workTypes[3]]
                     .Select(x => x.pawn)
                     .Should()
-                    .Equal(_pawns[3], _pawns[0], _pawns[1], _pawns[2]);
+                    .Equal(_pw.pawns[3], _pw.pawns[0], _pw.pawns[1], _pw.pawns[2]);
         }
 
-        private IWorkTypeWrapper[] WorkTypes()
+        [Test]
+        public void Build_WorkTypeNotInSaveButInGame()
         {
-            var cook = new WorkType
+            // arrange
+
+            var percents = new[]
             {
-                defName = "cook",
-                workTags = WorkTags.Cooking,
-                relevantSkillsCount = 1,
-                labelShort = "cook"
+                TablePercent.Percent(0.2), TablePercent.Percent(0.2), TablePercent.Percent(0.2),
+                TablePercent.Number(0, 2),
             };
-            var haul = new WorkType
-            {
-                defName = "haul",
-                workTags = WorkTags.Hauling,
-                relevantSkillsCount = 0,
-                labelShort = "haul"
-            };
-            var mine = new WorkType
-            {
-                defName = "mine",
-                workTags = WorkTags.Mining,
-                relevantSkillsCount = 1,
-                labelShort = "mine"
-            };
-            var craft = new WorkType
-            {
-                defName = "crafting",
-                workTags = WorkTags.Crafting,
-                relevantSkillsCount = 1,
-                labelShort = "crafting"
-            };
-            return new IWorkTypeWrapper[] {cook, haul, mine, craft};
-        }
+            var unknownWorkType = new WorkType() {defName = "unknown"};
+            _pw.workTypes.Add(unknownWorkType);
+            var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y))
+                                     .ToDictionary(k => k.x, v => v.y);
+            _serializer.LoadSavedData()
+                       .Returns(new SaveData
+                       {
+                           ExcludedPawns =
+                               new HashSet<(IWorkTypeWrapper, IPawnWrapper)> {(_pw.workTypes[1], _pw.pawns[1])},
+                           WorkTablesData =
+                               new List<(Priority priority, JobCount maxJobs,
+                                   Dictionary<IWorkTypeWrapper, TablePercent> workTypes)> {(1, 4, workTypePercent)}
+                       });
 
-        private IPawnWrapper[] Pawns()
-        {
-            var pawn1 = Substitute.For<IPawnWrapper>();
-            pawn1.ThingID.Returns("pawn1");
-            pawn1.AnimalOrWildMan()
-                 .Returns(false);
-            pawn1.IsCapableOfWholeWorkType(_workTypes[0])
-                 .Returns(true);
-            pawn1.IsCapableOfWholeWorkType(_workTypes[1])
-                 .Returns(true);
-            // pawn1.IsCapableOfWholeWorkType(_workTypes[2]).Returns(true);
-            pawn1.IsCapableOfWholeWorkType(_workTypes[3])
-                 .Returns(true);
-            pawn1.AverageOfRelevantSkillsFor(_workTypes[0])
-                 .Returns(3);
-            pawn1.AverageOfRelevantSkillsFor(_workTypes[1])
-                 .Returns(4);
-            pawn1.AverageOfRelevantSkillsFor(_workTypes[2])
-                 .Returns(3);
-            pawn1.AverageOfRelevantSkillsFor(_workTypes[3])
-                 .Returns(3);
+            // act
+            var pd = _pawnsData.Build();
 
-            var pawn2 = Substitute.For<IPawnWrapper>();
-            pawn2.ThingID.Returns("pawn2");
-            pawn2.AnimalOrWildMan()
-                 .Returns(false);
-            pawn2.IsCapableOfWholeWorkType(_workTypes[0])
-                 .Returns(true);
-            pawn2.IsCapableOfWholeWorkType(_workTypes[1])
-                 .Returns(true);
-            pawn2.IsCapableOfWholeWorkType(_workTypes[2])
-                 .Returns(true);
-            pawn2.IsCapableOfWholeWorkType(_workTypes[3])
-                 .Returns(true);
-            pawn2.AverageOfRelevantSkillsFor(_workTypes[0])
-                 .Returns(5);
-            pawn2.AverageOfRelevantSkillsFor(_workTypes[1])
-                 .Returns(2);
-            pawn2.AverageOfRelevantSkillsFor(_workTypes[2])
-                 .Returns(4);
-            pawn2.AverageOfRelevantSkillsFor(_workTypes[3])
-                 .Returns(2);
+            // assert
+            _logger.Received(1)
+                   .Warn(Arg.Any<string>());
 
-            var pawn3 = Substitute.For<IPawnWrapper>();
-            pawn3.ThingID.Returns("pawn3");
-            pawn3.AnimalOrWildMan()
-                 .Returns(false);
-            pawn3.IsCapableOfWholeWorkType(_workTypes[0])
-                 .Returns(true);
-            pawn3.IsCapableOfWholeWorkType(_workTypes[1])
-                 .Returns(true);
-            pawn3.IsCapableOfWholeWorkType(_workTypes[2])
-                 .Returns(true);
-            pawn3.IsCapableOfWholeWorkType(_workTypes[3])
-                 .Returns(true);
-            pawn3.AverageOfRelevantSkillsFor(_workTypes[0])
-                 .Returns(2);
-            pawn3.AverageOfRelevantSkillsFor(_workTypes[1])
-                 .Returns(1);
-            pawn3.AverageOfRelevantSkillsFor(_workTypes[2])
-                 .Returns(3);
-            pawn3.AverageOfRelevantSkillsFor(_workTypes[3])
-                 .Returns(1);
-
-            var pawn4 = Substitute.For<IPawnWrapper>();
-            pawn4.ThingID.Returns("pawn4");
-            pawn4.AnimalOrWildMan()
-                 .Returns(false);
-            pawn4.IsCapableOfWholeWorkType(_workTypes[0])
-                 .Returns(true);
-            pawn4.IsCapableOfWholeWorkType(_workTypes[1])
-                 .Returns(true);
-            pawn4.IsCapableOfWholeWorkType(_workTypes[2])
-                 .Returns(true);
-            pawn4.IsCapableOfWholeWorkType(_workTypes[3])
-                 .Returns(true);
-            pawn4.AverageOfRelevantSkillsFor(_workTypes[0])
-                 .Returns(1);
-            pawn4.AverageOfRelevantSkillsFor(_workTypes[1])
-                 .Returns(2);
-            pawn4.AverageOfRelevantSkillsFor(_workTypes[2])
-                 .Returns(6);
-            pawn4.AverageOfRelevantSkillsFor(_workTypes[3])
-                 .Returns(7);
-
-            return new[] {pawn1, pawn2, pawn3, pawn4};
+            pd.WorkTables.First()
+              .workTypes.Should()
+              .HaveCount(5);
         }
     }
 }
