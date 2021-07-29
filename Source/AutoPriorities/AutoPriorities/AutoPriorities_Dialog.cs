@@ -187,10 +187,9 @@ namespace AutoPriorities
 
                 var maxJobsSliderRect = new Rect(maxJobsElementXPos, slidersRect.yMin + 60f, SliderWidth,
                     SliderHeight);
-                var newMaxJobsSliderValue =
-                    GUI.VerticalSlider(maxJobsSliderRect,
-                        Mathf.Clamp(pr.maxJobs.V, 0f, _pawnsData.WorkTypes.Count),
-                        _pawnsData.WorkTypes.Count, 0f);
+
+                var newMaxJobsSliderValue = MaxJobsPerPawnSlider(maxJobsSliderRect,
+                    Mathf.Clamp(pr.maxJobs.V, 0f, _pawnsData.WorkTypes.Count), out var skipTextAssign);
 
                 var jobCountMaxLabelRect = new Rect(
                     maxJobsSliderRect.xMax - PercentStringWidth,
@@ -198,9 +197,8 @@ namespace AutoPriorities
                     PercentStringWidth,
                     25f);
 
-                var maxJobsText = Mathf.RoundToInt(newMaxJobsSliderValue)
-                                       .ToString();
-                Widgets.TextFieldNumeric(jobCountMaxLabelRect, ref newMaxJobsSliderValue, ref maxJobsText);
+                newMaxJobsSliderValue =
+                    MaxJobsPerPawnField(jobCountMaxLabelRect, newMaxJobsSliderValue, skipTextAssign);
 
                 pr.maxJobs = Mathf.RoundToInt(newMaxJobsSliderValue);
                 workTables[table] = pr;
@@ -241,6 +239,38 @@ namespace AutoPriorities
                 AddPriority();
                 SoundDefOf.Click.PlayOneShotOnCamera();
             }
+        }
+
+        private float MaxJobsPerPawnSlider(Rect rect, float currentMaxJobs, out bool valueWasAssigned)
+        {
+            var newMaxJobsSliderValue =
+                GUI.VerticalSlider(rect,
+                    currentMaxJobs,
+                    _pawnsData.WorkTypes.Count, 0f);
+            valueWasAssigned = Math.Abs(newMaxJobsSliderValue - currentMaxJobs) > 0.0001;
+            return newMaxJobsSliderValue;
+        }
+
+        private float MaxJobsPerPawnField(Rect jobCountMaxLabelRect, float newMaxJobsSliderValue, bool skipAssign)
+        {
+            var maxJobsText = _textFieldBuffers.GetValueOrDefault(jobCountMaxLabelRect) ?? Mathf
+                .RoundToInt(newMaxJobsSliderValue)
+                .ToString();
+            var prevSliderVal = newMaxJobsSliderValue;
+            Widgets.TextFieldNumeric(jobCountMaxLabelRect, ref newMaxJobsSliderValue, ref maxJobsText);
+
+            // so that the text input doesn't override values set by slider
+            if (skipAssign)
+            {
+                _textFieldBuffers[jobCountMaxLabelRect] = null;
+                return prevSliderVal;
+            }
+
+            if (Math.Abs(prevSliderVal - newMaxJobsSliderValue) < 0.0001)
+                _textFieldBuffers[jobCountMaxLabelRect] = maxJobsText;
+            else
+                _textFieldBuffers[jobCountMaxLabelRect] = null;
+            return newMaxJobsSliderValue;
         }
 
         private void DrawWorkListForPriority(
@@ -377,10 +407,8 @@ namespace AutoPriorities
             }
 
             if (Math.Abs(prevSliderVal - value) < 0.0001)
-                // _logger.Info($"no change. text: {percentsText}, value: {value}");
                 _textFieldBuffers[rect] = percentsText;
             else
-                // _logger.Info($"change. text: {percentsText}, value: {value}, prev: {prevSliderVal}");
                 _textFieldBuffers[rect] = null;
 
             GUI.color = prevCol;
