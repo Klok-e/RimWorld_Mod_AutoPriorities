@@ -6,7 +6,6 @@ using AutoPriorities.APLogger;
 using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.Percents;
 using AutoPriorities.WorldInfoRetriever;
-using AutoPriorities.Wrappers;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
@@ -54,16 +53,25 @@ namespace Tests
             };
             var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y))
                                      .ToDictionary(k => k.x, v => v.y);
+            var save = new SaveData
+            {
+                ExcludedPawns = new HashSet<ExcludedPawnEntry>
+                {
+                    new()
+                    {
+                        workDef = _pw.workTypes[1]
+                                     .defName,
+                        pawnThingId = _pw.pawns[1]
+                                         .ThingID
+                    }
+                },
+                WorkTablesData = new List<WorkTableEntry>
+                {
+                    new() {priority = 1, jobCount = 4, workTypes = workTypePercent}
+                }
+            };
             _serializer.LoadSavedData()
-                       .Returns(new SaveData
-                       {
-                           ExcludedPawns =
-                               new HashSet<(IWorkTypeWrapper, IPawnWrapper)> {(_pw.workTypes[1], _pw.pawns[1])},
-                           WorkTablesData = new List<WorkTableEntry>
-                           {
-                               new() {priority = 1, jobCount = 4, workTypes = workTypePercent}
-                           }
-                       });
+                       .Returns(save);
 
             // act
             var pawnData = _pawnsData.Build();
@@ -103,16 +111,25 @@ namespace Tests
             _pw.workTypes.Add(unknownWorkType);
             var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y))
                                      .ToDictionary(k => k.x, v => v.y);
+            var save = new SaveData
+            {
+                ExcludedPawns = new HashSet<ExcludedPawnEntry>
+                {
+                    new()
+                    {
+                        workDef = _pw.workTypes[1]
+                                     .defName,
+                        pawnThingId = _pw.pawns[1]
+                                         .ThingID
+                    }
+                },
+                WorkTablesData = new List<WorkTableEntry>
+                {
+                    new() {priority = 1, jobCount = 4, workTypes = workTypePercent}
+                }
+            };
             _serializer.LoadSavedData()
-                       .Returns(new SaveData
-                       {
-                           ExcludedPawns =
-                               new HashSet<(IWorkTypeWrapper, IPawnWrapper)> {(_pw.workTypes[1], _pw.pawns[1])},
-                           WorkTablesData = new List<WorkTableEntry>
-                           {
-                               new() {priority = 1, jobCount = 4, workTypes = workTypePercent}
-                           }
-                       });
+                       .Returns(save);
 
             // act
             var pd = _pawnsData.Build();

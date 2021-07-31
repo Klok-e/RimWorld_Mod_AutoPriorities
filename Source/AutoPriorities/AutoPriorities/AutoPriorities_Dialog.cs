@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoPriorities.Core;
-using AutoPriorities.Extensions;
 using AutoPriorities.ImportantJobs;
 using AutoPriorities.Percents;
 using AutoPriorities.Utils;
@@ -39,11 +38,11 @@ namespace AutoPriorities
         private const string ImportantJobsLabel = "Important Jobs";
         private const string Label = "Run AutoPriorities";
         private const float PawnNameCoWidth = 150f;
+        private readonly float _importantJobsLabelWidth = ImportantJobsLabel.GetWidthCached() + 10f;
+        private readonly IImportantJobsProvider _importantJobsProvider;
         private readonly float _labelWidth = Label.GetWidthCached() + 10f;
         private readonly ILogger _logger;
-        private readonly IImportantJobsProvider _importantJobsProvider;
         private readonly float _pawnExcludeLabelWidth = PawnExcludeLabel.GetWidthCached() + 10f;
-        private readonly float _importantJobsLabelWidth = ImportantJobsLabel.GetWidthCached() + 10f;
         private readonly PawnsData _pawnsData;
         private readonly PrioritiesAssigner _prioritiesAssigner;
         private readonly HashSet<Priority> _prioritiesEncounteredCached = new();
@@ -192,13 +191,9 @@ namespace AutoPriorities
                 if (prev == next) continue;
 
                 if (next)
-                {
                     workTypes.Add(workType);
-                }
                 else
-                {
                     workTypes.Remove(workType);
-                }
 
                 _importantJobsProvider.SaveImportantWorkTypes(workTypes.Select(x => x.defName));
             }
@@ -551,12 +546,15 @@ namespace AutoPriorities
                 TooltipHandler.TipRegion(nameRect, "Click here to toggle all jobs");
                 if (Widgets.ButtonInvisible(nameRect))
                 {
-                    var c = _pawnsData.ExcludedPawns.Count(x => x.Item2 == pawn);
+                    var c = _pawnsData.ExcludedPawns.Count(x => x.pawnThingId == pawn.ThingID);
                     if (c > _pawnsData.WorkTypes.Count / 2)
-                        _pawnsData.ExcludedPawns.RemoveWhere(x => x.Item2 == pawn);
+                        _pawnsData.ExcludedPawns.RemoveWhere(x => x.pawnThingId == pawn.ThingID);
                     else
                         foreach (var work in _pawnsData.WorkTypes)
-                            _pawnsData.ExcludedPawns.Add((work, pawn));
+                            _pawnsData.ExcludedPawns.Add(new ExcludedPawnEntry
+                            {
+                                workDef = work.defName, pawnThingId = pawn.ThingID
+                            });
                 }
 
                 Widgets.DrawLine(new Vector2(nameRect.xMin, nameRect.yMax),
@@ -566,7 +564,10 @@ namespace AutoPriorities
                 foreach (var (workType, i) in _pawnsData.WorkTypes.Zip(Enumerable.Range(0, _pawnsData.WorkTypes.Count),
                     (w, i) => (w, i)))
                 {
-                    var prev = _pawnsData.ExcludedPawns.Contains((workType, pawn));
+                    var prev = _pawnsData.ExcludedPawns.Contains(new ExcludedPawnEntry
+                    {
+                        workDef = workType.defName, pawnThingId = pawn.ThingID
+                    });
                     var next = prev;
                     DrawUtil.EmptyCheckbox(nameRect.xMax - (ButtonHeight - 1) / 2 + (i + 1) * WorkLabelHorizOffset,
                         nameRect.yMin, ref next);
@@ -574,7 +575,10 @@ namespace AutoPriorities
 
                     if (next)
                     {
-                        _pawnsData.ExcludedPawns.Add((workType, pawn));
+                        _pawnsData.ExcludedPawns.Add(new ExcludedPawnEntry
+                        {
+                            workDef = workType.defName, pawnThingId = pawn.ThingID
+                        });
 #if DEBUG
                         _logger.Info(
                             $"Pawn {pawn.NameFullColored} with work {workType.defName} was added to the Excluded list");
@@ -582,7 +586,10 @@ namespace AutoPriorities
                     }
                     else
                     {
-                        _pawnsData.ExcludedPawns.Remove((workType, pawn));
+                        _pawnsData.ExcludedPawns.Remove(new ExcludedPawnEntry
+                        {
+                            workDef = workType.defName, pawnThingId = pawn.ThingID
+                        });
 #if DEBUG
                         _logger.Info(
                             $"Pawn {pawn.NameFullColored} with work {workType.defName} was removed from the Excluded list");
@@ -616,7 +623,7 @@ namespace AutoPriorities
         {
             Priorities = 1,
             PawnExclusion = 2,
-            ImportantWorkTypes = 3,
+            ImportantWorkTypes = 3
         }
     }
 }

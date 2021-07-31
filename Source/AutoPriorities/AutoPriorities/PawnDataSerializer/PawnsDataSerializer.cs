@@ -6,7 +6,6 @@ using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 using AutoPriorities.PawnDataSerializer.StreamProviders;
 using AutoPriorities.WorldInfoRetriever;
-using AutoPriorities.Wrappers;
 
 namespace AutoPriorities.PawnDataSerializer
 {
@@ -44,7 +43,7 @@ namespace AutoPriorities.PawnDataSerializer
 
         #endregion
 
-        private void SaveState((List<WorkTableEntry>, HashSet<(IWorkTypeWrapper, IPawnWrapper)>) state)
+        private void SaveState((List<WorkTableEntry>, HashSet<ExcludedPawnEntry>) state)
         {
             _streamProvider.WithStream(_fullPath, FileMode.Create, stream =>
             {
@@ -53,7 +52,7 @@ namespace AutoPriorities.PawnDataSerializer
             });
         }
 
-        private (List<WorkTableEntry> percents, HashSet<(IWorkTypeWrapper, IPawnWrapper)> excluded) GetStateLoaders()
+        private (List<WorkTableEntry> percents, HashSet<ExcludedPawnEntry> excluded) GetStateLoaders()
         {
             try
             {
@@ -71,7 +70,7 @@ namespace AutoPriorities.PawnDataSerializer
                 _logger.Err(e);
             }
 
-            return (new List<WorkTableEntry>(), new HashSet<(IWorkTypeWrapper, IPawnWrapper)>());
+            return (new List<WorkTableEntry>(), new HashSet<ExcludedPawnEntry>());
         }
     }
 }

@@ -20,16 +20,19 @@ namespace AutoPriorities.Core
                            .ToList();
             }
 
-            public HashSet<(IWorkTypeWrapper, IPawnWrapper)> ParsedExcluded(IWorldInfoFacade serializer)
+            public HashSet<ExcludedPawnEntry> ParsedExcluded(IWorldInfoFacade serializer)
             {
                 return excludedPawns.Select(x => x.Parsed(serializer))
                                     .Where(p => p.Item1 != null && p.Item2 != null)
-                                    .Select(p => (p.Item1!, p.Item2!))
+                                    .Select(p =>
+                                        new ExcludedPawnEntry
+                                        {
+                                            workDef = p.Item1!.defName, pawnThingId = p.Item2!.ThingID
+                                        })
                                     .ToHashSet();
             }
 
-            public static Ser Serialized(
-                (List<WorkTableEntry> percents, HashSet<(IWorkTypeWrapper, IPawnWrapper)> excluded) data)
+            public static Ser Serialized((List<WorkTableEntry> percents, HashSet<ExcludedPawnEntry> excluded) data)
             {
                 return new()
                 {
@@ -51,9 +54,9 @@ namespace AutoPriorities.Core
                 return (serializer.StringToDef(workType), serializer.IdToPawn(pawnId));
             }
 
-            public static WorktypePawn Serialized((IWorkTypeWrapper work, IPawnWrapper pawn) data)
+            public static WorktypePawn Serialized(ExcludedPawnEntry data)
             {
-                return new() {workType = data.work.defName, pawnId = data.pawn.ThingID};
+                return new() {workType = data.workDef, pawnId = data.pawnThingId};
             }
         }
 

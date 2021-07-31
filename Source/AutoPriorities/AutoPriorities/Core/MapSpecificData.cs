@@ -5,8 +5,7 @@ namespace AutoPriorities.Core
 {
     public class MapSpecificData : MapComponent
     {
-        public List<string> importantWorks =
-            new List<string>() {"Firefighter", "Patient", "PatientBedRest", "BasicWorker"};
+        public List<string> importantWorks = new() {"Firefighter", "Patient", "PatientBedRest", "BasicWorker"};
 
         public MapSpecificData(Map map)
             : base(map)
@@ -28,10 +27,7 @@ namespace AutoPriorities.Core
                 return null;
             }
 
-            if (map.GetComponent<MapSpecificData>() == null)
-            {
-                map.components.Add(new MapSpecificData(map));
-            }
+            if (map.GetComponent<MapSpecificData>() == null) map.components.Add(new MapSpecificData(map));
 
             return map.GetComponent<MapSpecificData>();
         }

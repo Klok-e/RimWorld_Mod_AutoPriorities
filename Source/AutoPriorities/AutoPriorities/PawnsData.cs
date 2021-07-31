@@ -27,7 +27,7 @@ namespace AutoPriorities
 
         public List<WorkTableEntry> WorkTables { get; private set; } = new();
 
-        public HashSet<(IWorkTypeWrapper work, IPawnWrapper pawn)> ExcludedPawns { get; private set; } = new();
+        public HashSet<ExcludedPawnEntry> ExcludedPawns { get; private set; } = new();
 
         public HashSet<IWorkTypeWrapper> WorkTypes { get; } = new();
 
@@ -84,7 +84,10 @@ namespace AutoPriorities
                         var fitness = -1d;
                         try
                         {
-                            if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains((work, pawn)))
+                            if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains(new ExcludedPawnEntry
+                            {
+                                workDef = work.defName, pawnThingId = pawn.ThingID
+                            }))
                             {
                                 var skill = pawn.AverageOfRelevantSkillsFor(work);
                                 double passion = PassionFactor(pawn.MaxPassionOfRelevantSkillsFor(work));
@@ -112,8 +115,17 @@ namespace AutoPriorities
                 foreach (var keyValue in SortedPawnFitnessForEveryWork)
                     keyValue.Value.Sort((x, y) => y.fitness.CompareTo(x.fitness));
 
+                _logger.Info(
+                    $"player pawns: {string.Join("; ", AllPlayerPawns.Select(x => $"{x.NameFullColored}:{x.ThingID}"))}");
                 // remove all non player pawns
-                ExcludedPawns.RemoveWhere(wp => !AllPlayerPawns.Contains(wp.pawn));
+                ExcludedPawns.RemoveWhere(wp =>
+                {
+                    var res = !AllPlayerPawns.Select(x => x.ThingID)
+                                             .Contains(wp.pawnThingId);
+                    if (res) _logger.Err($"INFO: removing {wp.pawnThingId} from excluded list");
+
+                    return res;
+                });
             }
             catch (Exception e)
             {

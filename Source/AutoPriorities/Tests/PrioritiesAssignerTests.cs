@@ -73,86 +73,6 @@ namespace Tests
                .workSettingsSetPriority(_pw.workTypes[3], 1);
         }
 
-        private void AddMorePawnsToPw()
-        {
-            var pawn5 = Substitute.For<IPawnWrapper>();
-            pawn5.ThingID.Returns("pawn1");
-            pawn5.IsCapableOfWholeWorkType(_pw.workTypes[0])
-                 .Returns(true);
-            pawn5.IsCapableOfWholeWorkType(_pw.workTypes[1])
-                 .Returns(true);
-            // pawn1.IsCapableOfWholeWorkType(_pw._workTypes[2]).Returns(true);
-            pawn5.IsCapableOfWholeWorkType(_pw.workTypes[3])
-                 .Returns(true);
-            pawn5.AverageOfRelevantSkillsFor(_pw.workTypes[0])
-                 .Returns(3);
-            pawn5.AverageOfRelevantSkillsFor(_pw.workTypes[1])
-                 .Returns(4);
-            pawn5.AverageOfRelevantSkillsFor(_pw.workTypes[2])
-                 .Returns(3);
-            pawn5.AverageOfRelevantSkillsFor(_pw.workTypes[3])
-                 .Returns(3);
-
-            var pawn6 = Substitute.For<IPawnWrapper>();
-            pawn6.ThingID.Returns("pawn2");
-            pawn6.IsCapableOfWholeWorkType(_pw.workTypes[0])
-                 .Returns(true);
-            pawn6.IsCapableOfWholeWorkType(_pw.workTypes[1])
-                 .Returns(true);
-            pawn6.IsCapableOfWholeWorkType(_pw.workTypes[2])
-                 .Returns(true);
-            pawn6.IsCapableOfWholeWorkType(_pw.workTypes[3])
-                 .Returns(true);
-            pawn6.AverageOfRelevantSkillsFor(_pw.workTypes[0])
-                 .Returns(5);
-            pawn6.AverageOfRelevantSkillsFor(_pw.workTypes[1])
-                 .Returns(2);
-            pawn6.AverageOfRelevantSkillsFor(_pw.workTypes[2])
-                 .Returns(4);
-            pawn6.AverageOfRelevantSkillsFor(_pw.workTypes[3])
-                 .Returns(2);
-
-            var pawn7 = Substitute.For<IPawnWrapper>();
-            pawn7.ThingID.Returns("pawn3");
-            pawn7.IsCapableOfWholeWorkType(_pw.workTypes[0])
-                 .Returns(true);
-            pawn7.IsCapableOfWholeWorkType(_pw.workTypes[1])
-                 .Returns(true);
-            pawn7.IsCapableOfWholeWorkType(_pw.workTypes[2])
-                 .Returns(true);
-            pawn7.IsCapableOfWholeWorkType(_pw.workTypes[3])
-                 .Returns(true);
-            pawn7.AverageOfRelevantSkillsFor(_pw.workTypes[0])
-                 .Returns(2);
-            pawn7.AverageOfRelevantSkillsFor(_pw.workTypes[1])
-                 .Returns(1);
-            pawn7.AverageOfRelevantSkillsFor(_pw.workTypes[2])
-                 .Returns(3);
-            pawn7.AverageOfRelevantSkillsFor(_pw.workTypes[3])
-                 .Returns(1);
-
-            var pawn8 = Substitute.For<IPawnWrapper>();
-            pawn8.ThingID.Returns("pawn4");
-            pawn8.IsCapableOfWholeWorkType(_pw.workTypes[0])
-                 .Returns(true);
-            pawn8.IsCapableOfWholeWorkType(_pw.workTypes[1])
-                 .Returns(true);
-            pawn8.IsCapableOfWholeWorkType(_pw.workTypes[2])
-                 .Returns(true);
-            pawn8.IsCapableOfWholeWorkType(_pw.workTypes[3])
-                 .Returns(true);
-            pawn8.AverageOfRelevantSkillsFor(_pw.workTypes[0])
-                 .Returns(1);
-            pawn8.AverageOfRelevantSkillsFor(_pw.workTypes[1])
-                 .Returns(2);
-            pawn8.AverageOfRelevantSkillsFor(_pw.workTypes[2])
-                 .Returns(6);
-            pawn8.AverageOfRelevantSkillsFor(_pw.workTypes[3])
-                 .Returns(7);
-
-            _pw.pawns.AddRange(new[] {pawn5, pawn6, pawn7});
-        }
-
         private void AssignPawnsData()
         {
             var percents = new[]
@@ -162,16 +82,25 @@ namespace Tests
             };
             var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y))
                                      .ToDictionary(k => k.x, v => v.y);
+            var save = new SaveData
+            {
+                ExcludedPawns = new HashSet<ExcludedPawnEntry>
+                {
+                    new()
+                    {
+                        workDef = _pw.workTypes[1]
+                                     .defName,
+                        pawnThingId = _pw.pawns[1]
+                                         .ThingID
+                    }
+                },
+                WorkTablesData = new List<WorkTableEntry>
+                {
+                    new() {priority = 1, jobCount = 4, workTypes = workTypePercent}
+                }
+            };
             _serializer.LoadSavedData()
-                       .Returns(new SaveData
-                       {
-                           ExcludedPawns =
-                               new HashSet<(IWorkTypeWrapper, IPawnWrapper)> {(_pw.workTypes[1], _pw.pawns[1])},
-                           WorkTablesData = new List<WorkTableEntry>
-                           {
-                               new() {priority = 1, jobCount = 4, workTypes = workTypePercent}
-                           }
-                       });
+                       .Returns(save);
 
             _pawnsData = new PawnsDataBuilder(_serializer, _retriever, _logger).Build();
         }
