@@ -115,14 +115,14 @@ namespace AutoPriorities
                 foreach (var keyValue in SortedPawnFitnessForEveryWork)
                     keyValue.Value.Sort((x, y) => y.fitness.CompareTo(x.fitness));
 
-                _logger.Info(
-                    $"player pawns: {string.Join("; ", AllPlayerPawns.Select(x => $"{x.NameFullColored}:{x.ThingID}"))}");
+                // _logger.Info(
+                //     $"player pawns: {string.Join("; ", AllPlayerPawns.Select(x => $"{x.NameFullColored}:{x.ThingID}"))}");
                 // remove all non player pawns
                 ExcludedPawns.RemoveWhere(wp =>
                 {
                     var res = !AllPlayerPawns.Select(x => x.ThingID)
                                              .Contains(wp.pawnThingId);
-                    if (res) _logger.Err($"INFO: removing {wp.pawnThingId} from excluded list");
+                    // if (res) _logger.Err($"INFO: removing {wp.pawnThingId} from excluded list");
 
                     return res;
                 });
