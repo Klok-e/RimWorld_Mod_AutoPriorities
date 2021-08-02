@@ -43,7 +43,6 @@
         <Compile Include="Core\Resources.cs" />
         <Compile Include="Core\Unit.cs" />
         <Compile Include="ExcludedPawnEntry.cs" />
-        <Compile Include="Extensions\PawnExtensions.cs" />
         <Compile Include="Extensions\CollectionExtensions.cs" />
         <Compile Include="ImportantJobs\IImportantJobsProvider.cs" />
         <Compile Include="ImportantJobs\ImportantJobsProvider.cs" />

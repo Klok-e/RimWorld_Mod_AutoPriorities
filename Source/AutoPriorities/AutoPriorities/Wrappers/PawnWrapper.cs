@@ -1,4 +1,3 @@
-using AutoPriorities.Extensions;
 using RimWorld;
 using Verse;
 
@@ -23,7 +22,7 @@ namespace AutoPriorities.Wrappers
 
         public bool IsCapableOfWholeWorkType(IWorkTypeWrapper work)
         {
-            return _pawn.IsCapableOfWholeWorkType(work);
+            return !_pawn.WorkTypeIsDisabled(((WorkTypeWrapper)work).workTypeDef);
         }
 
         public double AverageOfRelevantSkillsFor(IWorkTypeWrapper work)
