@@ -17,7 +17,7 @@ namespace AutoPriorities.WorldInfoRetriever
 
         public IEnumerable<IPawnWrapper> PawnsInPlayerFaction()
         {
-            return Find.CurrentMap.mapPawns.FreeColonists_NoHusks.Select(x => new PawnWrapper(x));
+            return Find.CurrentMap.mapPawns.FreeColonists.Select(x => new PawnWrapper(x));
         }
 
         public double PassionMultiplier => Controller.PassionMult;
