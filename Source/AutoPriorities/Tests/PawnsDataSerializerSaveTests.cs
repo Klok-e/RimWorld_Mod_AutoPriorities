@@ -47,7 +47,7 @@ namespace Tests
 
             _retriever.WorkTypeDefsInPriorityOrder()
                       .Returns(TestHelper.WorkTypes.Select(x => _fixture.Build<WorkType>()
-                                                                        .With(y => y.defName, x)
+                                                                        .With(y => y.DefName, x)
                                                                         .Create()));
             var fileContents = File.ReadAllBytes(TestHelper.SavePath);
             _stream.Write(fileContents, 0, fileContents.Length);
@@ -59,7 +59,7 @@ namespace Tests
             // act
             _serializer.SaveData(new SaveDataRequest
             {
-                ExcludedPawns = loaded.ExcludedPawns, WorkTablesData = loaded.WorkTablesData
+                ExcludedPawns = loaded!.ExcludedPawns, WorkTablesData = loaded.WorkTablesData
             });
             var actualString = Encoding.UTF8.GetString(_stream.ToArray());
 

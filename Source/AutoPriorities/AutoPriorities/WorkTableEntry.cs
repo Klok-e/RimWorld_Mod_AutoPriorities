@@ -7,10 +7,10 @@ namespace AutoPriorities
 {
     public struct WorkTableEntry
     {
-        public Priority priority { get; set; }
+        public Priority Priority { get; set; }
 
-        public JobCount jobCount { get; set; }
+        public JobCount JobCount { get; set; }
 
-        public Dictionary<IWorkTypeWrapper, TablePercent> workTypes { get; set; }
+        public Dictionary<IWorkTypeWrapper, TablePercent> WorkTypes { get; set; }
     }
 }

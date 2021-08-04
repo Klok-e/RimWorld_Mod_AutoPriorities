@@ -7,13 +7,13 @@ namespace Tests.MockImplementations
     {
         #region IWorkTypeWrapper Members
 
-        public string defName { get; set; } = string.Empty;
+        public string DefName { get; set; } = string.Empty;
 
-        public WorkTags workTags { get; set; }
+        public WorkTags WorkTags { get; set; }
 
-        public int relevantSkillsCount { get; set; }
+        public int RelevantSkillsCount { get; set; }
 
-        public string labelShort { get; set; } = string.Empty;
+        public string LabelShort { get; set; } = string.Empty;
 
         #endregion
     }

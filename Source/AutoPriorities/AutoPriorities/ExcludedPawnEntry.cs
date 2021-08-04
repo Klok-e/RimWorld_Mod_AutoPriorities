@@ -2,8 +2,8 @@ namespace AutoPriorities
 {
     public struct ExcludedPawnEntry
     {
-        public string workDef { get; set; }
+        public string WorkDef { get; set; }
 
-        public string pawnThingId { get; set; }
+        public string PawnThingId { get; set; }
     }
 }

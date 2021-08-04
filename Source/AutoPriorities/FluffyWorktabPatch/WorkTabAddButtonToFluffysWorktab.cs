@@ -25,6 +25,7 @@ namespace FluffyWorktabPatch
         private static void Postfix(Rect rect)
         {
             var window = Controller.Dialog;
+            if (window == null) return;
 
             var button = new Rect(rect.x + 160, rect.y + 5, 25, 25);
 

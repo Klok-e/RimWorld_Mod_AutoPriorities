@@ -30,12 +30,12 @@ namespace AutoPriorities.Percents
 
         public static TablePercent Percent(double value)
         {
-            return new(PercentVariant.Percent, value, 0, 0);
+            return new TablePercent(PercentVariant.Percent, value, 0, 0);
         }
 
         public static TablePercent Number(int numberTotal, int numberCount)
         {
-            return new(PercentVariant.Number, 0, numberTotal, numberCount);
+            return new TablePercent(PercentVariant.Number, 0, numberTotal, numberCount);
         }
 
         public override string ToString()

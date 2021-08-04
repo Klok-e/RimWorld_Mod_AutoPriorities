@@ -24,17 +24,16 @@ namespace AutoPriorities.Core
             {
                 return excludedPawns.Select(x => x.Parsed(serializer))
                                     .Where(p => p.Item1 != null && p.Item2 != null)
-                                    .Select(p =>
-                                        new ExcludedPawnEntry
-                                        {
-                                            workDef = p.Item1!.defName, pawnThingId = p.Item2!.ThingID
-                                        })
+                                    .Select(p => new ExcludedPawnEntry
+                                    {
+                                        WorkDef = p.Item1!.DefName, PawnThingId = p.Item2!.ThingID
+                                    })
                                     .ToHashSet();
             }
 
             public static Ser Serialized((List<WorkTableEntry> percents, HashSet<ExcludedPawnEntry> excluded) data)
             {
-                return new()
+                return new Ser
                 {
                     data = data.percents.Select(Tupl.Serialized)
                                .ToList(),
@@ -56,7 +55,7 @@ namespace AutoPriorities.Core
 
             public static WorktypePawn Serialized(ExcludedPawnEntry data)
             {
-                return new() {workType = data.workDef, pawnId = data.pawnThingId};
+                return new WorktypePawn { workType = data.WorkDef, pawnId = data.PawnThingId };
             }
         }
 
@@ -68,14 +67,17 @@ namespace AutoPriorities.Core
 
             public WorkTableEntry Parsed(IWorldInfoFacade serializer)
             {
-                return new() {priority = priority, jobCount = jobsMax, workTypes = dict.Parsed(serializer)};
+                return new WorkTableEntry
+                {
+                    Priority = priority, JobCount = jobsMax, WorkTypes = dict.Parsed(serializer)
+                };
             }
 
             public static Tupl Serialized(WorkTableEntry val)
             {
-                return new()
+                return new Tupl
                 {
-                    priority = val.priority.V, jobsMax = val.jobCount.V, dict = Dic.Serialized(val.workTypes)
+                    priority = val.Priority.v, jobsMax = val.JobCount.v, dict = Dic.Serialized(val.WorkTypes)
                 };
             }
         }
@@ -93,7 +95,7 @@ namespace AutoPriorities.Core
 
             public static Dic Serialized(Dictionary<IWorkTypeWrapper, TablePercent> dic)
             {
-                return new()
+                return new Dic
                 {
                     percents = dic.Select(kv => StrPercent.Serialized((kv.Key, kv.Value)))
                                   .ToList()
@@ -113,7 +115,7 @@ namespace AutoPriorities.Core
 
             public static StrPercent Serialized((IWorkTypeWrapper work, TablePercent percent) val)
             {
-                return new() {workType = val.work.defName, percent = UnionPercent.Serialized(val.percent)};
+                return new StrPercent { workType = val.work.DefName, percent = UnionPercent.Serialized(val.percent) };
             }
         }
 
@@ -138,7 +140,10 @@ namespace AutoPriorities.Core
             {
                 return percent.Variant switch
                 {
-                    PercentVariant.Number => new UnionPercent {variant = Variant.Number, number = percent.NumberCount},
+                    PercentVariant.Number => new UnionPercent
+                    {
+                        variant = Variant.Number, number = percent.NumberCount
+                    },
                     PercentVariant.Percent => new UnionPercent
                     {
                         variant = Variant.Percent, percent = percent.PercentValue

@@ -37,7 +37,7 @@ namespace AutoPriorities.Wrappers
             return _pawn.skills.MaxPassionOfRelevantSkillsFor(((WorkTypeWrapper)work).workTypeDef);
         }
 
-        public void workSettingsSetPriority(IWorkTypeWrapper work, int priorityV)
+        public void WorkSettingsSetPriority(IWorkTypeWrapper work, int priorityV)
         {
             // TODO: terrible hack, fix this
             _pawn.workSettings.SetPriority(((WorkTypeWrapper)work).workTypeDef, priorityV);

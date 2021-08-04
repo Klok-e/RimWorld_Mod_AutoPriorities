@@ -13,13 +13,13 @@ namespace AutoPriorities.Wrappers
 
         #region IWorkTypeWrapper Members
 
-        public string defName => workTypeDef.defName;
+        public string DefName => workTypeDef.defName;
 
-        public WorkTags workTags => workTypeDef.workTags;
+        public WorkTags WorkTags => workTypeDef.workTags;
 
-        public int relevantSkillsCount => workTypeDef.relevantSkills.Count;
+        public int RelevantSkillsCount => workTypeDef.relevantSkills.Count;
 
-        public string labelShort => workTypeDef.labelShort;
+        public string LabelShort => workTypeDef.labelShort;
 
         #endregion
     }

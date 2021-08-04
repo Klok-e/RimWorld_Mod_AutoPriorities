@@ -29,11 +29,29 @@ namespace AutoPriorities.PawnDataSerializer
 
         #region IPawnsDataSerializer Members
 
-        public SaveData LoadSavedData()
+        public SaveData? LoadSavedData()
         {
-            var (percents, excluded) = GetStateLoaders();
+            try
+            {
+                if (_streamProvider.FileExists(_fullPath))
+                    return _streamProvider.WithStream(_fullPath, FileMode.OpenOrCreate, stream =>
+                    {
+                        var ser =
+                            (PercentTableSaver.Ser)new XmlSerializer(typeof(PercentTableSaver.Ser)).Deserialize(stream);
+                        return new SaveData
+                        {
+                            ExcludedPawns = ser.ParsedExcluded(_worldInfo),
+                            WorkTablesData = ser.ParsedData(_worldInfo)
+                        };
+                    });
+            }
+            catch (Exception e)
+            {
+                _logger.Err("Error while deserializing state");
+                _logger.Err(e);
+            }
 
-            return new SaveData {ExcludedPawns = excluded, WorkTablesData = percents};
+            return null;
         }
 
         public void SaveData(SaveDataRequest request)
@@ -43,6 +61,11 @@ namespace AutoPriorities.PawnDataSerializer
 
         #endregion
 
+        public void DeleteSaveFile()
+        {
+            File.Delete(_fullPath);
+        }
+
         private void SaveState((List<WorkTableEntry>, HashSet<ExcludedPawnEntry>) state)
         {
             _streamProvider.WithStream(_fullPath, FileMode.Create, stream =>
@@ -50,27 +73,6 @@ namespace AutoPriorities.PawnDataSerializer
                 new XmlSerializer(typeof(PercentTableSaver.Ser)).Serialize(stream,
                     PercentTableSaver.Ser.Serialized(state));
             });
-        }
-
-        private (List<WorkTableEntry> percents, HashSet<ExcludedPawnEntry> excluded) GetStateLoaders()
-        {
-            try
-            {
-                if (_streamProvider.FileExists(_fullPath))
-                    return _streamProvider.WithStream(_fullPath, FileMode.OpenOrCreate, stream =>
-                    {
-                        var ser =
-                            (PercentTableSaver.Ser)new XmlSerializer(typeof(PercentTableSaver.Ser)).Deserialize(stream);
-                        return (ser.ParsedData(_worldInfo), ser.ParsedExcluded(_worldInfo));
-                    });
-            }
-            catch (Exception e)
-            {
-                _logger.Err("Error while deserializing state");
-                _logger.Err(e);
-            }
-
-            return (new List<WorkTableEntry>(), new HashSet<ExcludedPawnEntry>());
         }
     }
 }

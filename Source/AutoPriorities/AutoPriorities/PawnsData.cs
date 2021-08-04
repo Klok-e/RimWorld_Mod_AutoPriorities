@@ -51,7 +51,10 @@ namespace AutoPriorities
         {
             try
             {
-                _serializer.SaveData(new SaveDataRequest {ExcludedPawns = ExcludedPawns, WorkTablesData = WorkTables});
+                _serializer.SaveData(new SaveDataRequest
+                {
+                    ExcludedPawns = ExcludedPawns, WorkTablesData = WorkTables
+                });
             }
             catch (Exception e)
             {
@@ -86,7 +89,7 @@ namespace AutoPriorities
                         {
                             if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains(new ExcludedPawnEntry
                             {
-                                workDef = work.defName, pawnThingId = pawn.ThingID
+                                WorkDef = work.DefName, PawnThingId = pawn.ThingID
                             }))
                             {
                                 var skill = pawn.AverageOfRelevantSkillsFor(work);
@@ -109,7 +112,7 @@ namespace AutoPriorities
                     if (WorkTypes.Contains(work)) continue;
 
                     WorkTypes.Add(work);
-                    if (work.relevantSkillsCount == 0) WorkTypesNotRequiringSkills.Add(work);
+                    if (work.RelevantSkillsCount == 0) WorkTypesNotRequiringSkills.Add(work);
                 }
 
                 foreach (var keyValue in SortedPawnFitnessForEveryWork)
@@ -121,7 +124,7 @@ namespace AutoPriorities
                 ExcludedPawns.RemoveWhere(wp =>
                 {
                     var res = !AllPlayerPawns.Select(x => x.ThingID)
-                                             .Contains(wp.pawnThingId);
+                                             .Contains(wp.PawnThingId);
                     // if (res) _logger.Err($"INFO: removing {wp.pawnThingId} from excluded list");
 
                     return res;
@@ -139,11 +142,11 @@ namespace AutoPriorities
         {
             var taken = 0d;
             var takenTotal = 0d;
-            foreach (var it in WorkTables.Distinct(x => x.priority))
+            foreach (var it in WorkTables.Distinct(x => x.Priority))
             {
-                var percent = it.workTypes[workType]
+                var percent = it.WorkTypes[workType]
                                 .Value;
-                if (it.priority.V != priorityIgnore.V) taken += percent;
+                if (it.Priority.v != priorityIgnore.v) taken += percent;
                 takenTotal += percent;
             }
 
@@ -179,7 +182,7 @@ namespace AutoPriorities
                 for (var i = 0; i < workTables.Count; i++)
                 {
                     var currentWorkTable = workTables[i]
-                        .workTypes;
+                        .WorkTypes;
 
                     // ToArray is needed to not modify the collection while iterating
                     foreach (var key in currentWorkTable.Keys.ToArray())
@@ -193,11 +196,11 @@ namespace AutoPriorities
 
                 // if there are work types not present in built structure, then add with 0 percent
                 foreach (var work in workTables.SelectMany(keyVal =>
-                    WorkTypes.Where(work => !keyVal.workTypes.ContainsKey(work))))
+                    WorkTypes.Where(work => !keyVal.WorkTypes.ContainsKey(work))))
                 foreach (var it in workTables)
                 {
                     _logger.Warn($"Work type {work} wasn't found in a save file. Setting percent to 0");
-                    it.workTypes.Add(work, TablePercent.Percent(0));
+                    it.WorkTypes.Add(work, TablePercent.Percent(0));
                 }
             }
             catch (Exception e)

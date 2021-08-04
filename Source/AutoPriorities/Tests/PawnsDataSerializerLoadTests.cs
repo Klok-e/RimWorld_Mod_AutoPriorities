@@ -41,25 +41,27 @@ namespace Tests
 
             _retriever.WorkTypeDefsInPriorityOrder()
                       .Returns(TestHelper.WorkTypes.Select(x => _fixture.Build<WorkType>()
-                                                                        .With(y => y.defName, x)
+                                                                        .With(y => y.DefName, x)
                                                                         .Create()));
 
             // act
             var savedData = _serializer.LoadSavedData();
 
             // assert
-            savedData.ExcludedPawns.Should()
-                     .BeEmpty();
+            savedData.Should()
+                     .NotBeNull();
+            savedData!.ExcludedPawns.Should()
+                      .BeEmpty();
             savedData.WorkTablesData.Should()
                      .HaveCount(2);
             savedData.WorkTablesData[0]
-                     .priority.V.Should()
+                     .Priority.v.Should()
                      .Be(2);
             savedData.WorkTablesData[1]
-                     .priority.V.Should()
+                     .Priority.v.Should()
                      .Be(3);
             savedData.WorkTablesData[0]
-                     .workTypes.Should()
+                     .WorkTypes.Should()
                      .HaveCount(20);
 
             _logger.NoWarnReceived();
@@ -74,7 +76,7 @@ namespace Tests
 
             _retriever.WorkTypeDefsInPriorityOrder()
                       .Returns(TestHelper.WorkTypesTruncated.Select(x => _fixture.Build<WorkType>()
-                          .With(y => y.defName, x)
+                          .With(y => y.DefName, x)
                           .Create()));
 
             // act

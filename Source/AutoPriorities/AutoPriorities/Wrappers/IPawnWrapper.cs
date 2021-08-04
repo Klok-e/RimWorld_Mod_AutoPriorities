@@ -16,6 +16,6 @@ namespace AutoPriorities.Wrappers
 
         Passion MaxPassionOfRelevantSkillsFor(IWorkTypeWrapper work);
 
-        void workSettingsSetPriority(IWorkTypeWrapper work, int priorityV);
+        void WorkSettingsSetPriority(IWorkTypeWrapper work, int priorityV);
     }
 }

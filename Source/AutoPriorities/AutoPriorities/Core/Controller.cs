@@ -16,10 +16,9 @@ namespace AutoPriorities.Core
 {
     public class Controller : ModBase
     {
-        private static AutoPrioritiesDialog? _dialog;
         private static ILogger? _logger;
 
-        public static AutoPrioritiesDialog Dialog => _dialog ??= CreateDialog();
+        public static AutoPrioritiesDialog? Dialog { get; private set; }
 
         public static SettingHandle<double>? PassionMult { get; private set; }
 
@@ -33,6 +32,12 @@ namespace AutoPriorities.Core
             HarmonyInst.PatchAll();
         }
 
+        public override void MapLoaded(Map map)
+        {
+            base.MapLoaded(map);
+            Dialog = CreateDialog();
+        }
+
         public override void DefsLoaded()
         {
             base.DefsLoaded();
@@ -40,9 +45,9 @@ namespace AutoPriorities.Core
                 "Determines the importance of passions when assigning priorities", 1d);
         }
 
-        private bool PatchMod(string packageId, string patchName)
+        private void PatchMod(string packageId, string patchName)
         {
-            if (!LoadedModManager.RunningModsListForReading.Exists(m => m.PackageId == packageId)) return false;
+            if (!LoadedModManager.RunningModsListForReading.Exists(m => m.PackageId == packageId)) return;
 
             _logger?.Info($"Patching for: {packageId}");
 
@@ -52,11 +57,9 @@ namespace AutoPriorities.Core
 
             var methods = asm.GetMethodsWithHelpAttribute<PatchInitializeAttribute>();
             foreach (var method in methods) method.Invoke(null, null);
-
-            return true;
         }
 
-        private static AutoPrioritiesDialog CreateDialog()
+        private static AutoPrioritiesDialog? CreateDialog()
         {
             const string filename = "ModAutoPrioritiesSaveNEW.xml";
             string fullPath = Application.persistentDataPath + filename;
@@ -65,10 +68,12 @@ namespace AutoPriorities.Core
             var logger = _logger!;
             var worldFacade = new WorldInfoFacade(worldInfo, logger);
             var streamProvider = new FileStreamProvider();
+            var mapSpecificSerializer = new MapSpecificDataPawnsDataSerializer(logger, worldFacade);
             var serializer = new PawnsDataSerializer(logger, fullPath, worldFacade, streamProvider);
-            var pawnData = new PawnsDataBuilder(serializer, worldInfo, logger).Build();
+            var combinedSer = new CombinedPawnsDataSerializer(logger, mapSpecificSerializer, serializer);
+            var pawnData = new PawnsDataBuilder(combinedSer, worldInfo, logger).Build();
             var importantWorktypes = new ImportantJobsProvider(worldFacade);
-            var priorityAssigner = new PrioritiesAssigner(worldFacade, pawnData, logger, importantWorktypes);
+            var priorityAssigner = new PrioritiesAssigner(pawnData, logger, importantWorktypes);
 
             return new AutoPrioritiesDialog(pawnData, priorityAssigner, logger, importantWorktypes);
         }

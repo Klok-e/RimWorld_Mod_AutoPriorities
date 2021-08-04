@@ -5,7 +5,6 @@ using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 using AutoPriorities.Extensions;
 using AutoPriorities.ImportantJobs;
-using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
 
 namespace AutoPriorities
@@ -15,14 +14,9 @@ namespace AutoPriorities
         private readonly IImportantJobsProvider _importantJobsProvider;
         private readonly ILogger _logger;
         private readonly PawnsData _pawnsData;
-        private readonly IWorldInfoFacade _worldInfo;
 
-        public PrioritiesAssigner(IWorldInfoFacade worldInfo,
-            PawnsData pawnsData,
-            ILogger logger,
-            IImportantJobsProvider importantJobsProvider)
+        public PrioritiesAssigner(PawnsData pawnsData, ILogger logger, IImportantJobsProvider importantJobsProvider)
         {
-            _worldInfo = worldInfo;
             _pawnsData = pawnsData;
             _logger = logger;
             _importantJobsProvider = importantJobsProvider;
@@ -87,7 +81,7 @@ namespace AutoPriorities
 
                 var pawns = fitnessGetter(work);
 #if DEBUG
-                _logger.Info($"worktype {work.defName}");
+                _logger.Info($"worktype {work.DefName}");
 #endif
 
                 foreach (var (priority, maxJobs, jobsToSet) in PriorityPercentCached.Distinct(x => x.priority)
@@ -97,7 +91,7 @@ namespace AutoPriorities
                     .Select(g => (PriorityPercentCached[g.Key]
                         .priority, PriorityPercentCached[g.Key]
                         .maxJobs, g.Count()))
-                    .OrderBy(x => x.priority.V))
+                    .OrderBy(x => x.priority.v))
                 {
                     var jobsSet = 0;
                     // iterate over all the pawns for this job with current priority
@@ -111,12 +105,12 @@ namespace AutoPriorities
                                 .ContainsKey(work) ||
                             // count amount of jobs assigned to pawn on this priority, then compare with max
                             pawnJobs[pawn]
-                                .Count(kv => kv.Value.V == priority.V) >= maxJobs.V)
+                                .Count(kv => kv.Value.v == priority.v) >= maxJobs.v)
                             continue;
 
                         pawnJobs[pawn][work] = priority;
                         jobsSet += 1;
-                        pawn.workSettingsSetPriority(work, priority.V);
+                        pawn.WorkSettingsSetPriority(work, priority.v);
                     }
                 }
 
@@ -131,7 +125,7 @@ namespace AutoPriorities
                         .ContainsKey(work))
                         continue;
 
-                    pawn.workSettingsSetPriority(work, 0);
+                    pawn.WorkSettingsSetPriority(work, 0);
                 }
             }
         }
@@ -141,11 +135,12 @@ namespace AutoPriorities
             List<(Priority, JobCount, double)> priorities)
         {
             priorities.Clear();
-            priorities.AddRange(pawnsData.WorkTables.Select(tup => (tup.priority, tup.jobCount, tup.workTypes[work]
+            priorities.AddRange(pawnsData.WorkTables.Select(tup => (priority: tup.Priority, jobCount: tup.JobCount, tup
+                                             .WorkTypes[work]
                                              .Value))
                                          .Distinct(t => t.priority)
-                                         .Where(t => t.priority.V > 0));
-            priorities.Sort((x, y) => x.Item1.V.CompareTo(y.Item1.V));
+                                         .Where(t => t.priority.v > 0));
+            priorities.Sort((x, y) => x.Item1.v.CompareTo(y.Item1.v));
         }
     }
 }

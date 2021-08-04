@@ -4,12 +4,12 @@ namespace AutoPriorities.Wrappers
 {
     public interface IWorkTypeWrapper
     {
-        string defName { get; }
+        string DefName { get; }
 
-        WorkTags workTags { get; }
+        WorkTags WorkTags { get; }
 
-        int relevantSkillsCount { get; }
+        int RelevantSkillsCount { get; }
 
-        string labelShort { get; }
+        string LabelShort { get; }
     }
 }

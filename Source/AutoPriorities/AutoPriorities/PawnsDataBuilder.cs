@@ -20,7 +20,7 @@ namespace AutoPriorities
         public PawnsData Build()
         {
             var data = new PawnsData(_serializer, _worldInfoRetriever, _logger);
-            var save = _serializer.LoadSavedData();
+            var save = _serializer.LoadSavedData() ?? new SaveData();
             data.SetData(save);
             return data;
         }

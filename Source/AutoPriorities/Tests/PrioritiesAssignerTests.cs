@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using AutoFixture;
 using AutoPriorities;
 using AutoPriorities.APLogger;
 using AutoPriorities.ImportantJobs;
@@ -18,23 +17,19 @@ namespace Tests
     public class PrioritiesAssignerTests
     {
         private PrioritiesAssigner _assigner = null!;
-        private IFixture _fixture = null!;
         private IImportantJobsProvider _importantWorkTypesProvider = null!;
         private ILogger _logger = null!;
         private PawnsData _pawnsData = null!;
         private PawnWorktypeCreator _pw = null!;
         private IWorldInfoRetriever _retriever = null!;
         private IPawnsDataSerializer _serializer = null!;
-        private IWorldInfoFacade _worldInfo = null!;
 
         [SetUp]
         public void SetUp()
         {
             _logger = Substitute.For<ILogger>();
             _retriever = Substitute.For<IWorldInfoRetriever>();
-            _worldInfo = new WorldInfoFacade(_retriever, _logger);
             _serializer = Substitute.For<IPawnsDataSerializer>();
-            _fixture = FixtureBuilder.Create();
             _pw = PawnWorktypeCreator.Create();
             // AddMorePawnsToPw();
             _retriever.PawnsInPlayerFaction()
@@ -45,7 +40,7 @@ namespace Tests
             _importantWorkTypesProvider = Substitute.For<IImportantJobsProvider>();
             _importantWorkTypesProvider.ImportantWorkTypes()
                                        .Returns(new HashSet<IWorkTypeWrapper>());
-            _assigner = new PrioritiesAssigner(_worldInfo, _pawnsData, _logger, _importantWorkTypesProvider);
+            _assigner = new PrioritiesAssigner(_pawnsData, _logger, _importantWorkTypesProvider);
         }
 
         [Test]
@@ -61,16 +56,16 @@ namespace Tests
 
             _pw.pawns[0]
                .Received()
-               .workSettingsSetPriority(_pw.workTypes[1], 1);
+               .WorkSettingsSetPriority(_pw.workTypes[1], 1);
             _pw.pawns[1]
                .Received()
-               .workSettingsSetPriority(_pw.workTypes[0], 1);
+               .WorkSettingsSetPriority(_pw.workTypes[0], 1);
             _pw.pawns[3]
                .Received()
-               .workSettingsSetPriority(_pw.workTypes[2], 1);
+               .WorkSettingsSetPriority(_pw.workTypes[2], 1);
             _pw.pawns[3]
                .Received()
-               .workSettingsSetPriority(_pw.workTypes[3], 1);
+               .WorkSettingsSetPriority(_pw.workTypes[3], 1);
         }
 
         private void AssignPawnsData()
@@ -88,15 +83,15 @@ namespace Tests
                 {
                     new()
                     {
-                        workDef = _pw.workTypes[1]
-                                     .defName,
-                        pawnThingId = _pw.pawns[1]
+                        WorkDef = _pw.workTypes[1]
+                                     .DefName,
+                        PawnThingId = _pw.pawns[1]
                                          .ThingID
                     }
                 },
                 WorkTablesData = new List<WorkTableEntry>
                 {
-                    new() {priority = 1, jobCount = 4, workTypes = workTypePercent}
+                    new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent }
                 }
             };
             _serializer.LoadSavedData()
