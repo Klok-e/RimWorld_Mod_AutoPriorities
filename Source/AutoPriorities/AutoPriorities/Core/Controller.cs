@@ -4,6 +4,7 @@ using AutoPriorities.Extensions;
 using AutoPriorities.ImportantJobs;
 using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.PawnDataSerializer.StreamProviders;
+using AutoPriorities.Ui;
 using AutoPriorities.WorldInfoRetriever;
 using HugsLib;
 using HugsLib.Settings;

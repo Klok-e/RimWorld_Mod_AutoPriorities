@@ -12,11 +12,15 @@ namespace AutoPriorities.PawnDataSerializer
     {
         private readonly ILogger _logger;
         private readonly IWorldInfoFacade _worldInfoFacade;
+        private readonly IPawnDataStringSerializer _serializer;
 
-        public MapSpecificDataPawnsDataSerializer(ILogger logger, IWorldInfoFacade worldInfoFacade)
+        public MapSpecificDataPawnsDataSerializer(ILogger logger,
+            IWorldInfoFacade worldInfoFacade,
+            IPawnDataStringSerializer serializer)
         {
             _logger = logger;
             _worldInfoFacade = worldInfoFacade;
+            _serializer = serializer;
         }
 
         #region IPawnsDataSerializer Members
@@ -28,22 +32,7 @@ namespace AutoPriorities.PawnDataSerializer
 
             if (mapData.pawnsDataXml == null) return new SaveData();
 
-            var stream = new MemoryStream(mapData.pawnsDataXml);
-
-            try
-            {
-                var ser = (PercentTableSaver.Ser)new XmlSerializer(typeof(PercentTableSaver.Ser)).Deserialize(stream);
-                var workTableEntries = ser.ParsedData(_worldInfoFacade);
-                var excludedPawnEntries = ser.ParsedExcluded(_worldInfoFacade);
-                return new SaveData { ExcludedPawns = excludedPawnEntries, WorkTablesData = workTableEntries };
-            }
-            catch (Exception e)
-            {
-                _logger.Err("Error while deserializing state");
-                _logger.Err(e);
-            }
-
-            return null;
+            return _serializer.Deserialize(mapData.pawnsDataXml);
         }
 
         public void SaveData(SaveDataRequest request)
@@ -51,13 +40,8 @@ namespace AutoPriorities.PawnDataSerializer
             var mapData = MapSpecificData.GetForCurrentMap();
             if (mapData == null) return;
 
-            var stream = new MemoryStream();
-
-            new XmlSerializer(typeof(PercentTableSaver.Ser)).Serialize(stream,
-                PercentTableSaver.Ser.Serialized((request.WorkTablesData, request.ExcludedPawns)));
-
-            stream.Position = 0;
-            mapData.pawnsDataXml = stream.ToArray();
+            var ser = _serializer.Serialize(request);
+            mapData.pawnsDataXml = ser;
         }
 
         #endregion

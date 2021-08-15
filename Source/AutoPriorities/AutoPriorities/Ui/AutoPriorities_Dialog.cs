@@ -14,7 +14,7 @@ using Verse.Sound;
 using ILogger = AutoPriorities.APLogger.ILogger;
 using Resources = AutoPriorities.Core.Resources;
 
-namespace AutoPriorities
+namespace AutoPriorities.Ui
 {
     public class AutoPrioritiesDialog : Window
     {
@@ -133,6 +133,7 @@ namespace AutoPriorities
                     default:
                         throw new ArgumentOutOfRangeException(nameof(_currentlySelectedTab));
                 }
+                
 
                 // draw run auto priorities
                 var buttonRect = new Rect(inRect.xMin, inRect.yMax - ButtonHeight, _labelWidth, ButtonHeight);
