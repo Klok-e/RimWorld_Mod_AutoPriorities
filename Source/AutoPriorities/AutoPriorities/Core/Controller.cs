@@ -69,7 +69,8 @@ namespace AutoPriorities.Core
             var logger = _logger!;
             var worldFacade = new WorldInfoFacade(worldInfo, logger);
             var streamProvider = new FileStreamProvider();
-            var mapSpecificSerializer = new MapSpecificDataPawnsDataSerializer(logger, worldFacade);
+            var stringSerializer = new PawnDataStringSerializer(logger, worldFacade);
+            var mapSpecificSerializer = new MapSpecificDataPawnsDataSerializer(logger, worldFacade, stringSerializer);
             var serializer = new PawnsDataSerializer(logger, fullPath, worldFacade, streamProvider);
             var combinedSer = new CombinedPawnsDataSerializer(logger, mapSpecificSerializer, serializer);
             var pawnData = new PawnsDataBuilder(combinedSer, worldInfo, logger).Build();
