@@ -61,11 +61,11 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
                 }
 
                 ScribeMetaHeaderUtility.WriteMetaHeader();
-                Scribe_Deep.Look(ref mapData, "Blueprint");
+                Scribe_Deep.Look(ref mapData, NodeName);
             }
             catch (Exception ex2)
             {
-                Log.Error("Exception while saving blueprint: " + ex2);
+                Log.Error("Exception while saving table: " + ex2);
             }
             finally
             {
@@ -111,6 +111,9 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
             var save = _pawnDataStringSerializer.Deserialize(mapData.pawnsDataXml);
             if (save == null) return;
 
+#if DEBUG
+            _logger.Info("Loading successful. Setting loaded data.");
+#endif
             _pawnsData.SetData(save);
         }
 
