@@ -24,10 +24,11 @@ namespace AutoPriorities.Core
             {
                 return excludedPawns.Select(x => x.Parsed(serializer))
                                     .Where(p => p.Item1 != null && p.Item2 != null)
-                                    .Select(p => new ExcludedPawnEntry
-                                    {
-                                        WorkDef = p.Item1!.DefName, PawnThingId = p.Item2!.ThingID
-                                    })
+                                    .Select(
+                                        p => new ExcludedPawnEntry
+                                        {
+                                            WorkDef = p.Item1!.DefName, PawnThingId = p.Item2!.ThingID
+                                        })
                                     .ToHashSet();
             }
 

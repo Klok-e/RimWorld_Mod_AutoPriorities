@@ -12,11 +12,13 @@ namespace AutoPriorities.PawnDataSerializer
         private readonly ILogger _logger;
         private readonly IWorldInfoFacade _worldInfoFacade;
 
-        public PawnDataStringSerializer(ILogger logger,IWorldInfoFacade worldInfoFacade)
+        public PawnDataStringSerializer(ILogger logger, IWorldInfoFacade worldInfoFacade)
         {
             _logger = logger;
             _worldInfoFacade = worldInfoFacade;
         }
+
+        #region IPawnDataStringSerializer Members
 
         public SaveData? Deserialize(byte[] xml)
         {
@@ -42,11 +44,14 @@ namespace AutoPriorities.PawnDataSerializer
         {
             var stream = new MemoryStream();
 
-            new XmlSerializer(typeof(PercentTableSaver.Ser)).Serialize(stream,
+            new XmlSerializer(typeof(PercentTableSaver.Ser)).Serialize(
+                stream,
                 PercentTableSaver.Ser.Serialized((request.WorkTablesData, request.ExcludedPawns)));
 
             stream.Position = 0;
             return stream.ToArray();
         }
+
+        #endregion
     }
 }

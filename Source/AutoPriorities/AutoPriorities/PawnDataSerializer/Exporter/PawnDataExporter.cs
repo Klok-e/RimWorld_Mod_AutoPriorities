@@ -6,7 +6,6 @@ using System.Xml.Serialization;
 using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 using Verse;
-using FileMode = Mono.Posix.FileMode;
 
 namespace AutoPriorities.PawnDataSerializer.Exporter
 {
@@ -15,10 +14,10 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
         private const string Extension = ".xml";
         private const string NodeName = "Priorities";
         private readonly ILogger _logger;
-        private readonly string _saveDirectoryPath;
-        private readonly PawnsData _pawnsData;
         private readonly IPawnDataStringSerializer _pawnDataStringSerializer;
-        private List<string> _savesCached = new List<string>();
+        private readonly PawnsData _pawnsData;
+        private readonly string _saveDirectoryPath;
+        private List<string> _savesCached = new();
 
         public PawnDataExporter(ILogger logger,
             string saveDirectoryPath,
@@ -32,6 +31,8 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
 
             RecacheSaves();
         }
+
+        #region IPawnDataExporter Members
 
         public void ExportCurrentPawnData(string name)
         {
@@ -118,19 +119,21 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
             return _savesCached;
         }
 
-        private void RecacheSaves()
-        {
-            _savesCached = Directory.EnumerateFiles(_saveDirectoryPath)
-                                    .Select(Path.GetFileName)
-                                    .ToList();
-        }
-
         public void DeleteSave(string name)
         {
             var path = FullPath(name);
             if (!File.Exists(path)) _logger.Warn("Tried to delete a nonexistent file.");
             File.Delete(path);
             RecacheSaves();
+        }
+
+        #endregion
+
+        private void RecacheSaves()
+        {
+            _savesCached = Directory.EnumerateFiles(_saveDirectoryPath)
+                                    .Select(Path.GetFileNameWithoutExtension)
+                                    .ToList();
         }
 
         private string FullPath(string name)

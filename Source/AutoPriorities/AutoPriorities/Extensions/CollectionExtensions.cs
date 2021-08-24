@@ -59,8 +59,9 @@ namespace AutoPriorities.Extensions
         {
             return assembly.GetTypes()
                            .SelectMany(t => t.GetMethods())
-                           .Where(type => type.GetCustomAttributes(typeof(T), true)
-                                              .Length > 0 && type.IsStatic);
+                           .Where(
+                               type => type.GetCustomAttributes(typeof(T), true)
+                                           .Length > 0 && type.IsStatic);
         }
     }
 }

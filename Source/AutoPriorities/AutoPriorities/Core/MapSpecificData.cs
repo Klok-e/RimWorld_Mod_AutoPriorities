@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Verse;
 
 namespace AutoPriorities.Core
 {
     public class MapSpecificData : MapComponent
     {
-        public List<string> importantWorks = new() { "Firefighter", "Patient", "PatientBedRest", "BasicWorker" };
+        public List<string>? importantWorks = new() { "Firefighter", "Patient", "PatientBedRest", "BasicWorker" };
         public byte[]? pawnsDataXml;
 
         public MapSpecificData(Map map)

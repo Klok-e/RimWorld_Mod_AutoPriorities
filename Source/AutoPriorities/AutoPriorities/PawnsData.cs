@@ -51,10 +51,8 @@ namespace AutoPriorities
         {
             try
             {
-                _serializer.SaveData(new SaveDataRequest
-                {
-                    ExcludedPawns = ExcludedPawns, WorkTablesData = WorkTables
-                });
+                _serializer.SaveData(
+                    new SaveDataRequest { ExcludedPawns = ExcludedPawns, WorkTablesData = WorkTables });
             }
             catch (Exception e)
             {
@@ -87,10 +85,8 @@ namespace AutoPriorities
                         var fitness = -1d;
                         try
                         {
-                            if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains(new ExcludedPawnEntry
-                            {
-                                WorkDef = work.DefName, PawnThingId = pawn.ThingID
-                            }))
+                            if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains(
+                                new ExcludedPawnEntry { WorkDef = work.DefName, PawnThingId = pawn.ThingID }))
                             {
                                 var skill = pawn.AverageOfRelevantSkillsFor(work);
                                 double passion = PassionFactor(pawn.MaxPassionOfRelevantSkillsFor(work));
@@ -121,14 +117,15 @@ namespace AutoPriorities
                 // _logger.Info(
                 //     $"player pawns: {string.Join("; ", AllPlayerPawns.Select(x => $"{x.NameFullColored}:{x.ThingID}"))}");
                 // remove all non player pawns
-                ExcludedPawns.RemoveWhere(wp =>
-                {
-                    var res = !AllPlayerPawns.Select(x => x.ThingID)
-                                             .Contains(wp.PawnThingId);
-                    // if (res) _logger.Err($"INFO: removing {wp.pawnThingId} from excluded list");
+                ExcludedPawns.RemoveWhere(
+                    wp =>
+                    {
+                        var res = !AllPlayerPawns.Select(x => x.ThingID)
+                                                 .Contains(wp.PawnThingId);
+                        // if (res) _logger.Err($"INFO: removing {wp.pawnThingId} from excluded list");
 
-                    return res;
-                });
+                        return res;
+                    });
             }
             catch (Exception e)
             {
@@ -189,14 +186,15 @@ namespace AutoPriorities
                     {
                         var currentPercent = currentWorkTable[key];
                         if (currentPercent.Variant == PercentVariant.Number)
-                            currentWorkTable[key] =
-                                TablePercent.Number(NumberColonists(key), currentPercent.NumberCount);
+                            currentWorkTable[key] = TablePercent.Number(
+                                NumberColonists(key),
+                                currentPercent.NumberCount);
                     }
                 }
 
                 // if there are work types not present in built structure, then add with 0 percent
-                foreach (var work in workTables.SelectMany(keyVal =>
-                    WorkTypes.Where(work => !keyVal.WorkTypes.ContainsKey(work))))
+                foreach (var work in workTables.SelectMany(
+                    keyVal => WorkTypes.Where(work => !keyVal.WorkTypes.ContainsKey(work))))
                 foreach (var it in workTables)
                 {
                     _logger.Warn($"Work type {work} wasn't found in a save file. Setting percent to 0");

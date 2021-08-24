@@ -40,9 +40,11 @@ namespace Tests
                       .Returns(_fixture.CreateMany<IPawnWrapper>());
 
             _retriever.WorkTypeDefsInPriorityOrder()
-                      .Returns(TestHelper.WorkTypes.Select(x => _fixture.Build<WorkType>()
-                                                                        .With(y => y.DefName, x)
-                                                                        .Create()));
+                      .Returns(
+                          TestHelper.WorkTypes.Select(
+                              x => _fixture.Build<WorkType>()
+                                           .With(y => y.DefName, x)
+                                           .Create()));
 
             // act
             var savedData = _serializer.LoadSavedData();
@@ -75,9 +77,11 @@ namespace Tests
                       .Returns(_fixture.CreateMany<IPawnWrapper>());
 
             _retriever.WorkTypeDefsInPriorityOrder()
-                      .Returns(TestHelper.WorkTypesTruncated.Select(x => _fixture.Build<WorkType>()
-                          .With(y => y.DefName, x)
-                          .Create()));
+                      .Returns(
+                          TestHelper.WorkTypesTruncated.Select(
+                              x => _fixture.Build<WorkType>()
+                                           .With(y => y.DefName, x)
+                                           .Create()));
 
             // act
             var _ = _serializer.LoadSavedData();

@@ -33,7 +33,10 @@ namespace Tests
             _retriever = Substitute.For<IWorldInfoRetriever>();
             _worldInfo = new WorldInfoFacade(_retriever, _logger);
             _stream = new MemoryStream();
-            _serializer = new PawnsDataSerializer(_logger, TestHelper.SavePath, _worldInfo,
+            _serializer = new PawnsDataSerializer(
+                _logger,
+                TestHelper.SavePath,
+                _worldInfo,
                 new MemoryStreamProvider(_stream));
             _fixture = FixtureBuilder.Create();
         }
@@ -46,9 +49,11 @@ namespace Tests
                       .Returns(_fixture.CreateMany<IPawnWrapper>());
 
             _retriever.WorkTypeDefsInPriorityOrder()
-                      .Returns(TestHelper.WorkTypes.Select(x => _fixture.Build<WorkType>()
-                                                                        .With(y => y.DefName, x)
-                                                                        .Create()));
+                      .Returns(
+                          TestHelper.WorkTypes.Select(
+                              x => _fixture.Build<WorkType>()
+                                           .With(y => y.DefName, x)
+                                           .Create()));
             var fileContents = File.ReadAllBytes(TestHelper.SavePath);
             _stream.Write(fileContents, 0, fileContents.Length);
             _stream.Position = 0;
@@ -57,10 +62,8 @@ namespace Tests
             _stream.SetLength(0);
 
             // act
-            _serializer.SaveData(new SaveDataRequest
-            {
-                ExcludedPawns = loaded!.ExcludedPawns, WorkTablesData = loaded.WorkTablesData
-            });
+            _serializer.SaveData(
+                new SaveDataRequest { ExcludedPawns = loaded!.ExcludedPawns, WorkTablesData = loaded.WorkTablesData });
             var actualString = Encoding.UTF8.GetString(_stream.ToArray());
 
             // assert

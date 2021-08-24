@@ -1,7 +1,3 @@
-using System;
-using System.IO;
-using System.Text;
-using System.Xml.Serialization;
 using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 using AutoPriorities.WorldInfoRetriever;
@@ -11,8 +7,8 @@ namespace AutoPriorities.PawnDataSerializer
     public class MapSpecificDataPawnsDataSerializer : IPawnsDataSerializer
     {
         private readonly ILogger _logger;
-        private readonly IWorldInfoFacade _worldInfoFacade;
         private readonly IPawnDataStringSerializer _serializer;
+        private readonly IWorldInfoFacade _worldInfoFacade;
 
         public MapSpecificDataPawnsDataSerializer(ILogger logger,
             IWorldInfoFacade worldInfoFacade,

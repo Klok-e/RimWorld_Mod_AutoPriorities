@@ -44,8 +44,11 @@ namespace AutoPriorities.Core
         public override void DefsLoaded()
         {
             base.DefsLoaded();
-            PassionMult = Settings.GetHandle("passionMult", "Passion multiplier",
-                "Determines the importance of passions when assigning priorities", 1d);
+            PassionMult = Settings.GetHandle(
+                "passionMult",
+                "Passion multiplier",
+                "Determines the importance of passions when assigning priorities",
+                1d);
         }
 
         private void PatchMod(string packageId, string patchName)
@@ -54,8 +57,8 @@ namespace AutoPriorities.Core
 
             _logger?.Info($"Patching for: {packageId}");
 
-            var asm = Assembly.LoadFile(Path.Combine(ModContentPack.RootDir,
-                Path.Combine("ConditionalAssemblies/1.3/", patchName)));
+            var asm = Assembly.LoadFile(
+                Path.Combine(ModContentPack.RootDir, Path.Combine("ConditionalAssemblies/1.3/", patchName)));
             HarmonyInst.PatchAll(asm);
 
             var methods = asm.GetMethodsWithHelpAttribute<PatchInitializeAttribute>();
@@ -65,7 +68,8 @@ namespace AutoPriorities.Core
         private static string GetSaveLocation()
         {
             // Get method "FolderUnderSaveData" from GenFilePaths, which is private (NonPublic) and static.
-            var folder = typeof(GenFilePaths).GetMethod("FolderUnderSaveData",
+            var folder = typeof(GenFilePaths).GetMethod(
+                "FolderUnderSaveData",
                 BindingFlags.NonPublic | BindingFlags.Static);
             if (folder == null) throw new Exception("AutoPriorities :: FolderUnderSaveData is null [reflection]");
 

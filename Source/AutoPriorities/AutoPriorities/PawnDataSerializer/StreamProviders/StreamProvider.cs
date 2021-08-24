@@ -9,11 +9,14 @@ namespace AutoPriorities.PawnDataSerializer.StreamProviders
     {
         public void WithStream(string path, FileMode mode, Action<Stream> callback)
         {
-            WithStream<Unit>(path, mode, stream =>
-            {
-                callback(stream);
-                return default;
-            });
+            WithStream<Unit>(
+                path,
+                mode,
+                stream =>
+                {
+                    callback(stream);
+                    return default;
+                });
         }
 
         public abstract T WithStream<T>(string path, FileMode mode, Func<Stream, T> callback);

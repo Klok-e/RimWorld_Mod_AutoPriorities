@@ -34,16 +34,19 @@ namespace AutoPriorities.PawnDataSerializer
             try
             {
                 if (_streamProvider.FileExists(_fullPath))
-                    return _streamProvider.WithStream(_fullPath, FileMode.OpenOrCreate, stream =>
-                    {
-                        var ser =
-                            (PercentTableSaver.Ser)new XmlSerializer(typeof(PercentTableSaver.Ser)).Deserialize(stream);
-                        return new SaveData
+                    return _streamProvider.WithStream(
+                        _fullPath,
+                        FileMode.OpenOrCreate,
+                        stream =>
                         {
-                            ExcludedPawns = ser.ParsedExcluded(_worldInfo),
-                            WorkTablesData = ser.ParsedData(_worldInfo)
-                        };
-                    });
+                            var ser = (PercentTableSaver.Ser)new XmlSerializer(typeof(PercentTableSaver.Ser))
+                                .Deserialize(stream);
+                            return new SaveData
+                            {
+                                ExcludedPawns = ser.ParsedExcluded(_worldInfo),
+                                WorkTablesData = ser.ParsedData(_worldInfo)
+                            };
+                        });
             }
             catch (Exception e)
             {
@@ -68,11 +71,15 @@ namespace AutoPriorities.PawnDataSerializer
 
         private void SaveState((List<WorkTableEntry>, HashSet<ExcludedPawnEntry>) state)
         {
-            _streamProvider.WithStream(_fullPath, FileMode.Create, stream =>
-            {
-                new XmlSerializer(typeof(PercentTableSaver.Ser)).Serialize(stream,
-                    PercentTableSaver.Ser.Serialized(state));
-            });
+            _streamProvider.WithStream(
+                _fullPath,
+                FileMode.Create,
+                stream =>
+                {
+                    new XmlSerializer(typeof(PercentTableSaver.Ser)).Serialize(
+                        stream,
+                        PercentTableSaver.Ser.Serialized(state));
+                });
         }
     }
 }

@@ -41,13 +41,13 @@ namespace AutoPriorities.Ui
         private const string DeleteLabel = "Delete";
         private const string ExportLabel = "Export";
         private const string ImportLabel = "Import";
-        private readonly float _importExportImportLabelWidth = DeleteLabel.GetWidthCached() + 10f;
         private const float PawnNameCoWidth = 150f;
         private readonly float _importantJobsLabelWidth = ImportantJobsLabel.GetWidthCached() + 10f;
         private readonly IImportantJobsProvider _importantJobsProvider;
-        private readonly IPawnDataExporter _pawnDataExporter;
+        private readonly float _importExportImportLabelWidth = DeleteLabel.GetWidthCached() + 10f;
         private readonly float _labelWidth = Label.GetWidthCached() + 10f;
         private readonly ILogger _logger;
+        private readonly IPawnDataExporter _pawnDataExporter;
         private readonly float _pawnExcludeLabelWidth = PawnExcludeLabel.GetWidthCached() + 10f;
         private readonly PawnsData _pawnsData;
         private readonly PrioritiesAssigner _prioritiesAssigner;
@@ -198,7 +198,7 @@ namespace AutoPriorities.Ui
             {
                 var options = saves.Select(x => new FloatMenuOption(x, () => _pawnDataExporter.ImportPawnData(x)))
                                    .ToList();
-                Find.WindowStack.Add(new FloatMenu(options, "Select to import"));
+                Find.WindowStack.Add(new FloatMenu(options, string.Empty));
                 SoundDefOf.Click.PlayOneShotOnCamera();
             }
         }
@@ -220,7 +220,7 @@ namespace AutoPriorities.Ui
             {
                 var options = saves.Select(x => new FloatMenuOption(x, () => _pawnDataExporter.DeleteSave(x)))
                                    .ToList();
-                Find.WindowStack.Add(new FloatMenu(options, "Select to delete"));
+                Find.WindowStack.Add(new FloatMenu(options, string.Empty));
                 SoundDefOf.Click.PlayOneShotOnCamera();
             }
         }
