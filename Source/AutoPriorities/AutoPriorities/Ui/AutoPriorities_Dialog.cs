@@ -192,14 +192,12 @@ namespace AutoPriorities.Ui
 
         private void DrawImportButton(Rect inRect)
         {
-            if (Widgets.ButtonText(inRect, ImportLabel))
+            var saves = _pawnDataExporter.ListSaves()
+                                         .ToList();
+            if (saves.Any() && Widgets.ButtonText(inRect, ImportLabel))
             {
-                var options = _pawnDataExporter.ListSaves()
-                                               .Select(
-                                                   x => new FloatMenuOption(
-                                                       x,
-                                                       () => _pawnDataExporter.ImportPawnData(x)))
-                                               .ToList();
+                var options = saves.Select(x => new FloatMenuOption(x, () => _pawnDataExporter.ImportPawnData(x)))
+                                   .ToList();
                 Find.WindowStack.Add(new FloatMenu(options, "Select to import"));
                 SoundDefOf.Click.PlayOneShotOnCamera();
             }
@@ -216,12 +214,12 @@ namespace AutoPriorities.Ui
 
         private void DrawDeleteButton(Rect inRect)
         {
-            if (Widgets.ButtonText(inRect, DeleteLabel))
+            var saves = _pawnDataExporter.ListSaves()
+                                         .ToList();
+            if (saves.Any() && Widgets.ButtonText(inRect, DeleteLabel))
             {
-                var options = _pawnDataExporter.ListSaves()
-                                               .Select(
-                                                   x => new FloatMenuOption(x, () => _pawnDataExporter.DeleteSave(x)))
-                                               .ToList();
+                var options = saves.Select(x => new FloatMenuOption(x, () => _pawnDataExporter.DeleteSave(x)))
+                                   .ToList();
                 Find.WindowStack.Add(new FloatMenu(options, "Select to delete"));
                 SoundDefOf.Click.PlayOneShotOnCamera();
             }

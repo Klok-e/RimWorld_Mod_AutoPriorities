@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 using AutoPriorities.APLogger;
 using AutoPriorities.Core;
@@ -17,6 +18,7 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
         private readonly string _saveDirectoryPath;
         private readonly PawnsData _pawnsData;
         private readonly IPawnDataStringSerializer _pawnDataStringSerializer;
+        private List<string> _savesCached = new List<string>();
 
         public PawnDataExporter(ILogger logger,
             string saveDirectoryPath,
@@ -27,6 +29,8 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
             _saveDirectoryPath = saveDirectoryPath;
             _pawnsData = pawnsData;
             _pawnDataStringSerializer = pawnDataStringSerializer;
+
+            RecacheSaves();
         }
 
         public void ExportCurrentPawnData(string name)
@@ -36,7 +40,8 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
 
             var stream = new MemoryStream();
 
-            new XmlSerializer(typeof(PercentTableSaver.Ser)).Serialize(stream,
+            new XmlSerializer(typeof(PercentTableSaver.Ser)).Serialize(
+                stream,
                 PercentTableSaver.Ser.Serialized((_pawnsData.WorkTables, _pawnsData.ExcludedPawns)));
 
             stream.Position = 0;
@@ -64,6 +69,7 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
             finally
             {
                 Scribe.saver.FinalizeSaving();
+                RecacheSaves();
             }
         }
 
@@ -103,17 +109,28 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
 
             var save = _pawnDataStringSerializer.Deserialize(mapData.pawnsDataXml);
             if (save == null) return;
+
             _pawnsData.SetData(save);
         }
 
         public IEnumerable<string> ListSaves()
         {
-            return Directory.EnumerateFiles(_saveDirectoryPath);
+            return _savesCached;
+        }
+
+        private void RecacheSaves()
+        {
+            _savesCached = Directory.EnumerateFiles(_saveDirectoryPath)
+                                    .Select(Path.GetFileName)
+                                    .ToList();
         }
 
         public void DeleteSave(string name)
         {
-            File.Delete(FullPath(name));
+            var path = FullPath(name);
+            if (!File.Exists(path)) _logger.Warn("Tried to delete a nonexistent file.");
+            File.Delete(path);
+            RecacheSaves();
         }
 
         private string FullPath(string name)
