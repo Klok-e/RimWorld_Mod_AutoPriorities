@@ -48,7 +48,7 @@ namespace AutoPriorities
 
 #if DEBUG
             _logger.Info(
-                $"first job count {WorkTables.FirstOrDefault().JobCount.v}; "
+                $"[SetData] first job count {WorkTables.FirstOrDefault().JobCount.v}; "
                 + $"load job count: {data.WorkTablesData.FirstOrDefault().JobCount.v}");
 #endif
         }

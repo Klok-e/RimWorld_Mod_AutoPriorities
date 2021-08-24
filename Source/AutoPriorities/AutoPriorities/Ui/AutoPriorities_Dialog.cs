@@ -105,6 +105,7 @@ namespace AutoPriorities.Ui
                 {
                     _currentlySelectedTab = SelectedTab.Priorities;
                     _pawnsData.Rebuild();
+                    _textFieldBuffers.Clear();
                 }
 
                 var pawnsButtonRect = new Rect(
@@ -116,6 +117,7 @@ namespace AutoPriorities.Ui
                 {
                     _currentlySelectedTab = SelectedTab.PawnExclusion;
                     _pawnsData.Rebuild();
+                    _textFieldBuffers.Clear();
                 }
 
                 var importantButtonRect = new Rect(
@@ -127,6 +129,7 @@ namespace AutoPriorities.Ui
                 {
                     _currentlySelectedTab = SelectedTab.ImportantWorkTypes;
                     _pawnsData.Rebuild();
+                    _textFieldBuffers.Clear();
                 }
 
                 // draw tab contents lower than buttons
@@ -196,7 +199,14 @@ namespace AutoPriorities.Ui
                                          .ToList();
             if (saves.Any() && Widgets.ButtonText(inRect, ImportLabel))
             {
-                var options = saves.Select(x => new FloatMenuOption(x, () => _pawnDataExporter.ImportPawnData(x)))
+                var options = saves.Select(
+                                       x => new FloatMenuOption(
+                                           x,
+                                           () =>
+                                           {
+                                               _pawnDataExporter.ImportPawnData(x);
+                                               _textFieldBuffers.Clear();
+                                           }))
                                    .ToList();
                 Find.WindowStack.Add(new FloatMenu(options, string.Empty));
                 SoundDefOf.Click.PlayOneShotOnCamera();
