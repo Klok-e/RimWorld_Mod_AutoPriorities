@@ -45,6 +45,12 @@ namespace AutoPriorities
             // Excluded must be loaded first because State depends on ExcludedPawns being filled
             ExcludedPawns = data.ExcludedPawns;
             WorkTables = LoadSavedState(data.WorkTablesData);
+
+#if DEBUG
+            _logger.Info(
+                $"first job count {WorkTables.FirstOrDefault().JobCount.v}; "
+                + $"load job count: {data.WorkTablesData.FirstOrDefault().JobCount.v}");
+#endif
         }
 
         public void SaveState()
