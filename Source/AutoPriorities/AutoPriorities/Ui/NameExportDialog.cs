@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+using AutoPriorities.PawnDataSerializer.Exporter;
 using RimWorld;
 using Verse;
 
@@ -5,17 +7,22 @@ namespace AutoPriorities.Ui
 {
     public class NameExportDialog:Dialog_Rename
     {
+        private readonly IPawnDataExporter _exporter;
+        private static readonly Regex ValidNameRegex = new Regex(@"^[\w]+$");
+
+        public NameExportDialog(IPawnDataExporter exporter)
+        {
+            _exporter = exporter;
+        }
+
         protected override void SetName(string name)
         {
-            throw new System.NotImplementedException();
+            _exporter.ExportCurrentPawnData(name);
         }
         
         protected override AcceptanceReport NameIsValid( string newName )
         {
-            throw new System.NotImplementedException();
-
-            // if all checks are passed, return true.
-            return true;
+            return ValidNameRegex.IsMatch(newName);
         }
     }
 }

@@ -1,8 +1,10 @@
+using System;
 using System.IO;
 using System.Reflection;
 using AutoPriorities.Extensions;
 using AutoPriorities.ImportantJobs;
 using AutoPriorities.PawnDataSerializer;
+using AutoPriorities.PawnDataSerializer.Exporter;
 using AutoPriorities.PawnDataSerializer.StreamProviders;
 using AutoPriorities.Ui;
 using AutoPriorities.WorldInfoRetriever;
@@ -60,10 +62,22 @@ namespace AutoPriorities.Core
             foreach (var method in methods) method.Invoke(null, null);
         }
 
-        private static AutoPrioritiesDialog? CreateDialog()
+        private static string GetSaveLocation()
+        {
+            // Get method "FolderUnderSaveData" from GenFilePaths, which is private (NonPublic) and static.
+            var folder = typeof(GenFilePaths).GetMethod("FolderUnderSaveData",
+                BindingFlags.NonPublic | BindingFlags.Static);
+            if (folder == null) throw new Exception("AutoPriorities :: FolderUnderSaveData is null [reflection]");
+
+            // Call "FolderUnderSaveData" from null parameter, since this is a static method.
+            return (string)folder.Invoke(null, new object[] { "PrioritiesData" });
+        }
+
+        private static AutoPrioritiesDialog CreateDialog()
         {
             const string filename = "ModAutoPrioritiesSaveNEW.xml";
             string fullPath = Application.persistentDataPath + filename;
+            var savePath = GetSaveLocation();
 
             var worldInfo = new WorldInfoRetriever.WorldInfoRetriever();
             var logger = _logger!;
@@ -74,10 +88,11 @@ namespace AutoPriorities.Core
             var serializer = new PawnsDataSerializer(logger, fullPath, worldFacade, streamProvider);
             var combinedSer = new CombinedPawnsDataSerializer(logger, mapSpecificSerializer, serializer);
             var pawnData = new PawnsDataBuilder(combinedSer, worldInfo, logger).Build();
-            var importantWorktypes = new ImportantJobsProvider(worldFacade);
-            var priorityAssigner = new PrioritiesAssigner(pawnData, logger, importantWorktypes);
+            var importantWorkTypes = new ImportantJobsProvider(worldFacade);
+            var priorityAssigner = new PrioritiesAssigner(pawnData, logger, importantWorkTypes);
+            var pawnDataExporter = new PawnDataExporter(logger, savePath, pawnData, stringSerializer);
 
-            return new AutoPrioritiesDialog(pawnData, priorityAssigner, logger, importantWorktypes);
+            return new AutoPrioritiesDialog(pawnData, priorityAssigner, logger, importantWorkTypes, pawnDataExporter);
         }
     }
 }

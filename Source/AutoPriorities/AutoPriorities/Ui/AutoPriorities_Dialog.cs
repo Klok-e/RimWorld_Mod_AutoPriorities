@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using AutoPriorities.Core;
 using AutoPriorities.ImportantJobs;
+using AutoPriorities.PawnDataSerializer.Exporter;
 using AutoPriorities.Percents;
 using AutoPriorities.Utils;
 using AutoPriorities.Wrappers;
@@ -37,9 +38,14 @@ namespace AutoPriorities.Ui
         private const string PawnExcludeLabel = "Exclude Colonists";
         private const string ImportantJobsLabel = "Important Jobs";
         private const string Label = "Run AutoPriorities";
+        private const string DeleteLabel = "Delete";
+        private const string ExportLabel = "Export";
+        private const string ImportLabel = "Import";
+        private readonly float _importExportImportLabelWidth = DeleteLabel.GetWidthCached() + 10f;
         private const float PawnNameCoWidth = 150f;
         private readonly float _importantJobsLabelWidth = ImportantJobsLabel.GetWidthCached() + 10f;
         private readonly IImportantJobsProvider _importantJobsProvider;
+        private readonly IPawnDataExporter _pawnDataExporter;
         private readonly float _labelWidth = Label.GetWidthCached() + 10f;
         private readonly ILogger _logger;
         private readonly float _pawnExcludeLabelWidth = PawnExcludeLabel.GetWidthCached() + 10f;
@@ -60,12 +66,14 @@ namespace AutoPriorities.Ui
         public AutoPrioritiesDialog(PawnsData pawnsData,
             PrioritiesAssigner prioritiesAssigner,
             ILogger logger,
-            IImportantJobsProvider importantJobsProvider)
+            IImportantJobsProvider importantJobsProvider,
+            IPawnDataExporter pawnDataExporter)
         {
             _pawnsData = pawnsData;
             _prioritiesAssigner = prioritiesAssigner;
             _logger = logger;
             _importantJobsProvider = importantJobsProvider;
+            _pawnDataExporter = pawnDataExporter;
             doCloseButton = true;
             draggable = true;
             resizeable = true;
@@ -133,22 +141,74 @@ namespace AutoPriorities.Ui
                     default:
                         throw new ArgumentOutOfRangeException(nameof(_currentlySelectedTab));
                 }
-                
 
-                // draw run auto priorities
-                var buttonRect = new Rect(inRect.xMin, inRect.yMax - ButtonHeight, _labelWidth, ButtonHeight);
-                if (Widgets.ButtonText(buttonRect, Label))
-                {
-                    _pawnsData.Rebuild();
-                    _prioritiesAssigner.AssignPriorities();
-                    _pawnsData.SaveState();
-                    SoundDefOf.Click.PlayOneShotOnCamera();
-                }
+                var buttonDeleteRect = new Rect(inRect.xMax, inRect.yMin + ButtonHeight, _importExportImportLabelWidth,
+                    ButtonHeight);
+                DrawDeleteButton(buttonDeleteRect);
+                
+                var buttonImportRect = new Rect(buttonDeleteRect.xMin, inRect.yMin + ButtonHeight, _importExportImportLabelWidth,
+                    ButtonHeight);
+                DrawImportButton(buttonImportRect);
+
+                var buttonExportRect = new Rect(buttonImportRect.xMin, inRect.yMin + ButtonHeight, _importExportImportLabelWidth,
+                    ButtonHeight);
+                DrawExportButton(buttonExportRect);
+
+                var buttonRunRect = new Rect(inRect.xMin, inRect.yMax - ButtonHeight, _labelWidth, ButtonHeight);
+                DrawRunButton(buttonRunRect);
             }
 
             // if (_windowContentsCalls % 1000 == 0) _profilerFactory.SaveProfileData();
 
             // _windowContentsCalls += 1;
+        }
+
+        private void DrawRunButton(Rect inRect)
+        {
+            if (Widgets.ButtonText(inRect, Label))
+            {
+                _pawnsData.Rebuild();
+                _prioritiesAssigner.AssignPriorities();
+                _pawnsData.SaveState();
+                SoundDefOf.Click.PlayOneShotOnCamera();
+            }
+        }
+
+        private void DrawImportButton(Rect inRect)
+        {
+            
+            if (Widgets.ButtonText(inRect, ImportLabel))
+            {
+                var options = _pawnDataExporter.ListSaves()
+                                               .Select(x =>
+                                                   new FloatMenuOption(x, () => _pawnDataExporter.ImportPawnData(x)))
+                                               .ToList();
+                Find.WindowStack.Add(new FloatMenu(options, "Select to import"));
+                SoundDefOf.Click.PlayOneShotOnCamera();
+            }
+        }
+
+        private void DrawExportButton(Rect inRect)
+        {
+          
+            if (Widgets.ButtonText(inRect, ImportLabel))
+            {
+                Find.WindowStack.Add(new NameExportDialog(_pawnDataExporter));
+                SoundDefOf.Click.PlayOneShotOnCamera();
+            }
+        }
+
+        private void DrawDeleteButton(Rect inRect)
+        {
+            if (Widgets.ButtonText(inRect, ImportLabel))
+            {
+                var options = _pawnDataExporter.ListSaves()
+                                               .Select(x =>
+                                                   new FloatMenuOption(x, () => _pawnDataExporter.DeleteSave(x)))
+                                               .ToList();
+                Find.WindowStack.Add(new FloatMenu(options, "Select to delete"));
+                SoundDefOf.Click.PlayOneShotOnCamera();
+            }
         }
 
         private void ImportantWorkTypes(Rect inRect)
