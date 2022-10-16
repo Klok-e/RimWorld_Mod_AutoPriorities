@@ -10,5 +10,7 @@ namespace AutoPriorities.WorldInfoRetriever
         IEnumerable<IWorkTypeWrapper> WorkTypeDefsInPriorityOrder();
 
         IEnumerable<IPawnWrapper> PawnsInPlayerFaction();
+
+        byte[]? PawnsDataXml { get; set; }
     }
 }

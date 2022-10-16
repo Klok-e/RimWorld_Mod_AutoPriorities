@@ -75,7 +75,7 @@ namespace AutoPriorities.Core
             var worldFacade = new WorldInfoFacade(worldInfo, logger);
             var streamProvider = new FileStreamProvider();
             var stringSerializer = new PawnDataStringSerializer(logger, worldFacade);
-            var mapSpecificSerializer = new MapSpecificDataPawnsDataSerializer(logger, worldFacade, stringSerializer);
+            var mapSpecificSerializer = new MapSpecificDataPawnsDataSerializer(worldInfo, stringSerializer);
             var combinedSer = new CombinedPawnsDataSerializer(logger, mapSpecificSerializer);
             var pawnData = new PawnsDataBuilder(combinedSer, worldInfo, logger).Build();
             var importantWorkTypes = new ImportantJobsProvider(worldFacade);

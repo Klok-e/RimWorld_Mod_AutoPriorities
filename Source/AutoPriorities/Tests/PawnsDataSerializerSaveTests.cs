@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -25,12 +26,9 @@ namespace Tests
             _logger = Substitute.For<ILogger>();
             _retriever = Substitute.For<IWorldInfoRetriever>();
             _worldInfo = new WorldInfoFacade(_retriever, _logger);
-            _stream = new MemoryStream();
-            _serializer = new PawnsDataSerializer(
-                _logger,
-                TestHelper.SavePath,
-                _worldInfo,
-                new MemoryStreamProvider(_stream));
+            _serializer = new MapSpecificDataPawnsDataSerializer(
+                _retriever,
+                new PawnDataStringSerializer(_logger, _worldInfo));
             _fixture = FixtureBuilder.Create();
         }
 
@@ -38,7 +36,6 @@ namespace Tests
         private ILogger _logger = null!;
         private IWorldInfoRetriever _retriever = null!;
         private IPawnsDataSerializer _serializer = null!;
-        private MemoryStream _stream = null!;
         private IWorldInfoFacade _worldInfo = null!;
 
         [Test]
@@ -55,16 +52,19 @@ namespace Tests
                             .With(y => y.DefName, x)
                             .Create()));
             var fileContents = File.ReadAllBytes(TestHelper.SavePath);
-            _stream.Write(fileContents, 0, fileContents.Length);
-            _stream.Position = 0;
+            _retriever.PawnsDataXml.Returns(fileContents);
+
+            var expectedString = Encoding.UTF8.GetString(fileContents);
             var loaded = _serializer.LoadSavedData();
-            var expectedString = Encoding.UTF8.GetString(_stream.ToArray());
-            _stream.SetLength(0);
+
+            var actualBytes = Array.Empty<byte>();
+            _retriever.WhenForAnyArgs(x => x.PawnsDataXml = Array.Empty<byte>())
+                .Do(x => actualBytes = x.Arg<byte[]>());
 
             // act
             _serializer.SaveData(
                 new SaveDataRequest { ExcludedPawns = loaded!.ExcludedPawns, WorkTablesData = loaded.WorkTablesData });
-            var actualString = Encoding.UTF8.GetString(_stream.ToArray());
+            var actualString = Encoding.UTF8.GetString(actualBytes);
 
             // assert
             _logger.NoWarnReceived();

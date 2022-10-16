@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using AutoPriorities.Core;
 using AutoPriorities.Wrappers;
 using Verse;
 
@@ -20,6 +21,18 @@ namespace AutoPriorities.WorldInfoRetriever
         }
 
         public double PassionMultiplier => 1;
+        
+        public byte[]? PawnsDataXml
+        {
+            get => MapSpecificData.GetForCurrentMap()?.pawnsDataXml;
+            set
+            {
+                var mapSpecificData = MapSpecificData.GetForCurrentMap();
+                if (mapSpecificData == null) return;
+
+                mapSpecificData.pawnsDataXml = value;
+            }
+        }
 
         #endregion
     }

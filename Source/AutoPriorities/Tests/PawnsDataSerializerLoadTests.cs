@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using AutoFixture;
 using AutoPriorities.APLogger;
@@ -22,7 +23,9 @@ namespace Tests
             _logger = Substitute.For<ILogger>();
             _retriever = Substitute.For<IWorldInfoRetriever>();
             _worldInfo = new WorldInfoFacade(_retriever, _logger);
-            _serializer = new PawnsDataSerializer(_logger, TestHelper.SavePath, _worldInfo, new FileStreamProvider());
+            _serializer = new MapSpecificDataPawnsDataSerializer(
+                _retriever,
+                new PawnDataStringSerializer(_logger, _worldInfo));
             _fixture = FixtureBuilder.Create();
         }
 
@@ -45,6 +48,8 @@ namespace Tests
                         x => _fixture.Build<WorkType>()
                             .With(y => y.DefName, x)
                             .Create()));
+            var fileContents = File.ReadAllBytes(TestHelper.SavePath);
+            _retriever.PawnsDataXml.Returns(fileContents);
 
             // act
             var savedData = _serializer.LoadSavedData();
@@ -82,12 +87,13 @@ namespace Tests
                         x => _fixture.Build<WorkType>()
                             .With(y => y.DefName, x)
                             .Create()));
+            var fileContents = File.ReadAllBytes(TestHelper.SavePath);
+            _retriever.PawnsDataXml.Returns(fileContents);
 
             // act
             var _ = _serializer.LoadSavedData();
 
             // assert
-            // TODO: 10 calls is received, double the expected amount. OK for now
             _logger.Received(10)
                 .Warn(Arg.Any<string>());
         }
