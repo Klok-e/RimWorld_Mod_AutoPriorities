@@ -25,7 +25,7 @@ namespace Tests
         {
             // act
             var actual = percents.IterPercents(total)
-                                 .ToArray();
+                .ToArray();
 
             // assert
             Assert.AreEqual(expected, actual);
@@ -40,7 +40,7 @@ namespace Tests
                 for (var k = 0; k < 100; k++)
                 {
                     var arr = percents.IterPercents(k)
-                                      .ToArray();
+                        .ToArray();
                     Assert.AreEqual(k, arr.Length);
                 }
             }
@@ -51,7 +51,7 @@ namespace Tests
                 {
                     var covered = (int)Math.Ceiling(i * arr.Sum());
                     var actual = arr.IterPercents(i)
-                                    .ToArray();
+                        .ToArray();
                     Assert.AreEqual(covered, actual.Length);
                 }
         }
@@ -62,7 +62,7 @@ namespace Tests
             var v = new[] { (1, 2d), (4, 1d), (2, 1d), (7, 1d), (8, 1d), (9, 2d), (1, 1d) };
 
             var actual = v.Distinct(x => x.Item1)
-                          .ToArray();
+                .ToArray();
 
             Assert.AreEqual(new[] { (1, 2d), (4, 1d), (2, 1d), (7, 1d), (8, 1d), (9, 2d) }, actual);
         }

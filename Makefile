@@ -1,6 +1,6 @@
 RIMWORLD_DEPLOY_PATH=$(HOME)/.steam/steam/steamapps/common/RimWorld/Mods
 export RIMWORLD_ASSEMBLIES_DIR=$(HOME)/.steam/steam/steamapps/common/RimWorld/RimWorldLinux_Data/Managed
-export RIMWORLD_VERSION=1.3
+export RIMWORLD_VERSION=1.4
 
 ifdef DEBUG
 export BUILD_CONFIGURATION=Debug

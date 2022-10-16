@@ -58,10 +58,10 @@ namespace AutoPriorities.Extensions
         public static IEnumerable<MethodInfo> GetMethodsWithHelpAttribute<T>(this Assembly assembly) where T : Attribute
         {
             return assembly.GetTypes()
-                           .SelectMany(t => t.GetMethods())
-                           .Where(
-                               type => type.GetCustomAttributes(typeof(T), true)
-                                           .Length > 0 && type.IsStatic);
+                .SelectMany(t => t.GetMethods())
+                .Where(
+                    type => type.GetCustomAttributes(typeof(T), true)
+                        .Length > 0 && type.IsStatic);
         }
     }
 }

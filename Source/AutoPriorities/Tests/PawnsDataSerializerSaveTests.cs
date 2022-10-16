@@ -19,13 +19,6 @@ namespace Tests
     [TestFixture]
     public class PawnsDataSerializerSaveTests
     {
-        private IFixture _fixture = null!;
-        private ILogger _logger = null!;
-        private IWorldInfoRetriever _retriever = null!;
-        private IPawnsDataSerializer _serializer = null!;
-        private MemoryStream _stream = null!;
-        private IWorldInfoFacade _worldInfo = null!;
-
         [SetUp]
         public void SetUp()
         {
@@ -41,19 +34,26 @@ namespace Tests
             _fixture = FixtureBuilder.Create();
         }
 
+        private IFixture _fixture = null!;
+        private ILogger _logger = null!;
+        private IWorldInfoRetriever _retriever = null!;
+        private IPawnsDataSerializer _serializer = null!;
+        private MemoryStream _stream = null!;
+        private IWorldInfoFacade _worldInfo = null!;
+
         [Test]
         public void LoadSavedData_SaveState_LoadAndSave_IdenticalResult()
         {
             // arrange
             _retriever.PawnsInPlayerFaction()
-                      .Returns(_fixture.CreateMany<IPawnWrapper>());
+                .Returns(_fixture.CreateMany<IPawnWrapper>());
 
             _retriever.WorkTypeDefsInPriorityOrder()
-                      .Returns(
-                          TestHelper.WorkTypes.Select(
-                              x => _fixture.Build<WorkType>()
-                                           .With(y => y.DefName, x)
-                                           .Create()));
+                .Returns(
+                    TestHelper.WorkTypes.Select(
+                        x => _fixture.Build<WorkType>()
+                            .With(y => y.DefName, x)
+                            .Create()));
             var fileContents = File.ReadAllBytes(TestHelper.SavePath);
             _stream.Write(fileContents, 0, fileContents.Length);
             _stream.Position = 0;
@@ -69,7 +69,7 @@ namespace Tests
             // assert
             _logger.NoWarnReceived();
             actualString.Should()
-                        .Be(expectedString);
+                .Be(expectedString);
         }
     }
 }

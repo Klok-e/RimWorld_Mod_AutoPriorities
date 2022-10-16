@@ -6,7 +6,7 @@ namespace AutoPriorities.Core
 {
     public class MapSpecificData : MapComponent
     {
-        public List<string>? importantWorks = new() { "Firefighter", "Patient", "PatientBedRest", "BasicWorker" };
+        public List<string>? importantWorkTypes = new() { "Firefighter", "Patient", "PatientBedRest", "BasicWorker" };
         public byte[]? pawnsDataXml;
 
         public MapSpecificData(Map map)
@@ -17,7 +17,7 @@ namespace AutoPriorities.Core
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Collections.Look(ref importantWorks, "AutoPriorities_ImportantWorkTypes", LookMode.Value);
+            Scribe_Collections.Look(ref importantWorkTypes, "AutoPriorities_ImportantWorkTypes", LookMode.Value);
             var dataStr = Convert.ToBase64String(pawnsDataXml ?? Array.Empty<byte>());
             Scribe_Values.Look(ref dataStr, "AutoPriorities_PawnsDataXml");
             pawnsDataXml = !string.IsNullOrEmpty(dataStr) ? Convert.FromBase64String(dataStr!) : null;

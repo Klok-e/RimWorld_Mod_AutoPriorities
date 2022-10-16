@@ -72,11 +72,11 @@ namespace AutoPriorities
             {
                 // get all work types
                 var workTypes = _worldInfoRetriever.WorkTypeDefsInPriorityOrder()
-                                                   .ToArray();
+                    .ToArray();
 
                 // get all pawns owned by player
                 var pawns = _worldInfoRetriever.PawnsInPlayerFaction()
-                                               .ToArray();
+                    .ToArray();
 
                 // get all skills associated with the work types
                 AllPlayerPawns.Clear();
@@ -92,7 +92,7 @@ namespace AutoPriorities
                         try
                         {
                             if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains(
-                                new ExcludedPawnEntry { WorkDef = work.DefName, PawnThingId = pawn.ThingID }))
+                                    new ExcludedPawnEntry { WorkDef = work.DefName, PawnThingId = pawn.ThingID }))
                             {
                                 var skill = pawn.AverageOfRelevantSkillsFor(work);
                                 double passion = PassionFactor(pawn.MaxPassionOfRelevantSkillsFor(work));
@@ -127,7 +127,7 @@ namespace AutoPriorities
                     wp =>
                     {
                         var res = !AllPlayerPawns.Select(x => x.ThingID)
-                                                 .Contains(wp.PawnThingId);
+                            .Contains(wp.PawnThingId);
                         // if (res) _logger.Err($"INFO: removing {wp.pawnThingId} from excluded list");
 
                         return res;
@@ -148,7 +148,7 @@ namespace AutoPriorities
             foreach (var it in WorkTables.Distinct(x => x.Priority))
             {
                 var percent = it.WorkTypes[workType]
-                                .Value;
+                    .Value;
                 if (it.Priority.v != priorityIgnore.v) taken += percent;
                 takenTotal += percent;
             }
@@ -167,8 +167,9 @@ namespace AutoPriorities
         {
             return passion switch
             {
+                Passion.Major => 1.5f,
                 Passion.Minor => 1f,
-                Passion.Major => 2f,
+                Passion.None => 0.35f,
                 _ => 0f
             };
         }
@@ -200,7 +201,7 @@ namespace AutoPriorities
 
                 // if there are work types not present in built structure, then add with 0 percent
                 foreach (var work in workTables.SelectMany(
-                    keyVal => WorkTypes.Where(work => !keyVal.WorkTypes.ContainsKey(work))))
+                             keyVal => WorkTypes.Where(work => !keyVal.WorkTypes.ContainsKey(work))))
                 foreach (var it in workTables)
                 {
                     _logger.Warn($"Work type {work} wasn't found in a save file. Setting percent to 0");

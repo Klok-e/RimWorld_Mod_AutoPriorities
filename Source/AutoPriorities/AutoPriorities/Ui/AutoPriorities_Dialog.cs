@@ -196,18 +196,18 @@ namespace AutoPriorities.Ui
         private void DrawImportButton(Rect inRect)
         {
             var saves = _pawnDataExporter.ListSaves()
-                                         .ToList();
+                .ToList();
             if (saves.Any() && Widgets.ButtonText(inRect, ImportLabel))
             {
                 var options = saves.Select(
-                                       x => new FloatMenuOption(
-                                           x,
-                                           () =>
-                                           {
-                                               _pawnDataExporter.ImportPawnData(x);
-                                               _textFieldBuffers.Clear();
-                                           }))
-                                   .ToList();
+                        x => new FloatMenuOption(
+                            x,
+                            () =>
+                            {
+                                _pawnDataExporter.ImportPawnData(x);
+                                _textFieldBuffers.Clear();
+                            }))
+                    .ToList();
                 Find.WindowStack.Add(new FloatMenu(options, string.Empty));
                 SoundDefOf.Click.PlayOneShotOnCamera();
             }
@@ -225,11 +225,11 @@ namespace AutoPriorities.Ui
         private void DrawDeleteButton(Rect inRect)
         {
             var saves = _pawnDataExporter.ListSaves()
-                                         .ToList();
+                .ToList();
             if (saves.Any() && Widgets.ButtonText(inRect, DeleteLabel))
             {
                 var options = saves.Select(x => new FloatMenuOption(x, () => _pawnDataExporter.DeleteSave(x)))
-                                   .ToList();
+                    .ToList();
                 Find.WindowStack.Add(new FloatMenu(options, string.Empty));
                 SoundDefOf.Click.PlayOneShotOnCamera();
             }
@@ -670,8 +670,8 @@ namespace AutoPriorities.Ui
             // draw worktypes
             Text.Anchor = TextAnchor.UpperCenter;
             foreach (var (workType, i) in _pawnsData.WorkTypes.Zip(
-                Enumerable.Range(0, _pawnsData.WorkTypes.Count),
-                (w, i) => (w, i)))
+                         Enumerable.Range(0, _pawnsData.WorkTypes.Count),
+                         (w, i) => (w, i)))
             {
                 var workLabel = workType.LabelShort;
                 var rect = new Rect(
@@ -721,8 +721,8 @@ namespace AutoPriorities.Ui
 
                 // draw tickboxes
                 foreach (var (workType, i) in _pawnsData.WorkTypes.Zip(
-                    Enumerable.Range(0, _pawnsData.WorkTypes.Count),
-                    (w, i) => (w, i)))
+                             Enumerable.Range(0, _pawnsData.WorkTypes.Count),
+                             (w, i) => (w, i)))
                 {
                     var prev = _pawnsData.ExcludedPawns.Contains(
                         new ExcludedPawnEntry { WorkDef = workType.DefName, PawnThingId = pawn.ThingID });

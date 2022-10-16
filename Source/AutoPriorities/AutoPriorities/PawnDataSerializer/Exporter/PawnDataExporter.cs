@@ -32,6 +32,19 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
             RecacheSaves();
         }
 
+        private void RecacheSaves()
+        {
+            _savesCached = Directory.EnumerateFiles(_saveDirectoryPath)
+                .Select(Path.GetFileNameWithoutExtension)
+                .ToList();
+        }
+
+        private string FullPath(string name)
+        {
+            var nameWithExt = Path.ChangeExtension(name, Extension);
+            return Path.Combine(_saveDirectoryPath, nameWithExt);
+        }
+
         #region IPawnDataExporter Members
 
         public void ExportCurrentPawnData(string name)
@@ -131,18 +144,5 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
         }
 
         #endregion
-
-        private void RecacheSaves()
-        {
-            _savesCached = Directory.EnumerateFiles(_saveDirectoryPath)
-                                    .Select(Path.GetFileNameWithoutExtension)
-                                    .ToList();
-        }
-
-        private string FullPath(string name)
-        {
-            var nameWithExt = Path.ChangeExtension(name, Extension);
-            return Path.Combine(_saveDirectoryPath, nameWithExt);
-        }
     }
 }

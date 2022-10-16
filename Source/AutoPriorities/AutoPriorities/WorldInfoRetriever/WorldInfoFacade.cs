@@ -20,7 +20,7 @@ namespace AutoPriorities.WorldInfoRetriever
         public IWorkTypeWrapper? StringToDef(string name)
         {
             var work = _worldInfo.WorkTypeDefsInPriorityOrder()
-                                 .FirstOrDefault(w => w.DefName == name);
+                .FirstOrDefault(w => w.DefName == name);
             if (work is not null) return work;
 
             _logger.Warn($"Work type {name} not found. Excluding {name} from the internal data structure.");
@@ -30,7 +30,7 @@ namespace AutoPriorities.WorldInfoRetriever
         public IPawnWrapper? IdToPawn(string pawnId)
         {
             var res = _worldInfo.PawnsInPlayerFaction()
-                                .FirstOrDefault(p => p.ThingID == pawnId);
+                .FirstOrDefault(p => p.ThingID == pawnId);
             if (res is not null) return res;
 
             _logger.Warn($"pawn {pawnId} wasn't found while deserializing data, skipping...");

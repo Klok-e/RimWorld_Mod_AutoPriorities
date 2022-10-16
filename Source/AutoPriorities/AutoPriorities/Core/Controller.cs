@@ -9,7 +9,6 @@ using AutoPriorities.PawnDataSerializer.StreamProviders;
 using AutoPriorities.Ui;
 using AutoPriorities.WorldInfoRetriever;
 using HugsLib;
-using HugsLib.Settings;
 using UnityEngine;
 using Verse;
 using ILogger = AutoPriorities.APLogger.ILogger;
@@ -22,8 +21,6 @@ namespace AutoPriorities.Core
         private static ILogger? _logger;
 
         public static AutoPrioritiesDialog? Dialog { get; private set; }
-
-        public static SettingHandle<double>? PassionMult { get; private set; }
 
         public override void Initialize()
         {
@@ -41,16 +38,6 @@ namespace AutoPriorities.Core
             Dialog = CreateDialog();
         }
 
-        public override void DefsLoaded()
-        {
-            base.DefsLoaded();
-            PassionMult = Settings.GetHandle(
-                "passionMult",
-                "Passion multiplier",
-                "Determines the importance of passions when assigning priorities",
-                1d);
-        }
-
         private void PatchMod(string packageId, string patchName)
         {
             if (!LoadedModManager.RunningModsListForReading.Exists(m => m.PackageId == packageId)) return;
@@ -58,7 +45,7 @@ namespace AutoPriorities.Core
             _logger?.Info($"Patching for: {packageId}");
 
             var asm = Assembly.LoadFile(
-                Path.Combine(ModContentPack.RootDir, Path.Combine("ConditionalAssemblies/1.3/", patchName)));
+                Path.Combine(ModContentPack.RootDir, Path.Combine("ConditionalAssemblies/1.4/", patchName)));
             HarmonyInst.PatchAll(asm);
 
             var methods = asm.GetMethodsWithHelpAttribute<PatchInitializeAttribute>();
@@ -68,19 +55,19 @@ namespace AutoPriorities.Core
         private static string GetSaveLocation()
         {
             // Get method "FolderUnderSaveData" from GenFilePaths, which is private (NonPublic) and static.
-            var folder = typeof(GenFilePaths).GetMethod(
+            var method = typeof(GenFilePaths).GetMethod(
                 "FolderUnderSaveData",
                 BindingFlags.NonPublic | BindingFlags.Static);
-            if (folder == null) throw new Exception("AutoPriorities :: FolderUnderSaveData is null [reflection]");
+            if (method == null) throw new Exception("AutoPriorities :: FolderUnderSaveData is null [reflection]");
 
             // Call "FolderUnderSaveData" from null parameter, since this is a static method.
-            return (string)folder.Invoke(null, new object[] { "PrioritiesData" });
+            return (string)method.Invoke(null, new object[] { "PrioritiesData" });
         }
 
         private static AutoPrioritiesDialog CreateDialog()
         {
             const string filename = "ModAutoPrioritiesSaveNEW.xml";
-            string fullPath = Application.persistentDataPath + filename;
+            var fullPath = Application.persistentDataPath + filename;
             var savePath = GetSaveLocation();
 
             var worldInfo = new WorldInfoRetriever.WorldInfoRetriever();
@@ -89,8 +76,7 @@ namespace AutoPriorities.Core
             var streamProvider = new FileStreamProvider();
             var stringSerializer = new PawnDataStringSerializer(logger, worldFacade);
             var mapSpecificSerializer = new MapSpecificDataPawnsDataSerializer(logger, worldFacade, stringSerializer);
-            var serializer = new PawnsDataSerializer(logger, fullPath, worldFacade, streamProvider);
-            var combinedSer = new CombinedPawnsDataSerializer(logger, mapSpecificSerializer, serializer);
+            var combinedSer = new CombinedPawnsDataSerializer(logger, mapSpecificSerializer);
             var pawnData = new PawnsDataBuilder(combinedSer, worldInfo, logger).Build();
             var importantWorkTypes = new ImportantJobsProvider(worldFacade);
             var priorityAssigner = new PrioritiesAssigner(pawnData, logger, importantWorkTypes);

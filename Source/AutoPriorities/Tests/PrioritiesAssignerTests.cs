@@ -16,14 +16,6 @@ namespace Tests
     [TestFixture]
     public class PrioritiesAssignerTests
     {
-        private PrioritiesAssigner _assigner = null!;
-        private IImportantJobsProvider _importantWorkTypesProvider = null!;
-        private ILogger _logger = null!;
-        private PawnsData _pawnsData = null!;
-        private PawnWorktypeCreator _pw = null!;
-        private IWorldInfoRetriever _retriever = null!;
-        private IPawnsDataSerializer _serializer = null!;
-
         [SetUp]
         public void SetUp()
         {
@@ -33,15 +25,23 @@ namespace Tests
             _pw = PawnWorktypeCreator.Create();
             // AddMorePawnsToPw();
             _retriever.PawnsInPlayerFaction()
-                      .Returns(_pw.pawns);
+                .Returns(_pw.pawns);
             _retriever.WorkTypeDefsInPriorityOrder()
-                      .Returns(_pw.workTypes);
+                .Returns(_pw.workTypes);
             AssignPawnsData();
             _importantWorkTypesProvider = Substitute.For<IImportantJobsProvider>();
             _importantWorkTypesProvider.ImportantWorkTypes()
-                                       .Returns(new HashSet<IWorkTypeWrapper>());
+                .Returns(new HashSet<IWorkTypeWrapper>());
             _assigner = new PrioritiesAssigner(_pawnsData, _logger, _importantWorkTypesProvider);
         }
+
+        private PrioritiesAssigner _assigner = null!;
+        private IImportantJobsProvider _importantWorkTypesProvider = null!;
+        private ILogger _logger = null!;
+        private PawnsData _pawnsData = null!;
+        private PawnWorktypeCreator _pw = null!;
+        private IWorldInfoRetriever _retriever = null!;
+        private IPawnsDataSerializer _serializer = null!;
 
         [Test]
         public void AssignPriorities_Numbers()
@@ -55,17 +55,17 @@ namespace Tests
             _logger.NoWarnReceived();
 
             _pw.pawns[0]
-               .Received()
-               .WorkSettingsSetPriority(_pw.workTypes[1], 1);
+                .Received()
+                .WorkSettingsSetPriority(_pw.workTypes[1], 1);
             _pw.pawns[1]
-               .Received()
-               .WorkSettingsSetPriority(_pw.workTypes[0], 1);
+                .Received()
+                .WorkSettingsSetPriority(_pw.workTypes[0], 1);
             _pw.pawns[3]
-               .Received()
-               .WorkSettingsSetPriority(_pw.workTypes[2], 1);
+                .Received()
+                .WorkSettingsSetPriority(_pw.workTypes[2], 1);
             _pw.pawns[3]
-               .Received()
-               .WorkSettingsSetPriority(_pw.workTypes[3], 1);
+                .Received()
+                .WorkSettingsSetPriority(_pw.workTypes[3], 1);
         }
 
         private void AssignPawnsData()
@@ -76,7 +76,7 @@ namespace Tests
                 TablePercent.Number(0, 1)
             };
             var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y))
-                                     .ToDictionary(k => k.x, v => v.y);
+                .ToDictionary(k => k.x, v => v.y);
             var save = new SaveData
             {
                 ExcludedPawns = new HashSet<ExcludedPawnEntry>
@@ -84,9 +84,9 @@ namespace Tests
                     new()
                     {
                         WorkDef = _pw.workTypes[1]
-                                     .DefName,
+                            .DefName,
                         PawnThingId = _pw.pawns[1]
-                                         .ThingID
+                            .ThingID
                     }
                 },
                 WorkTablesData = new List<WorkTableEntry>
@@ -95,7 +95,7 @@ namespace Tests
                 }
             };
             _serializer.LoadSavedData()
-                       .Returns(save);
+                .Returns(save);
 
             _pawnsData = new PawnsDataBuilder(_serializer, _retriever, _logger).Build();
         }

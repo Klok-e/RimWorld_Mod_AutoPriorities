@@ -16,12 +16,6 @@ namespace Tests
     [TestFixture]
     public class PawnsDataSerializerLoadTests
     {
-        private IFixture _fixture = null!;
-        private ILogger _logger = null!;
-        private IWorldInfoRetriever _retriever = null!;
-        private IPawnsDataSerializer _serializer = null!;
-        private IWorldInfoFacade _worldInfo = null!;
-
         [SetUp]
         public void SetUp()
         {
@@ -32,39 +26,45 @@ namespace Tests
             _fixture = FixtureBuilder.Create();
         }
 
+        private IFixture _fixture = null!;
+        private ILogger _logger = null!;
+        private IWorldInfoRetriever _retriever = null!;
+        private IPawnsDataSerializer _serializer = null!;
+        private IWorldInfoFacade _worldInfo = null!;
+
         [Test]
         public void LoadFromFile()
         {
             // arrange
             _retriever.PawnsInPlayerFaction()
-                      .Returns(_fixture.CreateMany<IPawnWrapper>());
+                .Returns(_fixture.CreateMany<IPawnWrapper>());
 
             _retriever.WorkTypeDefsInPriorityOrder()
-                      .Returns(
-                          TestHelper.WorkTypes.Select(
-                              x => _fixture.Build<WorkType>()
-                                           .With(y => y.DefName, x)
-                                           .Create()));
+                .Returns(
+                    TestHelper.WorkTypes.Select(
+                        x => _fixture.Build<WorkType>()
+                            .With(y => y.DefName, x)
+                            .Create()));
 
             // act
             var savedData = _serializer.LoadSavedData();
 
             // assert
             savedData.Should()
-                     .NotBeNull();
+                .NotBeNull();
             savedData!.ExcludedPawns.Should()
-                      .BeEmpty();
+                .BeEmpty();
             savedData.WorkTablesData.Should()
-                     .HaveCount(2);
+                .HaveCount(2);
             savedData.WorkTablesData[0]
-                     .Priority.v.Should()
-                     .Be(2);
+                .Priority.v.Should()
+                .Be(2);
             savedData.WorkTablesData[1]
-                     .Priority.v.Should()
-                     .Be(3);
+                .Priority.v.Should()
+                .Be(3);
             savedData.WorkTablesData[0]
-                     .WorkTypes.Should()
-                     .HaveCount(20);
+                .WorkTypes.Should()
+                .HaveCount(20);
 
             _logger.NoWarnReceived();
         }
@@ -74,14 +74,14 @@ namespace Tests
         {
             // arrange
             _retriever.PawnsInPlayerFaction()
-                      .Returns(_fixture.CreateMany<IPawnWrapper>());
+                .Returns(_fixture.CreateMany<IPawnWrapper>());
 
             _retriever.WorkTypeDefsInPriorityOrder()
-                      .Returns(
-                          TestHelper.WorkTypesTruncated.Select(
-                              x => _fixture.Build<WorkType>()
-                                           .With(y => y.DefName, x)
-                                           .Create()));
+                .Returns(
+                    TestHelper.WorkTypesTruncated.Select(
+                        x => _fixture.Build<WorkType>()
+                            .With(y => y.DefName, x)
+                            .Create()));
 
             // act
             var _ = _serializer.LoadSavedData();
@@ -89,7 +89,7 @@ namespace Tests
             // assert
             // TODO: 10 calls is received, double the expected amount. OK for now
             _logger.Received(10)
-                   .Warn(Arg.Any<string>());
+                .Warn(Arg.Any<string>());
         }
     }
 }

@@ -53,7 +53,7 @@ namespace AutoPriorities
                     _pawnsData,
                     PawnJobsCached,
                     _pawnsData.WorkTypes.Subtract(importantWorks)
-                              .Where(work => !_pawnsData.WorkTypesNotRequiringSkills.Contains(work)),
+                        .Where(work => !_pawnsData.WorkTypesNotRequiringSkills.Contains(work)),
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work]);
 
 #if DEBUG
@@ -65,11 +65,11 @@ namespace AutoPriorities
                     PawnJobsCached,
                     _pawnsData.WorkTypesNotRequiringSkills.Subtract(importantWorks),
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work]
-                                      .Select(
-                                          p => (p.pawn, 1d / (1 + PawnJobsCached[p.pawn]
-                                              .Count)))
-                                      .OrderByDescending(p => p.Item2)
-                                      .ToList());
+                        .Select(
+                            p => (p.pawn, 1d / (1 + PawnJobsCached[p.pawn]
+                                .Count)))
+                        .OrderByDescending(p => p.Item2)
+                        .ToList());
             }
             catch (Exception e)
             {
@@ -93,14 +93,14 @@ namespace AutoPriorities
 #endif
 
                 foreach (var (priority, maxJobs, jobsToSet) in PriorityPercentCached.Distinct(x => x.priority)
-                    .Select(a => a.percent)
-                    .IterPercents(pawns.Count)
-                    .GroupBy(v => v.percentIndex)
-                    .Select(
-                        g => (PriorityPercentCached[g.Key]
-                            .priority, PriorityPercentCached[g.Key]
-                            .maxJobs, g.Count()))
-                    .OrderBy(x => x.priority.v))
+                             .Select(a => a.percent)
+                             .IterPercents(pawns.Count)
+                             .GroupBy(v => v.percentIndex)
+                             .Select(
+                                 g => (PriorityPercentCached[g.Key]
+                                     .priority, PriorityPercentCached[g.Key]
+                                     .maxJobs, g.Count()))
+                             .OrderBy(x => x.priority.v))
                 {
                     var jobsSet = 0;
                     // iterate over all the pawns for this job with current priority
@@ -146,10 +146,10 @@ namespace AutoPriorities
             priorities.Clear();
             priorities.AddRange(
                 pawnsData.WorkTables.Select(
-                             tup => (priority: tup.Priority, jobCount: tup.JobCount, tup.WorkTypes[work]
-                                 .Value))
-                         .Distinct(t => t.priority)
-                         .Where(t => t.priority.v > 0));
+                        tup => (priority: tup.Priority, jobCount: tup.JobCount, tup.WorkTypes[work]
+                            .Value))
+                    .Distinct(t => t.priority)
+                    .Where(t => t.priority.v > 0));
             priorities.Sort((x, y) => x.Item1.v.CompareTo(y.Item1.v));
         }
     }

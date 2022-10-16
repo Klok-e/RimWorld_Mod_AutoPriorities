@@ -9,6 +9,12 @@ namespace AutoPriorities.Core
 {
     public static class PercentTableSaver
     {
+        public enum Variant
+        {
+            Number,
+            Percent
+        }
+
         public class Ser
         {
             public List<Tupl> data = new();
@@ -17,19 +23,19 @@ namespace AutoPriorities.Core
             public List<WorkTableEntry> ParsedData(IWorldInfoFacade serializer)
             {
                 return data.Select(x => x.Parsed(serializer))
-                           .ToList();
+                    .ToList();
             }
 
             public HashSet<ExcludedPawnEntry> ParsedExcluded(IWorldInfoFacade serializer)
             {
                 return excludedPawns.Select(x => x.Parsed(serializer))
-                                    .Where(p => p.Item1 != null && p.Item2 != null)
-                                    .Select(
-                                        p => new ExcludedPawnEntry
-                                        {
-                                            WorkDef = p.Item1!.DefName, PawnThingId = p.Item2!.ThingID
-                                        })
-                                    .ToHashSet();
+                    .Where(p => p.Item1 != null && p.Item2 != null)
+                    .Select(
+                        p => new ExcludedPawnEntry
+                        {
+                            WorkDef = p.Item1!.DefName, PawnThingId = p.Item2!.ThingID
+                        })
+                    .ToHashSet();
             }
 
             public static Ser Serialized((List<WorkTableEntry> percents, HashSet<ExcludedPawnEntry> excluded) data)
@@ -37,9 +43,9 @@ namespace AutoPriorities.Core
                 return new Ser
                 {
                     data = data.percents.Select(Tupl.Serialized)
-                               .ToList(),
+                        .ToList(),
                     excludedPawns = data.excluded.Select(WorktypePawn.Serialized)
-                                        .ToList()
+                        .ToList()
                 };
             }
         }
@@ -90,8 +96,8 @@ namespace AutoPriorities.Core
             public Dictionary<IWorkTypeWrapper, TablePercent> Parsed(IWorldInfoFacade serializer)
             {
                 return percents.Select(x => x.Parsed(serializer))
-                               .Where(x => x.Item1 != null)
-                               .ToDictionary(x => x.Item1!, x => x.Item2);
+                    .Where(x => x.Item1 != null)
+                    .ToDictionary(x => x.Item1!, x => x.Item2);
             }
 
             public static Dic Serialized(Dictionary<IWorkTypeWrapper, TablePercent> dic)
@@ -99,7 +105,7 @@ namespace AutoPriorities.Core
                 return new Dic
                 {
                     percents = dic.Select(kv => StrPercent.Serialized((kv.Key, kv.Value)))
-                                  .ToList()
+                        .ToList()
                 };
             }
         }
@@ -152,12 +158,6 @@ namespace AutoPriorities.Core
                     _ => throw new Exception()
                 };
             }
-        }
-
-        public enum Variant
-        {
-            Number,
-            Percent
         }
     }
 }

@@ -27,6 +27,24 @@ namespace AutoPriorities.PawnDataSerializer
             _streamProvider = streamProvider;
         }
 
+        public void DeleteSaveFile()
+        {
+            File.Delete(_fullPath);
+        }
+
+        private void SaveState((List<WorkTableEntry>, HashSet<ExcludedPawnEntry>) state)
+        {
+            _streamProvider.WithStream(
+                _fullPath,
+                FileMode.Create,
+                stream =>
+                {
+                    new XmlSerializer(typeof(PercentTableSaver.Ser)).Serialize(
+                        stream,
+                        PercentTableSaver.Ser.Serialized(state));
+                });
+        }
+
         #region IPawnsDataSerializer Members
 
         public SaveData? LoadSavedData()
@@ -63,23 +81,5 @@ namespace AutoPriorities.PawnDataSerializer
         }
 
         #endregion
-
-        public void DeleteSaveFile()
-        {
-            File.Delete(_fullPath);
-        }
-
-        private void SaveState((List<WorkTableEntry>, HashSet<ExcludedPawnEntry>) state)
-        {
-            _streamProvider.WithStream(
-                _fullPath,
-                FileMode.Create,
-                stream =>
-                {
-                    new XmlSerializer(typeof(PercentTableSaver.Ser)).Serialize(
-                        stream,
-                        PercentTableSaver.Ser.Serialized(state));
-                });
-        }
     }
 }

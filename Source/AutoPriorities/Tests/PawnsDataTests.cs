@@ -16,12 +16,6 @@ namespace Tests
     [TestFixture]
     public class PawnsDataBuilderTests
     {
-        private ILogger _logger = null!;
-        private PawnsDataBuilder _pawnsData = null!;
-        private PawnWorktypeCreator _pw = null!;
-        private IWorldInfoRetriever _retriever = null!;
-        private IPawnsDataSerializer _serializer = null!;
-
         [SetUp]
         public void SetUp()
         {
@@ -32,10 +26,16 @@ namespace Tests
             FixtureBuilder.Create();
             _pw = PawnWorktypeCreator.Create();
             _retriever.PawnsInPlayerFaction()
-                      .Returns(_pw.pawns);
+                .Returns(_pw.pawns);
             _retriever.WorkTypeDefsInPriorityOrder()
-                      .Returns(_pw.workTypes);
+                .Returns(_pw.workTypes);
         }
+
+        private ILogger _logger = null!;
+        private PawnsDataBuilder _pawnsData = null!;
+        private PawnWorktypeCreator _pw = null!;
+        private IWorldInfoRetriever _retriever = null!;
+        private IPawnsDataSerializer _serializer = null!;
 
         [Test]
         public void Build()
@@ -48,7 +48,7 @@ namespace Tests
                 TablePercent.Number(0, 2)
             };
             var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y))
-                                     .ToDictionary(k => k.x, v => v.y);
+                .ToDictionary(k => k.x, v => v.y);
             var save = new SaveData
             {
                 ExcludedPawns = new HashSet<ExcludedPawnEntry>
@@ -56,9 +56,9 @@ namespace Tests
                     new()
                     {
                         WorkDef = _pw.workTypes[1]
-                                     .DefName,
+                            .DefName,
                         PawnThingId = _pw.pawns[1]
-                                         .ThingID
+                            .ThingID
                     }
                 },
                 WorkTablesData = new List<WorkTableEntry>
@@ -67,7 +67,7 @@ namespace Tests
                 }
             };
             _serializer.LoadSavedData()
-                       .Returns(save);
+                .Returns(save);
 
             // act
             var pawnData = _pawnsData.Build();
@@ -76,21 +76,21 @@ namespace Tests
             _logger.NoWarnReceived();
 
             pawnData.SortedPawnFitnessForEveryWork[_pw.workTypes[0]]
-                    .Select(x => x.pawn)
-                    .Should()
-                    .Equal(_pw.pawns[1], _pw.pawns[0], _pw.pawns[2], _pw.pawns[3]);
+                .Select(x => x.pawn)
+                .Should()
+                .Equal(_pw.pawns[1], _pw.pawns[0], _pw.pawns[2], _pw.pawns[3]);
             pawnData.SortedPawnFitnessForEveryWork[_pw.workTypes[1]]
-                    .Select(x => x.pawn)
-                    .Should()
-                    .Equal(_pw.pawns[0], _pw.pawns[3], _pw.pawns[2]);
+                .Select(x => x.pawn)
+                .Should()
+                .Equal(_pw.pawns[0], _pw.pawns[3], _pw.pawns[2]);
             pawnData.SortedPawnFitnessForEveryWork[_pw.workTypes[2]]
-                    .Select(x => x.pawn)
-                    .Should()
-                    .Equal(_pw.pawns[3], _pw.pawns[1], _pw.pawns[2]);
+                .Select(x => x.pawn)
+                .Should()
+                .Equal(_pw.pawns[3], _pw.pawns[1], _pw.pawns[2]);
             pawnData.SortedPawnFitnessForEveryWork[_pw.workTypes[3]]
-                    .Select(x => x.pawn)
-                    .Should()
-                    .Equal(_pw.pawns[3], _pw.pawns[0], _pw.pawns[1], _pw.pawns[2]);
+                .Select(x => x.pawn)
+                .Should()
+                .Equal(_pw.pawns[3], _pw.pawns[0], _pw.pawns[1], _pw.pawns[2]);
         }
 
         [Test]
@@ -106,7 +106,7 @@ namespace Tests
             var unknownWorkType = new WorkType { DefName = "unknown" };
             _pw.workTypes.Add(unknownWorkType);
             var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y))
-                                     .ToDictionary(k => k.x, v => v.y);
+                .ToDictionary(k => k.x, v => v.y);
             var save = new SaveData
             {
                 ExcludedPawns = new HashSet<ExcludedPawnEntry>
@@ -114,9 +114,9 @@ namespace Tests
                     new()
                     {
                         WorkDef = _pw.workTypes[1]
-                                     .DefName,
+                            .DefName,
                         PawnThingId = _pw.pawns[1]
-                                         .ThingID
+                            .ThingID
                     }
                 },
                 WorkTablesData = new List<WorkTableEntry>
@@ -125,18 +125,18 @@ namespace Tests
                 }
             };
             _serializer.LoadSavedData()
-                       .Returns(save);
+                .Returns(save);
 
             // act
             var pd = _pawnsData.Build();
 
             // assert
             _logger.Received(1)
-                   .Warn(Arg.Any<string>());
+                .Warn(Arg.Any<string>());
 
             pd.WorkTables.First()
-              .WorkTypes.Should()
-              .HaveCount(5);
+                .WorkTypes.Should()
+                .HaveCount(5);
         }
     }
 }

@@ -238,9 +238,6 @@
         <Reference Include="UnityEngine.SubstanceModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.SubstanceModule.dll</HintPath>
         </Reference>
-        <Reference Include="UnityEngine.SubsystemsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\RimManaged\UnityEngine.SubsystemsModule.dll</HintPath>
-        </Reference>
         <Reference Include="UnityEngine.TerrainModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.TerrainModule.dll</HintPath>
         </Reference>
