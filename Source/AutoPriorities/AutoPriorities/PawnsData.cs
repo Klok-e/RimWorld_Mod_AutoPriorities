@@ -88,7 +88,6 @@ namespace AutoPriorities
                     {
                         if (!AllPlayerPawns.Contains(pawn)) AllPlayerPawns.Add(pawn);
 
-                        var fitness = -1d;
                         try
                         {
                             if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains(
@@ -97,7 +96,9 @@ namespace AutoPriorities
                                 var skill = pawn.AverageOfRelevantSkillsFor(work);
                                 double passion = PassionFactor(pawn.MaxPassionOfRelevantSkillsFor(work));
 
-                                fitness = skill * passion;
+                                var fitness = skill * passion;
+                                SortedPawnFitnessForEveryWork[work]
+                                    .Add((pawn, fitness));
                             }
                         }
                         catch (Exception e)
@@ -105,10 +106,6 @@ namespace AutoPriorities
                             _logger.Err($"error: {e} for pawn {pawn.NameFullColored}");
                             _logger.Err(e);
                         }
-
-                        if (fitness >= 0d)
-                            SortedPawnFitnessForEveryWork[work]
-                                .Add((pawn, fitness));
                     }
 
                     if (WorkTypes.Contains(work)) continue;
