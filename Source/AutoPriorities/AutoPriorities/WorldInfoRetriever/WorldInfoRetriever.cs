@@ -20,8 +20,6 @@ namespace AutoPriorities.WorldInfoRetriever
             return Find.CurrentMap.mapPawns.FreeColonists.Select(x => new PawnWrapper(x));
         }
 
-        public double PassionMultiplier => 1;
-        
         public byte[]? PawnsDataXml
         {
             get => MapSpecificData.GetForCurrentMap()?.pawnsDataXml;

@@ -97,7 +97,7 @@ namespace AutoPriorities
                                 var skill = pawn.AverageOfRelevantSkillsFor(work);
                                 double passion = PassionFactor(pawn.MaxPassionOfRelevantSkillsFor(work));
 
-                                fitness = skill * (1 + passion * Math.Max(_worldInfoRetriever.PassionMultiplier, 0d));
+                                fitness = skill * passion;
                             }
                         }
                         catch (Exception e)
