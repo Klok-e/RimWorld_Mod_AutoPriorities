@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace AutoPriorities.Utils
 {
-    public class QuickProfiler : IDisposable
+    internal class QuickProfiler : IDisposable
     {
         public readonly string name;
         public readonly Stopwatch sw = Stopwatch.StartNew();

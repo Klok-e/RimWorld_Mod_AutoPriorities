@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AutoPriorities.Utils
 {
-    public class QuickProfilerFactory
+    internal class QuickProfilerFactory
     {
         private readonly List<QuickProfiler> _profilers = new();
 

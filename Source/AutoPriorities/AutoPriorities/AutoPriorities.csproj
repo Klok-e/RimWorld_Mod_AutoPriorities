@@ -50,16 +50,12 @@
         <Compile Include="APLogger\ILogger.cs" />
         <Compile Include="APLogger\Logger.cs" />
         <Compile Include="PatchInitializeAttribute.cs" />
-        <Compile Include="PawnDataSerializer\CombinedPawnsDataSerializer.cs" />
         <Compile Include="PawnDataSerializer\Exporter\IPawnDataExporter.cs" />
         <Compile Include="PawnDataSerializer\Exporter\PawnDataExporter.cs" />
         <Compile Include="PawnDataSerializer\IPawnDataStringSerializer.cs" />
         <Compile Include="PawnDataSerializer\IPawnsDataSerializer.cs" />
         <Compile Include="PawnDataSerializer\MapSpecificDataPawnsDataSerializer.cs" />
         <Compile Include="PawnDataSerializer\PawnDataStringSerializer.cs" />
-        <Compile Include="PawnDataSerializer\StreamProviders\StreamProvider.cs" />
-        <Compile Include="PawnDataSerializer\StreamProviders\MemoryStreamProvider.cs" />
-        <Compile Include="PawnDataSerializer\StreamProviders\FileStreamProvider.cs" />
         <Compile Include="PawnsData.cs" />
         <Compile Include="PawnsDataBuilder.cs" />
         <Compile Include="Percents\PercentVariant.cs" />
@@ -71,7 +67,6 @@
         <Compile Include="Ui\AutoPriorities_Dialog.cs" />
         <Compile Include="Ui\NameExportDialog.cs" />
         <Compile Include="Utils\DrawUtil.cs" />
-        <Compile Include="Utils\PoolFactory.cs" />
         <Compile Include="Utils\QuickProfiler.cs" />
         <Compile Include="Utils\QuickProfilerFactory.cs" />
         <Compile Include="WorkTableEntry.cs" />

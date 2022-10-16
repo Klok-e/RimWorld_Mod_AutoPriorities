@@ -5,7 +5,6 @@ using AutoPriorities.Extensions;
 using AutoPriorities.ImportantJobs;
 using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.PawnDataSerializer.Exporter;
-using AutoPriorities.PawnDataSerializer.StreamProviders;
 using AutoPriorities.Ui;
 using AutoPriorities.WorldInfoRetriever;
 using HugsLib;
@@ -66,18 +65,14 @@ namespace AutoPriorities.Core
 
         private static AutoPrioritiesDialog CreateDialog()
         {
-            const string filename = "ModAutoPrioritiesSaveNEW.xml";
-            var fullPath = Application.persistentDataPath + filename;
             var savePath = GetSaveLocation();
 
             var worldInfo = new WorldInfoRetriever.WorldInfoRetriever();
             var logger = _logger!;
             var worldFacade = new WorldInfoFacade(worldInfo, logger);
-            var streamProvider = new FileStreamProvider();
             var stringSerializer = new PawnDataStringSerializer(logger, worldFacade);
             var mapSpecificSerializer = new MapSpecificDataPawnsDataSerializer(worldInfo, stringSerializer);
-            var combinedSer = new CombinedPawnsDataSerializer(logger, mapSpecificSerializer);
-            var pawnData = new PawnsDataBuilder(combinedSer, worldInfo, logger).Build();
+            var pawnData = new PawnsDataBuilder(mapSpecificSerializer, worldInfo, logger).Build();
             var importantWorkTypes = new ImportantJobsProvider(worldFacade);
             var priorityAssigner = new PrioritiesAssigner(pawnData, logger, importantWorkTypes);
             var pawnDataExporter = new PawnDataExporter(logger, savePath, pawnData, stringSerializer);

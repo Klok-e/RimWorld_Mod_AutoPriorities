@@ -6,7 +6,6 @@ using AutoFixture;
 using AutoPriorities;
 using AutoPriorities.APLogger;
 using AutoPriorities.PawnDataSerializer;
-using AutoPriorities.PawnDataSerializer.StreamProviders;
 using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
 using FluentAssertions;
