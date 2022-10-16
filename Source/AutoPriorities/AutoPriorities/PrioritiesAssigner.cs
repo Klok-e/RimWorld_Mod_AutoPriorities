@@ -82,7 +82,6 @@ namespace AutoPriorities
             IEnumerable<IWorkTypeWrapper> workTypes,
             Func<IWorkTypeWrapper, List<(IPawnWrapper pawn, double fitness)>> fitnessGetter)
         {
-            //skip works not requiring skills because they will be handled later
             foreach (var work in workTypes)
             {
                 FillListPriorityPercents(pawnsData, work, PriorityPercentCached);
@@ -92,7 +91,8 @@ namespace AutoPriorities
                 _logger.Info($"worktype {work.DefName}");
 #endif
 
-                foreach (var (priority, maxJobs, jobsToSet) in PriorityPercentCached.Distinct(x => x.priority)
+                foreach (var (priority, maxJobs, jobsToSet) in PriorityPercentCached
+                             .Distinct(x => x.priority)
                              .Select(a => a.percent)
                              .IterPercents(pawns.Count)
                              .GroupBy(v => v.percentIndex)
