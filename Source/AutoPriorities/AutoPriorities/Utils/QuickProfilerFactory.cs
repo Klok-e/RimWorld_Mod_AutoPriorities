@@ -13,6 +13,7 @@ namespace AutoPriorities.Utils
             var str = new StringBuilder();
             foreach (var profiler in _profilers)
                 str.Append($"{profiler.name} took {profiler.sw.Elapsed.TotalMilliseconds}ms\n");
+            _profilers.Clear();
 
             File.WriteAllText("/tmp/auto-priority-profile.txt", str.ToString());
         }

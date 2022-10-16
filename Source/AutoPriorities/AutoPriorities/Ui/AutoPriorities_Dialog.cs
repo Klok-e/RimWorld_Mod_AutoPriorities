@@ -60,7 +60,8 @@ namespace AutoPriorities.Ui
         private Rect _rect;
 
         private Vector2 _scrollPos;
-        // private QuickProfilerFactory _profilerFactory = new();
+
+        private readonly QuickProfilerFactory _profilerFactory = new();
         // private int _windowContentsCalls;
 
         public AutoPrioritiesDialog(PawnsData pawnsData,
@@ -97,85 +98,84 @@ namespace AutoPriorities.Ui
 
         public override void DoWindowContents(Rect inRect)
         {
-            // using (_profilerFactory.CreateProfiler("DoWindowContents"))
+            // using var p = _profilerFactory.CreateProfiler("DoWindowContents");
+
+            // draw select tab buttons
+            var prioritiesButtonRect = new Rect(inRect.xMin, inRect.yMin, _prioritiesLabelWidth, LabelHeight);
+            if (Widgets.ButtonText(prioritiesButtonRect, PrioritiesLabel))
             {
-                // draw select tab buttons
-                var prioritiesButtonRect = new Rect(inRect.xMin, inRect.yMin, _prioritiesLabelWidth, LabelHeight);
-                if (Widgets.ButtonText(prioritiesButtonRect, PrioritiesLabel))
-                {
-                    _currentlySelectedTab = SelectedTab.Priorities;
-                    _pawnsData.Rebuild();
-                    _textFieldBuffers.Clear();
-                }
-
-                var pawnsButtonRect = new Rect(
-                    prioritiesButtonRect.xMax + 5f,
-                    prioritiesButtonRect.yMin,
-                    _pawnExcludeLabelWidth,
-                    LabelHeight);
-                if (Widgets.ButtonText(pawnsButtonRect, PawnExcludeLabel))
-                {
-                    _currentlySelectedTab = SelectedTab.PawnExclusion;
-                    _pawnsData.Rebuild();
-                    _textFieldBuffers.Clear();
-                }
-
-                var importantButtonRect = new Rect(
-                    pawnsButtonRect.xMax + 5f,
-                    prioritiesButtonRect.yMin,
-                    _importantJobsLabelWidth,
-                    LabelHeight);
-                if (Widgets.ButtonText(importantButtonRect, ImportantJobsLabel))
-                {
-                    _currentlySelectedTab = SelectedTab.ImportantWorkTypes;
-                    _pawnsData.Rebuild();
-                    _textFieldBuffers.Clear();
-                }
-
-                // draw tab contents lower than buttons
-                var lowerInRect = inRect;
-                lowerInRect.yMin += LabelHeight + 10f;
-
-                // draw currently selected tab
-                switch (_currentlySelectedTab)
-                {
-                    case SelectedTab.Priorities:
-                        PrioritiesTab(lowerInRect);
-                        break;
-                    case SelectedTab.PawnExclusion:
-                        PawnExcludeTab(lowerInRect);
-                        break;
-                    case SelectedTab.ImportantWorkTypes:
-                        ImportantWorkTypes(lowerInRect);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(_currentlySelectedTab));
-                }
-
-                var buttonDeleteRect = new Rect(
-                    inRect.xMax - _importExportImportLabelWidth,
-                    inRect.yMin,
-                    _importExportImportLabelWidth,
-                    LabelHeight);
-                DrawDeleteButton(buttonDeleteRect);
-
-                var buttonImportRect = new Rect(
-                    buttonDeleteRect.xMin - _importExportImportLabelWidth,
-                    inRect.yMin,
-                    _importExportImportLabelWidth,
-                    LabelHeight);
-                DrawImportButton(buttonImportRect);
-
-                var buttonExportRect = new Rect(
-                    buttonImportRect.xMin - _importExportImportLabelWidth,
-                    inRect.yMin,
-                    _importExportImportLabelWidth,
-                    LabelHeight);
-                DrawExportButton(buttonExportRect);
-
-                var buttonRunRect = new Rect(inRect.xMin, inRect.yMax - ButtonHeight, _labelWidth, ButtonHeight);
-                DrawRunButton(buttonRunRect);
+                _currentlySelectedTab = SelectedTab.Priorities;
+                _pawnsData.Rebuild();
+                _textFieldBuffers.Clear();
             }
+
+            var pawnsButtonRect = new Rect(
+                prioritiesButtonRect.xMax + 5f,
+                prioritiesButtonRect.yMin,
+                _pawnExcludeLabelWidth,
+                LabelHeight);
+            if (Widgets.ButtonText(pawnsButtonRect, PawnExcludeLabel))
+            {
+                _currentlySelectedTab = SelectedTab.PawnExclusion;
+                _pawnsData.Rebuild();
+                _textFieldBuffers.Clear();
+            }
+
+            var importantButtonRect = new Rect(
+                pawnsButtonRect.xMax + 5f,
+                prioritiesButtonRect.yMin,
+                _importantJobsLabelWidth,
+                LabelHeight);
+            if (Widgets.ButtonText(importantButtonRect, ImportantJobsLabel))
+            {
+                _currentlySelectedTab = SelectedTab.ImportantWorkTypes;
+                _pawnsData.Rebuild();
+                _textFieldBuffers.Clear();
+            }
+
+            // draw tab contents lower than buttons
+            var lowerInRect = inRect;
+            lowerInRect.yMin += LabelHeight + 10f;
+
+            // draw currently selected tab
+            switch (_currentlySelectedTab)
+            {
+                case SelectedTab.Priorities:
+                    PrioritiesTab(lowerInRect);
+                    break;
+                case SelectedTab.PawnExclusion:
+                    PawnExcludeTab(lowerInRect);
+                    break;
+                case SelectedTab.ImportantWorkTypes:
+                    ImportantWorkTypes(lowerInRect);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(_currentlySelectedTab));
+            }
+
+            var buttonDeleteRect = new Rect(
+                inRect.xMax - _importExportImportLabelWidth,
+                inRect.yMin,
+                _importExportImportLabelWidth,
+                LabelHeight);
+            DrawDeleteButton(buttonDeleteRect);
+
+            var buttonImportRect = new Rect(
+                buttonDeleteRect.xMin - _importExportImportLabelWidth,
+                inRect.yMin,
+                _importExportImportLabelWidth,
+                LabelHeight);
+            DrawImportButton(buttonImportRect);
+
+            var buttonExportRect = new Rect(
+                buttonImportRect.xMin - _importExportImportLabelWidth,
+                inRect.yMin,
+                _importExportImportLabelWidth,
+                LabelHeight);
+            DrawExportButton(buttonExportRect);
+
+            var buttonRunRect = new Rect(inRect.xMin, inRect.yMax - ButtonHeight, _labelWidth, ButtonHeight);
+            DrawRunButton(buttonRunRect);
 
             // if (_windowContentsCalls % 1000 == 0) _profilerFactory.SaveProfileData();
 
