@@ -53,7 +53,6 @@ namespace AutoPriorities.Ui
         private readonly PrioritiesAssigner _prioritiesAssigner;
         private readonly HashSet<Priority> _prioritiesEncounteredCached = new();
         private readonly float _prioritiesLabelWidth = PrioritiesLabel.GetWidthCached() + 10f;
-        private readonly Dictionary<Rect, string?> _textFieldBuffers = new();
         private SelectedTab _currentlySelectedTab = SelectedTab.Priorities;
         private bool _openedOnce;
         private Vector2 _pawnExcludeScrollPos;
@@ -106,7 +105,6 @@ namespace AutoPriorities.Ui
             {
                 _currentlySelectedTab = SelectedTab.Priorities;
                 _pawnsData.Rebuild();
-                _textFieldBuffers.Clear();
             }
 
             var pawnsButtonRect = new Rect(
@@ -118,7 +116,6 @@ namespace AutoPriorities.Ui
             {
                 _currentlySelectedTab = SelectedTab.PawnExclusion;
                 _pawnsData.Rebuild();
-                _textFieldBuffers.Clear();
             }
 
             var importantButtonRect = new Rect(
@@ -130,7 +127,6 @@ namespace AutoPriorities.Ui
             {
                 _currentlySelectedTab = SelectedTab.ImportantWorkTypes;
                 _pawnsData.Rebuild();
-                _textFieldBuffers.Clear();
             }
 
             // draw tab contents lower than buttons
@@ -202,11 +198,7 @@ namespace AutoPriorities.Ui
                 var options = saves.Select(
                         x => new FloatMenuOption(
                             x,
-                            () =>
-                            {
-                                _pawnDataExporter.ImportPawnData(x);
-                                _textFieldBuffers.Clear();
-                            }))
+                            () => { _pawnDataExporter.ImportPawnData(x); }))
                     .ToList();
                 Find.WindowStack.Add(new FloatMenu(options, string.Empty));
                 SoundDefOf.Click.PlayOneShotOnCamera();
@@ -423,7 +415,7 @@ namespace AutoPriorities.Ui
 
         private float MaxJobsPerPawnField(Rect jobCountMaxLabelRect, float newMaxJobsSliderValue, bool skipAssign)
         {
-            var maxJobsText = _textFieldBuffers.GetValueOrDefault(jobCountMaxLabelRect) ?? Mathf
+            var maxJobsText = Mathf
                 .RoundToInt(newMaxJobsSliderValue)
                 .ToString();
             var prevSliderVal = newMaxJobsSliderValue;
@@ -432,14 +424,9 @@ namespace AutoPriorities.Ui
             // so that the text input doesn't override values set by slider
             if (skipAssign)
             {
-                _textFieldBuffers[jobCountMaxLabelRect] = null;
                 return prevSliderVal;
             }
 
-            if (Math.Abs(prevSliderVal - newMaxJobsSliderValue) < 0.0001)
-                _textFieldBuffers[jobCountMaxLabelRect] = maxJobsText;
-            else
-                _textFieldBuffers[jobCountMaxLabelRect] = null;
             return newMaxJobsSliderValue;
         }
 
@@ -571,24 +558,28 @@ namespace AutoPriorities.Ui
                     _ => throw new ArgumentOutOfRangeException(nameof(currentPercent), currentPercent, null)
                 });
 
-            var percentsText = _textFieldBuffers.GetValueOrDefault(rect) ?? Mathf.RoundToInt(value)
+            var percentsText = Mathf.RoundToInt(value)
                 .ToString(CultureInfo.InvariantCulture);
 
             var prevCol = GUI.color;
             if (takenMoreThanTotal) GUI.color = Color.red;
 
-            var prevSliderVal = value;
-            Widgets.TextFieldNumeric(rect, ref value, ref percentsText);
-            if (skipAssign)
+            if (Mouse.IsOver(rect))
             {
-                _textFieldBuffers[rect] = null;
-                return currentValue;
+                Widgets.TextFieldNumeric(rect, ref value, ref percentsText);
+            }
+            else
+            {
+                var anchor = Text.Anchor;
+                Text.Anchor = TextAnchor.UpperCenter;
+                Widgets.Label(rect, percentsText);
+                Text.Anchor = anchor;
             }
 
-            if (Math.Abs(prevSliderVal - value) < 0.0001)
-                _textFieldBuffers[rect] = percentsText;
-            else
-                _textFieldBuffers[rect] = null;
+            if (skipAssign)
+            {
+                return currentValue;
+            }
 
             GUI.color = prevCol;
             var currSliderVal = currentPercent.Variant switch
@@ -610,9 +601,6 @@ namespace AutoPriorities.Ui
                 case PercentVariant.Number:
                     if (Widgets.ButtonText(rect, "№"))
                     {
-                        // clear buffers so that text input uses new values
-                        _textFieldBuffers.Clear();
-
                         currentPercent = TablePercent.Percent(sliderValue);
                     }
                     else
@@ -626,9 +614,6 @@ namespace AutoPriorities.Ui
                 case PercentVariant.Percent:
                     if (Widgets.ButtonText(rect, "%"))
                     {
-                        // clear buffers so that text input uses new values
-                        _textFieldBuffers.Clear();
-
                         currentPercent = TablePercent.Number(
                             numberColonists,
                             Mathf.RoundToInt(sliderValue * numberColonists));

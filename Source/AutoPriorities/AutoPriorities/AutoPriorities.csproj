@@ -66,6 +66,7 @@
         <Compile Include="SaveDataRequest.cs" />
         <Compile Include="Ui\AutoPriorities_Dialog.cs" />
         <Compile Include="Ui\NameExportDialog.cs" />
+        <Compile Include="Ui\PrioritiesTabArtisan.cs" />
         <Compile Include="Utils\DrawUtil.cs" />
         <Compile Include="Utils\QuickProfiler.cs" />
         <Compile Include="Utils\QuickProfilerFactory.cs" />
