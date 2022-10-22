@@ -19,7 +19,7 @@ namespace AutoPriorities.Wrappers
 
         public int RelevantSkillsCount => workTypeDef.relevantSkills.Count;
 
-        public string LabelShort => workTypeDef.labelShort;
+        public string LabelShort => workTypeDef.labelShort.CapitalizeFirst();
 
         #endregion
     }
