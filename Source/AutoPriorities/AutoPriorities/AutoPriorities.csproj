@@ -80,8 +80,8 @@
         <Compile Include="Wrappers\WorkTypeWrapper.cs" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Lib.Harmony" Version="2.1.1" />
-        <PackageReference Include="UnlimitedHugs.Rimworld.HugsLib" Version="9.0.0" />
+        <PackageReference Include="Lib.Harmony" Version="2.2.2" />
+        <PackageReference Include="UnlimitedHugs.Rimworld.HugsLib" Version="9.0.1" />
     </ItemGroup>
     <ItemGroup>
         <Reference Include="Assembly-CSharp, Culture=neutral, PublicKeyToken=null">
