@@ -27,7 +27,6 @@ namespace AutoPriorities.Core
             _logger = new Logger(Logger);
 
             PatchMod("fluffy.worktab", "FluffyWorktabPatch.dll");
-            PatchMod("dame.interestsframework", "InterestsPatch.dll");
             HarmonyInst.PatchAll();
         }
 
