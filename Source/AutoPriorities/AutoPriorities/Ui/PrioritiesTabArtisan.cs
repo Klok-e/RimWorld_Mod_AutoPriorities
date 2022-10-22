@@ -343,17 +343,17 @@ namespace AutoPriorities.Ui
             var prevCol = GUI.color;
             if (takenMoreThanTotal) GUI.color = Color.red;
 
-            if (Mouse.IsOver(rect))
-            {
-                Widgets.TextFieldNumeric(rect, ref value, ref percentsText);
-            }
-            else
-            {
-                var anchor = Text.Anchor;
-                Text.Anchor = TextAnchor.UpperCenter;
-                Widgets.Label(rect, percentsText);
-                Text.Anchor = anchor;
-            }
+            // if (Mouse.IsOver(rect))
+            // {
+            Widgets.TextFieldNumeric(rect, ref value, ref percentsText);
+            // }
+            // else
+            // {
+            // var anchor = Text.Anchor;
+            // Text.Anchor = TextAnchor.UpperCenter;
+            // Widgets.Label(rect, percentsText);
+            // Text.Anchor = anchor;
+            // }
 
             if (skipAssign)
             {
