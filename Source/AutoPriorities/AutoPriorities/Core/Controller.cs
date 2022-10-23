@@ -18,6 +18,7 @@ namespace AutoPriorities.Core
     public class Controller : ModBase
     {
         private static ILogger? _logger;
+        public static PawnsData? pawnData;
 
         public static AutoPrioritiesDialog? Dialog { get; private set; }
 
@@ -71,7 +72,7 @@ namespace AutoPriorities.Core
             var worldFacade = new WorldInfoFacade(worldInfo, logger);
             var stringSerializer = new PawnDataStringSerializer(logger, worldFacade);
             var mapSpecificSerializer = new MapSpecificDataPawnsDataSerializer(worldInfo, stringSerializer);
-            var pawnData = new PawnsDataBuilder(mapSpecificSerializer, worldInfo, logger).Build();
+            pawnData = new PawnsDataBuilder(mapSpecificSerializer, worldInfo, logger).Build();
             var importantWorkTypes = new ImportantJobsProvider(worldFacade);
             var priorityAssigner = new PrioritiesAssigner(pawnData, logger, importantWorkTypes);
             var pawnDataExporter = new PawnDataExporter(logger, savePath, pawnData, stringSerializer);
