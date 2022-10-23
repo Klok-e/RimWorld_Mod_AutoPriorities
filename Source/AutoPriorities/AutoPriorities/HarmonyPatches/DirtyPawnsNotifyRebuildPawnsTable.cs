@@ -1,4 +1,5 @@
 using AutoPriorities.Core;
+using AutoPriorities.Ui;
 using HarmonyLib;
 using RimWorld;
 using Verse;
@@ -14,7 +15,20 @@ namespace AutoPriorities.HarmonyPatches
         // ReSharper disable once UnusedMember.Local
         private static void Postfix()
         {
-            Controller.pawnData?.Rebuild();
+            var windowStack = Find.WindowStack;
+            if (windowStack.WindowOfType<AutoPrioritiesDialog>() is not null)
+            {
+#if DEBUG
+                Controller.logger?.Info("Rebuild by notification");
+#endif
+                Controller.pawnData?.Rebuild();
+            }
+            else
+            {
+#if DEBUG
+                Controller.logger?.Info("Rebuild by notification: auto priority window not found");
+#endif
+            }
         }
     }
 }

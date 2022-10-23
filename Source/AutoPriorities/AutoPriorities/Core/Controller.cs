@@ -17,7 +17,7 @@ namespace AutoPriorities.Core
 {
     public class Controller : ModBase
     {
-        private static ILogger? _logger;
+        public static ILogger? logger;
         public static PawnsData? pawnData;
 
         public static AutoPrioritiesDialog? Dialog { get; private set; }
@@ -25,7 +25,7 @@ namespace AutoPriorities.Core
         public override void Initialize()
         {
             base.Initialize();
-            _logger = new Logger(Logger);
+            logger = new Logger(Logger);
 
             PatchMod("fluffy.worktab", "FluffyWorktabPatch.dll");
             HarmonyInst.PatchAll();
@@ -41,7 +41,7 @@ namespace AutoPriorities.Core
         {
             if (!LoadedModManager.RunningModsListForReading.Exists(m => m.PackageId == packageId)) return;
 
-            _logger?.Info($"Patching for: {packageId}");
+            logger?.Info($"Patching for: {packageId}");
 
             var asm = Assembly.LoadFile(
                 Path.Combine(ModContentPack.RootDir, Path.Combine("ConditionalAssemblies/1.4/", patchName)));
@@ -68,16 +68,16 @@ namespace AutoPriorities.Core
             var savePath = GetSaveLocation();
 
             var worldInfo = new WorldInfoRetriever.WorldInfoRetriever();
-            var logger = _logger!;
-            var worldFacade = new WorldInfoFacade(worldInfo, logger);
-            var stringSerializer = new PawnDataStringSerializer(logger, worldFacade);
+            var log = Controller.logger!;
+            var worldFacade = new WorldInfoFacade(worldInfo, log);
+            var stringSerializer = new PawnDataStringSerializer(log, worldFacade);
             var mapSpecificSerializer = new MapSpecificDataPawnsDataSerializer(worldInfo, stringSerializer);
-            pawnData = new PawnsDataBuilder(mapSpecificSerializer, worldInfo, logger).Build();
+            pawnData = new PawnsDataBuilder(mapSpecificSerializer, worldInfo, log).Build();
             var importantWorkTypes = new ImportantJobsProvider(worldFacade);
-            var priorityAssigner = new PrioritiesAssigner(pawnData, logger, importantWorkTypes);
-            var pawnDataExporter = new PawnDataExporter(logger, savePath, pawnData, stringSerializer);
+            var priorityAssigner = new PrioritiesAssigner(pawnData, log, importantWorkTypes);
+            var pawnDataExporter = new PawnDataExporter(log, savePath, pawnData, stringSerializer);
 
-            return new AutoPrioritiesDialog(pawnData, priorityAssigner, logger, importantWorkTypes, pawnDataExporter);
+            return new AutoPrioritiesDialog(pawnData, priorityAssigner, log, importantWorkTypes, pawnDataExporter);
         }
     }
 }

@@ -201,8 +201,12 @@ namespace AutoPriorities.Ui
                 try
                 {
                     var currentPercent = pr.WorkTypes[workType];
-
                     var numberColonists = _pawnsData.NumberColonists(workType);
+                    if (currentPercent.Variant == PercentVariant.Number)
+                    {
+                        currentPercent = TablePercent.Number(numberColonists, currentPercent.NumberCount);
+                    }
+
                     float elementXPos;
                     Rect labelRect;
                     double available;
