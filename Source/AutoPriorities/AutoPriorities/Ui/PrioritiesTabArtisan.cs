@@ -202,6 +202,11 @@ namespace AutoPriorities.Ui
                 {
                     var currentPercent = pr.WorkTypes[workType];
                     var numberColonists = _pawnsData.NumberColonists(workType);
+                    var remainPercentExistsForWorkType = _pawnsData.PercentRemainExistsForWorkType(workType);
+
+#if DEBUG
+                    var isCallInteresting = false;
+#endif
 
                     float elementXPos;
                     Rect labelRect;
@@ -233,13 +238,25 @@ namespace AutoPriorities.Ui
                             slidersRect.yMin + 60f,
                             Consts.SliderWidth,
                             Consts.SliderHeight);
-                        currSliderVal = (float)_pawnsData.PercentValue(currentPercent, workType);
+                        currSliderVal = (float)_pawnsData.PercentValue(currentPercent, workType, pr.Priority);
+
+#if DEBUG
+                        var prevSliderVal = currSliderVal;
+#endif
 
                         currSliderVal = SliderPercentsInput(
                             sliderRect,
                             (float)available,
                             currSliderVal,
                             out didValueChange);
+#if DEBUG
+                        if (Math.Abs(currSliderVal - prevSliderVal) > 0.001)
+                        {
+                            _logger.Info(
+                                $"slider: available {available}; newSliderValue {prevSliderVal}; currSliderVal {currSliderVal}");
+                            isCallInteresting = true;
+                        }
+#endif
                     }
 
                     Rect percentsRect;
@@ -251,6 +268,9 @@ namespace AutoPriorities.Ui
                             Consts.PercentStringWidth,
                             25f);
 
+#if DEBUG
+                        var prevSliderVal = currSliderVal;
+#endif
                         currSliderVal = TextPercentsInput(
                             percentsRect,
                             currentPercent,
@@ -259,6 +279,14 @@ namespace AutoPriorities.Ui
                             (float)available,
                             didValueChange,
                             numberColonists);
+#if DEBUG
+                        if (Math.Abs(currSliderVal - prevSliderVal) > 0.001)
+                        {
+                            _logger.Info(
+                                $"text: available {available}; prevSliderVal {prevSliderVal}; currSliderVal {currSliderVal}");
+                            isCallInteresting = true;
+                        }
+#endif
                     }
 
                     // using (_profilerFactory.CreateProfiler(
@@ -268,11 +296,21 @@ namespace AutoPriorities.Ui
                             percentsRect.min + new Vector2(5f + Consts.PercentStringLabelWidth, 0f),
                             percentsRect.size);
                         var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
-                        pr.WorkTypes[workType] = SwitchPercentsNumbersButton(
+                        var switchPercentsNumbersButton = SwitchPercentsNumbersButton(
                             symbolRect,
                             currentPercent,
                             numberColonists,
-                            currSliderVal);
+                            currSliderVal,
+                            remainPercentExistsForWorkType);
+#if DEBUG
+                        if (isCallInteresting)
+                        {
+                            _logger.Info(
+                                $"button {switchPercentsNumbersButton.Variant.ToString()}; " +
+                                $"percent {_pawnsData.PercentValue(switchPercentsNumbersButton, workType, pr.Priority)}");
+                        }
+#endif
+                        pr.WorkTypes[workType] = switchPercentsNumbersButton;
                     }
                 }
                 catch (Exception e)
@@ -333,6 +371,7 @@ namespace AutoPriorities.Ui
                 currentPercent.Variant switch
                 {
                     PercentVariant.Percent => currentValue * 100f,
+                    PercentVariant.PercentRemaining => available * 100f,
                     PercentVariant.Number => currentValue * totalColonists,
                     _ => throw new ArgumentOutOfRangeException(nameof(currentPercent), currentPercent, null)
                 });
@@ -354,6 +393,7 @@ namespace AutoPriorities.Ui
             var currSliderVal = currentPercent.Variant switch
             {
                 PercentVariant.Percent => value / 100f,
+                PercentVariant.PercentRemaining => value / 100f,
                 PercentVariant.Number => value / totalColonists,
                 _ => throw new ArgumentOutOfRangeException(nameof(currentPercent), currentPercent, null)
             };
@@ -363,33 +403,34 @@ namespace AutoPriorities.Ui
         private TablePercent SwitchPercentsNumbersButton(Rect rect,
             TablePercent currentPercent,
             int numberColonists,
-            float sliderValue)
+            float sliderValue,
+            bool remainPercentExistsForWorkType)
         {
             if (!rect.Overlaps(_currViewedScrollRect))
             {
                 return currentPercent;
             }
 
-            var switchButtonResult = SwitchButton.None;
-            switch (currentPercent.Variant)
+            var switchButtonResult = currentPercent.Variant switch
             {
-                case PercentVariant.Number:
-                    if (Widgets.ButtonText(rect, "№"))
-                        switchButtonResult = SwitchButton.Percent;
-                    break;
-                case PercentVariant.Percent:
-                    if (Widgets.ButtonText(rect, "%"))
-                        switchButtonResult = SwitchButton.Number;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                PercentVariant.Percent => Widgets.ButtonText(rect, "%")
+                    ? PercentVariant.Number
+                    : PercentVariant.Percent,
+                PercentVariant.Number => Widgets.ButtonText(rect, "№")
+                    ? remainPercentExistsForWorkType ? PercentVariant.Percent : PercentVariant.PercentRemaining
+                    : PercentVariant.Number,
+                PercentVariant.PercentRemaining => Widgets.ButtonText(rect, "R")
+                    ? PercentVariant.Percent
+                    : PercentVariant.PercentRemaining,
+                _ => throw new ArgumentOutOfRangeException()
+            };
 
             currentPercent = switchButtonResult switch
             {
-                SwitchButton.Number => TablePercent.Number(Mathf.RoundToInt(sliderValue * numberColonists)),
-                SwitchButton.Percent => TablePercent.Percent(sliderValue),
-                _ => currentPercent
+                PercentVariant.Number => TablePercent.Number(Mathf.RoundToInt(sliderValue * numberColonists)),
+                PercentVariant.Percent => TablePercent.Percent(sliderValue),
+                PercentVariant.PercentRemaining => TablePercent.PercentRemaining(),
+                _ => throw new ArgumentOutOfRangeException()
             };
 
             return currentPercent;
@@ -408,13 +449,6 @@ namespace AutoPriorities.Ui
         private void RemovePriority()
         {
             if (_pawnsData.WorkTables.Count > 0) _pawnsData.WorkTables.RemoveLast();
-        }
-
-        enum SwitchButton
-        {
-            None,
-            Percent,
-            Number
         }
     }
 }

@@ -137,14 +137,17 @@ namespace AutoPriorities
             }
         }
 
-        public (double percent, bool takenMoreThanTotal) PercentColonistsAvailable(IWorkTypeWrapper workType,
+        public (double percent, bool takenMoreThanTotal) PercentColonistsAvailable(
+            IWorkTypeWrapper workType,
             Priority priorityIgnore)
         {
             var taken = 0d;
             var takenTotal = 0d;
-            foreach (var it in WorkTables.Distinct(x => x.Priority))
+            foreach (var it in WorkTables
+                         .Distinct(x => x.Priority)
+                         .Where(x => x.WorkTypes[workType].Variant != PercentVariant.PercentRemaining))
             {
-                var percent = PercentValue(it.WorkTypes[workType], workType);
+                var percent = PercentValue(it.WorkTypes[workType], workType, priorityIgnore);
                 if (it.Priority.v != priorityIgnore.v) taken += percent;
                 takenTotal += percent;
             }
@@ -159,6 +162,12 @@ namespace AutoPriorities
                 .Count;
         }
 
+        public bool PercentRemainExistsForWorkType(IWorkTypeWrapper workType)
+        {
+            return WorkTables.Any(
+                workTableEntry => workTableEntry.WorkTypes[workType].Variant == PercentVariant.PercentRemaining);
+        }
+
         public static float PassionFactor(Passion passion)
         {
             return passion switch
@@ -170,12 +179,15 @@ namespace AutoPriorities
             };
         }
 
-        public double PercentValue(TablePercent tablePercent, IWorkTypeWrapper workTypeWrapper)
+        public double PercentValue(TablePercent tablePercent,
+            IWorkTypeWrapper workTypeWrapper,
+            Priority currentPriority)
         {
             return tablePercent.Variant switch
             {
                 PercentVariant.Percent => tablePercent.PercentValue,
                 PercentVariant.Number => (double)tablePercent.NumberCount / NumberColonists(workTypeWrapper),
+                PercentVariant.PercentRemaining => PercentColonistsAvailable(workTypeWrapper, currentPriority).percent,
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
@@ -187,22 +199,6 @@ namespace AutoPriorities
             try
             {
                 workTables = loader.ToList();
-
-                // add totals, otherwise results in division by zero
-                for (var i = 0; i < workTables.Count; i++)
-                {
-                    var currentWorkTable = workTables[i]
-                        .WorkTypes;
-
-                    // ToArray is needed to not modify the collection while iterating
-                    foreach (var key in currentWorkTable.Keys.ToArray())
-                    {
-                        var currentPercent = currentWorkTable[key];
-                        if (currentPercent.Variant == PercentVariant.Number)
-                            currentWorkTable[key] = TablePercent.Number(
-                                currentPercent.NumberCount);
-                    }
-                }
 
                 // if there are work types not present in built structure, then add with 0 percent
                 foreach (var work in workTables.SelectMany(

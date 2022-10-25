@@ -149,7 +149,7 @@ namespace AutoPriorities
                         tup => (priority:
                             tup.Priority,
                             jobCount: tup.JobCount,
-                            _pawnsData.PercentValue(tup.WorkTypes[work], work)))
+                            _pawnsData.PercentValue(tup.WorkTypes[work], work, tup.Priority)))
                     .Distinct(t => t.priority)
                     .Where(t => t.priority.v > 0));
             priorities.Sort((x, y) => x.Item1.v.CompareTo(y.Item1.v));

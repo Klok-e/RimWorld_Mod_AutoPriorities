@@ -4,6 +4,6 @@ namespace AutoPriorities.Percents
     {
         Percent = 1,
         Number = 2,
-        // PercentRemaining = 3,
+        PercentRemaining = 3,
     }
 }

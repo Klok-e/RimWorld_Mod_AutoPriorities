@@ -12,7 +12,8 @@ namespace AutoPriorities.Core
         public enum Variant
         {
             Number,
-            Percent
+            Percent,
+            PercentRemaining,
         }
 
         public class Ser
@@ -139,6 +140,7 @@ namespace AutoPriorities.Core
                 {
                     Variant.Number => TablePercent.Number(number),
                     Variant.Percent => TablePercent.Percent(percent),
+                    Variant.PercentRemaining => TablePercent.PercentRemaining(),
                     _ => throw new Exception()
                 };
             }
@@ -154,6 +156,10 @@ namespace AutoPriorities.Core
                     PercentVariant.Percent => new UnionPercent
                     {
                         variant = Variant.Percent, percent = percent.PercentValue
+                    },
+                    PercentVariant.PercentRemaining => new UnionPercent
+                    {
+                        variant = Variant.PercentRemaining
                     },
                     _ => throw new Exception()
                 };
