@@ -202,10 +202,6 @@ namespace AutoPriorities.Ui
                 {
                     var currentPercent = pr.WorkTypes[workType];
                     var numberColonists = _pawnsData.NumberColonists(workType);
-                    if (currentPercent.Variant == PercentVariant.Number)
-                    {
-                        currentPercent = TablePercent.Number(numberColonists, currentPercent.NumberCount);
-                    }
 
                     float elementXPos;
                     Rect labelRect;
@@ -237,7 +233,7 @@ namespace AutoPriorities.Ui
                             slidersRect.yMin + 60f,
                             Consts.SliderWidth,
                             Consts.SliderHeight);
-                        currSliderVal = (float)currentPercent.Value;
+                        currSliderVal = (float)_pawnsData.PercentValue(currentPercent, workType);
 
                         currSliderVal = SliderPercentsInput(
                             sliderRect,
@@ -384,7 +380,6 @@ namespace AutoPriorities.Ui
                     else
                     {
                         currentPercent = TablePercent.Number(
-                            numberColonists,
                             Mathf.RoundToInt(sliderValue * numberColonists));
                     }
 
@@ -393,7 +388,6 @@ namespace AutoPriorities.Ui
                     if (Widgets.ButtonText(rect, "%"))
                     {
                         currentPercent = TablePercent.Number(
-                            numberColonists,
                             Mathf.RoundToInt(sliderValue * numberColonists));
                     }
                     else

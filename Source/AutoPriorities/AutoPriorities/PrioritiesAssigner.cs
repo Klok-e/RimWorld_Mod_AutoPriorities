@@ -139,15 +139,17 @@ namespace AutoPriorities
             }
         }
 
-        private static void FillListPriorityPercents(PawnsData pawnsData,
+        private void FillListPriorityPercents(PawnsData pawnsData,
             IWorkTypeWrapper work,
             List<(Priority, JobCount, double)> priorities)
         {
             priorities.Clear();
             priorities.AddRange(
                 pawnsData.WorkTables.Select(
-                        tup => (priority: tup.Priority, jobCount: tup.JobCount, tup.WorkTypes[work]
-                            .Value))
+                        tup => (priority:
+                            tup.Priority,
+                            jobCount: tup.JobCount,
+                            _pawnsData.PercentValue(tup.WorkTypes[work], work)))
                     .Distinct(t => t.priority)
                     .Where(t => t.priority.v > 0));
             priorities.Sort((x, y) => x.Item1.v.CompareTo(y.Item1.v));

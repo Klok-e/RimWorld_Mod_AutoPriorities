@@ -6,42 +6,30 @@ namespace AutoPriorities.Percents
     {
         public PercentVariant Variant { get; }
 
-        public double Value =>
-            Variant switch
-            {
-                PercentVariant.Percent => PercentValue,
-                PercentVariant.Number => (double)NumberCount / NumberTotal,
-                _ => throw new ArgumentOutOfRangeException()
-            };
-
         public double PercentValue { get; }
-
-        public int NumberTotal { get; }
 
         public int NumberCount { get; }
 
-        private TablePercent(PercentVariant variant, double percentValue, int numberTotal, int numberCount)
+        private TablePercent(PercentVariant variant, double percentValue, int numberCount)
         {
             Variant = variant;
             PercentValue = percentValue;
-            NumberTotal = numberTotal;
             NumberCount = numberCount;
         }
 
         public static TablePercent Percent(double value)
         {
-            return new TablePercent(PercentVariant.Percent, value, 0, 0);
+            return new TablePercent(PercentVariant.Percent, value, 0);
         }
 
-        public static TablePercent Number(int numberTotal, int numberCount)
+        public static TablePercent Number(int numberCount)
         {
-            return new TablePercent(PercentVariant.Number, 0, numberTotal, numberCount);
+            return new TablePercent(PercentVariant.Number, 0, numberCount);
         }
 
         public override string ToString()
         {
             return $"{nameof(Variant)}: {Variant}, " + $"{nameof(PercentValue)}: {PercentValue}, "
-                                                     + $"{nameof(NumberTotal)}: {NumberTotal}, "
                                                      + $"{nameof(NumberCount)}: {NumberCount}";
         }
     }

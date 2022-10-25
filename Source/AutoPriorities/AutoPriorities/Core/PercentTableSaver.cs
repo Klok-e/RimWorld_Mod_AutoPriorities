@@ -137,7 +137,7 @@ namespace AutoPriorities.Core
             {
                 return variant switch
                 {
-                    Variant.Number => TablePercent.Number(0, number),
+                    Variant.Number => TablePercent.Number(number),
                     Variant.Percent => TablePercent.Percent(percent),
                     _ => throw new Exception()
                 };

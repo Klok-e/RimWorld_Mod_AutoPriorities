@@ -144,8 +144,7 @@ namespace AutoPriorities
             var takenTotal = 0d;
             foreach (var it in WorkTables.Distinct(x => x.Priority))
             {
-                var percent = it.WorkTypes[workType]
-                    .Value;
+                var percent = PercentValue(it.WorkTypes[workType], workType);
                 if (it.Priority.v != priorityIgnore.v) taken += percent;
                 takenTotal += percent;
             }
@@ -171,6 +170,16 @@ namespace AutoPriorities
             };
         }
 
+        public double PercentValue(TablePercent tablePercent, IWorkTypeWrapper workTypeWrapper)
+        {
+            return tablePercent.Variant switch
+            {
+                PercentVariant.Percent => tablePercent.PercentValue,
+                PercentVariant.Number => (double)tablePercent.NumberCount / NumberColonists(workTypeWrapper),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
+
         private List<WorkTableEntry> LoadSavedState(IEnumerable<WorkTableEntry> loader)
         {
             Rebuild();
@@ -191,7 +200,6 @@ namespace AutoPriorities
                         var currentPercent = currentWorkTable[key];
                         if (currentPercent.Variant == PercentVariant.Number)
                             currentWorkTable[key] = TablePercent.Number(
-                                NumberColonists(key),
                                 currentPercent.NumberCount);
                     }
                 }

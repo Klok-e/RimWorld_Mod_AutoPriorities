@@ -72,8 +72,8 @@ namespace Tests
         {
             var percents = new[]
             {
-                TablePercent.Number(0, 1), TablePercent.Number(0, 1), TablePercent.Number(0, 1),
-                TablePercent.Number(0, 1)
+                TablePercent.Number(1), TablePercent.Number(1), TablePercent.Number(1),
+                TablePercent.Number(1)
             };
             var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y))
                 .ToDictionary(k => k.x, v => v.y);
