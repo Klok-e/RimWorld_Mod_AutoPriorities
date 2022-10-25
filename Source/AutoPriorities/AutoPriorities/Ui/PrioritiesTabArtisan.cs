@@ -370,35 +370,27 @@ namespace AutoPriorities.Ui
                 return currentPercent;
             }
 
+            var switchButtonResult = SwitchButton.None;
             switch (currentPercent.Variant)
             {
                 case PercentVariant.Number:
                     if (Widgets.ButtonText(rect, "№"))
-                    {
-                        currentPercent = TablePercent.Percent(sliderValue);
-                    }
-                    else
-                    {
-                        currentPercent = TablePercent.Number(
-                            Mathf.RoundToInt(sliderValue * numberColonists));
-                    }
-
+                        switchButtonResult = SwitchButton.Percent;
                     break;
                 case PercentVariant.Percent:
                     if (Widgets.ButtonText(rect, "%"))
-                    {
-                        currentPercent = TablePercent.Number(
-                            Mathf.RoundToInt(sliderValue * numberColonists));
-                    }
-                    else
-                    {
-                        currentPercent = TablePercent.Percent(sliderValue);
-                    }
-
+                        switchButtonResult = SwitchButton.Number;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            currentPercent = switchButtonResult switch
+            {
+                SwitchButton.Number => TablePercent.Number(Mathf.RoundToInt(sliderValue * numberColonists)),
+                SwitchButton.Percent => TablePercent.Percent(sliderValue),
+                _ => currentPercent
+            };
 
             return currentPercent;
         }
@@ -416,6 +408,13 @@ namespace AutoPriorities.Ui
         private void RemovePriority()
         {
             if (_pawnsData.WorkTables.Count > 0) _pawnsData.WorkTables.RemoveLast();
+        }
+
+        enum SwitchButton
+        {
+            None,
+            Percent,
+            Number
         }
     }
 }
