@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoPriorities.Core;
 using AutoPriorities.Wrappers;
+using RimWorld;
 using Verse;
 
 namespace AutoPriorities.WorldInfoRetriever
@@ -17,7 +18,8 @@ namespace AutoPriorities.WorldInfoRetriever
 
         public IEnumerable<IPawnWrapper> PawnsInPlayerFaction()
         {
-            return Find.CurrentMap.mapPawns.FreeColonists.Select(x => new PawnWrapper(x));
+            return PlayerPawnsDisplayOrderUtility.InOrder(Find.CurrentMap.mapPawns.FreeColonists)
+                .Select(x => new PawnWrapper(x));
         }
 
         public byte[]? PawnsDataXml

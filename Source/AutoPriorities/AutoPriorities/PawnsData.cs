@@ -38,7 +38,7 @@ namespace AutoPriorities
             get;
         } = new();
 
-        public HashSet<IPawnWrapper> AllPlayerPawns { get; } = new();
+        public List<IPawnWrapper> AllPlayerPawns { get; } = new();
 
         public void SetData(SaveData data)
         {
@@ -76,18 +76,18 @@ namespace AutoPriorities
 
                 // get all pawns owned by player
                 var pawns = _worldInfoRetriever.PawnsInPlayerFaction()
-                    .ToArray();
+                    .ToList();
 
                 // get all skills associated with the work types
                 AllPlayerPawns.Clear();
+                AllPlayerPawns.AddRange(pawns);
+
                 SortedPawnFitnessForEveryWork.Clear();
                 foreach (var work in workTypes)
                 {
                     SortedPawnFitnessForEveryWork[work] = new List<(IPawnWrapper pawn, double fitness)>();
                     foreach (var pawn in pawns)
                     {
-                        if (!AllPlayerPawns.Contains(pawn)) AllPlayerPawns.Add(pawn);
-
                         try
                         {
                             if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains(
@@ -168,7 +168,7 @@ namespace AutoPriorities
                 workTableEntry => workTableEntry.WorkTypes[workType].Variant == PercentVariant.PercentRemaining);
         }
 
-        public static float PassionFactor(Passion passion)
+        private static float PassionFactor(Passion passion)
         {
             return passion switch
             {
