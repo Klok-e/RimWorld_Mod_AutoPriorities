@@ -41,7 +41,7 @@ namespace Tests
         public void LoadSavedData_SaveState_LoadAndSave_IdenticalResult()
         {
             // arrange
-            _retriever.PawnsInPlayerFaction()
+            _retriever.PawnsInPlayerFactionInCurrentMap()
                 .Returns(_fixture.CreateMany<IPawnWrapper>());
 
             _retriever.WorkTypeDefsInPriorityOrder()

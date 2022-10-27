@@ -292,7 +292,7 @@ namespace AutoPriorities.Ui
                              Consts.WorkLabelHorizOffset * _pawnsData.WorkTypes.Count;
 
             var tableSizeY = fromTopToTickboxesVertical
-                             + (Consts.LabelMargin + Consts.ButtonHeight) * _pawnsData.AllPlayerPawns.Count;
+                             + (Consts.LabelMargin + Consts.ButtonHeight) * _pawnsData.CurrentMapPlayerPawns.Count;
             Widgets.BeginScrollView(scrollRect, ref _pawnExcludeScrollPos, new Rect(0, 0, tableSizeX, tableSizeY));
 
             var tickboxesRect = new Rect(
@@ -329,7 +329,7 @@ namespace AutoPriorities.Ui
             }
 
             Text.Anchor = TextAnchor.UpperLeft;
-            foreach (var (pawn, rowi) in _pawnsData.AllPlayerPawns.Select((w, i) => (w, i)))
+            foreach (var (pawn, rowi) in _pawnsData.CurrentMapPlayerPawns.Select((w, i) => (w, i)))
             {
                 // draw pawn name
                 var nameRect = new Rect(

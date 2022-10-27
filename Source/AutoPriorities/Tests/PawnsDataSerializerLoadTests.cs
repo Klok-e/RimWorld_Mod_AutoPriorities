@@ -38,7 +38,7 @@ namespace Tests
         public void LoadFromFile()
         {
             // arrange
-            _retriever.PawnsInPlayerFaction()
+            _retriever.PawnsInPlayerFactionInCurrentMap()
                 .Returns(_fixture.CreateMany<IPawnWrapper>());
 
             _retriever.WorkTypeDefsInPriorityOrder()
@@ -77,7 +77,7 @@ namespace Tests
         public void LoadSavedData_Warning_UnknownWorktypeInSave()
         {
             // arrange
-            _retriever.PawnsInPlayerFaction()
+            _retriever.PawnsInPlayerFactionInCurrentMap()
                 .Returns(_fixture.CreateMany<IPawnWrapper>());
 
             _retriever.WorkTypeDefsInPriorityOrder()

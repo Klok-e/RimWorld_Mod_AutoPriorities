@@ -31,7 +31,7 @@ namespace AutoPriorities
             try
             {
                 PawnJobsCached.Clear();
-                foreach (var pawn in _pawnsData.AllPlayerPawns)
+                foreach (var pawn in _pawnsData.CurrentMapPlayerPawns)
                     PawnJobsCached.Add(pawn, new Dictionary<IWorkTypeWrapper, Priority>());
 
 #if DEBUG

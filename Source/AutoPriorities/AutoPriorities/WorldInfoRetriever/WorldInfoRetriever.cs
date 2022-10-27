@@ -16,10 +16,20 @@ namespace AutoPriorities.WorldInfoRetriever
             return WorkTypeDefsUtility.WorkTypeDefsInPriorityOrder.Select(x => new WorkTypeWrapper(x));
         }
 
-        public IEnumerable<IPawnWrapper> PawnsInPlayerFaction()
+        public IEnumerable<IPawnWrapper> PawnsInPlayerFactionInCurrentMap()
         {
             return PlayerPawnsDisplayOrderUtility.InOrder(Find.CurrentMap.mapPawns.FreeColonists)
                 .Select(x => new PawnWrapper(x));
+        }
+
+        public IEnumerable<IPawnWrapper> AllPawnsInPlayerFaction()
+        {
+            var caravans = Find.WorldObjects.Caravans
+                .Where(caravan => caravan.IsPlayerControlled)
+                .SelectMany(caravan => caravan.PawnsListForReading)
+                .Where(pawn => pawn.IsColonist);
+            var colonists = Find.Maps.SelectMany(x => x.mapPawns.FreeColonists);
+            return caravans.Concat(colonists).Select(x => new PawnWrapper(x));
         }
 
         public byte[]? PawnsDataXml

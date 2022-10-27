@@ -38,6 +38,7 @@ namespace AutoPriorities
             get;
         } = new();
 
+        public List<IPawnWrapper> CurrentMapPlayerPawns { get; } = new();
         public List<IPawnWrapper> AllPlayerPawns { get; } = new();
 
         public void SetData(SaveData data)
@@ -74,13 +75,17 @@ namespace AutoPriorities
                 var workTypes = _worldInfoRetriever.WorkTypeDefsInPriorityOrder()
                     .ToArray();
 
+                var allPawns = _worldInfoRetriever.AllPawnsInPlayerFaction();
+                AllPlayerPawns.Clear();
+                AllPlayerPawns.AddRange(allPawns);
+
                 // get all pawns owned by player
-                var pawns = _worldInfoRetriever.PawnsInPlayerFaction()
+                var pawns = _worldInfoRetriever.PawnsInPlayerFactionInCurrentMap()
                     .ToList();
 
                 // get all skills associated with the work types
-                AllPlayerPawns.Clear();
-                AllPlayerPawns.AddRange(pawns);
+                CurrentMapPlayerPawns.Clear();
+                CurrentMapPlayerPawns.AddRange(pawns);
 
                 SortedPawnFitnessForEveryWork.Clear();
                 foreach (var work in workTypes)
@@ -123,11 +128,11 @@ namespace AutoPriorities
                 ExcludedPawns.RemoveWhere(
                     wp =>
                     {
-                        var res = !AllPlayerPawns.Select(x => x.ThingID)
+                        var isToBeDeleted = !AllPlayerPawns.Select(x => x.ThingID)
                             .Contains(wp.PawnThingId);
                         // if (res) _logger.Err($"INFO: removing {wp.pawnThingId} from excluded list");
 
-                        return res;
+                        return isToBeDeleted;
                     });
             }
             catch (Exception e)
