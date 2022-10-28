@@ -80,8 +80,7 @@ namespace AutoPriorities
                 AllPlayerPawns.AddRange(allPawns);
 
                 // get all pawns owned by player
-                var pawns = _worldInfoRetriever.PawnsInPlayerFactionInCurrentMap()
-                    .ToList();
+                var pawns = _worldInfoRetriever.PawnsInPlayerFactionInCurrentMap();
 
                 // get all skills associated with the work types
                 CurrentMapPlayerPawns.Clear();
@@ -91,7 +90,7 @@ namespace AutoPriorities
                 foreach (var work in workTypes)
                 {
                     SortedPawnFitnessForEveryWork[work] = new List<(IPawnWrapper pawn, double fitness)>();
-                    foreach (var pawn in pawns)
+                    foreach (var pawn in CurrentMapPlayerPawns)
                     {
                         try
                         {
