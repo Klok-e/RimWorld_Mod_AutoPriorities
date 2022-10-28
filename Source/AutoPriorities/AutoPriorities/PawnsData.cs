@@ -130,7 +130,8 @@ namespace AutoPriorities
                     {
                         var isToBeDeleted = !AllPlayerPawns.Select(x => x.ThingID)
                             .Contains(wp.PawnThingId);
-                        // if (res) _logger.Err($"INFO: removing {wp.pawnThingId} from excluded list");
+                        // if (isToBeDeleted)
+                        //     _logger.Info($"removing {wp.PawnThingId} from excluded list");
 
                         return isToBeDeleted;
                     });

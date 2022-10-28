@@ -67,6 +67,7 @@ namespace AutoPriorities.Ui
         public override void PostOpen()
         {
             base.PostOpen();
+            _pawnsData.Rebuild();
             if (_openedOnce)
                 windowRect = _rect;
             else
