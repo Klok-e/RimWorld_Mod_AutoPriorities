@@ -44,6 +44,7 @@
         <Compile Include="ExcludedPawnEntry.cs" />
         <Compile Include="Extensions\CollectionExtensions.cs" />
         <Compile Include="HarmonyPatches\DirtyPawnsNotifyRebuildPawnsTable.cs" />
+        <Compile Include="HarmonyPatches\SwitchedMap.cs" />
         <Compile Include="ImportantJobs\IImportantJobsProvider.cs" />
         <Compile Include="ImportantJobs\ImportantJobsProvider.cs" />
         <Compile Include="IsExternalInit.cs" />

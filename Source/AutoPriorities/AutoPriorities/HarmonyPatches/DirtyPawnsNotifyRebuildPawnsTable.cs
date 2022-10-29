@@ -21,7 +21,7 @@ namespace AutoPriorities.HarmonyPatches
 #if DEBUG
                 Controller.logger?.Info("Rebuild by notification");
 #endif
-                Controller.pawnData?.Rebuild();
+                Controller.RebuildPawns();
             }
             else
             {

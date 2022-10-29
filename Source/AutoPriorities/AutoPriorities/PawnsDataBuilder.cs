@@ -24,5 +24,11 @@ namespace AutoPriorities
             data.SetData(save);
             return data;
         }
+        
+        public void Build(PawnsData destination)
+        {
+            var save = _serializer.LoadSavedData() ?? new SaveData();
+            destination.SetData(save);
+        }
     }
 }
