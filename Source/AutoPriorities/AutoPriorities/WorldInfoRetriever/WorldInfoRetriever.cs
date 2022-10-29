@@ -27,7 +27,7 @@ namespace AutoPriorities.WorldInfoRetriever
             var caravans = Find.WorldObjects.Caravans
                 .Where(caravan => caravan.IsPlayerControlled)
                 .SelectMany(caravan => caravan.PawnsListForReading)
-                .Where(pawn => pawn.IsColonist);
+                .Where(pawn => pawn.IsColonist || pawn.IsSlaveOfColony);
             var colonists = Find.Maps.SelectMany(x => x.mapPawns.FreeColonists);
             return caravans.Concat(colonists).Select(x => new PawnWrapper(x));
         }
