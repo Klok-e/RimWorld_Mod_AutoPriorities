@@ -253,7 +253,7 @@ namespace AutoPriorities.Ui
                         if (Math.Abs(currSliderVal - prevSliderVal) > 0.001)
                         {
                             _logger.Info(
-                                $"slider: available {available}; newSliderValue {prevSliderVal}; currSliderVal {currSliderVal}");
+                                $"slider: available {available}; prevSliderVal {prevSliderVal}; currSliderVal {currSliderVal}");
                             isCallInteresting = true;
                         }
 #endif

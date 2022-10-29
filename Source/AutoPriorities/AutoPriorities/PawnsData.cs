@@ -188,10 +188,13 @@ namespace AutoPriorities
             IWorkTypeWrapper workTypeWrapper,
             Priority currentPriority)
         {
+            var numberColonists = NumberColonists(workTypeWrapper);
             return tablePercent.Variant switch
             {
                 PercentVariant.Percent => tablePercent.PercentValue,
-                PercentVariant.Number => (double)tablePercent.NumberCount / NumberColonists(workTypeWrapper),
+                PercentVariant.Number => numberColonists > 0
+                    ? (double)tablePercent.NumberCount / numberColonists
+                    : 0,
                 PercentVariant.PercentRemaining => PercentColonistsAvailable(workTypeWrapper, currentPriority).percent,
                 _ => throw new ArgumentOutOfRangeException()
             };
