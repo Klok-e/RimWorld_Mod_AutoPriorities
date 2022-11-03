@@ -88,7 +88,7 @@ namespace AutoPriorities.Core
             _pawnsDataBuilder = new PawnsDataBuilder(mapSpecificSerializer, worldInfo, log);
             _pawnData = _pawnsDataBuilder.Build();
             var importantWorkTypes = new ImportantJobsProvider(worldFacade);
-            var priorityAssigner = new PrioritiesAssigner(_pawnData, log, importantWorkTypes);
+            var priorityAssigner = new PrioritiesAssigner(_pawnData, log, importantWorkTypes, worldInfo);
             var pawnDataExporter = new PawnDataExporter(log, savePath, _pawnData, stringSerializer);
 
             return new AutoPrioritiesDialog(_pawnData, priorityAssigner, log, importantWorkTypes, pawnDataExporter);

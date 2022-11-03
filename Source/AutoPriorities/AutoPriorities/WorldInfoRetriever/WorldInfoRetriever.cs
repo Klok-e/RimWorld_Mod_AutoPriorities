@@ -35,6 +35,11 @@ namespace AutoPriorities.WorldInfoRetriever
                 .Select(x => new PawnWrapper(x));
         }
 
+        public double MinimumWorkFitness()
+        {
+            return 1;
+        }
+
         public byte[]? PawnsDataXml
         {
             get => MapSpecificData.GetForCurrentMap()?.pawnsDataXml;

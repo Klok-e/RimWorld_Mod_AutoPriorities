@@ -35,7 +35,7 @@ namespace Tests.Helpers
             pawn1.IsCapableOfWholeWorkType(workTypes[3])
                 .Returns(true);
             pawn1.AverageOfRelevantSkillsFor(workTypes[0])
-                .Returns(3);
+                .Returns(1.5);
             pawn1.AverageOfRelevantSkillsFor(workTypes[1])
                 .Returns(4);
             pawn1.AverageOfRelevantSkillsFor(workTypes[2])
@@ -62,7 +62,7 @@ namespace Tests.Helpers
             pawn2.IsCapableOfWholeWorkType(workTypes[3])
                 .Returns(true);
             pawn2.AverageOfRelevantSkillsFor(workTypes[0])
-                .Returns(5);
+                .Returns(3);
             pawn2.AverageOfRelevantSkillsFor(workTypes[1])
                 .Returns(2);
             pawn2.AverageOfRelevantSkillsFor(workTypes[2])
@@ -89,7 +89,7 @@ namespace Tests.Helpers
             pawn3.IsCapableOfWholeWorkType(workTypes[3])
                 .Returns(true);
             pawn3.AverageOfRelevantSkillsFor(workTypes[0])
-                .Returns(2);
+                .Returns(1.3);
             pawn3.AverageOfRelevantSkillsFor(workTypes[1])
                 .Returns(1);
             pawn3.AverageOfRelevantSkillsFor(workTypes[2])

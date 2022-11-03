@@ -5,6 +5,7 @@ using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 using AutoPriorities.Extensions;
 using AutoPriorities.ImportantJobs;
+using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
 
 namespace AutoPriorities
@@ -12,14 +13,20 @@ namespace AutoPriorities
     public class PrioritiesAssigner
     {
         private readonly IImportantJobsProvider _importantJobsProvider;
+        private readonly IWorldInfoRetriever _worldInfoRetriever;
         private readonly ILogger _logger;
         private readonly PawnsData _pawnsData;
 
-        public PrioritiesAssigner(PawnsData pawnsData, ILogger logger, IImportantJobsProvider importantJobsProvider)
+        public PrioritiesAssigner(
+            PawnsData pawnsData,
+            ILogger logger,
+            IImportantJobsProvider importantJobsProvider,
+            IWorldInfoRetriever worldInfoRetriever)
         {
             _pawnsData = pawnsData;
             _logger = logger;
             _importantJobsProvider = importantJobsProvider;
+            _worldInfoRetriever = worldInfoRetriever;
         }
 
         private List<(Priority priority, JobCount maxJobs, double percent)> PriorityPercentCached { get; } = new();
@@ -54,7 +61,8 @@ namespace AutoPriorities
                     PawnJobsCached,
                     _pawnsData.WorkTypes.Subtract(importantWorks)
                         .Where(work => !_pawnsData.WorkTypesNotRequiringSkills.Contains(work)),
-                    work => _pawnsData.SortedPawnFitnessForEveryWork[work]);
+                    work => _pawnsData.SortedPawnFitnessForEveryWork[work],
+                    _worldInfoRetriever.MinimumWorkFitness());
 
 #if DEBUG
                 _logger.Info("non skilled");
@@ -80,7 +88,8 @@ namespace AutoPriorities
         private void AssignJobs(PawnsData pawnsData,
             IDictionary<IPawnWrapper, Dictionary<IWorkTypeWrapper, Priority>> pawnJobs,
             IEnumerable<IWorkTypeWrapper> workTypes,
-            Func<IWorkTypeWrapper, List<(IPawnWrapper pawn, double fitness)>> fitnessGetter)
+            Func<IWorkTypeWrapper, List<(IPawnWrapper pawn, double fitness)>> fitnessGetter,
+            double? minimumFitness = null)
         {
             foreach (var work in workTypes)
             {
@@ -104,10 +113,10 @@ namespace AutoPriorities
                 {
                     var jobsSet = 0;
                     // iterate over all the pawns for this job with current priority
-                    for (var i = 0; i < pawns.Count && jobsSet < jobsToSet; i++)
+                    foreach (var (pawn, fitness) in pawns)
                     {
-                        var pawn = pawns[i]
-                            .pawn;
+                        if (jobsSet >= jobsToSet)
+                            break;
 
                         if ( // if this job was already set, skip
                             pawnJobs[pawn]
@@ -117,6 +126,9 @@ namespace AutoPriorities
                                 .Count(kv => kv.Value.v == priority.v) >= maxJobs.v)
                             continue;
 
+                        if (fitness < minimumFitness)
+                            continue;
+
                         pawnJobs[pawn][work] = priority;
                         jobsSet += 1;
                         pawn.WorkSettingsSetPriority(work, priority.v);
@@ -124,11 +136,8 @@ namespace AutoPriorities
                 }
 
                 // set remaining to zero
-                for (var i = 0; i < pawns.Count; i++)
+                foreach (var (pawn, _) in pawns)
                 {
-                    var pawn = pawns[i]
-                        .pawn;
-
                     // if this job was already set, skip
                     if (pawnJobs[pawn]
                         .ContainsKey(work))

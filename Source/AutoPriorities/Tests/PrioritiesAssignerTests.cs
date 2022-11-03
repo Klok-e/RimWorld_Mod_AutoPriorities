@@ -32,7 +32,7 @@ namespace Tests
             _importantWorkTypesProvider = Substitute.For<IImportantJobsProvider>();
             _importantWorkTypesProvider.ImportantWorkTypes()
                 .Returns(new HashSet<IWorkTypeWrapper>());
-            _assigner = new PrioritiesAssigner(_pawnsData, _logger, _importantWorkTypesProvider);
+            _assigner = new PrioritiesAssigner(_pawnsData, _logger, _importantWorkTypesProvider, _retriever);
         }
 
         private PrioritiesAssigner _assigner = null!;
@@ -56,10 +56,43 @@ namespace Tests
 
             _pw.pawns[0]
                 .Received()
-                .WorkSettingsSetPriority(_pw.workTypes[1], 1);
+                .WorkSettingsSetPriority(_pw.workTypes[0], 2);
             _pw.pawns[1]
                 .Received()
-                .WorkSettingsSetPriority(_pw.workTypes[0], 1);
+                .WorkSettingsSetPriority(_pw.workTypes[0], 1);            
+            _pw.pawns[2]
+                .Received()
+                .WorkSettingsSetPriority(_pw.workTypes[1], 1);
+            _pw.pawns[3]
+                .Received()
+                .WorkSettingsSetPriority(_pw.workTypes[2], 1);
+            _pw.pawns[3]
+                .Received()
+                .WorkSettingsSetPriority(_pw.workTypes[3], 1);
+        }
+
+        [Test]
+        public void AssignPriorities_MinimumFitness2()
+        {
+            // arrange
+            _retriever.MinimumWorkFitness()
+                .Returns(2);
+
+            // act
+            _assigner.AssignPriorities();
+
+            // assert
+            _logger.NoWarnReceived();
+            
+            _pw.pawns[0]
+                .Received()
+                .WorkSettingsSetPriority(_pw.workTypes[0], 0);
+            _pw.pawns[1]
+                .Received()
+                .WorkSettingsSetPriority(_pw.workTypes[0], 1);            
+            _pw.pawns[2]
+                .Received()
+                .WorkSettingsSetPriority(_pw.workTypes[1], 1);
             _pw.pawns[3]
                 .Received()
                 .WorkSettingsSetPriority(_pw.workTypes[2], 1);
@@ -75,7 +108,8 @@ namespace Tests
                 TablePercent.Number(1), TablePercent.Number(1), TablePercent.Number(1),
                 TablePercent.Number(1)
             };
-            var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y))
+            var workTypePercent = _pw.workTypes
+                .Zip(percents, (x, y) => (x, y))
                 .ToDictionary(k => k.x, v => v.y);
             var save = new SaveData
             {
@@ -91,7 +125,8 @@ namespace Tests
                 },
                 WorkTablesData = new List<WorkTableEntry>
                 {
-                    new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent }
+                    new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent },
+                    new() { Priority = 2, JobCount = 4, WorkTypes = workTypePercent },
                 }
             };
             _serializer.LoadSavedData()

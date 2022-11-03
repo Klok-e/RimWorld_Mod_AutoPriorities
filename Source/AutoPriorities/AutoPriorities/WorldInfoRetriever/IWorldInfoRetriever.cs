@@ -11,6 +11,8 @@ namespace AutoPriorities.WorldInfoRetriever
 
         IEnumerable<IPawnWrapper> AllAdultPawnsInPlayerFaction();
 
+        double MinimumWorkFitness();
+
         byte[]? PawnsDataXml { get; set; }
     }
 }
