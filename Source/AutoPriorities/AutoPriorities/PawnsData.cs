@@ -94,13 +94,14 @@ namespace AutoPriorities
                     {
                         try
                         {
-                            if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains(
+                            if (pawn.IsCapableOfWholeWorkType(work)
+                                && !ExcludedPawns.Contains(
                                     new ExcludedPawnEntry { WorkDef = work.DefName, PawnThingId = pawn.ThingID }))
                             {
                                 var skill = pawn.AverageOfRelevantSkillsFor(work);
-                                double passion = PassionFactor(pawn.MaxPassionOfRelevantSkillsFor(work));
+                                double learningRateFactor = pawn.MaxLearningRateFactor(work);
 
-                                var fitness = skill * passion;
+                                var fitness = skill * learningRateFactor;
                                 SortedPawnFitnessForEveryWork[work]
                                     .Add((pawn, fitness));
                             }
@@ -171,17 +172,6 @@ namespace AutoPriorities
         {
             return WorkTables.Any(
                 workTableEntry => workTableEntry.WorkTypes[workType].Variant == PercentVariant.PercentRemaining);
-        }
-
-        private static float PassionFactor(Passion passion)
-        {
-            return passion switch
-            {
-                Passion.Major => 1.5f,
-                Passion.Minor => 1f,
-                Passion.None => 0.35f,
-                _ => 0f
-            };
         }
 
         public double PercentValue(TablePercent tablePercent,

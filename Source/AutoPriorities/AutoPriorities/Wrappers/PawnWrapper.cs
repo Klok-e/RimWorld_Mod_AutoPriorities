@@ -1,3 +1,4 @@
+using System.Linq;
 using RimWorld;
 using Verse;
 
@@ -31,10 +32,15 @@ namespace AutoPriorities.Wrappers
             return _pawn.skills.AverageOfRelevantSkillsFor(((WorkTypeWrapper)work).workTypeDef);
         }
 
-        public Passion MaxPassionOfRelevantSkillsFor(IWorkTypeWrapper work)
+        public float MaxLearningRateFactor(IWorkTypeWrapper work)
         {
             // TODO: terrible hack, fix this
-            return _pawn.skills.MaxPassionOfRelevantSkillsFor(((WorkTypeWrapper)work).workTypeDef);
+            var factor = ((WorkTypeWrapper)work).workTypeDef.relevantSkills
+                .Select(_pawn.skills.GetSkill)
+                .Select(x => x.LearnRateFactor())
+                .Max();
+
+            return factor;
         }
 
         public void WorkSettingsSetPriority(IWorkTypeWrapper work, int priorityV)

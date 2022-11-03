@@ -14,7 +14,7 @@ namespace AutoPriorities.Wrappers
 
         double AverageOfRelevantSkillsFor(IWorkTypeWrapper work);
 
-        Passion MaxPassionOfRelevantSkillsFor(IWorkTypeWrapper work);
+        float MaxLearningRateFactor(IWorkTypeWrapper work);
 
         void WorkSettingsSetPriority(IWorkTypeWrapper work, int priorityV);
     }
