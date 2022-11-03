@@ -37,7 +37,7 @@ namespace AutoPriorities.WorldInfoRetriever
 
         public double MinimumWorkFitness()
         {
-            return 1;
+            return Controller.MinimumSkill;
         }
 
         public byte[]? PawnsDataXml

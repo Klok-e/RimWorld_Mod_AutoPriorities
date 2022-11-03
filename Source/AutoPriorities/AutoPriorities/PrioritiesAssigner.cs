@@ -100,6 +100,13 @@ namespace AutoPriorities
                 _logger.Info($"worktype {work.DefName}");
 #endif
 
+#if DEBUG
+                foreach (var (pawn, fitness) in pawns)
+                {
+                    _logger.Info($"pawn {pawn.NameFullColored}; fitness {fitness}");
+                }
+#endif
+
                 foreach (var (priority, maxJobs, jobsToSet) in PriorityPercentCached
                              .Distinct(x => x.priority)
                              .Select(a => a.percent)
@@ -127,7 +134,12 @@ namespace AutoPriorities
                             continue;
 
                         if (fitness < minimumFitness)
+                        {
+#if DEBUG
+                            _logger.Info($"fitness < minimumFitness: {fitness} < {minimumFitness}");
+#endif
                             continue;
+                        }
 
                         pawnJobs[pawn][work] = priority;
                         jobsSet += 1;
