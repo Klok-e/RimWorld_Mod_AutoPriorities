@@ -8,7 +8,7 @@ using AutoPriorities.PawnDataSerializer.Exporter;
 using AutoPriorities.Ui;
 using AutoPriorities.WorldInfoRetriever;
 using HugsLib;
-using UnityEngine;
+using HugsLib.Settings;
 using Verse;
 using ILogger = AutoPriorities.APLogger.ILogger;
 using Logger = AutoPriorities.APLogger.Logger;
@@ -21,6 +21,8 @@ namespace AutoPriorities.Core
         private static PawnsData? _pawnData;
         private static PawnsDataBuilder? _pawnsDataBuilder;
 
+        public static SettingHandle<double>? MinimumSkill { get; private set; }
+        
         public static AutoPrioritiesDialog? Dialog { get; private set; }
 
         public override void Initialize()
@@ -36,6 +38,17 @@ namespace AutoPriorities.Core
         {
             base.WorldLoaded();
             Dialog = CreateDialog();
+        }
+        
+        public override void DefsLoaded()
+        {
+            base.DefsLoaded();
+            MinimumSkill = Settings.GetHandle(
+                "minimumFitness",
+                "Minimum fitness",
+                "Determines whether the pawn is eligible for the work type." +
+                "If minimumFitness < skill * learnRate, work type isn't assigned",
+                0d);
         }
 
         public static void SwitchMap()
