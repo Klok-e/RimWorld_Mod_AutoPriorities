@@ -75,12 +75,12 @@ namespace AutoPriorities
                 var workTypes = _worldInfoRetriever.WorkTypeDefsInPriorityOrder()
                     .ToArray();
 
-                var allPawns = _worldInfoRetriever.AllPawnsInPlayerFaction();
+                var allPawns = _worldInfoRetriever.AllAdultPawnsInPlayerFaction();
                 AllPlayerPawns.Clear();
                 AllPlayerPawns.AddRange(allPawns);
 
                 // get all pawns owned by player
-                var pawns = _worldInfoRetriever.PawnsInPlayerFactionInCurrentMap();
+                var pawns = _worldInfoRetriever.AdultPawnsInPlayerFactionInCurrentMap();
 
                 // get all skills associated with the work types
                 CurrentMapPlayerPawns.Clear();

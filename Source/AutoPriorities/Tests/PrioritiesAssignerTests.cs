@@ -24,7 +24,7 @@ namespace Tests
             _serializer = Substitute.For<IPawnsDataSerializer>();
             _pw = PawnWorktypeCreator.Create();
             // AddMorePawnsToPw();
-            _retriever.PawnsInPlayerFactionInCurrentMap()
+            _retriever.AdultPawnsInPlayerFactionInCurrentMap()
                 .Returns(_pw.pawns);
             _retriever.WorkTypeDefsInPriorityOrder()
                 .Returns(_pw.workTypes);

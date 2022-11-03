@@ -30,7 +30,7 @@ namespace AutoPriorities.WorldInfoRetriever
 
         public IPawnWrapper? IdToPawn(string pawnId)
         {
-            var res = _worldInfo.PawnsInPlayerFactionInCurrentMap()
+            var res = _worldInfo.AdultPawnsInPlayerFactionInCurrentMap()
                 .FirstOrDefault(p => p.ThingID == pawnId);
             if (res is not null) return res;
 

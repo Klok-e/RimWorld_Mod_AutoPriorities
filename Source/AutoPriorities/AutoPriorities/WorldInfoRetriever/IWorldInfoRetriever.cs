@@ -7,9 +7,9 @@ namespace AutoPriorities.WorldInfoRetriever
     {
         IEnumerable<IWorkTypeWrapper> WorkTypeDefsInPriorityOrder();
 
-        IEnumerable<IPawnWrapper> PawnsInPlayerFactionInCurrentMap();
+        IEnumerable<IPawnWrapper> AdultPawnsInPlayerFactionInCurrentMap();
 
-        IEnumerable<IPawnWrapper> AllPawnsInPlayerFaction();
+        IEnumerable<IPawnWrapper> AllAdultPawnsInPlayerFaction();
 
         byte[]? PawnsDataXml { get; set; }
     }
