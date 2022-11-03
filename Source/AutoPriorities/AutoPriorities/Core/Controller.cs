@@ -46,7 +46,7 @@ namespace AutoPriorities.Core
             MinimumSkill = Settings.GetHandle(
                 "minimumFitness",
                 "Minimum fitness",
-                "Determines whether the pawn is eligible for the work type." +
+                "Determines whether the pawn is eligible for the work type. " +
                 "If minimumFitness < skill * learnRate, work type isn't assigned",
                 0d);
         }
