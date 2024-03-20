@@ -9,7 +9,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>AutoPriorities</RootNamespace>
         <AssemblyName>AutoPriorities</AssemblyName>
-        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>default</LangVersion>
         <Nullable>enable</Nullable>
@@ -54,6 +54,7 @@
         <Compile Include="PatchInitializeAttribute.cs" />
         <Compile Include="PawnDataSerializer\Exporter\IPawnDataExporter.cs" />
         <Compile Include="PawnDataSerializer\Exporter\PawnDataExporter.cs" />
+        <Compile Include="PawnDataSerializer\Exporter\SavedPawnDataReference.cs" />
         <Compile Include="PawnDataSerializer\IPawnDataStringSerializer.cs" />
         <Compile Include="PawnDataSerializer\IPawnsDataSerializer.cs" />
         <Compile Include="PawnDataSerializer\MapSpecificDataPawnsDataSerializer.cs" />
@@ -84,229 +85,458 @@
         <Compile Include="Wrappers\WorkTypeWrapper.cs" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Lib.Harmony" Version="2.2.2" />
-        <PackageReference Include="UnlimitedHugs.Rimworld.HugsLib" Version="9.0.1" />
+        <PackageReference Include="JetBrains.Profiler.Api" Version="1.4.2" />
+        <PackageReference Include="Lib.Harmony" Version="2.3.1.1" />
+        <PackageReference Include="UnlimitedHugs.Rimworld.HugsLib" Version="11.0.3" />
     </ItemGroup>
     <ItemGroup>
+        <Reference Include="Assembly-CSharp">
+          <HintPath>..\..\RimManaged\Assembly-CSharp.dll</HintPath>
+        </Reference>
         <Reference Include="Assembly-CSharp, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\Assembly-CSharp.dll</HintPath>
             <SpecificVersion>False</SpecificVersion>
         </Reference>
+        <Reference Include="Assembly-CSharp-firstpass">
+          <HintPath>..\..\RimManaged\Assembly-CSharp-firstpass.dll</HintPath>
+        </Reference>
         <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\Assembly-CSharp-firstpass.dll</HintPath>
+        </Reference>
+        <Reference Include="com.rlabrecque.steamworks.net">
+          <HintPath>..\..\RimManaged\com.rlabrecque.steamworks.net.dll</HintPath>
+        </Reference>
+        <Reference Include="ISharpZipLib">
+          <HintPath>..\..\RimManaged\ISharpZipLib.dll</HintPath>
         </Reference>
         <Reference Include="ISharpZipLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\ISharpZipLib.dll</HintPath>
         </Reference>
+        <Reference Include="Mono.Posix">
+          <HintPath>..\..\RimManaged\Mono.Posix.dll</HintPath>
+        </Reference>
         <Reference Include="Mono.Posix, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
             <HintPath>..\..\RimManaged\Mono.Posix.dll</HintPath>
+        </Reference>
+        <Reference Include="Mono.Security">
+          <HintPath>..\..\RimManaged\Mono.Security.dll</HintPath>
         </Reference>
         <Reference Include="Mono.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
             <HintPath>..\..\RimManaged\Mono.Security.dll</HintPath>
         </Reference>
+        <Reference Include="mscorlib">
+          <HintPath>..\..\RimManaged\mscorlib.dll</HintPath>
+        </Reference>
         <Reference Include="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
             <HintPath>..\..\RimManaged\mscorlib.dll</HintPath>
+        </Reference>
+        <Reference Include="System">
+          <HintPath>..\..\RimManaged\System.dll</HintPath>
         </Reference>
         <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
             <HintPath>..\..\RimManaged\System.dll</HintPath>
         </Reference>
+        <Reference Include="System.Configuration">
+          <HintPath>..\..\RimManaged\System.Configuration.dll</HintPath>
+        </Reference>
         <Reference Include="System.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
             <HintPath>..\..\RimManaged\System.Configuration.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Core">
+          <HintPath>..\..\RimManaged\System.Core.dll</HintPath>
         </Reference>
         <Reference Include="System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
             <HintPath>..\..\RimManaged\System.Core.dll</HintPath>
         </Reference>
+        <Reference Include="System.Runtime.Serialization">
+          <HintPath>..\..\RimManaged\System.Runtime.Serialization.dll</HintPath>
+        </Reference>
         <Reference Include="System.Runtime.Serialization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
             <HintPath>..\..\RimManaged\System.Runtime.Serialization.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Security">
+          <HintPath>..\..\RimManaged\System.Security.dll</HintPath>
         </Reference>
         <Reference Include="System.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
             <HintPath>..\..\RimManaged\System.Security.dll</HintPath>
         </Reference>
+        <Reference Include="System.ServiceModel.Internals">
+          <HintPath>..\..\RimManaged\System.ServiceModel.Internals.dll</HintPath>
+        </Reference>
         <Reference Include="System.ServiceModel.Internals, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
             <HintPath>..\..\RimManaged\System.ServiceModel.Internals.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Xml">
+          <HintPath>..\..\RimManaged\System.Xml.dll</HintPath>
         </Reference>
         <Reference Include="System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
             <HintPath>..\..\RimManaged\System.Xml.dll</HintPath>
         </Reference>
+        <Reference Include="System.Xml.Linq">
+          <HintPath>..\..\RimManaged\System.Xml.Linq.dll</HintPath>
+        </Reference>
         <Reference Include="System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
             <HintPath>..\..\RimManaged\System.Xml.Linq.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.TextMeshPro">
+          <HintPath>..\..\RimManaged\Unity.TextMeshPro.dll</HintPath>
         </Reference>
         <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\Unity.TextMeshPro.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine">
+          <HintPath>..\..\RimManaged\UnityEngine.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AccessibilityModule">
+          <HintPath>..\..\RimManaged\UnityEngine.AccessibilityModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AccessibilityModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.AccessibilityModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.AIModule">
+          <HintPath>..\..\RimManaged\UnityEngine.AIModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.AIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.AIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AndroidJNIModule">
+          <HintPath>..\..\RimManaged\UnityEngine.AndroidJNIModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AndroidJNIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.AndroidJNIModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.AnimationModule">
+          <HintPath>..\..\RimManaged\UnityEngine.AnimationModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.AnimationModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AssetBundleModule">
+          <HintPath>..\..\RimManaged\UnityEngine.AssetBundleModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.AssetBundleModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.AudioModule">
+          <HintPath>..\..\RimManaged\UnityEngine.AudioModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.AudioModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ClothModule">
+          <HintPath>..\..\RimManaged\UnityEngine.ClothModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.ClothModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.ClothModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.ClusterInputModule">
+          <HintPath>..\..\RimManaged\UnityEngine.ClusterInputModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.ClusterInputModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.ClusterInputModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ClusterRendererModule">
+          <HintPath>..\..\RimManaged\UnityEngine.ClusterRendererModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.ClusterRendererModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.ClusterRendererModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+          <HintPath>..\..\RimManaged\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CrashReportingModule">
+          <HintPath>..\..\RimManaged\UnityEngine.CrashReportingModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.CrashReportingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.CrashReportingModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.DirectorModule">
+          <HintPath>..\..\RimManaged\UnityEngine.DirectorModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.DirectorModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.DirectorModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.DSPGraphModule">
+          <HintPath>..\..\RimManaged\UnityEngine.DSPGraphModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.DSPGraphModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.DSPGraphModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.GameCenterModule">
+          <HintPath>..\..\RimManaged\UnityEngine.GameCenterModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.GameCenterModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.GameCenterModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.GridModule">
+          <HintPath>..\..\RimManaged\UnityEngine.GridModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.GridModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.GridModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.HotReloadModule">
+          <HintPath>..\..\RimManaged\UnityEngine.HotReloadModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.HotReloadModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.HotReloadModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ImageConversionModule">
+          <HintPath>..\..\RimManaged\UnityEngine.ImageConversionModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.ImageConversionModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.IMGUIModule">
+          <HintPath>..\..\RimManaged\UnityEngine.IMGUIModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.IMGUIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.InputLegacyModule">
+          <HintPath>..\..\RimManaged\UnityEngine.InputLegacyModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.InputLegacyModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.InputModule">
+          <HintPath>..\..\RimManaged\UnityEngine.InputModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.InputModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.InputModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.JSONSerializeModule">
+          <HintPath>..\..\RimManaged\UnityEngine.JSONSerializeModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.JSONSerializeModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.JSONSerializeModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.LocalizationModule">
+          <HintPath>..\..\RimManaged\UnityEngine.LocalizationModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.LocalizationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.LocalizationModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ParticleSystemModule">
+          <HintPath>..\..\RimManaged\UnityEngine.ParticleSystemModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.ParticleSystemModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.PerformanceReportingModule">
+          <HintPath>..\..\RimManaged\UnityEngine.PerformanceReportingModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.PerformanceReportingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.PerformanceReportingModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.Physics2DModule">
+          <HintPath>..\..\RimManaged\UnityEngine.Physics2DModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.Physics2DModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.Physics2DModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.PhysicsModule">
+          <HintPath>..\..\RimManaged\UnityEngine.PhysicsModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.PhysicsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ProfilerModule">
+          <HintPath>..\..\RimManaged\UnityEngine.ProfilerModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.ProfilerModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.ProfilerModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.ScreenCaptureModule">
+          <HintPath>..\..\RimManaged\UnityEngine.ScreenCaptureModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.ScreenCaptureModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.ScreenCaptureModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SharedInternalsModule">
+          <HintPath>..\..\RimManaged\UnityEngine.SharedInternalsModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.SharedInternalsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.SharedInternalsModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.SpriteMaskModule">
+          <HintPath>..\..\RimManaged\UnityEngine.SpriteMaskModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.SpriteMaskModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.SpriteMaskModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SpriteShapeModule">
+          <HintPath>..\..\RimManaged\UnityEngine.SpriteShapeModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.SpriteShapeModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.SpriteShapeModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.StreamingModule">
+          <HintPath>..\..\RimManaged\UnityEngine.StreamingModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.StreamingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.StreamingModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SubstanceModule">
+          <HintPath>..\..\RimManaged\UnityEngine.SubstanceModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.SubstanceModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.SubstanceModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.SubsystemsModule">
+          <HintPath>..\..\RimManaged\UnityEngine.SubsystemsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TerrainModule">
+          <HintPath>..\..\RimManaged\UnityEngine.TerrainModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.TerrainModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.TerrainModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TerrainPhysicsModule">
+          <HintPath>..\..\RimManaged\UnityEngine.TerrainPhysicsModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.TerrainPhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.TerrainPhysicsModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.TextCoreModule">
+          <HintPath>..\..\RimManaged\UnityEngine.TextCoreModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.TextCoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.TextCoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TextRenderingModule">
+          <HintPath>..\..\RimManaged\UnityEngine.TextRenderingModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.TextRenderingModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.TilemapModule">
+          <HintPath>..\..\RimManaged\UnityEngine.TilemapModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.TilemapModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.TilemapModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TLSModule">
+          <HintPath>..\..\RimManaged\UnityEngine.TLSModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.TLSModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.TLSModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.UI">
+          <HintPath>..\..\RimManaged\UnityEngine.UI.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.UI.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UIElementsModule">
+          <HintPath>..\..\RimManaged\UnityEngine.UIElementsModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UIElementsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.UIElementsModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.UIModule">
+          <HintPath>..\..\RimManaged\UnityEngine.UIModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.UIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UmbraModule">
+          <HintPath>..\..\RimManaged\UnityEngine.UmbraModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UmbraModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.UmbraModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.UNETModule">
+          <HintPath>..\..\RimManaged\UnityEngine.UNETModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.UNETModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.UNETModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityAnalyticsModule">
+          <HintPath>..\..\RimManaged\UnityEngine.UnityAnalyticsModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UnityAnalyticsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.UnityAnalyticsModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.UnityConnectModule">
+          <HintPath>..\..\RimManaged\UnityEngine.UnityConnectModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.UnityConnectModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.UnityConnectModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityTestProtocolModule">
+          <HintPath>..\..\RimManaged\UnityEngine.UnityTestProtocolModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UnityTestProtocolModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.UnityTestProtocolModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
+          <HintPath>..\..\RimManaged\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestAudioModule">
+          <HintPath>..\..\RimManaged\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UnityWebRequestAudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestModule">
+          <HintPath>..\..\RimManaged\UnityEngine.UnityWebRequestModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.UnityWebRequestModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+          <HintPath>..\..\RimManaged\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UnityWebRequestTextureModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+          <HintPath>..\..\RimManaged\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.VehiclesModule">
+          <HintPath>..\..\RimManaged\UnityEngine.VehiclesModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.VehiclesModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.VehiclesModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.VFXModule">
+          <HintPath>..\..\RimManaged\UnityEngine.VFXModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.VFXModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.VFXModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.VideoModule">
+          <HintPath>..\..\RimManaged\UnityEngine.VideoModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.VideoModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.VideoModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.VRModule">
+          <HintPath>..\..\RimManaged\UnityEngine.VRModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.VRModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.VRModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.WindModule">
+          <HintPath>..\..\RimManaged\UnityEngine.WindModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.WindModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.WindModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.XRModule">
+          <HintPath>..\..\RimManaged\UnityEngine.XRModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.XRModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\RimManaged\UnityEngine.XRModule.dll</HintPath>

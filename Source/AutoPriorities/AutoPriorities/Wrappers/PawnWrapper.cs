@@ -1,5 +1,4 @@
 using System.Linq;
-using RimWorld;
 using Verse;
 
 namespace AutoPriorities.Wrappers
@@ -35,11 +34,10 @@ namespace AutoPriorities.Wrappers
         public float MaxLearningRateFactor(IWorkTypeWrapper work)
         {
             // TODO: terrible hack, fix this
-            var factor = ((WorkTypeWrapper)work).workTypeDef.relevantSkills
-                .Select(_pawn.skills.GetSkill)
-                .Select(x => x.LearnRateFactor())
-                .DefaultIfEmpty(1)
-                .Max();
+            var factor = ((WorkTypeWrapper)work).workTypeDef.relevantSkills.Select(_pawn.skills.GetSkill)
+                                                .Select(x => x.LearnRateFactor())
+                                                .DefaultIfEmpty(1)
+                                                .Max();
 
             return factor;
         }

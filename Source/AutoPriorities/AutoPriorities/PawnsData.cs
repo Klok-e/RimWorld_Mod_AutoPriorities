@@ -8,7 +8,6 @@ using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.Percents;
 using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
-using RimWorld;
 
 namespace AutoPriorities
 {
@@ -39,6 +38,7 @@ namespace AutoPriorities
         } = new();
 
         public List<IPawnWrapper> CurrentMapPlayerPawns { get; } = new();
+
         public List<IPawnWrapper> AllPlayerPawns { get; } = new();
 
         public void SetData(SaveData data)
@@ -73,7 +73,7 @@ namespace AutoPriorities
             {
                 // get all work types
                 var workTypes = _worldInfoRetriever.WorkTypeDefsInPriorityOrder()
-                    .ToArray();
+                                                   .ToArray();
 
                 var allPawns = _worldInfoRetriever.AllAdultPawnsInPlayerFaction();
                 AllPlayerPawns.Clear();
@@ -94,8 +94,7 @@ namespace AutoPriorities
                     {
                         try
                         {
-                            if (pawn.IsCapableOfWholeWorkType(work)
-                                && !ExcludedPawns.Contains(
+                            if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains(
                                     new ExcludedPawnEntry { WorkDef = work.DefName, PawnThingId = pawn.ThingID }))
                             {
                                 var skill = pawn.AverageOfRelevantSkillsFor(work);
@@ -113,10 +112,12 @@ namespace AutoPriorities
                         }
                     }
 
-                    if (WorkTypes.Contains(work)) continue;
+                    if (WorkTypes.Contains(work))
+                        continue;
 
                     WorkTypes.Add(work);
-                    if (work.RelevantSkillsCount == 0) WorkTypesNotRequiringSkills.Add(work);
+                    if (work.RelevantSkillsCount == 0)
+                        WorkTypesNotRequiringSkills.Add(work);
                 }
 
                 foreach (var keyValue in SortedPawnFitnessForEveryWork)
@@ -129,7 +130,7 @@ namespace AutoPriorities
                     wp =>
                     {
                         var isToBeDeleted = !AllPlayerPawns.Select(x => x.ThingID)
-                            .Contains(wp.PawnThingId);
+                                                           .Contains(wp.PawnThingId);
                         // if (isToBeDeleted)
                         //     _logger.Info($"removing {wp.PawnThingId} from excluded list");
 
@@ -143,18 +144,17 @@ namespace AutoPriorities
             }
         }
 
-        public (double percent, bool takenMoreThanTotal) PercentColonistsAvailable(
-            IWorkTypeWrapper workType,
+        public (double percent, bool takenMoreThanTotal) PercentColonistsAvailable(IWorkTypeWrapper workType,
             Priority priorityIgnore)
         {
             var taken = 0d;
             var takenTotal = 0d;
-            foreach (var it in WorkTables
-                         .Distinct(x => x.Priority)
-                         .Where(x => x.WorkTypes[workType].Variant != PercentVariant.PercentRemaining))
+            foreach (var it in WorkTables.Distinct(x => x.Priority)
+                                         .Where(x => x.WorkTypes[workType].Variant != PercentVariant.PercentRemaining))
             {
                 var percent = PercentValue(it.WorkTypes[workType], workType, priorityIgnore);
-                if (it.Priority.v != priorityIgnore.v) taken += percent;
+                if (it.Priority.v != priorityIgnore.v)
+                    taken += percent;
                 takenTotal += percent;
             }
 
@@ -164,8 +164,7 @@ namespace AutoPriorities
 
         public int NumberColonists(IWorkTypeWrapper workType)
         {
-            return SortedPawnFitnessForEveryWork[workType]
-                .Count;
+            return SortedPawnFitnessForEveryWork[workType].Count;
         }
 
         public bool PercentRemainExistsForWorkType(IWorkTypeWrapper workType)
@@ -182,10 +181,9 @@ namespace AutoPriorities
             return tablePercent.Variant switch
             {
                 PercentVariant.Percent => tablePercent.PercentValue,
-                PercentVariant.Number => numberColonists > 0
-                    ? (double)tablePercent.NumberCount / numberColonists
-                    : 0,
-                PercentVariant.PercentRemaining => PercentColonistsAvailable(workTypeWrapper, currentPriority).percent,
+                PercentVariant.Number => numberColonists > 0 ? (double)tablePercent.NumberCount / numberColonists : 0,
+                PercentVariant.PercentRemaining => PercentColonistsAvailable(workTypeWrapper, currentPriority)
+                    .percent,
                 _ => throw new ArgumentOutOfRangeException()
             };
         }

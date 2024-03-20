@@ -10,7 +10,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>Tests</RootNamespace>
         <AssemblyName>Tests</AssemblyName>
-        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>default</LangVersion>
         <Nullable>enable</Nullable>
@@ -279,10 +279,11 @@
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.17.0" />
-        <PackageReference Include="FluentAssertions" Version="6.1.0" />
-        <PackageReference Include="NSubstitute" Version="4.4.0" />
-        <PackageReference Include="NUnit" Version="3.13.3" />
+        <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.18.1" />
+        <PackageReference Include="FluentAssertions" Version="6.12.0" />
+        <PackageReference Include="JetBrains.Profiler.Api" Version="1.4.2" />
+        <PackageReference Include="NSubstitute" Version="5.1.0" />
+        <PackageReference Include="NUnit" Version="4.1.0" />
     </ItemGroup>
     <ItemGroup>
         <None Include="$(SolutionDir)Tests/TestData/**" CopyToOutputDirectory="PreserveNewest" />

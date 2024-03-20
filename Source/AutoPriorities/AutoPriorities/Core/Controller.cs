@@ -22,7 +22,7 @@ namespace AutoPriorities.Core
         private static PawnsDataBuilder? _pawnsDataBuilder;
 
         public static SettingHandle<double>? MinimumSkill { get; private set; }
-        
+
         public static AutoPrioritiesDialog? Dialog { get; private set; }
 
         public override void Initialize()
@@ -39,21 +39,22 @@ namespace AutoPriorities.Core
             base.WorldLoaded();
             Dialog = CreateDialog();
         }
-        
+
         public override void DefsLoaded()
         {
             base.DefsLoaded();
             MinimumSkill = Settings.GetHandle(
                 "minimumFitness",
                 "Minimum fitness",
-                "Determines whether the pawn is eligible for the work type. " +
-                "If minimumFitness < skill * learnRate, work type isn't assigned",
+                "Determines whether the pawn is eligible for the work type. "
+                + "If minimumFitness < skill * learnRate, work type isn't assigned",
                 0d);
         }
 
         public static void SwitchMap()
         {
-            if (_pawnData == null) return;
+            if (_pawnData == null)
+                return;
 
             _pawnsDataBuilder?.Build(_pawnData);
         }
@@ -65,7 +66,8 @@ namespace AutoPriorities.Core
 
         private void PatchMod(string packageId, string patchName)
         {
-            if (!LoadedModManager.RunningModsListForReading.Exists(m => m.PackageId == packageId)) return;
+            if (!LoadedModManager.RunningModsListForReading.Exists(m => m.PackageId == packageId))
+                return;
 
             logger?.Info($"Patching for: {packageId}");
 
@@ -74,7 +76,8 @@ namespace AutoPriorities.Core
             HarmonyInst.PatchAll(asm);
 
             var methods = asm.GetMethodsWithHelpAttribute<PatchInitializeAttribute>();
-            foreach (var method in methods) method.Invoke(null, null);
+            foreach (var method in methods)
+                method.Invoke(null, null);
         }
 
         private static string GetSaveLocation()
@@ -83,7 +86,8 @@ namespace AutoPriorities.Core
             var method = typeof(GenFilePaths).GetMethod(
                 "FolderUnderSaveData",
                 BindingFlags.NonPublic | BindingFlags.Static);
-            if (method == null) throw new Exception("AutoPriorities :: FolderUnderSaveData is null [reflection]");
+            if (method == null)
+                throw new Exception("AutoPriorities :: FolderUnderSaveData is null [reflection]");
 
             // Call "FolderUnderSaveData" from null parameter, since this is a static method.
             return (string)method.Invoke(null, new object[] { "PrioritiesData" });

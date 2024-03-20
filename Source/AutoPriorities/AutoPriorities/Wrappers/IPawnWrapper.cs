@@ -1,5 +1,3 @@
-using RimWorld;
-
 namespace AutoPriorities.Wrappers
 {
     public interface IPawnWrapper

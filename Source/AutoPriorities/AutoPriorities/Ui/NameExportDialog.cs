@@ -4,19 +4,13 @@ using Verse;
 
 namespace AutoPriorities.Ui
 {
-    public class NameExportDialog : Dialog_Rename
+    public class NameExportDialog : Dialog_Rename<SavedPawnDataReference>
     {
         private static readonly Regex ValidNameRegex = new(@"^[\w]+$");
-        private readonly IPawnDataExporter _exporter;
 
-        public NameExportDialog(IPawnDataExporter exporter)
+        public NameExportDialog(SavedPawnDataReference pawnDataReference)
+            : base(pawnDataReference)
         {
-            _exporter = exporter;
-        }
-
-        protected override void SetName(string name)
-        {
-            _exporter.ExportCurrentPawnData(name);
         }
 
         protected override AcceptanceReport NameIsValid(string newName)
