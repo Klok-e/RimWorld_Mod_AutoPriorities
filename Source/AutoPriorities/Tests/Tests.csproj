@@ -281,7 +281,7 @@
     <ItemGroup>
         <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.18.1" />
         <PackageReference Include="FluentAssertions" Version="6.12.0" />
-        <PackageReference Include="JetBrains.Profiler.Api" Version="1.4.2" />
+        <PackageReference Include="JetBrains.Profiler.Api" Version="1.4.6" />
         <PackageReference Include="NSubstitute" Version="5.1.0" />
         <PackageReference Include="NUnit" Version="4.1.0" />
     </ItemGroup>

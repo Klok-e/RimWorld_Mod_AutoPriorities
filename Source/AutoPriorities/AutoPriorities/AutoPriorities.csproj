@@ -85,8 +85,8 @@
         <Compile Include="Wrappers\WorkTypeWrapper.cs" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="JetBrains.Profiler.Api" Version="1.4.2" />
-        <PackageReference Include="Lib.Harmony" Version="2.3.1.1" />
+        <PackageReference Include="JetBrains.Profiler.Api" Version="1.4.6" />
+        <PackageReference Include="Lib.Harmony" Version="2.3.3" />
         <PackageReference Include="UnlimitedHugs.Rimworld.HugsLib" Version="11.0.3" />
     </ItemGroup>
     <ItemGroup>
