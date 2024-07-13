@@ -20,7 +20,7 @@ namespace AutoPriorities.WorldInfoRetriever
 
         public IWorkTypeWrapper? StringToDef(string name)
         {
-            var work = _worldInfo.WorkTypeDefsInPriorityOrder()
+            var work = _worldInfo.GetWorkTypeDefsInPriorityOrder()
                 .FirstOrDefault(w => w.DefName == name);
             if (work is not null) return work;
 
@@ -30,7 +30,7 @@ namespace AutoPriorities.WorldInfoRetriever
 
         public IPawnWrapper? IdToPawn(string pawnId)
         {
-            var res = _worldInfo.AdultPawnsInPlayerFactionInCurrentMap()
+            var res = _worldInfo.GetAdultPawnsInPlayerFactionInCurrentMap()
                 .FirstOrDefault(p => p.ThingID == pawnId);
             if (res is not null) return res;
 

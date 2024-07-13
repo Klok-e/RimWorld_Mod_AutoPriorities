@@ -41,10 +41,10 @@ namespace Tests
         public void LoadSavedData_SaveState_LoadAndSave_IdenticalResult()
         {
             // arrange
-            _retriever.AdultPawnsInPlayerFactionInCurrentMap()
+            _retriever.GetAdultPawnsInPlayerFactionInCurrentMap()
                 .Returns(_fixture.CreateMany<IPawnWrapper>());
 
-            _retriever.WorkTypeDefsInPriorityOrder()
+            _retriever.GetWorkTypeDefsInPriorityOrder()
                 .Returns(
                     TestHelper.WorkTypes.Select(
                         x => _fixture.Build<WorkType>()

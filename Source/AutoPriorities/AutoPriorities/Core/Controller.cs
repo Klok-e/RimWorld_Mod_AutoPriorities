@@ -22,6 +22,8 @@ namespace AutoPriorities.Core
         private static PawnsDataBuilder? _pawnsDataBuilder;
 
         public static SettingHandle<double>? MinimumSkill { get; private set; }
+        public static SettingHandle<int>? MaxPriority { get; private set; }
+        public static int? MaxPriorityAlien { get; set; }
 
         public static AutoPrioritiesDialog? Dialog { get; private set; }
 
@@ -49,6 +51,11 @@ namespace AutoPriorities.Core
                 "Determines whether the pawn is eligible for the work type. "
                 + "If minimumFitness < skill * learnRate, work type isn't assigned",
                 0d);
+            MaxPriority = Settings.GetHandle(
+                "maxPriority",
+                "Max priority",
+                "Sets max priority",
+                4);
         }
 
         public static void SwitchMap()
@@ -72,7 +79,7 @@ namespace AutoPriorities.Core
             logger?.Info($"Patching for: {packageId}");
 
             var asm = Assembly.LoadFile(
-                Path.Combine(ModContentPack.RootDir, Path.Combine("ConditionalAssemblies/1.4/", patchName)));
+                Path.Combine(ModContentPack.RootDir, Path.Combine("ConditionalAssemblies/1.5/", patchName)));
             HarmonyInst.PatchAll(asm);
 
             var methods = asm.GetMethodsWithHelpAttribute<PatchInitializeAttribute>();
@@ -108,7 +115,13 @@ namespace AutoPriorities.Core
             var priorityAssigner = new PrioritiesAssigner(_pawnData, log, importantWorkTypes, worldInfo);
             var pawnDataExporter = new PawnDataExporter(log, savePath, _pawnData, stringSerializer);
 
-            return new AutoPrioritiesDialog(_pawnData, priorityAssigner, log, importantWorkTypes, pawnDataExporter);
+            return new AutoPrioritiesDialog(
+                _pawnData,
+                priorityAssigner,
+                log,
+                importantWorkTypes,
+                pawnDataExporter,
+                worldInfo);
         }
     }
 }

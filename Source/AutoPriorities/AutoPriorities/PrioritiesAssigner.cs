@@ -62,7 +62,7 @@ namespace AutoPriorities
                     _pawnsData.WorkTypes.Subtract(importantWorks)
                         .Where(work => !_pawnsData.WorkTypesNotRequiringSkills.Contains(work)),
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work],
-                    _worldInfoRetriever.MinimumWorkFitness());
+                    _worldInfoRetriever.GetMinimumWorkFitness());
 
 #if DEBUG
                 _logger.Info("non skilled");

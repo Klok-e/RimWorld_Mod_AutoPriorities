@@ -11,19 +11,19 @@ namespace AutoPriorities.WorldInfoRetriever
     {
         #region IWorldInfoRetriever Members
 
-        public IEnumerable<IWorkTypeWrapper> WorkTypeDefsInPriorityOrder()
+        public IEnumerable<IWorkTypeWrapper> GetWorkTypeDefsInPriorityOrder()
         {
             return WorkTypeDefsUtility.WorkTypeDefsInPriorityOrder.Select(x => new WorkTypeWrapper(x));
         }
 
-        public IEnumerable<IPawnWrapper> AdultPawnsInPlayerFactionInCurrentMap()
+        public IEnumerable<IPawnWrapper> GetAdultPawnsInPlayerFactionInCurrentMap()
         {
             return PlayerPawnsDisplayOrderUtility.InOrder(Find.CurrentMap.mapPawns.FreeColonists)
                 .Where(pawn => !pawn.DevelopmentalStage.Baby())
                 .Select(x => new PawnWrapper(x));
         }
 
-        public IEnumerable<IPawnWrapper> AllAdultPawnsInPlayerFaction()
+        public IEnumerable<IPawnWrapper> GetAllAdultPawnsInPlayerFaction()
         {
             var caravans = Find.WorldObjects.Caravans
                 .Where(caravan => caravan.IsPlayerControlled)
@@ -35,9 +35,14 @@ namespace AutoPriorities.WorldInfoRetriever
                 .Select(x => new PawnWrapper(x));
         }
 
-        public double MinimumWorkFitness()
+        public double GetMinimumWorkFitness()
         {
             return Controller.MinimumSkill;
+        }
+        
+        public int GetMaxPriority()
+        {
+            return Controller.MaxPriorityAlien ?? Controller.MaxPriority;
         }
 
         public byte[]? PawnsDataXml

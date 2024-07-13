@@ -25,9 +25,9 @@ namespace Tests
             _pawnsData = new PawnsDataBuilder(_serializer, _retriever, _logger);
             FixtureBuilder.Create();
             _pw = PawnWorktypeCreator.Create();
-            _retriever.AdultPawnsInPlayerFactionInCurrentMap()
+            _retriever.GetAdultPawnsInPlayerFactionInCurrentMap()
                 .Returns(_pw.pawns);
-            _retriever.WorkTypeDefsInPriorityOrder()
+            _retriever.GetWorkTypeDefsInPriorityOrder()
                 .Returns(_pw.workTypes);
         }
 

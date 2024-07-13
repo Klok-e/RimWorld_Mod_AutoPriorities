@@ -38,10 +38,10 @@ namespace Tests
         public void LoadFromFile()
         {
             // arrange
-            _retriever.AdultPawnsInPlayerFactionInCurrentMap()
+            _retriever.GetAdultPawnsInPlayerFactionInCurrentMap()
                 .Returns(_fixture.CreateMany<IPawnWrapper>());
 
-            _retriever.WorkTypeDefsInPriorityOrder()
+            _retriever.GetWorkTypeDefsInPriorityOrder()
                 .Returns(
                     TestHelper.WorkTypes.Select(
                         x => _fixture.Build<WorkType>()
@@ -77,10 +77,10 @@ namespace Tests
         public void LoadSavedData_Warning_UnknownWorktypeInSave()
         {
             // arrange
-            _retriever.AdultPawnsInPlayerFactionInCurrentMap()
+            _retriever.GetAdultPawnsInPlayerFactionInCurrentMap()
                 .Returns(_fixture.CreateMany<IPawnWrapper>());
 
-            _retriever.WorkTypeDefsInPriorityOrder()
+            _retriever.GetWorkTypeDefsInPriorityOrder()
                 .Returns(
                     TestHelper.WorkTypesTruncated.Select(
                         x => _fixture.Build<WorkType>()

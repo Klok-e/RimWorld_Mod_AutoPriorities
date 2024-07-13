@@ -3,6 +3,7 @@ using System.Linq;
 using AutoPriorities.ImportantJobs;
 using AutoPriorities.PawnDataSerializer.Exporter;
 using AutoPriorities.Utils;
+using AutoPriorities.WorldInfoRetriever;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -35,7 +36,8 @@ namespace AutoPriorities.Ui
             PrioritiesAssigner prioritiesAssigner,
             ILogger logger,
             IImportantJobsProvider importantJobsProvider,
-            IPawnDataExporter pawnDataExporter)
+            IPawnDataExporter pawnDataExporter,
+            IWorldInfoRetriever worldInfoRetriever)
         {
             _pawnsData = pawnsData;
             _prioritiesAssigner = prioritiesAssigner;
@@ -45,7 +47,7 @@ namespace AutoPriorities.Ui
             doCloseButton = true;
             draggable = true;
             resizeable = true;
-            _prioritiesTabArtisan = new PrioritiesTabArtisan(_pawnsData, _logger);
+            _prioritiesTabArtisan = new PrioritiesTabArtisan(_pawnsData, _logger, worldInfoRetriever);
         }
 
         public override void PostClose()
@@ -183,10 +185,7 @@ namespace AutoPriorities.Ui
                 var options = saves.Select(
                         x => new FloatMenuOption(
                             x.RenamableLabel,
-                            () =>
-                            {
-                                _pawnDataExporter.ImportPawnData(x.RenamableLabel);
-                            }))
+                            () => { _pawnDataExporter.ImportPawnData(x.RenamableLabel); }))
                     .ToList();
                 Find.WindowStack.Add(new FloatMenu(options, string.Empty));
                 SoundDefOf.Click.PlayOneShotOnCamera();

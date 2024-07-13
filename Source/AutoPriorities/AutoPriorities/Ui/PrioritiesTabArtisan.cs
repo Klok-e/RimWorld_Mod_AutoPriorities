@@ -5,6 +5,7 @@ using System.Linq;
 using AutoPriorities.Core;
 using AutoPriorities.Percents;
 using AutoPriorities.Utils;
+using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
 using RimWorld;
 using UnityEngine;
@@ -20,14 +21,16 @@ namespace AutoPriorities.Ui
         private readonly HashSet<Priority> _prioritiesEncounteredCached = new();
         private Vector2 _scrollPos;
 
-        private PawnsData _pawnsData;
+        private readonly PawnsData _pawnsData;
         private readonly ILogger _logger;
+        private readonly IWorldInfoRetriever _worldInfoRetriever;
         private Rect _currViewedScrollRect;
 
-        public PrioritiesTabArtisan(PawnsData pawnsData, ILogger logger)
+        public PrioritiesTabArtisan(PawnsData pawnsData, ILogger logger, IWorldInfoRetriever worldInfoRetriever)
         {
             _pawnsData = pawnsData;
             _logger = logger;
+            _worldInfoRetriever = worldInfoRetriever;
         }
 
         public void PrioritiesTab(Rect inRect)
@@ -77,7 +80,8 @@ namespace AutoPriorities.Ui
                 pr.Priority = DrawUtil.PriorityBox(
                     slidersRect.xMin,
                     slidersRect.yMin + slidersRect.height / 2f,
-                    pr.Priority.v);
+                    pr.Priority.v,
+                    _worldInfoRetriever.GetMaxPriority());
                 workTables[table] = pr;
 
                 var maxJobsElementXPos = slidersRect.xMin + Consts.SliderMargin;

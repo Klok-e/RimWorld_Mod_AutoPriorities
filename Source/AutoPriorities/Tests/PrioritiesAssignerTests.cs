@@ -24,9 +24,9 @@ namespace Tests
             _serializer = Substitute.For<IPawnsDataSerializer>();
             _pw = PawnWorktypeCreator.Create();
             // AddMorePawnsToPw();
-            _retriever.AdultPawnsInPlayerFactionInCurrentMap()
+            _retriever.GetAdultPawnsInPlayerFactionInCurrentMap()
                 .Returns(_pw.pawns);
-            _retriever.WorkTypeDefsInPriorityOrder()
+            _retriever.GetWorkTypeDefsInPriorityOrder()
                 .Returns(_pw.workTypes);
             AssignPawnsData();
             _importantWorkTypesProvider = Substitute.For<IImportantJobsProvider>();
@@ -75,7 +75,7 @@ namespace Tests
         public void AssignPriorities_MinimumFitness2()
         {
             // arrange
-            _retriever.MinimumWorkFitness()
+            _retriever.GetMinimumWorkFitness()
                 .Returns(2);
 
             // act

@@ -5,13 +5,15 @@ namespace AutoPriorities.WorldInfoRetriever
 {
     public interface IWorldInfoRetriever
     {
-        IEnumerable<IWorkTypeWrapper> WorkTypeDefsInPriorityOrder();
+        IEnumerable<IWorkTypeWrapper> GetWorkTypeDefsInPriorityOrder();
 
-        IEnumerable<IPawnWrapper> AdultPawnsInPlayerFactionInCurrentMap();
+        IEnumerable<IPawnWrapper> GetAdultPawnsInPlayerFactionInCurrentMap();
 
-        IEnumerable<IPawnWrapper> AllAdultPawnsInPlayerFaction();
+        IEnumerable<IPawnWrapper> GetAllAdultPawnsInPlayerFaction();
 
-        double MinimumWorkFitness();
+        double GetMinimumWorkFitness();
+
+        int GetMaxPriority();
 
         byte[]? PawnsDataXml { get; set; }
     }

@@ -7,8 +7,6 @@ namespace AutoPriorities.Utils
 {
     public static class DrawUtil
     {
-        public static int MaxPriority { get; set; } = 4;
-
         /// <summary>
         ///     If false - only background is drawn
         /// </summary>
@@ -23,7 +21,8 @@ namespace AutoPriorities.Utils
             value = !value;
         }
 
-        public static int PriorityBox(float x, float y, int priority, float width = 25f, float height = 25f)
+        public static int PriorityBox(float x, float y, int priority, int MaxPriority, float width = 25f,
+            float height = 25f)
         {
             var rect = new Rect(x, y, width, height);
             DrawWorkBoxBackground(rect);

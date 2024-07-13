@@ -17,7 +17,7 @@ namespace FluffyWorktabPatch
         // ReSharper disable once UnusedMember.Global
         public static void Init()
         {
-            DrawUtil.MaxPriority = Settings.maxPriority;
+            Controller.MaxPriorityAlien = Settings.maxPriority;
         }
 
         [HarmonyPostfix]
