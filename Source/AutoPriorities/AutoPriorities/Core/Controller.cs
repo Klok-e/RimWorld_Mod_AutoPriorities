@@ -33,6 +33,8 @@ namespace AutoPriorities.Core
             logger = new Logger(Logger);
 
             PatchMod("fluffy.worktab", "FluffyWorktabPatch.dll");
+            PatchMod("arof.fluffy.worktab", "FluffyWorktabPatch.dll");
+
             HarmonyInst.PatchAll();
         }
 
