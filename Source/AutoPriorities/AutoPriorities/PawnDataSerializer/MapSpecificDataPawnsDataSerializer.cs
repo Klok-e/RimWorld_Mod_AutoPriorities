@@ -1,4 +1,3 @@
-using AutoPriorities.Core;
 using AutoPriorities.WorldInfoRetriever;
 
 namespace AutoPriorities.PawnDataSerializer

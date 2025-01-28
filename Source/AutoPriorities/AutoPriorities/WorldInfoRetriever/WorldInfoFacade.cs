@@ -1,6 +1,5 @@
 using System.Linq;
 using AutoPriorities.APLogger;
-using AutoPriorities.Core;
 using AutoPriorities.Wrappers;
 
 namespace AutoPriorities.WorldInfoRetriever

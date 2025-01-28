@@ -5,6 +5,7 @@ namespace AutoPriorities.WorldInfoRetriever
 {
     public interface IWorldInfoRetriever
     {
+        byte[]? PawnsDataXml { get; set; }
         IEnumerable<IWorkTypeWrapper> GetWorkTypeDefsInPriorityOrder();
 
         IEnumerable<IPawnWrapper> GetAdultPawnsInPlayerFactionInCurrentMap();
@@ -14,7 +15,5 @@ namespace AutoPriorities.WorldInfoRetriever
         double GetMinimumWorkFitness();
 
         int GetMaxPriority();
-
-        byte[]? PawnsDataXml { get; set; }
     }
 }

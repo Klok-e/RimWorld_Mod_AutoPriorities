@@ -3,7 +3,6 @@ using AutoPriorities.Ui;
 using HarmonyLib;
 using RimWorld;
 using Verse;
-using Resources = AutoPriorities.Core.Resources;
 
 namespace AutoPriorities.HarmonyPatches
 {

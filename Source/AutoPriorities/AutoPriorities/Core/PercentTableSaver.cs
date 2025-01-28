@@ -34,7 +34,7 @@ namespace AutoPriorities.Core
                     .Select(
                         p => new ExcludedPawnEntry
                         {
-                            WorkDef = p.Item1!.DefName, PawnThingId = p.Item2!.ThingID
+                            WorkDef = p.Item1!.DefName, PawnThingId = p.Item2!.ThingID,
                         })
                     .ToHashSet();
             }
@@ -46,7 +46,7 @@ namespace AutoPriorities.Core
                     data = data.percents.Select(Tupl.Serialized)
                         .ToList(),
                     excludedPawns = data.excluded.Select(WorktypePawn.Serialized)
-                        .ToList()
+                        .ToList(),
                 };
             }
         }
@@ -77,7 +77,7 @@ namespace AutoPriorities.Core
             {
                 return new WorkTableEntry
                 {
-                    Priority = priority, JobCount = jobsMax, WorkTypes = dict.Parsed(serializer)
+                    Priority = priority, JobCount = jobsMax, WorkTypes = dict.Parsed(serializer),
                 };
             }
 
@@ -85,7 +85,7 @@ namespace AutoPriorities.Core
             {
                 return new Tupl
                 {
-                    priority = val.Priority.v, jobsMax = val.JobCount.v, dict = Dic.Serialized(val.WorkTypes)
+                    priority = val.Priority.v, jobsMax = val.JobCount.v, dict = Dic.Serialized(val.WorkTypes),
                 };
             }
         }
@@ -106,7 +106,7 @@ namespace AutoPriorities.Core
                 return new Dic
                 {
                     percents = dic.Select(kv => StrPercent.Serialized((kv.Key, kv.Value)))
-                        .ToList()
+                        .ToList(),
                 };
             }
         }
@@ -141,7 +141,7 @@ namespace AutoPriorities.Core
                     Variant.Number => TablePercent.Number(number),
                     Variant.Percent => TablePercent.Percent(percent),
                     Variant.PercentRemaining => TablePercent.PercentRemaining(),
-                    _ => throw new Exception()
+                    _ => throw new Exception(),
                 };
             }
 
@@ -151,17 +151,17 @@ namespace AutoPriorities.Core
                 {
                     PercentVariant.Number => new UnionPercent
                     {
-                        variant = Variant.Number, number = percent.NumberCount
+                        variant = Variant.Number, number = percent.NumberCount,
                     },
                     PercentVariant.Percent => new UnionPercent
                     {
-                        variant = Variant.Percent, percent = percent.PercentValue
+                        variant = Variant.Percent, percent = percent.PercentValue,
                     },
                     PercentVariant.PercentRemaining => new UnionPercent
                     {
-                        variant = Variant.PercentRemaining
+                        variant = Variant.PercentRemaining,
                     },
-                    _ => throw new Exception()
+                    _ => throw new Exception(),
                 };
             }
         }

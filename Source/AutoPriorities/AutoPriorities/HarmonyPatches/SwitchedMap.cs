@@ -1,7 +1,5 @@
 using AutoPriorities.Core;
-using AutoPriorities.Ui;
 using HarmonyLib;
-using RimWorld;
 using Verse;
 
 namespace AutoPriorities.HarmonyPatches

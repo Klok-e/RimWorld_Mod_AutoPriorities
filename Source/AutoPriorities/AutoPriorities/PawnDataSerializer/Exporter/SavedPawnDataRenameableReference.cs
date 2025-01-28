@@ -2,19 +2,19 @@ using Verse;
 
 namespace AutoPriorities.PawnDataSerializer.Exporter
 {
-    public class SavedPawnDataReference : IRenameable
+    public class SavedPawnDataRenameableReference : IRenameable
     {
-        private readonly IPawnDataExporter _pawnDataExporter;
-
-        public string FileName { get; set; }
-
         public const string StartingName = "AutoPriorities";
 
-        public SavedPawnDataReference(IPawnDataExporter pawnDataExporter, string fileName)
+        private readonly PawnDataExporter _pawnDataExporter;
+
+        public SavedPawnDataRenameableReference(PawnDataExporter pawnDataExporter, string fileName)
         {
             _pawnDataExporter = pawnDataExporter;
             FileName = fileName;
         }
+
+        public string FileName { get; set; }
 
         public string RenamableLabel
         {

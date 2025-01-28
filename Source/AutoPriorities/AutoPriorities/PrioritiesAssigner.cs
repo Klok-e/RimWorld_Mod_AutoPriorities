@@ -13,9 +13,9 @@ namespace AutoPriorities
     public class PrioritiesAssigner
     {
         private readonly IImportantJobsProvider _importantJobsProvider;
-        private readonly IWorldInfoRetriever _worldInfoRetriever;
         private readonly ILogger _logger;
         private readonly PawnsData _pawnsData;
+        private readonly IWorldInfoRetriever _worldInfoRetriever;
 
         public PrioritiesAssigner(
             PawnsData pawnsData,
@@ -101,10 +101,7 @@ namespace AutoPriorities
 #endif
 
 #if DEBUG
-                foreach (var (pawn, fitness) in pawns)
-                {
-                    _logger.Info($"pawn {pawn.NameFullColored}; fitness {fitness}");
-                }
+                foreach (var (pawn, fitness) in pawns) _logger.Info($"pawn {pawn.NameFullColored}; fitness {fitness}");
 #endif
 
                 foreach (var (priority, maxJobs, jobsToSet) in PriorityPercentCached

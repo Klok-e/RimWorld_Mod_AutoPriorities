@@ -39,7 +39,7 @@ namespace AutoPriorities.WorldInfoRetriever
         {
             return Controller.MinimumSkill;
         }
-        
+
         public int GetMaxPriority()
         {
             return Controller.MaxPriorityAlien ?? Controller.MaxPriority;

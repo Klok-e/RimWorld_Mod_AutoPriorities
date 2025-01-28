@@ -56,7 +56,7 @@ namespace Tests
             // assert
             savedData.Should()
                 .NotBeNull();
-            savedData!.ExcludedPawns.Should()
+            savedData.ExcludedPawns.Should()
                 .BeEmpty();
             savedData.WorkTablesData.Should()
                 .HaveCount(2);
@@ -90,7 +90,7 @@ namespace Tests
             _retriever.PawnsDataXml.Returns(fileContents);
 
             // act
-            var _ = _serializer.LoadSavedData();
+            _ = _serializer.LoadSavedData();
 
             // assert
             _logger.Received(10)

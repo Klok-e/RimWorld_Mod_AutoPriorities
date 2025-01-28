@@ -139,19 +139,19 @@ namespace Tests.Helpers
         {
             var cook = new WorkType
             {
-                DefName = "cook", WorkTags = WorkTags.Cooking, RelevantSkillsCount = 1, LabelShort = "cook"
+                DefName = "cook", WorkTags = WorkTags.Cooking, RelevantSkillsCount = 1, LabelShort = "cook",
             };
             var haul = new WorkType
             {
-                DefName = "haul", WorkTags = WorkTags.Hauling, RelevantSkillsCount = 0, LabelShort = "haul"
+                DefName = "haul", WorkTags = WorkTags.Hauling, RelevantSkillsCount = 0, LabelShort = "haul",
             };
             var mine = new WorkType
             {
-                DefName = "mine", WorkTags = WorkTags.Mining, RelevantSkillsCount = 1, LabelShort = "mine"
+                DefName = "mine", WorkTags = WorkTags.Mining, RelevantSkillsCount = 1, LabelShort = "mine",
             };
             var craft = new WorkType
             {
-                DefName = "crafting", WorkTags = WorkTags.Crafting, RelevantSkillsCount = 1, LabelShort = "crafting"
+                DefName = "crafting", WorkTags = WorkTags.Crafting, RelevantSkillsCount = 1, LabelShort = "crafting",
             };
             workTypes = new List<IWorkTypeWrapper> { cook, haul, mine, craft };
         }

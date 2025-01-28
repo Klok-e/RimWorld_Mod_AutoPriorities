@@ -1,5 +1,4 @@
 ﻿using AutoPriorities;
-using AutoPriorities.Utils;
 using HarmonyLib;
 using UnityEngine;
 using Verse;

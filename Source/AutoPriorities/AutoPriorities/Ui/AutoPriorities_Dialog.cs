@@ -19,24 +19,25 @@ namespace AutoPriorities.Ui
         private readonly float _importExportImportLabelWidth = Consts.DeleteLabel.GetWidthCached() + 10f;
         private readonly float _labelWidth = Consts.Label.GetWidthCached() + 10f;
         private readonly ILogger _logger;
-        private readonly IPawnDataExporter _pawnDataExporter;
+        private readonly PawnDataExporter _pawnDataExporter;
         private readonly float _pawnExcludeLabelWidth = Consts.PawnExcludeLabel.GetWidthCached() + 10f;
         private readonly PawnsData _pawnsData;
         private readonly PrioritiesAssigner _prioritiesAssigner;
         private readonly float _prioritiesLabelWidth = Consts.PrioritiesLabel.GetWidthCached() + 10f;
+        private readonly PrioritiesTabArtisan _prioritiesTabArtisan;
+        private readonly QuickProfilerFactory _profilerFactory = new();
         private SelectedTab _currentlySelectedTab = SelectedTab.Priorities;
         private bool _openedOnce;
         private Vector2 _pawnExcludeScrollPos;
+
         private Rect _rect;
-        private PrioritiesTabArtisan _prioritiesTabArtisan;
-        private readonly QuickProfilerFactory _profilerFactory = new();
         // private int _windowContentsCalls;
 
         public AutoPrioritiesDialog(PawnsData pawnsData,
             PrioritiesAssigner prioritiesAssigner,
             ILogger logger,
             IImportantJobsProvider importantJobsProvider,
-            IPawnDataExporter pawnDataExporter,
+            PawnDataExporter pawnDataExporter,
             IWorldInfoRetriever worldInfoRetriever)
         {
             _pawnsData = pawnsData;
@@ -178,14 +179,12 @@ namespace AutoPriorities.Ui
 
         private void DrawImportButton(Rect inRect)
         {
-            var saves = _pawnDataExporter.ListSaves()
+            var saves = _pawnDataExporter.ListImportableSaves()
                 .ToList();
             if (saves.Any() && Widgets.ButtonText(inRect, Consts.ImportLabel))
             {
                 var options = saves.Select(
-                        x => new FloatMenuOption(
-                            x.RenamableLabel,
-                            () => { _pawnDataExporter.ImportPawnData(x.RenamableLabel); }))
+                        x => new FloatMenuOption(x.FileName, x.ImportPawnData))
                     .ToList();
                 Find.WindowStack.Add(new FloatMenu(options, string.Empty));
                 SoundDefOf.Click.PlayOneShotOnCamera();
@@ -196,23 +195,24 @@ namespace AutoPriorities.Ui
         {
             if (Widgets.ButtonText(inRect, Consts.ExportLabel))
             {
-                var savedPawnDataReference = _pawnDataExporter.GetNextSavedPawnDataReference();
-                _pawnDataExporter.ExportCurrentPawnData(savedPawnDataReference);
-                Find.WindowStack.Add(new NameExportDialog(savedPawnDataReference));
+                var invalidNames = _pawnDataExporter.ListImportableSaves().Select(x => x.FileName).ToArray();
+                var savedPawnDataReference = _pawnDataExporter.ExportCurrentData();
+
+                Find.WindowStack.Add(new NameExportDialog(savedPawnDataReference, invalidNames));
                 SoundDefOf.Click.PlayOneShotOnCamera();
             }
         }
 
         private void DrawDeleteButton(Rect inRect)
         {
-            var saves = _pawnDataExporter.ListSaves()
+            var saves = _pawnDataExporter.ListDeletableSaves()
                 .ToList();
             if (saves.Any() && Widgets.ButtonText(inRect, Consts.DeleteLabel))
             {
                 var options = saves.Select(
                         x => new FloatMenuOption(
-                            x.RenamableLabel,
-                            () => _pawnDataExporter.DeleteSave(x.RenamableLabel)))
+                            x.FileName,
+                            () => _pawnDataExporter.DeleteSave(x.FileName)))
                     .ToList();
                 Find.WindowStack.Add(new FloatMenu(options, string.Empty));
                 SoundDefOf.Click.PlayOneShotOnCamera();
@@ -412,7 +412,7 @@ namespace AutoPriorities.Ui
         {
             Priorities = 1,
             PawnExclusion = 2,
-            ImportantWorkTypes = 3
+            ImportantWorkTypes = 3,
         }
     }
 }

@@ -73,7 +73,7 @@ namespace AutoPriorities
             {
                 // get all work types
                 var workTypes = _worldInfoRetriever.GetWorkTypeDefsInPriorityOrder()
-                                                   .ToArray();
+                    .ToArray();
 
                 var allPawns = _worldInfoRetriever.GetAllAdultPawnsInPlayerFaction();
                 AllPlayerPawns.Clear();
@@ -91,7 +91,6 @@ namespace AutoPriorities
                 {
                     SortedPawnFitnessForEveryWork[work] = new List<(IPawnWrapper pawn, double fitness)>();
                     foreach (var pawn in CurrentMapPlayerPawns)
-                    {
                         try
                         {
                             if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains(
@@ -110,7 +109,6 @@ namespace AutoPriorities
                             _logger.Err($"error: {e} for pawn {pawn.NameFullColored}");
                             _logger.Err(e);
                         }
-                    }
 
                     if (WorkTypes.Contains(work))
                         continue;
@@ -130,7 +128,7 @@ namespace AutoPriorities
                     wp =>
                     {
                         var isToBeDeleted = !AllPlayerPawns.Select(x => x.ThingID)
-                                                           .Contains(wp.PawnThingId);
+                            .Contains(wp.PawnThingId);
                         // if (isToBeDeleted)
                         //     _logger.Info($"removing {wp.PawnThingId} from excluded list");
 
@@ -150,7 +148,7 @@ namespace AutoPriorities
             var taken = 0d;
             var takenTotal = 0d;
             foreach (var it in WorkTables.Distinct(x => x.Priority)
-                                         .Where(x => x.WorkTypes[workType].Variant != PercentVariant.PercentRemaining))
+                         .Where(x => x.WorkTypes[workType].Variant != PercentVariant.PercentRemaining))
             {
                 var percent = PercentValue(it.WorkTypes[workType], workType, priorityIgnore);
                 if (it.Priority.v != priorityIgnore.v)
@@ -184,7 +182,7 @@ namespace AutoPriorities
                 PercentVariant.Number => numberColonists > 0 ? (double)tablePercent.NumberCount / numberColonists : 0,
                 PercentVariant.PercentRemaining => PercentColonistsAvailable(workTypeWrapper, currentPriority)
                     .percent,
-                _ => throw new ArgumentOutOfRangeException()
+                _ => throw new ArgumentOutOfRangeException(),
             };
         }
 

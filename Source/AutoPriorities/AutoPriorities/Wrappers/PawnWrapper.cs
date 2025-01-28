@@ -35,9 +35,9 @@ namespace AutoPriorities.Wrappers
         {
             // TODO: terrible hack, fix this
             var factor = ((WorkTypeWrapper)work).workTypeDef.relevantSkills.Select(_pawn.skills.GetSkill)
-                                                .Select(x => x.LearnRateFactor())
-                                                .DefaultIfEmpty(1)
-                                                .Max();
+                .Select(x => x.LearnRateFactor())
+                .DefaultIfEmpty(1)
+                .Max();
 
             return factor;
         }

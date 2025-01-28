@@ -45,7 +45,7 @@ namespace Tests
             var percents = new[]
             {
                 TablePercent.Percent(0.2), TablePercent.Percent(0.2), TablePercent.Percent(0.2),
-                TablePercent.Number(2)
+                TablePercent.Number(2),
             };
             var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y))
                 .ToDictionary(k => k.x, v => v.y);
@@ -58,13 +58,13 @@ namespace Tests
                         WorkDef = _pw.workTypes[1]
                             .DefName,
                         PawnThingId = _pw.pawns[1]
-                            .ThingID
-                    }
+                            .ThingID,
+                    },
                 },
                 WorkTablesData = new List<WorkTableEntry>
                 {
-                    new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent }
-                }
+                    new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent },
+                },
             };
             _serializer.LoadSavedData()
                 .Returns(save);
@@ -101,7 +101,7 @@ namespace Tests
             var percents = new[]
             {
                 TablePercent.Percent(0.2), TablePercent.Percent(0.2), TablePercent.Percent(0.2),
-                TablePercent.Number(2)
+                TablePercent.Number(2),
             };
             var unknownWorkType = new WorkType { DefName = "unknown" };
             _pw.workTypes.Add(unknownWorkType);
@@ -116,13 +116,13 @@ namespace Tests
                         WorkDef = _pw.workTypes[1]
                             .DefName,
                         PawnThingId = _pw.pawns[1]
-                            .ThingID
-                    }
+                            .ThingID,
+                    },
                 },
                 WorkTablesData = new List<WorkTableEntry>
                 {
-                    new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent }
-                }
+                    new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent },
+                },
             };
             _serializer.LoadSavedData()
                 .Returns(save);

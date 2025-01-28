@@ -10,24 +10,26 @@ using Verse;
 
 namespace AutoPriorities.PawnDataSerializer.Exporter
 {
-    internal class PawnDataExporter : IPawnDataExporter
+    public class PawnDataExporter
     {
-        private const string Extension = ".xml";
-        private const string NodeName = "Priorities";
+        public const string NodeName = "Priorities";
         private readonly ILogger _logger;
         private readonly IPawnDataStringSerializer _pawnDataStringSerializer;
         private readonly PawnsData _pawnsData;
         private readonly string _saveDirectoryPath;
-        private List<SavedPawnDataReference> _savesCached = new();
+        private readonly SaveFilePather _saveFilePather;
+        private List<IPawnDataImportable> _savesCached = new();
 
         public PawnDataExporter(ILogger logger,
             string saveDirectoryPath,
             PawnsData pawnsData,
+            SaveFilePather saveFilePather,
             IPawnDataStringSerializer pawnDataStringSerializer)
         {
             _logger = logger;
             _saveDirectoryPath = saveDirectoryPath;
             _pawnsData = pawnsData;
+            _saveFilePather = saveFilePather;
             _pawnDataStringSerializer = pawnDataStringSerializer;
 
             RecacheSaves();
@@ -36,19 +38,17 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
         private void RecacheSaves()
         {
             _savesCached = Directory.EnumerateFiles(_saveDirectoryPath)
-                .Select(x => new SavedPawnDataReference(this, Path.GetFileNameWithoutExtension(x)))
+                .Select<string, IPawnDataImportable>(
+                    x => new PawnDataImportableReference(
+                        Path.GetFileNameWithoutExtension(x),
+                        this))
+                .Prepend(new PawnDataPreset(_logger, _pawnDataStringSerializer, _pawnsData))
                 .ToList();
-        }
-
-        private string FullPath(string name)
-        {
-            var nameWithExt = Path.ChangeExtension(name, Extension);
-            return Path.Combine(_saveDirectoryPath, nameWithExt);
         }
 
         #region IPawnDataExporter Members
 
-        public void ExportCurrentPawnData(SavedPawnDataReference name)
+        public void ExportCurrentPawnData(string name)
         {
             var mapData = MapSpecificData.GetForCurrentMap();
             if (mapData == null)
@@ -67,7 +67,7 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
             {
                 try
                 {
-                    Scribe.saver.InitSaving(FullPath(name.RenamableLabel), NodeName);
+                    Scribe.saver.InitSaving(_saveFilePather.FullPath(name), NodeName);
                 }
                 catch (Exception ex)
                 {
@@ -101,7 +101,7 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
 
             try
             {
-                Scribe.loader.InitLoading(FullPath(name));
+                Scribe.loader.InitLoading(_saveFilePather.FullPath(name));
                 ScribeMetaHeaderUtility.LoadGameDataHeader(ScribeMetaHeaderUtility.ScribeHeaderMode.Map, true);
                 Scribe.EnterNode(NodeName);
                 mapData.ExposeData();
@@ -136,19 +136,25 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
 
         public void RenameFile(string name, string newName)
         {
-            var path = FullPath(name);
+            var path = _saveFilePather.FullPath(name);
             if (!File.Exists(path))
                 _logger.Warn("Tried to rename a nonexistent file.");
-            File.Move(path, FullPath(newName));
+
+            File.Move(path, _saveFilePather.FullPath(newName));
             RecacheSaves();
         }
 
-        public IEnumerable<SavedPawnDataReference> ListSaves()
+        public IEnumerable<IPawnDataImportable> ListImportableSaves()
         {
             return _savesCached;
         }
 
-        public SavedPawnDataReference GetNextSavedPawnDataReference()
+        public IEnumerable<IPawnDataImportable> ListDeletableSaves()
+        {
+            return _savesCached.Where(x => !PawnDataPreset.PresetNames.Contains(x.FileName));
+        }
+
+        public SavedPawnDataRenameableReference ExportCurrentData()
         {
             var number = _savesCached.Select(
                     savedPawnDataReference => Regex.Match(savedPawnDataReference.FileName, @"^([\w]+?)([\d]*)$"))
@@ -165,12 +171,19 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
                     })
                 .DefaultIfEmpty(0)
                 .Max() + 1;
-            return new SavedPawnDataReference(this, $"{SavedPawnDataReference.StartingName}{number}");
+
+            var savedDataName = $"{SavedPawnDataRenameableReference.StartingName}{number}";
+
+            ExportCurrentPawnData(savedDataName);
+
+            return new SavedPawnDataRenameableReference(
+                this,
+                savedDataName);
         }
 
         public void DeleteSave(string name)
         {
-            var path = FullPath(name);
+            var path = _saveFilePather.FullPath(name);
             if (!File.Exists(path))
                 _logger.Warn("Tried to delete a nonexistent file.");
             File.Delete(path);

@@ -59,7 +59,7 @@ namespace Tests
                 .WorkSettingsSetPriority(_pw.workTypes[0], 2);
             _pw.pawns[1]
                 .Received()
-                .WorkSettingsSetPriority(_pw.workTypes[0], 1);            
+                .WorkSettingsSetPriority(_pw.workTypes[0], 1);
             _pw.pawns[2]
                 .Received()
                 .WorkSettingsSetPriority(_pw.workTypes[1], 1);
@@ -83,13 +83,13 @@ namespace Tests
 
             // assert
             _logger.NoWarnReceived();
-            
+
             _pw.pawns[0]
                 .Received()
                 .WorkSettingsSetPriority(_pw.workTypes[0], 0);
             _pw.pawns[1]
                 .Received()
-                .WorkSettingsSetPriority(_pw.workTypes[0], 1);            
+                .WorkSettingsSetPriority(_pw.workTypes[0], 1);
             _pw.pawns[2]
                 .Received()
                 .WorkSettingsSetPriority(_pw.workTypes[1], 1);
@@ -106,7 +106,7 @@ namespace Tests
             var percents = new[]
             {
                 TablePercent.Number(1), TablePercent.Number(1), TablePercent.Number(1),
-                TablePercent.Number(1)
+                TablePercent.Number(1),
             };
             var workTypePercent = _pw.workTypes
                 .Zip(percents, (x, y) => (x, y))
@@ -120,14 +120,14 @@ namespace Tests
                         WorkDef = _pw.workTypes[1]
                             .DefName,
                         PawnThingId = _pw.pawns[1]
-                            .ThingID
-                    }
+                            .ThingID,
+                    },
                 },
                 WorkTablesData = new List<WorkTableEntry>
                 {
                     new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent },
                     new() { Priority = 2, JobCount = 4, WorkTypes = workTypePercent },
-                }
+                },
             };
             _serializer.LoadSavedData()
                 .Returns(save);

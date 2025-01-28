@@ -1,5 +1,4 @@
 using System;
-using System.Reflection;
 using AutoPriorities.APLogger;
 using NSubstitute;
 
@@ -13,13 +12,13 @@ namespace Tests.Helpers
         {
             "Firefighter", "Patient", "Doctor", "PatientBedRest", "BasicWorker", "Warden", "Handling", "Cooking",
             "Hunting", "Construction", "Growing", "Mining", "PlantCutting", "Smithing", "Tailoring", "Art",
-            "Crafting", "Hauling", "Cleaning", "Research"
+            "Crafting", "Hauling", "Cleaning", "Research",
         };
 
         public static readonly string[] WorkTypesTruncated =
         {
             "Firefighter", "Patient", "Doctor", "PatientBedRest", "BasicWorker", "Warden", "Handling", "Cooking",
-            "Hunting", "Construction", "Growing", "Mining", "PlantCutting", "Smithing", "Tailoring"
+            "Hunting", "Construction", "Growing", "Mining", "PlantCutting", "Smithing", "Tailoring",
         };
 
         public static void NoWarnReceived(this ILogger logger)

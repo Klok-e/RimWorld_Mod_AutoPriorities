@@ -115,7 +115,13 @@ namespace AutoPriorities.Core
             _pawnData = _pawnsDataBuilder.Build();
             var importantWorkTypes = new ImportantJobsProvider(worldFacade);
             var priorityAssigner = new PrioritiesAssigner(_pawnData, log, importantWorkTypes, worldInfo);
-            var pawnDataExporter = new PawnDataExporter(log, savePath, _pawnData, stringSerializer);
+            var saveFilePather = new SaveFilePather(savePath);
+            var pawnDataExporter = new PawnDataExporter(
+                log,
+                savePath,
+                _pawnData,
+                saveFilePather,
+                stringSerializer);
 
             return new AutoPrioritiesDialog(
                 _pawnData,

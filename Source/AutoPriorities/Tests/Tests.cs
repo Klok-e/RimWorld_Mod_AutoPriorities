@@ -15,8 +15,8 @@ namespace Tests
             new object[]
             {
                 new[] { (0, 0), (1, 0), (2, 0), (3, 0), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (9, 2) },
-                new[] { 0.4, 0.5, 0.3 }, 10
-            }
+                new[] { 0.4, 0.5, 0.3 }, 10,
+            },
         };
 
         [Test]
@@ -25,7 +25,7 @@ namespace Tests
         {
             // act
             var actual = percents.IterPercents(total)
-                                 .ToArray();
+                .ToArray();
 
             // assert
             Assert.That(expected, Is.EqualTo(actual));
@@ -40,7 +40,7 @@ namespace Tests
                 for (var k = 0; k < 100; k++)
                 {
                     var arr = percents.IterPercents(k)
-                                      .ToArray();
+                        .ToArray();
                     Assert.That(k, Is.EqualTo(arr.Length));
                 }
             }
@@ -51,7 +51,7 @@ namespace Tests
                 {
                     var covered = (int)Math.Ceiling(i * arr.Sum());
                     var actual = arr.IterPercents(i)
-                                    .ToArray();
+                        .ToArray();
                     Assert.That(covered, Is.EqualTo(actual.Length));
                 }
         }
@@ -62,7 +62,7 @@ namespace Tests
             var v = new[] { (1, 2d), (4, 1d), (2, 1d), (7, 1d), (8, 1d), (9, 2d), (1, 1d) };
 
             var actual = v.Distinct(x => x.Item1)
-                          .ToArray();
+                .ToArray();
 
             Assert.That(new[] { (1, 2d), (4, 1d), (2, 1d), (7, 1d), (8, 1d), (9, 2d) }, Is.EqualTo(actual));
         }

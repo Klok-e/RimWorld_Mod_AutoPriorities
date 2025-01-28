@@ -20,7 +20,7 @@ namespace AutoPriorities.Core
             Scribe_Collections.Look(ref importantWorkTypes, "AutoPriorities_ImportantWorkTypes", LookMode.Value);
             var dataStr = Convert.ToBase64String(pawnsDataXml ?? Array.Empty<byte>());
             Scribe_Values.Look(ref dataStr, "AutoPriorities_PawnsDataXml");
-            pawnsDataXml = !string.IsNullOrEmpty(dataStr) ? Convert.FromBase64String(dataStr!) : null;
+            pawnsDataXml = string.IsNullOrEmpty(dataStr) ? null : Convert.FromBase64String(dataStr);
         }
 
         public static MapSpecificData? GetForCurrentMap()
