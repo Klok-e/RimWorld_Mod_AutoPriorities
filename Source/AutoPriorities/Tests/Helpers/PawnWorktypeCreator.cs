@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using AutoPriorities.Wrappers;
 using NSubstitute;
-using Tests.MockImplementations;
 using Verse;
 
 namespace Tests.Helpers
@@ -137,22 +136,30 @@ namespace Tests.Helpers
 
         private void WorkTypes()
         {
-            var cook = new WorkType
-            {
-                DefName = "cook", WorkTags = WorkTags.Cooking, RelevantSkillsCount = 1, LabelShort = "cook",
-            };
-            var haul = new WorkType
-            {
-                DefName = "haul", WorkTags = WorkTags.Hauling, RelevantSkillsCount = 0, LabelShort = "haul",
-            };
-            var mine = new WorkType
-            {
-                DefName = "mine", WorkTags = WorkTags.Mining, RelevantSkillsCount = 1, LabelShort = "mine",
-            };
-            var craft = new WorkType
-            {
-                DefName = "crafting", WorkTags = WorkTags.Crafting, RelevantSkillsCount = 1, LabelShort = "crafting",
-            };
+            var cook = Substitute.For<IWorkTypeWrapper>();
+            cook.DefName.Returns("cook");
+            cook.WorkTags.Returns(WorkTags.Cooking);
+            cook.RelevantSkillsCount.Returns(1);
+            cook.LabelShort.Returns("cook");
+
+            var haul = Substitute.For<IWorkTypeWrapper>();
+            haul.DefName.Returns("haul");
+            haul.WorkTags.Returns(WorkTags.Hauling);
+            haul.RelevantSkillsCount.Returns(0);
+            haul.LabelShort.Returns("haul");
+
+            var mine = Substitute.For<IWorkTypeWrapper>();
+            mine.DefName.Returns("mine");
+            mine.WorkTags.Returns(WorkTags.Mining);
+            mine.RelevantSkillsCount.Returns(1);
+            mine.LabelShort.Returns("mine");
+
+            var craft = Substitute.For<IWorkTypeWrapper>();
+            craft.DefName.Returns("crafting");
+            craft.WorkTags.Returns(WorkTags.Crafting);
+            craft.RelevantSkillsCount.Returns(1);
+            craft.LabelShort.Returns("crafting");
+
             workTypes = new List<IWorkTypeWrapper> { cook, haul, mine, craft };
         }
     }

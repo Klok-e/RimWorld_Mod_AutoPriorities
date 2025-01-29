@@ -9,7 +9,6 @@ using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.Helpers;
-using Tests.MockImplementations;
 
 namespace Tests
 {
@@ -44,9 +43,12 @@ namespace Tests
             _retriever.GetWorkTypeDefsInPriorityOrder()
                 .Returns(
                     TestHelper.WorkTypes.Select(
-                        x => _fixture.Build<WorkType>()
-                            .With(y => y.DefName, x)
-                            .Create()));
+                        x =>
+                        {
+                            var workTypeWrapper = _fixture.Create<IWorkTypeWrapper>();
+                            workTypeWrapper.DefName.Returns(x);
+                            return workTypeWrapper;
+                        }));
             var fileContents = File.ReadAllBytes(TestHelper.SavePath);
             _retriever.PawnsDataXml.Returns(fileContents);
 
@@ -83,9 +85,12 @@ namespace Tests
             _retriever.GetWorkTypeDefsInPriorityOrder()
                 .Returns(
                     TestHelper.WorkTypesTruncated.Select(
-                        x => _fixture.Build<WorkType>()
-                            .With(y => y.DefName, x)
-                            .Create()));
+                        x =>
+                        {
+                            var workTypeWrapper = _fixture.Create<IWorkTypeWrapper>();
+                            workTypeWrapper.DefName.Returns(x);
+                            return workTypeWrapper;
+                        }));
             var fileContents = File.ReadAllBytes(TestHelper.SavePath);
             _retriever.PawnsDataXml.Returns(fileContents);
 

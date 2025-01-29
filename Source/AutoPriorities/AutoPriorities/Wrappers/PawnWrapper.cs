@@ -3,7 +3,7 @@ using Verse;
 
 namespace AutoPriorities.Wrappers
 {
-    internal record PawnWrapper : IPawnWrapper
+    public record PawnWrapper : IPawnWrapper
     {
         private readonly Pawn _pawn;
 
@@ -27,13 +27,11 @@ namespace AutoPriorities.Wrappers
 
         public double AverageOfRelevantSkillsFor(IWorkTypeWrapper work)
         {
-            // TODO: terrible hack, fix this
             return _pawn.skills.AverageOfRelevantSkillsFor(((WorkTypeWrapper)work).workTypeDef);
         }
 
         public float MaxLearningRateFactor(IWorkTypeWrapper work)
         {
-            // TODO: terrible hack, fix this
             var factor = ((WorkTypeWrapper)work).workTypeDef.relevantSkills.Select(_pawn.skills.GetSkill)
                 .Select(x => x.LearnRateFactor())
                 .DefaultIfEmpty(1)
@@ -44,7 +42,6 @@ namespace AutoPriorities.Wrappers
 
         public void WorkSettingsSetPriority(IWorkTypeWrapper work, int priorityV)
         {
-            // TODO: terrible hack, fix this
             _pawn.workSettings.SetPriority(((WorkTypeWrapper)work).workTypeDef, priorityV);
         }
 

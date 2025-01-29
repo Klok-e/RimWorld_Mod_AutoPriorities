@@ -5,11 +5,11 @@ using AutoPriorities.APLogger;
 using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.Percents;
 using AutoPriorities.WorldInfoRetriever;
+using AutoPriorities.Wrappers;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.Helpers;
-using Tests.MockImplementations;
 
 namespace Tests
 {
@@ -103,7 +103,8 @@ namespace Tests
                 TablePercent.Percent(0.2), TablePercent.Percent(0.2), TablePercent.Percent(0.2),
                 TablePercent.Number(2),
             };
-            var unknownWorkType = new WorkType { DefName = "unknown" };
+            var unknownWorkType = Substitute.For<IWorkTypeWrapper>();
+            unknownWorkType.DefName.Returns("unknown");
             _pw.workTypes.Add(unknownWorkType);
             var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y))
                 .ToDictionary(k => k.x, v => v.y);

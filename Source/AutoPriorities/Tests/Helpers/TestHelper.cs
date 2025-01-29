@@ -6,7 +6,7 @@ namespace Tests.Helpers
 {
     public static class TestHelper
     {
-        public const string SavePath = "TestData/SaveFile1.xml";
+        public const string SavePath = "TestData/SaveFile1.txt";
 
         public static readonly string[] WorkTypes =
         {
