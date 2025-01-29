@@ -122,12 +122,15 @@ namespace AutoPriorities
                         if (jobsSet >= jobsToSet)
                             break;
 
-                        if ( // if this job was already set, skip
-                            pawnJobs[pawn]
-                                .ContainsKey(work) ||
-                            // count amount of jobs assigned to pawn on this priority, then compare with max
-                            pawnJobs[pawn]
-                                .Count(kv => kv.Value.v == priority.v) >= maxJobs.v)
+                        var jobsPawnHasOnThisPriority = pawnJobs[pawn].Count(kv => kv.Value.v == priority.v);
+#if DEBUG
+                        _logger.Info(
+                            $"pawn {pawn.NameFullColored}; fitness {fitness}; jobsSet {jobsSet}; " +
+                            $"jobsToSet {jobsToSet}; priority {priority.v}; " +
+                            $"jobsPawnHasOnThisPriority {jobsPawnHasOnThisPriority}; maxJobs {maxJobs.v}");
+#endif
+
+                        if (pawnJobs[pawn].ContainsKey(work) || jobsPawnHasOnThisPriority >= maxJobs.v)
                             continue;
 
                         if (fitness < minimumFitness)
@@ -148,8 +151,7 @@ namespace AutoPriorities
                 foreach (var (pawn, _) in pawns)
                 {
                     // if this job was already set, skip
-                    if (pawnJobs[pawn]
-                        .ContainsKey(work))
+                    if (pawnJobs[pawn].ContainsKey(work))
                         continue;
 
                     pawn.WorkSettingsSetPriority(work, 0);
