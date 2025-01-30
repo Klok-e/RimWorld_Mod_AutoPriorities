@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using AutoPriorities.ImportantJobs;
 using AutoPriorities.PawnDataSerializer.Exporter;
@@ -307,6 +308,11 @@ namespace AutoPriorities.Ui
         private void DrawMinimumFitnessInput(Rect inRect)
         {
             var pawnsDataMinimumSkillLevel = _pawnsData.MinimumSkillLevel;
+
+            if (_minimumFitnessInputBuffer != pawnsDataMinimumSkillLevel.ToString(CultureInfo.CurrentCulture))
+            {
+                _minimumFitnessInputBuffer = null;
+            }
 
             DrawNumericInput(
                 inRect,
