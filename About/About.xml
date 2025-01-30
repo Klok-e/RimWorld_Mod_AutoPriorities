@@ -10,18 +10,19 @@
         <li>1.5</li>
     </supportedVersions>
     <description>
-        Adds a window that allows to automatically set work priorities for a specified amount of pawns
+        Adds a window that allows you to automatically set work priorities for a specified number of pawns.
 
         How it works:
-        All pawns are sorted before assigning so that the highest skill gets the job first. Mod also takes into account
-        if the job does not require any skills. In that case, pawn with least skilled jobs assigned gets dumb job first.
+        All pawns are sorted before assigning tasks so that the highest skill gets the job first. The mod also considers
+        jobs that do not require any skills; in such cases, the pawn with the fewest skilled jobs assigned receives the
+        unskilled job first.
 
         NOTE:
-        1. Compatible with Fluffy's Worktab
-        2. Mods that add job types are fine
-        3. It is safe to add/remove to/from existing saves
+        1. Compatible with Fluffy's Worktab.
+        2. Mods that add job types are supported.
+        3. It is safe to add or remove from existing saves.
 
-        github: https://github.com/LokiVKlokeNaAndoke/RimWorld_Mod_AutoPriorities
+        GitHub: https://github.com/LokiVKlokeNaAndoke/RimWorld_Mod_AutoPriorities
     </description>
     <modDependencies>
         <li>

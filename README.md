@@ -1,16 +1,11 @@
-# RimWorld_Mod_AutoPriorities
+# RimWorld Mod AutoPriorities
 
-Adds a window that allows to automatically set work priorities for specified percents of pawns
+Adds a window that allows you to automatically set work priorities for specified percentages of pawns based on skill.
 
-Steam: https://steamcommunity.com/sharedfiles/filedetails/?id=1598406574
+Steam: [RimWorld Mod AutoPriorities](https://steamcommunity.com/sharedfiles/filedetails/?id=1598406574)
 
-This mod uses/includes the [Harmony library](https://github.com/pardeike/Harmony)
-
-It isn't compatible with any other mods that somehow change the work tab. If you know of any way to make so you are free
-to contribute!
+This mod uses/includes the [Harmony library](https://github.com/pardeike/Harmony).
 
 Screenshots:
 
-![](/ImagesForGithub/priorities.png)
-
-![](/ImagesForGithub/exclude.png)
+![Priorities Screenshot](/ImagesForGithub/priorities.png)
