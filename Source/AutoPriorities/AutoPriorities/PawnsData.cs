@@ -40,6 +40,8 @@ namespace AutoPriorities
 
         public bool IgnoreLearningRate { get; set; }
 
+        public bool IgnoreOppositionToWork { get; set; }
+
         public float MinimumSkillLevel { get; set; }
 
         public void SetData(SaveData data)
@@ -49,6 +51,7 @@ namespace AutoPriorities
             WorkTables = LoadSavedState(data.WorkTablesData);
             IgnoreLearningRate = data.IgnoreLearningRate;
             MinimumSkillLevel = data.MinimumSkillLevel;
+            IgnoreOppositionToWork = data.IgnoreOppositionToWork;
 
 #if DEBUG
             _logger.Info(
@@ -73,8 +76,11 @@ namespace AutoPriorities
         {
             return new SaveDataRequest
             {
-                ExcludedPawns = ExcludedPawns, WorkTablesData = WorkTables,
-                IgnoreLearningRate = IgnoreLearningRate, MinimumSkillLevel = MinimumSkillLevel,
+                ExcludedPawns = ExcludedPawns,
+                WorkTablesData = WorkTables,
+                IgnoreLearningRate = IgnoreLearningRate,
+                MinimumSkillLevel = MinimumSkillLevel,
+                IgnoreOppositionToWork = IgnoreOppositionToWork,
             };
         }
 
@@ -104,16 +110,18 @@ namespace AutoPriorities
                     foreach (var pawn in CurrentMapPlayerPawns)
                         try
                         {
-                            if (pawn.IsCapableOfWholeWorkType(work) && !ExcludedPawns.Contains(
-                                    new ExcludedPawnEntry { WorkDef = work.DefName, PawnThingId = pawn.ThingID }))
+                            if (!pawn.IsCapableOfWholeWorkType(work)
+                                || ExcludedPawns.Contains(new ExcludedPawnEntry { WorkDef = work.DefName, PawnThingId = pawn.ThingID }))
                             {
-                                var skill = pawn.AverageOfRelevantSkillsFor(work);
-                                double learningRateFactor = IgnoreLearningRate ? 1 : pawn.MaxLearningRateFactor(work);
-
-                                var fitness = skill * learningRateFactor;
-                                SortedPawnFitnessForEveryWork[work].Add(
-                                    new PawnFitnessData { Fitness = fitness, Pawn = pawn, SkillLevel = skill });
+                                continue;
                             }
+
+                            var skill = pawn.AverageOfRelevantSkillsFor(work);
+                            double learningRateFactor = IgnoreLearningRate ? 1 : pawn.MaxLearningRateFactor(work);
+
+                            var fitness = skill * learningRateFactor;
+                            SortedPawnFitnessForEveryWork[work]
+                                .Add(new PawnFitnessData { Fitness = fitness, Pawn = pawn, SkillLevel = skill, IsOpposed = pawn.IsOpposedToWorkType(work) });
                         }
                         catch (Exception e)
                         {
@@ -178,8 +186,7 @@ namespace AutoPriorities
 
         public bool PercentRemainExistsForWorkType(IWorkTypeWrapper workType)
         {
-            return WorkTables.Any(
-                workTableEntry => workTableEntry.WorkTypes[workType].Variant == PercentVariant.PercentRemaining);
+            return WorkTables.Any(workTableEntry => workTableEntry.WorkTypes[workType].Variant == PercentVariant.PercentRemaining);
         }
 
         public double PercentValue(TablePercent tablePercent,
@@ -206,8 +213,7 @@ namespace AutoPriorities
                 workTables = loader.ToList();
 
                 // if there are work types not present in built structure, then add with 0 percent
-                foreach (var work in workTables.SelectMany(
-                             keyVal => WorkTypes.Where(work => !keyVal.WorkTypes.ContainsKey(work))))
+                foreach (var work in workTables.SelectMany(keyVal => WorkTypes.Where(work => !keyVal.WorkTypes.ContainsKey(work))))
                 foreach (var it in workTables)
                 {
                     _logger.Warn($"Work type {work} wasn't found in a save file. Setting percent to 0");

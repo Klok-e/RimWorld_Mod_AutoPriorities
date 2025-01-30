@@ -69,13 +69,7 @@ namespace AutoPriorities
                     PawnJobsCached,
                     _pawnsData.WorkTypesNotRequiringSkills.Subtract(importantWorks),
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work]
-                        .Select(
-                            p => new PawnFitnessData
-                            {
-                                Pawn = p.Pawn,
-                                Fitness = 1d / (1 + PawnJobsCached[p.Pawn].Count),
-                                SkillLevel = 0,
-                            })
+                        .Select(p => new PawnFitnessData { Pawn = p.Pawn, Fitness = 1d / (1 + PawnJobsCached[p.Pawn].Count), SkillLevel = 0 })
                         .OrderByDescending(p => p.Fitness)
                         .ToList());
             }
@@ -101,8 +95,8 @@ namespace AutoPriorities
 #endif
 
 #if DEBUG
-                foreach (var (pawn, fitness, skillLevel) in pawns)
-                    _logger.Info($"pawn {pawn.NameFullColored}; fitness {fitness}; skill {skillLevel}");
+                foreach (var (pawn, fitness, skillLevel, isOpposed) in pawns)
+                    _logger.Info($"pawn {pawn.NameFullColored}; fitness {fitness}; skill {skillLevel}; isOpposed {isOpposed}");
 #endif
 
                 foreach (var (priority, maxJobs, jobsToSet) in PriorityPercentCached
@@ -118,7 +112,7 @@ namespace AutoPriorities
                 {
                     var jobsSet = 0;
                     // iterate over all the pawns for this job with current priority
-                    foreach (var (pawn, fitness, skillLevel) in pawns)
+                    foreach (var (pawn, fitness, skillLevel, isOpposed) in pawns)
                     {
                         if (jobsSet >= jobsToSet)
                             break;
@@ -126,12 +120,12 @@ namespace AutoPriorities
                         var jobsPawnHasOnThisPriority = pawnJobs[pawn].Count(kv => kv.Value.v == priority.v);
 #if DEBUG
                         _logger.Info(
-                            $"pawn {pawn.NameFullColored}; fitness {fitness}; jobsSet {jobsSet}; " +
-                            $"jobsToSet {jobsToSet}; priority {priority.v}; " +
-                            $"jobsPawnHasOnThisPriority {jobsPawnHasOnThisPriority}; maxJobs {maxJobs.v}");
+                            $"pawn {pawn.NameFullColored}; fitness {fitness}; jobsSet {jobsSet}; "
+                            + $"jobsToSet {jobsToSet}; priority {priority.v}; "
+                            + $"jobsPawnHasOnThisPriority {jobsPawnHasOnThisPriority}; maxJobs {maxJobs.v}");
 #endif
 
-                        if (pawnJobs[pawn].ContainsKey(work) || jobsPawnHasOnThisPriority >= maxJobs.v)
+                        if (pawnJobs[pawn].ContainsKey(work) || jobsPawnHasOnThisPriority >= maxJobs.v || (isOpposed && !pawnsData.IgnoreOppositionToWork))
                             continue;
 
                         if (skillLevel < minimumSkillLevel)
@@ -149,7 +143,7 @@ namespace AutoPriorities
                 }
 
                 // set remaining to zero
-                foreach (var (pawn, _, _) in pawns)
+                foreach (var (pawn, _, _, _) in pawns)
                 {
                     // if this job was already set, skip
                     if (pawnJobs[pawn].ContainsKey(work))

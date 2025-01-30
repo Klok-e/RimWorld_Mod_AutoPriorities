@@ -31,6 +31,7 @@ namespace AutoPriorities.PawnDataSerializer
                 WorkTablesData = deserialized.WorkTablesData,
                 IgnoreLearningRate = mapSpecificData.IgnoreLearningRate,
                 MinimumSkillLevel = mapSpecificData.MinimumSkillLevel,
+                IgnoreOppositionToWork = mapSpecificData.IgnoreOppositionToWork,
             };
         }
 
@@ -41,6 +42,7 @@ namespace AutoPriorities.PawnDataSerializer
 
             mapDataSaveTo.MinimumSkillLevel = request.MinimumSkillLevel;
             mapDataSaveTo.IgnoreLearningRate = request.IgnoreLearningRate;
+            mapDataSaveTo.IgnoreOppositionToWork = request.IgnoreOppositionToWork;
         }
     }
 }

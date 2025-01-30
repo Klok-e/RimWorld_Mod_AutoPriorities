@@ -8,8 +8,10 @@ namespace AutoPriorities
 
         public List<WorkTableEntry> WorkTablesData { get; init; } = new();
 
-        public bool IgnoreLearningRate { get; set; }
+        public bool IgnoreLearningRate { get; init; }
 
-        public float MinimumSkillLevel { get; set; }
+        public float MinimumSkillLevel { get; init; }
+
+        public bool IgnoreOppositionToWork { get; init; }
     }
 }

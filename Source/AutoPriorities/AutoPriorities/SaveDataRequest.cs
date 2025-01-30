@@ -11,5 +11,7 @@ namespace AutoPriorities
         public bool IgnoreLearningRate { get; set; }
 
         public float MinimumSkillLevel { get; set; }
+
+        public bool IgnoreOppositionToWork { get; set; }
     }
 }

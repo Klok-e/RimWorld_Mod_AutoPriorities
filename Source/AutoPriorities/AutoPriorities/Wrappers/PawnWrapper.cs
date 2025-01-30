@@ -25,6 +25,11 @@ namespace AutoPriorities.Wrappers
             return !_pawn.WorkTypeIsDisabled(((WorkTypeWrapper)work).workTypeDef);
         }
 
+        public bool IsOpposedToWorkType(IWorkTypeWrapper work)
+        {
+            return _pawn.Ideo?.IsWorkTypeConsideredDangerous(((WorkTypeWrapper)work).workTypeDef) == true;
+        }
+
         public double AverageOfRelevantSkillsFor(IWorkTypeWrapper work)
         {
             return _pawn.skills.AverageOfRelevantSkillsFor(((WorkTypeWrapper)work).workTypeDef);

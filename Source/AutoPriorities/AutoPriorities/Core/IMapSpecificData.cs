@@ -8,5 +8,6 @@ namespace AutoPriorities.Core
         public byte[]? PawnsDataXml { get; set; }
         public float MinimumSkillLevel { get; set; }
         public bool IgnoreLearningRate { get; set; }
+        bool IgnoreOppositionToWork { get; set; }
     }
 }

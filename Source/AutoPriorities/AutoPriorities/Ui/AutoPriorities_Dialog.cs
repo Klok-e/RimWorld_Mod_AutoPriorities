@@ -56,8 +56,13 @@ namespace AutoPriorities.Ui
         }
 
         public override Vector2 InitialSize => new(
-            _prioritiesLabelWidth + _pawnExcludeLabelWidth + _importantJobsLabelWidth + _miscLabelWidth
-            + _importExportDeleteLabelWidth * 4 + Consts.LabelMargin * 6 + 50,
+            _prioritiesLabelWidth
+            + _pawnExcludeLabelWidth
+            + _importantJobsLabelWidth
+            + _miscLabelWidth
+            + _importExportDeleteLabelWidth * 4
+            + Consts.LabelMargin * 6
+            + 50,
             500);
 
         public override void PostClose()
@@ -200,59 +205,117 @@ namespace AutoPriorities.Ui
             }
         }
 
-        private void DrawIgnoreLearningRateCheckbox(Rect inRect)
+        private void MiscTab(Rect inRect)
+        {
+            var checkLrIgnoreRect = new Rect(
+                inRect.xMin,
+                inRect.yMin,
+                inRect.width,
+                Consts.ButtonHeight);
+            DrawIgnoreLearningRateCheckbox(checkLrIgnoreRect);
+
+            var minFitnessRect = new Rect(
+                inRect.xMin,
+                checkLrIgnoreRect.yMax + Consts.LabelMargin,
+                inRect.width,
+                Consts.ButtonHeight);
+            DrawMinimumFitnessInput(minFitnessRect);
+
+            var checkIgnoreOppositionToWorkRect = new Rect(
+                inRect.xMin,
+                minFitnessRect.yMax + Consts.LabelMargin,
+                inRect.width,
+                Consts.ButtonHeight);
+            DrawIgnoreOppositionToWorkCheckbox(checkIgnoreOppositionToWorkRect);
+        }
+
+        private void DrawCheckbox(Rect inRect, string labelText, string tooltipText, ref bool value)
         {
             Widgets.DrawHighlightIfMouseover(inRect);
+            TooltipHandler.TipRegion(inRect, tooltipText);
 
-            var checkbox = _pawnsData.IgnoreLearningRate;
+            var checkboxValue = value;
 
             var labelRect = new Rect(inRect.xMin, inRect.yMin, inRect.width / 2, inRect.height);
-            Widgets.Label(labelRect, Consts.IgnoreLearningRate);
+            Widgets.Label(labelRect, labelText);
 
             var color = GUI.color;
             GUI.color = Color.white;
-            Widgets.CheckboxDraw(labelRect.xMax, labelRect.yMin, checkbox, false);
+            Widgets.CheckboxDraw(labelRect.xMax, labelRect.yMin, checkboxValue, false);
             GUI.color = color;
-            if (Widgets.ButtonInvisible(
-                    new Rect(labelRect.xMax, labelRect.yMin, Consts.CheckboxSize, Consts.CheckboxSize)))
+
+            if (Widgets.ButtonInvisible(new Rect(labelRect.xMax, labelRect.yMin, Consts.CheckboxSize, Consts.CheckboxSize)))
             {
-                checkbox = !checkbox;
-                if (checkbox)
+                checkboxValue = !checkboxValue;
+                if (checkboxValue)
+                {
                     SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
+                }
                 else
+                {
                     SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
+                }
             }
 
-#if DEBUG
-            if (_pawnsData.IgnoreLearningRate != checkbox)
-                _logger.Info($"_pawnsData.IgnoreLearningRate changed to {checkbox}");
-#endif
+            value = checkboxValue;
+        }
 
-            _pawnsData.IgnoreLearningRate = checkbox;
+        private void DrawIgnoreLearningRateCheckbox(Rect inRect)
+        {
+            var pawnsDataIgnoreLearningRate = _pawnsData.IgnoreLearningRate;
+
+            DrawCheckbox(
+                inRect,
+                Consts.IgnoreLearningRate,
+                Consts.IgnoreLearningRateTooltip,
+                ref pawnsDataIgnoreLearningRate);
+
+            _pawnsData.IgnoreLearningRate = pawnsDataIgnoreLearningRate;
+        }
+
+        private void DrawIgnoreOppositionToWorkCheckbox(Rect inRect)
+        {
+            var pawnsDataIgnoreOppositionToWork = _pawnsData.IgnoreOppositionToWork;
+
+            DrawCheckbox(
+                inRect,
+                Consts.IgnoreOppositionToWork,
+                Consts.IgnoreOppositionToWorkTooltip,
+                ref pawnsDataIgnoreOppositionToWork);
+
+            _pawnsData.IgnoreOppositionToWork = pawnsDataIgnoreOppositionToWork;
+        }
+
+        private void DrawNumericInput(Rect inRect, string labelText, string tooltipText, ref float value, ref string? buffer)
+        {
+            Widgets.DrawHighlightIfMouseover(inRect);
+            TooltipHandler.TipRegion(inRect, tooltipText);
+
+            var tempValue = value;
+
+            var labelRect = new Rect(inRect.xMin, inRect.yMin, inRect.width / 2, inRect.height);
+            Widgets.Label(labelRect, labelText);
+
+            Widgets.TextFieldNumeric(
+                new Rect(labelRect.xMax, labelRect.yMin, inRect.width / 2, inRect.height),
+                ref tempValue,
+                ref buffer);
+
+            value = tempValue;
         }
 
         private void DrawMinimumFitnessInput(Rect inRect)
         {
-            Widgets.DrawHighlightIfMouseover(inRect);
+            var pawnsDataMinimumSkillLevel = _pawnsData.MinimumSkillLevel;
 
-            var minimumFitness = _pawnsData.MinimumSkillLevel;
-
-            var labelRect = new Rect(inRect.xMin, inRect.yMin, inRect.width / 2, inRect.height);
-            Widgets.Label(labelRect, Consts.MinimumSkillLevel);
-
-            Widgets.TextFieldNumeric(
-                new Rect(labelRect.xMax, labelRect.yMin, inRect.width / 2, inRect.height),
-                ref minimumFitness,
+            DrawNumericInput(
+                inRect,
+                Consts.MinimumSkillLevel,
+                Consts.MinimumSkillLevelTooltip,
+                ref pawnsDataMinimumSkillLevel,
                 ref _minimumFitnessInputBuffer);
 
-            TooltipHandler.TipRegion(inRect, Consts.MinimumFitnessTooltip);
-
-#if DEBUG
-            if (!Mathf.Approximately(_pawnsData.MinimumSkillLevel, minimumFitness))
-                _logger.Info($"_pawnsData.MinimumFitness changed to {minimumFitness}");
-#endif
-
-            _pawnsData.MinimumSkillLevel = minimumFitness;
+            _pawnsData.MinimumSkillLevel = pawnsDataMinimumSkillLevel;
         }
 
         private void DrawImportButton(Rect inRect)
@@ -261,8 +324,7 @@ namespace AutoPriorities.Ui
                 .ToList();
             if (saves.Any() && Widgets.ButtonText(inRect, Consts.ImportLabel))
             {
-                var options = saves.Select(
-                        x => new FloatMenuOption(x.FileName, x.ImportPawnData))
+                var options = saves.Select(x => new FloatMenuOption(x.FileName, x.ImportPawnData))
                     .ToList();
                 Find.WindowStack.Add(new FloatMenu(options, string.Empty));
                 SoundDefOf.Click.PlayOneShotOnCamera();
@@ -367,23 +429,6 @@ namespace AutoPriorities.Ui
             Text.Anchor = anchor;
         }
 
-        private void MiscTab(Rect inRect)
-        {
-            var checkLrIgnoreRect = new Rect(
-                inRect.xMin,
-                inRect.yMin,
-                inRect.width,
-                Consts.ButtonHeight);
-            DrawIgnoreLearningRateCheckbox(checkLrIgnoreRect);
-
-            var minFitnessRect = new Rect(
-                inRect.xMin,
-                checkLrIgnoreRect.yMax + Consts.LabelMargin,
-                inRect.width,
-                Consts.ButtonHeight);
-            DrawMinimumFitnessInput(minFitnessRect);
-        }
-
         private void PawnExcludeTab(Rect inRect)
         {
             const float fromTopToTickboxesVertical = Consts.WorkLabelOffset + Consts.LabelHeight + 15f;
@@ -394,8 +439,9 @@ namespace AutoPriorities.Ui
                 inRect.width,
                 inRect.height - Consts.DistFromBottomBorder);
 
-            var tableSizeX = Consts.PawnNameCoWidth + Consts.WorkLabelWidth / 2
-                                                    + Consts.WorkLabelHorizOffset * _pawnsData.WorkTypes.Count;
+            var tableSizeX = Consts.PawnNameCoWidth
+                             + Consts.WorkLabelWidth / 2
+                             + Consts.WorkLabelHorizOffset * _pawnsData.WorkTypes.Count;
 
             var tableSizeY = fromTopToTickboxesVertical
                              + (Consts.LabelMargin + Consts.ButtonHeight) * _pawnsData.CurrentMapPlayerPawns.Count;
@@ -452,8 +498,7 @@ namespace AutoPriorities.Ui
                         _pawnsData.ExcludedPawns.RemoveWhere(x => x.PawnThingId == pawn.ThingID);
                     else
                         foreach (var work in _pawnsData.WorkTypes)
-                            _pawnsData.ExcludedPawns.Add(
-                                new ExcludedPawnEntry { WorkDef = work.DefName, PawnThingId = pawn.ThingID });
+                            _pawnsData.ExcludedPawns.Add(new ExcludedPawnEntry { WorkDef = work.DefName, PawnThingId = pawn.ThingID });
                 }
 
                 Widgets.DrawLine(
@@ -467,8 +512,7 @@ namespace AutoPriorities.Ui
                              Enumerable.Range(0, _pawnsData.WorkTypes.Count),
                              (w, i) => (w, i)))
                 {
-                    var prev = _pawnsData.ExcludedPawns.Contains(
-                        new ExcludedPawnEntry { WorkDef = workType.DefName, PawnThingId = pawn.ThingID });
+                    var prev = _pawnsData.ExcludedPawns.Contains(new ExcludedPawnEntry { WorkDef = workType.DefName, PawnThingId = pawn.ThingID });
                     var next = prev;
                     DrawUtil.EmptyCheckbox(
                         nameRect.xMax - (Consts.ButtonHeight - 1) / 2 + (i + 1) * Consts.WorkLabelHorizOffset,
@@ -479,20 +523,16 @@ namespace AutoPriorities.Ui
 
                     if (next)
                     {
-                        _pawnsData.ExcludedPawns.Add(
-                            new ExcludedPawnEntry { WorkDef = workType.DefName, PawnThingId = pawn.ThingID });
+                        _pawnsData.ExcludedPawns.Add(new ExcludedPawnEntry { WorkDef = workType.DefName, PawnThingId = pawn.ThingID });
 #if DEBUG
-                        _logger.Info(
-                            $"Pawn {pawn.NameFullColored} with work {workType.DefName} was added to the Excluded list");
+                        _logger.Info($"Pawn {pawn.NameFullColored} with work {workType.DefName} was added to the Excluded list");
 #endif
                     }
                     else
                     {
-                        _pawnsData.ExcludedPawns.Remove(
-                            new ExcludedPawnEntry { WorkDef = workType.DefName, PawnThingId = pawn.ThingID });
+                        _pawnsData.ExcludedPawns.Remove(new ExcludedPawnEntry { WorkDef = workType.DefName, PawnThingId = pawn.ThingID });
 #if DEBUG
-                        _logger.Info(
-                            $"Pawn {pawn.NameFullColored} with work {workType.DefName} was removed from the Excluded list");
+                        _logger.Info($"Pawn {pawn.NameFullColored} with work {workType.DefName} was removed from the Excluded list");
 #endif
                     }
                 }
