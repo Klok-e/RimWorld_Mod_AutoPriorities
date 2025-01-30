@@ -31,7 +31,15 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
 #if DEBUG
             _logger.Info("Loading successful. Setting loaded data.");
 #endif
-            _pawnsData.SetData(save);
+
+            _pawnsData.SetData(
+                new SaveData
+                {
+                    ExcludedPawns = save.ExcludedPawns,
+                    WorkTablesData = save.WorkTablesData,
+                    IgnoreLearningRate = false,
+                    MinimumFitness = 2,
+                });
         }
     }
 }

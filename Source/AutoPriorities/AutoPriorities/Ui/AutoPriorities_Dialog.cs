@@ -14,11 +14,15 @@ namespace AutoPriorities.Ui
 {
     public class AutoPrioritiesDialog : Window
     {
+        private readonly float _ignoreLearningRateLabelWidth = Consts.IgnoreLearningRate.GetWidthCached() + 10f;
         private readonly float _importantJobsLabelWidth = Consts.ImportantJobsLabel.GetWidthCached() + 10f;
+
         private readonly IImportantJobsProvider _importantJobsProvider;
-        private readonly float _importExportImportLabelWidth = Consts.DeleteLabel.GetWidthCached() + 10f;
+        private readonly float _importExportDeleteLabelWidth = Consts.DeleteLabel.GetWidthCached() + 10f;
         private readonly float _labelWidth = Consts.Label.GetWidthCached() + 10f;
         private readonly ILogger _logger;
+        private readonly float _minimumFitnessLabelWidth = Consts.MinimumFitness.GetWidthCached() + 10f;
+        private readonly float _miscLabelWidth = Consts.Misc.GetWidthCached() + 10f;
         private readonly PawnDataExporter _pawnDataExporter;
         private readonly float _pawnExcludeLabelWidth = Consts.PawnExcludeLabel.GetWidthCached() + 10f;
         private readonly PawnsData _pawnsData;
@@ -26,7 +30,10 @@ namespace AutoPriorities.Ui
         private readonly float _prioritiesLabelWidth = Consts.PrioritiesLabel.GetWidthCached() + 10f;
         private readonly PrioritiesTabArtisan _prioritiesTabArtisan;
         private readonly QuickProfilerFactory _profilerFactory = new();
+
         private SelectedTab _currentlySelectedTab = SelectedTab.Priorities;
+        private bool _ignoreLearningRateCheckboxCheckOn;
+        private string _minimumFitnessInputBuffer = string.Empty;
         private bool _openedOnce;
         private Vector2 _pawnExcludeScrollPos;
 
@@ -50,6 +57,11 @@ namespace AutoPriorities.Ui
             resizeable = true;
             _prioritiesTabArtisan = new PrioritiesTabArtisan(_pawnsData, _logger, worldInfoRetriever);
         }
+
+        public override Vector2 InitialSize => new(
+            _prioritiesLabelWidth + _pawnExcludeLabelWidth + _importantJobsLabelWidth + _miscLabelWidth
+            + _importExportDeleteLabelWidth * 4 + Consts.LabelMargin * 6 + 50,
+            500);
 
         public override void PostClose()
         {
@@ -86,25 +98,36 @@ namespace AutoPriorities.Ui
                     _pawnsData.Rebuild();
                 }
 
-                var pawnsButtonRect = new Rect(
-                    prioritiesButtonRect.xMax + 5f,
+                var excludedButtonRect = new Rect(
+                    prioritiesButtonRect.xMax + Consts.LabelMargin,
                     prioritiesButtonRect.yMin,
                     _pawnExcludeLabelWidth,
                     Consts.LabelHeight);
-                if (Widgets.ButtonText(pawnsButtonRect, Consts.PawnExcludeLabel))
+                if (Widgets.ButtonText(excludedButtonRect, Consts.PawnExcludeLabel))
                 {
                     _currentlySelectedTab = SelectedTab.PawnExclusion;
                     _pawnsData.Rebuild();
                 }
 
                 var importantButtonRect = new Rect(
-                    pawnsButtonRect.xMax + 5f,
+                    excludedButtonRect.xMax + Consts.LabelMargin,
                     prioritiesButtonRect.yMin,
                     _importantJobsLabelWidth,
                     Consts.LabelHeight);
                 if (Widgets.ButtonText(importantButtonRect, Consts.ImportantJobsLabel))
                 {
                     _currentlySelectedTab = SelectedTab.ImportantWorkTypes;
+                    _pawnsData.Rebuild();
+                }
+
+                var miscButtonRect = new Rect(
+                    importantButtonRect.xMax + Consts.LabelMargin,
+                    prioritiesButtonRect.yMin,
+                    _miscLabelWidth,
+                    Consts.LabelHeight);
+                if (Widgets.ButtonText(miscButtonRect, Consts.Misc))
+                {
+                    _currentlySelectedTab = SelectedTab.Misc;
                     _pawnsData.Rebuild();
                 }
 
@@ -122,30 +145,33 @@ namespace AutoPriorities.Ui
                         PawnExcludeTab(lowerInRect);
                         break;
                     case SelectedTab.ImportantWorkTypes:
-                        ImportantWorkTypes(lowerInRect);
+                        ImportantWorkTypesTab(lowerInRect);
+                        break;
+                    case SelectedTab.Misc:
+                        MiscTab(lowerInRect);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(_currentlySelectedTab));
                 }
 
                 var buttonDeleteRect = new Rect(
-                    inRect.xMax - _importExportImportLabelWidth,
+                    inRect.xMax - _importExportDeleteLabelWidth,
                     inRect.yMin,
-                    _importExportImportLabelWidth,
+                    _importExportDeleteLabelWidth,
                     Consts.LabelHeight);
                 DrawDeleteButton(buttonDeleteRect);
 
                 var buttonImportRect = new Rect(
-                    buttonDeleteRect.xMin - _importExportImportLabelWidth,
+                    buttonDeleteRect.xMin - _importExportDeleteLabelWidth - Consts.LabelMargin,
                     inRect.yMin,
-                    _importExportImportLabelWidth,
+                    _importExportDeleteLabelWidth,
                     Consts.LabelHeight);
                 DrawImportButton(buttonImportRect);
 
                 var buttonExportRect = new Rect(
-                    buttonImportRect.xMin - _importExportImportLabelWidth,
+                    buttonImportRect.xMin - _importExportDeleteLabelWidth - Consts.LabelMargin,
                     inRect.yMin,
-                    _importExportImportLabelWidth,
+                    _importExportDeleteLabelWidth,
                     Consts.LabelHeight);
                 DrawExportButton(buttonExportRect);
 
@@ -175,6 +201,36 @@ namespace AutoPriorities.Ui
                 _pawnsData.SaveState();
                 SoundDefOf.Click.PlayOneShotOnCamera();
             }
+        }
+
+        private void DrawIgnoreLearningRateCheckbox(Rect inRect)
+        {
+            var checkbox = _pawnsData.IgnoreLearningRate;
+            Widgets.CheckboxLabeledSelectable(
+                inRect,
+                Consts.IgnoreLearningRate,
+                ref _ignoreLearningRateCheckboxCheckOn,
+                ref checkbox);
+
+#if DEBUG
+            if (_pawnsData.IgnoreLearningRate != checkbox)
+                _logger.Info($"_pawnsData.IgnoreLearningRate changed to {checkbox}");
+#endif
+
+            _pawnsData.IgnoreLearningRate = checkbox;
+        }
+
+        private void DrawMinimumFitnessInput(Rect inRect)
+        {
+            var minimumFitness = _pawnsData.MinimumFitness;
+            Widgets.TextFieldNumericLabeled(
+                inRect,
+                Consts.MinimumFitness,
+                ref minimumFitness,
+                ref _minimumFitnessInputBuffer);
+            TooltipHandler.TipRegion(inRect, Consts.MinimumFitnessTooltip);
+
+            _pawnsData.MinimumFitness = minimumFitness;
         }
 
         private void DrawImportButton(Rect inRect)
@@ -219,7 +275,7 @@ namespace AutoPriorities.Ui
             }
         }
 
-        private void ImportantWorkTypes(Rect inRect)
+        private void ImportantWorkTypesTab(Rect inRect)
         {
             const float fromTopToTickboxesVertical = Consts.WorkLabelOffset + Consts.LabelHeight + 15f;
 
@@ -287,6 +343,23 @@ namespace AutoPriorities.Ui
             Widgets.EndScrollView();
 
             Text.Anchor = anchor;
+        }
+
+        private void MiscTab(Rect inRect)
+        {
+            var checkLrIgnoreRect = new Rect(
+                inRect.xMin,
+                inRect.yMin,
+                _ignoreLearningRateLabelWidth + Consts.ButtonHeight,
+                Consts.ButtonHeight);
+            DrawIgnoreLearningRateCheckbox(checkLrIgnoreRect);
+
+            var minFitnessRect = new Rect(
+                inRect.xMin,
+                checkLrIgnoreRect.yMax + Consts.LabelMargin,
+                _ignoreLearningRateLabelWidth + Consts.ButtonHeight,
+                Consts.ButtonHeight);
+            DrawMinimumFitnessInput(minFitnessRect);
         }
 
         private void PawnExcludeTab(Rect inRect)
@@ -413,6 +486,7 @@ namespace AutoPriorities.Ui
             Priorities = 1,
             PawnExclusion = 2,
             ImportantWorkTypes = 3,
+            Misc = 4,
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Xml.Serialization;
 using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 using Verse;
@@ -16,6 +15,7 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
         private readonly ILogger _logger;
         private readonly IPawnDataStringSerializer _pawnDataStringSerializer;
         private readonly PawnsData _pawnsData;
+        private readonly SaveDataHandler _saveDataHandler;
         private readonly string _saveDirectoryPath;
         private readonly SaveFilePather _saveFilePather;
         private List<IPawnDataImportable> _savesCached = new();
@@ -24,13 +24,15 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
             string saveDirectoryPath,
             PawnsData pawnsData,
             SaveFilePather saveFilePather,
-            IPawnDataStringSerializer pawnDataStringSerializer)
+            IPawnDataStringSerializer pawnDataStringSerializer,
+            SaveDataHandler saveDataHandler)
         {
             _logger = logger;
             _saveDirectoryPath = saveDirectoryPath;
             _pawnsData = pawnsData;
             _saveFilePather = saveFilePather;
             _pawnDataStringSerializer = pawnDataStringSerializer;
+            _saveDataHandler = saveDataHandler;
 
             RecacheSaves();
         }
@@ -46,22 +48,13 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
                 .ToList();
         }
 
-        #region IPawnDataExporter Members
-
-        public void ExportCurrentPawnData(string name)
+        private void ExportCurrentPawnData(string name)
         {
             var mapData = MapSpecificData.GetForCurrentMap();
             if (mapData == null)
                 throw new Exception("Current map null, couldn't export");
 
-            var stream = new MemoryStream();
-
-            new XmlSerializer(typeof(PercentTableSaver.Ser)).Serialize(
-                stream,
-                PercentTableSaver.Ser.Serialized((_pawnsData.WorkTables, _pawnsData.ExcludedPawns)));
-
-            stream.Position = 0;
-            mapData.pawnsDataXml = stream.ToArray();
+            _saveDataHandler.SaveData(_pawnsData.GetSaveDataRequest(), mapData);
 
             try
             {
@@ -88,6 +81,8 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
                 RecacheSaves();
             }
         }
+
+        #region IPawnDataExporter Members
 
         public void ImportPawnData(string name)
         {
@@ -118,20 +113,20 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
                 Scribe.mode = LoadSaveMode.Inactive;
             }
 
-            if (mapData.pawnsDataXml == null)
+            if (mapData.PawnsDataXml == null)
             {
                 _logger.Warn("Saved priorities are null somehow");
                 return;
             }
 
-            var save = _pawnDataStringSerializer.Deserialize(mapData.pawnsDataXml);
-            if (save == null)
-                return;
-
 #if DEBUG
             _logger.Info("Loading successful. Setting loaded data.");
 #endif
-            _pawnsData.SetData(save);
+            var savedData = _saveDataHandler.GetSavedData(mapData);
+            if (savedData == null)
+                return;
+
+            _pawnsData.SetData(savedData);
         }
 
         public void RenameFile(string name, string newName)

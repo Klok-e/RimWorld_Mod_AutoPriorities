@@ -21,7 +21,6 @@ namespace AutoPriorities.Core
         private static PawnsData? _pawnData;
         private static PawnsDataBuilder? _pawnsDataBuilder;
 
-        public static SettingHandle<double>? MinimumSkill { get; private set; }
         public static SettingHandle<int>? MaxPriority { get; private set; }
         public static int? MaxPriorityAlien { get; set; }
 
@@ -47,12 +46,6 @@ namespace AutoPriorities.Core
         public override void DefsLoaded()
         {
             base.DefsLoaded();
-            MinimumSkill = Settings.GetHandle(
-                "minimumFitness",
-                "Minimum fitness",
-                "Determines whether the pawn is eligible for the work type. "
-                + "If minimumFitness < skill * learnRate, work type isn't assigned",
-                0d);
             MaxPriority = Settings.GetHandle(
                 "maxPriority",
                 "Max priority",
@@ -110,18 +103,20 @@ namespace AutoPriorities.Core
             var log = logger!;
             var worldFacade = new WorldInfoFacade(worldInfo, log);
             var stringSerializer = new PawnDataStringSerializer(log, worldFacade);
-            var mapSpecificSerializer = new MapSpecificDataPawnsDataSerializer(worldInfo, stringSerializer);
+            var saveDataHandler = new SaveDataHandler(log, stringSerializer);
+            var mapSpecificSerializer = new MapSpecificDataPawnsDataSerializer(log, stringSerializer, saveDataHandler);
             _pawnsDataBuilder = new PawnsDataBuilder(mapSpecificSerializer, worldInfo, log);
             _pawnData = _pawnsDataBuilder.Build();
             var importantWorkTypes = new ImportantJobsProvider(worldFacade);
-            var priorityAssigner = new PrioritiesAssigner(_pawnData, log, importantWorkTypes, worldInfo);
+            var priorityAssigner = new PrioritiesAssigner(_pawnData, log, importantWorkTypes);
             var saveFilePather = new SaveFilePather(savePath);
             var pawnDataExporter = new PawnDataExporter(
                 log,
                 savePath,
                 _pawnData,
                 saveFilePather,
-                stringSerializer);
+                stringSerializer,
+                saveDataHandler);
 
             return new AutoPrioritiesDialog(
                 _pawnData,

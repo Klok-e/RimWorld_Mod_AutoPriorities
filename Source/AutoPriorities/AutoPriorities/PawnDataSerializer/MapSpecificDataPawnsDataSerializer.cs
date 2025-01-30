@@ -1,34 +1,36 @@
-using AutoPriorities.WorldInfoRetriever;
+using AutoPriorities.APLogger;
+using AutoPriorities.Core;
 
 namespace AutoPriorities.PawnDataSerializer
 {
     public class MapSpecificDataPawnsDataSerializer : IPawnsDataSerializer
     {
+        private readonly ILogger _logger;
+        private readonly SaveDataHandler _saveDataHandler;
         private readonly IPawnDataStringSerializer _serializer;
-        private readonly IWorldInfoRetriever _worldInfoRetriever;
 
-        public MapSpecificDataPawnsDataSerializer(
-            IWorldInfoRetriever worldInfoRetriever,
-            IPawnDataStringSerializer serializer)
+        public MapSpecificDataPawnsDataSerializer(ILogger logger, IPawnDataStringSerializer serializer,
+            SaveDataHandler saveDataHandler)
         {
-            _worldInfoRetriever = worldInfoRetriever;
+            _logger = logger;
             _serializer = serializer;
+            _saveDataHandler = saveDataHandler;
         }
 
         #region IPawnsDataSerializer Members
 
         public SaveData? LoadSavedData()
         {
-            var pawnsDataXml = _worldInfoRetriever.PawnsDataXml;
-            if (pawnsDataXml == null) return new SaveData();
-
-            return _serializer.Deserialize(pawnsDataXml);
+            var mapSpecificData = MapSpecificData.GetForCurrentMap();
+            return mapSpecificData == null ? null : _saveDataHandler.GetSavedData(mapSpecificData);
         }
 
         public void SaveData(SaveDataRequest request)
         {
-            var ser = _serializer.Serialize(request);
-            _worldInfoRetriever.PawnsDataXml = ser;
+            var mapData = MapSpecificData.GetForCurrentMap();
+            if (mapData == null) return;
+
+            _saveDataHandler.SaveData(request, mapData);
         }
 
         #endregion

@@ -20,7 +20,14 @@ namespace AutoPriorities.Ui
         public const string PrioritiesLabel = "Priorities";
         public const string PawnExcludeLabel = "Exclude Colonists";
         public const string ImportantJobsLabel = "Important Jobs";
-        public const string Label = "Run AutoPriorities";
+        public const string Label = "Set priorities";
+        public const string IgnoreLearningRate = "Ignore learning rate";
+        public const string MinimumFitness = "Minimum fitness";
+
+        public const string MinimumFitnessTooltip =
+            "Determines whether the pawn is eligible for the work type. If minimumFitness < skill * learnRate, work type isn't assigned";
+
+        public const string Misc = "Misc";
         public const string DeleteLabel = "Delete";
         public const string ExportLabel = "Export";
         public const string ImportLabel = "Import";

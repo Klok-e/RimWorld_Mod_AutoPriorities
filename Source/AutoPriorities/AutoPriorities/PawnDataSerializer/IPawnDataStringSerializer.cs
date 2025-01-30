@@ -2,7 +2,7 @@ namespace AutoPriorities.PawnDataSerializer
 {
     public interface IPawnDataStringSerializer
     {
-        SaveData? Deserialize(byte[] xml);
+        DeserializedData? Deserialize(byte[] xml);
 
         byte[] Serialize(SaveDataRequest request);
     }

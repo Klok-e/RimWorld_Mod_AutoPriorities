@@ -1,15 +1,11 @@
 using System.Collections.Generic;
 
-namespace AutoPriorities
+namespace AutoPriorities.PawnDataSerializer
 {
-    public record SaveDataRequest
+    public record DeserializedData
     {
         public HashSet<ExcludedPawnEntry> ExcludedPawns { get; init; } = new();
 
         public List<WorkTableEntry> WorkTablesData { get; init; } = new();
-
-        public bool IgnoreLearningRate { get; set; }
-
-        public float MinimumFitness { get; set; }
     }
 }

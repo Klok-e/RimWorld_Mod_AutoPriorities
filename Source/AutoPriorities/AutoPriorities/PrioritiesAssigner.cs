@@ -5,7 +5,6 @@ using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 using AutoPriorities.Extensions;
 using AutoPriorities.ImportantJobs;
-using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
 
 namespace AutoPriorities
@@ -15,18 +14,15 @@ namespace AutoPriorities
         private readonly IImportantJobsProvider _importantJobsProvider;
         private readonly ILogger _logger;
         private readonly PawnsData _pawnsData;
-        private readonly IWorldInfoRetriever _worldInfoRetriever;
 
         public PrioritiesAssigner(
             PawnsData pawnsData,
             ILogger logger,
-            IImportantJobsProvider importantJobsProvider,
-            IWorldInfoRetriever worldInfoRetriever)
+            IImportantJobsProvider importantJobsProvider)
         {
             _pawnsData = pawnsData;
             _logger = logger;
             _importantJobsProvider = importantJobsProvider;
-            _worldInfoRetriever = worldInfoRetriever;
         }
 
         private List<(Priority priority, JobCount maxJobs, double percent)> PriorityPercentCached { get; } = new();
@@ -62,7 +58,7 @@ namespace AutoPriorities
                     _pawnsData.WorkTypes.Subtract(importantWorks)
                         .Where(work => !_pawnsData.WorkTypesNotRequiringSkills.Contains(work)),
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work],
-                    _worldInfoRetriever.GetMinimumWorkFitness());
+                    _pawnsData.MinimumFitness);
 
 #if DEBUG
                 _logger.Info("non skilled");

@@ -41,11 +41,17 @@ namespace AutoPriorities
 
         public List<IPawnWrapper> AllPlayerPawns { get; } = new();
 
+        public bool IgnoreLearningRate { get; set; }
+
+        public float MinimumFitness { get; set; }
+
         public void SetData(SaveData data)
         {
             // Excluded must be loaded first because State depends on ExcludedPawns being filled
             ExcludedPawns = data.ExcludedPawns;
             WorkTables = LoadSavedState(data.WorkTablesData);
+            IgnoreLearningRate = data.IgnoreLearningRate;
+            MinimumFitness = data.MinimumFitness;
 
 #if DEBUG
             _logger.Info(
@@ -58,13 +64,21 @@ namespace AutoPriorities
         {
             try
             {
-                _serializer.SaveData(
-                    new SaveDataRequest { ExcludedPawns = ExcludedPawns, WorkTablesData = WorkTables });
+                _serializer.SaveData(GetSaveDataRequest());
             }
             catch (Exception e)
             {
                 _logger.Err(e);
             }
+        }
+
+        public SaveDataRequest GetSaveDataRequest()
+        {
+            return new SaveDataRequest
+            {
+                ExcludedPawns = ExcludedPawns, WorkTablesData = WorkTables,
+                IgnoreLearningRate = IgnoreLearningRate, MinimumFitness = MinimumFitness,
+            };
         }
 
         public void Rebuild()
@@ -97,7 +111,7 @@ namespace AutoPriorities
                                     new ExcludedPawnEntry { WorkDef = work.DefName, PawnThingId = pawn.ThingID }))
                             {
                                 var skill = pawn.AverageOfRelevantSkillsFor(work);
-                                double learningRateFactor = pawn.MaxLearningRateFactor(work);
+                                double learningRateFactor = IgnoreLearningRate ? 1 : pawn.MaxLearningRateFactor(work);
 
                                 var fitness = skill * learningRateFactor;
                                 SortedPawnFitnessForEveryWork[work]

@@ -35,26 +35,9 @@ namespace AutoPriorities.WorldInfoRetriever
                 .Select(x => new PawnWrapper(x));
         }
 
-        public double GetMinimumWorkFitness()
-        {
-            return Controller.MinimumSkill;
-        }
-
         public int GetMaxPriority()
         {
             return Controller.MaxPriorityAlien ?? Controller.MaxPriority;
-        }
-
-        public byte[]? PawnsDataXml
-        {
-            get => MapSpecificData.GetForCurrentMap()?.pawnsDataXml;
-            set
-            {
-                var mapSpecificData = MapSpecificData.GetForCurrentMap();
-                if (mapSpecificData == null) return;
-
-                mapSpecificData.pawnsDataXml = value;
-            }
         }
 
         #endregion

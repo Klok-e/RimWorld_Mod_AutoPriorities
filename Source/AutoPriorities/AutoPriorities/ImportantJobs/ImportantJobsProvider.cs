@@ -20,7 +20,7 @@ namespace AutoPriorities.ImportantJobs
         public HashSet<IWorkTypeWrapper> ImportantWorkTypes()
         {
             var workTypes = MapSpecificData.GetForCurrentMap()
-                ?.importantWorkTypes ?? new List<string>();
+                ?.ImportantWorkTypes ?? new List<string>();
             return workTypes.Select(_worldInfo.StringToDef)
                 .Where(def => def is not null)
                 .Select(x => x!)
@@ -32,9 +32,9 @@ namespace AutoPriorities.ImportantJobs
             var map = MapSpecificData.GetForCurrentMap();
             if (map == null) return;
 
-            map.importantWorkTypes ??= new List<string>();
-            map.importantWorkTypes.Clear();
-            map.importantWorkTypes.AddRange(workTypeDefNames);
+            map.ImportantWorkTypes ??= new List<string>();
+            map.ImportantWorkTypes.Clear();
+            map.ImportantWorkTypes.AddRange(workTypeDefNames);
         }
 
         #endregion

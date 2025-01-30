@@ -32,7 +32,7 @@ namespace Tests
             _importantWorkTypesProvider = Substitute.For<IImportantJobsProvider>();
             _importantWorkTypesProvider.ImportantWorkTypes()
                 .Returns(new HashSet<IWorkTypeWrapper>());
-            _assigner = new PrioritiesAssigner(_pawnsData, _logger, _importantWorkTypesProvider, _retriever);
+            _assigner = new PrioritiesAssigner(_pawnsData, _logger, _importantWorkTypesProvider);
         }
 
         private PrioritiesAssigner _assigner = null!;
@@ -47,6 +47,7 @@ namespace Tests
         public void AssignPriorities_Numbers()
         {
             // arrange
+            _pawnsData.MinimumFitness = 0;
 
             // act
             _assigner.AssignPriorities();
@@ -75,8 +76,7 @@ namespace Tests
         public void AssignPriorities_MinimumFitness2()
         {
             // arrange
-            _retriever.GetMinimumWorkFitness()
-                .Returns(2);
+            _pawnsData.MinimumFitness = 2;
 
             // act
             _assigner.AssignPriorities();

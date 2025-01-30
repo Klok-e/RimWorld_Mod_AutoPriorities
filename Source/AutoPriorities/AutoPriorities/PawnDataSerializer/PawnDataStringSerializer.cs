@@ -20,7 +20,7 @@ namespace AutoPriorities.PawnDataSerializer
 
         #region IPawnDataStringSerializer Members
 
-        public SaveData? Deserialize(byte[] xml)
+        public DeserializedData? Deserialize(byte[] xml)
         {
             var stream = new MemoryStream(xml);
 
@@ -29,7 +29,7 @@ namespace AutoPriorities.PawnDataSerializer
                 var ser = (PercentTableSaver.Ser)new XmlSerializer(typeof(PercentTableSaver.Ser)).Deserialize(stream);
                 var workTableEntries = ser.ParsedData(_worldInfoFacade);
                 var excludedPawnEntries = ser.ParsedExcluded(_worldInfoFacade);
-                return new SaveData { ExcludedPawns = excludedPawnEntries, WorkTablesData = workTableEntries };
+                return new DeserializedData { ExcludedPawns = excludedPawnEntries, WorkTablesData = workTableEntries };
             }
             catch (Exception e)
             {

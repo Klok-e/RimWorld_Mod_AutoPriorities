@@ -37,6 +37,7 @@
     <ItemGroup>
         <Compile Include="Core\AuxillaryStructures.cs"/>
         <Compile Include="Core\Controller.cs"/>
+        <Compile Include="Core\IMapSpecificData.cs"/>
         <Compile Include="Core\MapSpecificData.cs"/>
         <Compile Include="Core\PercentTableSaver.cs"/>
         <Compile Include="Core\Resources.cs"/>
@@ -52,6 +53,7 @@
         <Compile Include="APLogger\ILogger.cs"/>
         <Compile Include="APLogger\Logger.cs"/>
         <Compile Include="PatchInitializeAttribute.cs"/>
+        <Compile Include="PawnDataSerializer\DeserializedData.cs"/>
         <Compile Include="PawnDataSerializer\Exporter\FilePather.cs"/>
         <Compile Include="PawnDataSerializer\Exporter\IPawnDataImportable.cs"/>
         <Compile Include="PawnDataSerializer\Exporter\PawnDataExporter.cs"/>
@@ -62,6 +64,7 @@
         <Compile Include="PawnDataSerializer\IPawnsDataSerializer.cs"/>
         <Compile Include="PawnDataSerializer\MapSpecificDataPawnsDataSerializer.cs"/>
         <Compile Include="PawnDataSerializer\PawnDataStringSerializer.cs"/>
+        <Compile Include="PawnDataSerializer\SaveDataHandler.cs"/>
         <Compile Include="PawnsData.cs"/>
         <Compile Include="PawnsDataBuilder.cs"/>
         <Compile Include="Percents\PercentVariant.cs"/>

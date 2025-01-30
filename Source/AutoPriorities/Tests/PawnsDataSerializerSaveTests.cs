@@ -5,6 +5,7 @@ using System.Text;
 using AutoFixture;
 using AutoPriorities;
 using AutoPriorities.APLogger;
+using AutoPriorities.Core;
 using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
@@ -24,17 +25,19 @@ namespace Tests
             _logger = Substitute.For<ILogger>();
             _retriever = Substitute.For<IWorldInfoRetriever>();
             _worldInfo = new WorldInfoFacade(_retriever, _logger);
-            _serializer = new MapSpecificDataPawnsDataSerializer(
-                _retriever,
-                new PawnDataStringSerializer(_logger, _worldInfo));
+            var pawnDataStringSerializer = new PawnDataStringSerializer(_logger, _worldInfo);
+            _saveDataHandler = new SaveDataHandler(_logger, pawnDataStringSerializer);
             _fixture = FixtureBuilder.Create();
+
+            _mapSpecificData = Substitute.For<IMapSpecificData>();
         }
 
         private IFixture _fixture = null!;
         private ILogger _logger = null!;
         private IWorldInfoRetriever _retriever = null!;
-        private IPawnsDataSerializer _serializer = null!;
         private IWorldInfoFacade _worldInfo = null!;
+        private SaveDataHandler _saveDataHandler = null!;
+        private IMapSpecificData _mapSpecificData = null!;
 
         [Test]
         public void LoadSavedData_SaveState_LoadAndSave_IdenticalResult()
@@ -53,18 +56,19 @@ namespace Tests
                             return workTypeWrapper;
                         }));
             var fileContents = File.ReadAllBytes(TestHelper.SavePath);
-            _retriever.PawnsDataXml.Returns(fileContents);
+            _mapSpecificData.PawnsDataXml.Returns(fileContents);
 
             var expectedString = Encoding.UTF8.GetString(fileContents);
-            var loaded = _serializer.LoadSavedData();
+            var loaded = _saveDataHandler.GetSavedData(_mapSpecificData);
 
             var actualBytes = Array.Empty<byte>();
-            _retriever.WhenForAnyArgs(x => x.PawnsDataXml = Array.Empty<byte>())
+            _mapSpecificData.WhenForAnyArgs(x => x.PawnsDataXml = Array.Empty<byte>())
                 .Do(x => actualBytes = x.Arg<byte[]>());
 
             // act
-            _serializer.SaveData(
-                new SaveDataRequest { ExcludedPawns = loaded!.ExcludedPawns, WorkTablesData = loaded.WorkTablesData });
+            _saveDataHandler.SaveData(
+                new SaveDataRequest { ExcludedPawns = loaded!.ExcludedPawns, WorkTablesData = loaded.WorkTablesData },
+                _mapSpecificData);
             var actualString = Encoding.UTF8.GetString(actualBytes);
 
             // assert

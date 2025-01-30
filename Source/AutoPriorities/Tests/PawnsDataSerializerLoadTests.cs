@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using AutoFixture;
 using AutoPriorities.APLogger;
+using AutoPriorities.Core;
 using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
@@ -21,17 +22,19 @@ namespace Tests
             _logger = Substitute.For<ILogger>();
             _retriever = Substitute.For<IWorldInfoRetriever>();
             _worldInfo = new WorldInfoFacade(_retriever, _logger);
-            _serializer = new MapSpecificDataPawnsDataSerializer(
-                _retriever,
-                new PawnDataStringSerializer(_logger, _worldInfo));
+            var pawnDataStringSerializer = new PawnDataStringSerializer(_logger, _worldInfo);
+            _saveDataHandler = new SaveDataHandler(_logger, pawnDataStringSerializer);
             _fixture = FixtureBuilder.Create();
+
+            _mapSpecificData = Substitute.For<IMapSpecificData>();
         }
 
         private IFixture _fixture = null!;
         private ILogger _logger = null!;
         private IWorldInfoRetriever _retriever = null!;
-        private IPawnsDataSerializer _serializer = null!;
         private IWorldInfoFacade _worldInfo = null!;
+        private SaveDataHandler _saveDataHandler = null!;
+        private IMapSpecificData _mapSpecificData = null!;
 
         [Test]
         public void LoadFromFile()
@@ -50,10 +53,10 @@ namespace Tests
                             return workTypeWrapper;
                         }));
             var fileContents = File.ReadAllBytes(TestHelper.SavePath);
-            _retriever.PawnsDataXml.Returns(fileContents);
+            _mapSpecificData.PawnsDataXml.Returns(fileContents);
 
             // act
-            var savedData = _serializer.LoadSavedData();
+            var savedData = _saveDataHandler.GetSavedData(_mapSpecificData);
 
             // assert
             savedData.Should()
@@ -92,10 +95,10 @@ namespace Tests
                             return workTypeWrapper;
                         }));
             var fileContents = File.ReadAllBytes(TestHelper.SavePath);
-            _retriever.PawnsDataXml.Returns(fileContents);
+            _mapSpecificData.PawnsDataXml.Returns(fileContents);
 
             // act
-            _ = _serializer.LoadSavedData();
+            _ = _saveDataHandler.GetSavedData(_mapSpecificData);
 
             // assert
             _logger.Received(10)

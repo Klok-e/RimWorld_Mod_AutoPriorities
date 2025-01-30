@@ -4,23 +4,48 @@ using Verse;
 
 namespace AutoPriorities.Core
 {
-    public class MapSpecificData : MapComponent
+    public class MapSpecificData : MapComponent, IMapSpecificData
     {
-        public List<string>? importantWorkTypes = new() { "Firefighter", "Patient", "PatientBedRest", "BasicWorker" };
-        public byte[]? pawnsDataXml;
+        private bool _ignoreLearningRate;
+        private List<string>? _importantWorkTypes = new() { "Firefighter", "Patient", "PatientBedRest", "BasicWorker" };
+        private float _minimumFitness;
 
         public MapSpecificData(Map map)
             : base(map)
         {
         }
 
+        public List<string>? ImportantWorkTypes
+        {
+            get => _importantWorkTypes;
+            set => _importantWorkTypes = value;
+        }
+
+        public byte[]? PawnsDataXml { get; set; }
+
+        public float MinimumFitness
+        {
+            get => _minimumFitness;
+            set => _minimumFitness = value;
+        }
+
+        public bool IgnoreLearningRate
+        {
+            get => _ignoreLearningRate;
+            set => _ignoreLearningRate = value;
+        }
+
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Collections.Look(ref importantWorkTypes, "AutoPriorities_ImportantWorkTypes", LookMode.Value);
-            var dataStr = Convert.ToBase64String(pawnsDataXml ?? Array.Empty<byte>());
+
+            Scribe_Collections.Look(ref _importantWorkTypes, "AutoPriorities_ImportantWorkTypes", LookMode.Value);
+            Scribe_Values.Look(ref _minimumFitness, "AutoPriorities_MinimumFitness");
+            Scribe_Values.Look(ref _ignoreLearningRate, "AutoPriorities_IgnoreLearningRate");
+
+            var dataStr = Convert.ToBase64String(PawnsDataXml ?? Array.Empty<byte>());
             Scribe_Values.Look(ref dataStr, "AutoPriorities_PawnsDataXml");
-            pawnsDataXml = string.IsNullOrEmpty(dataStr) ? null : Convert.FromBase64String(dataStr);
+            PawnsDataXml = string.IsNullOrEmpty(dataStr) ? null : Convert.FromBase64String(dataStr);
         }
 
         public static MapSpecificData? GetForCurrentMap()
