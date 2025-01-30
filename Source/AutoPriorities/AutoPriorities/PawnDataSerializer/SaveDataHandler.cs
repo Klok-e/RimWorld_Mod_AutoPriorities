@@ -30,7 +30,7 @@ namespace AutoPriorities.PawnDataSerializer
                 ExcludedPawns = deserialized.ExcludedPawns,
                 WorkTablesData = deserialized.WorkTablesData,
                 IgnoreLearningRate = mapSpecificData.IgnoreLearningRate,
-                MinimumFitness = mapSpecificData.MinimumFitness,
+                MinimumSkillLevel = mapSpecificData.MinimumSkillLevel,
             };
         }
 
@@ -39,7 +39,7 @@ namespace AutoPriorities.PawnDataSerializer
             var ser = _serializer.Serialize(request);
             mapDataSaveTo.PawnsDataXml = ser;
 
-            mapDataSaveTo.MinimumFitness = request.MinimumFitness;
+            mapDataSaveTo.MinimumSkillLevel = request.MinimumSkillLevel;
             mapDataSaveTo.IgnoreLearningRate = request.IgnoreLearningRate;
         }
     }

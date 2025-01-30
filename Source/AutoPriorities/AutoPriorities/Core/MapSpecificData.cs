@@ -8,7 +8,7 @@ namespace AutoPriorities.Core
     {
         private bool _ignoreLearningRate;
         private List<string>? _importantWorkTypes = new() { "Firefighter", "Patient", "PatientBedRest", "BasicWorker" };
-        private float _minimumFitness;
+        private float _minimumSkillLevel;
 
         public MapSpecificData(Map map)
             : base(map)
@@ -23,10 +23,10 @@ namespace AutoPriorities.Core
 
         public byte[]? PawnsDataXml { get; set; }
 
-        public float MinimumFitness
+        public float MinimumSkillLevel
         {
-            get => _minimumFitness;
-            set => _minimumFitness = value;
+            get => _minimumSkillLevel;
+            set => _minimumSkillLevel = value;
         }
 
         public bool IgnoreLearningRate
@@ -40,7 +40,7 @@ namespace AutoPriorities.Core
             base.ExposeData();
 
             Scribe_Collections.Look(ref _importantWorkTypes, "AutoPriorities_ImportantWorkTypes", LookMode.Value);
-            Scribe_Values.Look(ref _minimumFitness, "AutoPriorities_MinimumFitness");
+            Scribe_Values.Look(ref _minimumSkillLevel, "AutoPriorities_MinimumSkillLevel");
             Scribe_Values.Look(ref _ignoreLearningRate, "AutoPriorities_IgnoreLearningRate");
 
             var dataStr = Convert.ToBase64String(PawnsDataXml ?? Array.Empty<byte>());

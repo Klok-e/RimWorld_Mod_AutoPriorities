@@ -47,7 +47,7 @@ namespace Tests
         public void AssignPriorities_Numbers()
         {
             // arrange
-            _pawnsData.MinimumFitness = 0;
+            _pawnsData.MinimumSkillLevel = 0;
 
             // act
             _assigner.AssignPriorities();
@@ -76,7 +76,7 @@ namespace Tests
         public void AssignPriorities_MinimumFitness2()
         {
             // arrange
-            _pawnsData.MinimumFitness = 2;
+            _pawnsData.MinimumSkillLevel = 2;
 
             // act
             _assigner.AssignPriorities();

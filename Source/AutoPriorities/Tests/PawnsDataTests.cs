@@ -76,19 +76,19 @@ namespace Tests
             _logger.NoWarnReceived();
 
             pawnData.SortedPawnFitnessForEveryWork[_pw.workTypes[0]]
-                .Select(x => x.pawn)
+                .Select(x => x.Pawn)
                 .Should()
                 .Equal(_pw.pawns[1], _pw.pawns[0], _pw.pawns[2], _pw.pawns[3]);
             pawnData.SortedPawnFitnessForEveryWork[_pw.workTypes[1]]
-                .Select(x => x.pawn)
+                .Select(x => x.Pawn)
                 .Should()
                 .Equal(_pw.pawns[0], _pw.pawns[3], _pw.pawns[2]);
             pawnData.SortedPawnFitnessForEveryWork[_pw.workTypes[2]]
-                .Select(x => x.pawn)
+                .Select(x => x.Pawn)
                 .Should()
                 .Equal(_pw.pawns[3], _pw.pawns[1], _pw.pawns[2]);
             pawnData.SortedPawnFitnessForEveryWork[_pw.workTypes[3]]
-                .Select(x => x.pawn)
+                .Select(x => x.Pawn)
                 .Should()
                 .Equal(_pw.pawns[3], _pw.pawns[0], _pw.pawns[1], _pw.pawns[2]);
         }

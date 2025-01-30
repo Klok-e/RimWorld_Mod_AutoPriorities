@@ -14,14 +14,12 @@ namespace AutoPriorities.Ui
 {
     public class AutoPrioritiesDialog : Window
     {
-        private readonly float _ignoreLearningRateLabelWidth = Consts.IgnoreLearningRate.GetWidthCached() + 10f;
         private readonly float _importantJobsLabelWidth = Consts.ImportantJobsLabel.GetWidthCached() + 10f;
 
         private readonly IImportantJobsProvider _importantJobsProvider;
         private readonly float _importExportDeleteLabelWidth = Consts.DeleteLabel.GetWidthCached() + 10f;
         private readonly float _labelWidth = Consts.Label.GetWidthCached() + 10f;
         private readonly ILogger _logger;
-        private readonly float _minimumFitnessLabelWidth = Consts.MinimumFitness.GetWidthCached() + 10f;
         private readonly float _miscLabelWidth = Consts.Misc.GetWidthCached() + 10f;
         private readonly PawnDataExporter _pawnDataExporter;
         private readonly float _pawnExcludeLabelWidth = Consts.PawnExcludeLabel.GetWidthCached() + 10f;
@@ -32,8 +30,7 @@ namespace AutoPriorities.Ui
         private readonly QuickProfilerFactory _profilerFactory = new();
 
         private SelectedTab _currentlySelectedTab = SelectedTab.Priorities;
-        private bool _ignoreLearningRateCheckboxCheckOn;
-        private string _minimumFitnessInputBuffer = string.Empty;
+        private string? _minimumFitnessInputBuffer;
         private bool _openedOnce;
         private Vector2 _pawnExcludeScrollPos;
 
@@ -205,12 +202,26 @@ namespace AutoPriorities.Ui
 
         private void DrawIgnoreLearningRateCheckbox(Rect inRect)
         {
+            Widgets.DrawHighlightIfMouseover(inRect);
+
             var checkbox = _pawnsData.IgnoreLearningRate;
-            Widgets.CheckboxLabeledSelectable(
-                inRect,
-                Consts.IgnoreLearningRate,
-                ref _ignoreLearningRateCheckboxCheckOn,
-                ref checkbox);
+
+            var labelRect = new Rect(inRect.xMin, inRect.yMin, inRect.width / 2, inRect.height);
+            Widgets.Label(labelRect, Consts.IgnoreLearningRate);
+
+            var color = GUI.color;
+            GUI.color = Color.white;
+            Widgets.CheckboxDraw(labelRect.xMax, labelRect.yMin, checkbox, false);
+            GUI.color = color;
+            if (Widgets.ButtonInvisible(
+                    new Rect(labelRect.xMax, labelRect.yMin, Consts.CheckboxSize, Consts.CheckboxSize)))
+            {
+                checkbox = !checkbox;
+                if (checkbox)
+                    SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
+                else
+                    SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
+            }
 
 #if DEBUG
             if (_pawnsData.IgnoreLearningRate != checkbox)
@@ -222,15 +233,26 @@ namespace AutoPriorities.Ui
 
         private void DrawMinimumFitnessInput(Rect inRect)
         {
-            var minimumFitness = _pawnsData.MinimumFitness;
-            Widgets.TextFieldNumericLabeled(
-                inRect,
-                Consts.MinimumFitness,
+            Widgets.DrawHighlightIfMouseover(inRect);
+
+            var minimumFitness = _pawnsData.MinimumSkillLevel;
+
+            var labelRect = new Rect(inRect.xMin, inRect.yMin, inRect.width / 2, inRect.height);
+            Widgets.Label(labelRect, Consts.MinimumSkillLevel);
+
+            Widgets.TextFieldNumeric(
+                new Rect(labelRect.xMax, labelRect.yMin, inRect.width / 2, inRect.height),
                 ref minimumFitness,
                 ref _minimumFitnessInputBuffer);
+
             TooltipHandler.TipRegion(inRect, Consts.MinimumFitnessTooltip);
 
-            _pawnsData.MinimumFitness = minimumFitness;
+#if DEBUG
+            if (!Mathf.Approximately(_pawnsData.MinimumSkillLevel, minimumFitness))
+                _logger.Info($"_pawnsData.MinimumFitness changed to {minimumFitness}");
+#endif
+
+            _pawnsData.MinimumSkillLevel = minimumFitness;
         }
 
         private void DrawImportButton(Rect inRect)
@@ -350,14 +372,14 @@ namespace AutoPriorities.Ui
             var checkLrIgnoreRect = new Rect(
                 inRect.xMin,
                 inRect.yMin,
-                _ignoreLearningRateLabelWidth + Consts.ButtonHeight,
+                inRect.width,
                 Consts.ButtonHeight);
             DrawIgnoreLearningRateCheckbox(checkLrIgnoreRect);
 
             var minFitnessRect = new Rect(
                 inRect.xMin,
                 checkLrIgnoreRect.yMax + Consts.LabelMargin,
-                _ignoreLearningRateLabelWidth + Consts.ButtonHeight,
+                inRect.width,
                 Consts.ButtonHeight);
             DrawMinimumFitnessInput(minFitnessRect);
         }

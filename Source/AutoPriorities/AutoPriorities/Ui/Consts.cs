@@ -15,6 +15,7 @@ namespace AutoPriorities.Ui
         public const float WorkLabelWidth = 75f;
         public const float WorkLabelOffset = 25f;
         public const float WorkLabelHorizOffset = 40f;
+        public const float CheckboxSize = 24f;
         public const float PercentStringWidth = 30f;
         public const float PercentStringLabelWidth = 20f;
         public const string PrioritiesLabel = "Priorities";
@@ -22,7 +23,7 @@ namespace AutoPriorities.Ui
         public const string ImportantJobsLabel = "Important Jobs";
         public const string Label = "Set priorities";
         public const string IgnoreLearningRate = "Ignore learning rate";
-        public const string MinimumFitness = "Minimum fitness";
+        public const string MinimumSkillLevel = "Minimum skill level";
 
         public const string MinimumFitnessTooltip =
             "Determines whether the pawn is eligible for the work type. If minimumFitness < skill * learnRate, work type isn't assigned";

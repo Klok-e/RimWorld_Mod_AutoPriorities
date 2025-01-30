@@ -6,7 +6,7 @@ namespace AutoPriorities.Core
     {
         public List<string>? ImportantWorkTypes { get; set; }
         public byte[]? PawnsDataXml { get; set; }
-        public float MinimumFitness { get; set; }
+        public float MinimumSkillLevel { get; set; }
         public bool IgnoreLearningRate { get; set; }
     }
 }

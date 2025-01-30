@@ -10,6 +10,6 @@ namespace AutoPriorities
 
         public bool IgnoreLearningRate { get; set; }
 
-        public float MinimumFitness { get; set; }
+        public float MinimumSkillLevel { get; set; }
     }
 }

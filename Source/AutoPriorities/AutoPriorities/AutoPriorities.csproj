@@ -65,6 +65,7 @@
         <Compile Include="PawnDataSerializer\MapSpecificDataPawnsDataSerializer.cs"/>
         <Compile Include="PawnDataSerializer\PawnDataStringSerializer.cs"/>
         <Compile Include="PawnDataSerializer\SaveDataHandler.cs"/>
+        <Compile Include="PawnFitnessData.cs"/>
         <Compile Include="PawnsData.cs"/>
         <Compile Include="PawnsDataBuilder.cs"/>
         <Compile Include="Percents\PercentVariant.cs"/>

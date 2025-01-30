@@ -23,7 +23,7 @@
           <StrPercent>
             <percent>
               <number>0</number>
-              <percent>1</percent>
+              <percent>0.20000000298023224</percent>
               <variant>Percent</variant>
             </percent>
             <workType>Doctor</workType>
@@ -198,7 +198,7 @@
           </StrPercent>
         </percents>
       </dict>
-      <jobsMax>2</jobsMax>
+      <jobsMax>24</jobsMax>
       <priority>1</priority>
     </Tupl>
     <Tupl>
@@ -455,7 +455,7 @@
           <StrPercent>
             <percent>
               <number>0</number>
-              <percent>0</percent>
+              <percent>1</percent>
               <variant>Percent</variant>
             </percent>
             <workType>BasicWorker</workType>

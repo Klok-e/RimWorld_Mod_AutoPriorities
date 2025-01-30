@@ -32,10 +32,7 @@ namespace AutoPriorities
 
         public HashSet<IWorkTypeWrapper> WorkTypesNotRequiringSkills { get; } = new();
 
-        public Dictionary<IWorkTypeWrapper, List<(IPawnWrapper pawn, double fitness)>> SortedPawnFitnessForEveryWork
-        {
-            get;
-        } = new();
+        public Dictionary<IWorkTypeWrapper, List<PawnFitnessData>> SortedPawnFitnessForEveryWork { get; } = new();
 
         public List<IPawnWrapper> CurrentMapPlayerPawns { get; } = new();
 
@@ -43,7 +40,7 @@ namespace AutoPriorities
 
         public bool IgnoreLearningRate { get; set; }
 
-        public float MinimumFitness { get; set; }
+        public float MinimumSkillLevel { get; set; }
 
         public void SetData(SaveData data)
         {
@@ -51,7 +48,7 @@ namespace AutoPriorities
             ExcludedPawns = data.ExcludedPawns;
             WorkTables = LoadSavedState(data.WorkTablesData);
             IgnoreLearningRate = data.IgnoreLearningRate;
-            MinimumFitness = data.MinimumFitness;
+            MinimumSkillLevel = data.MinimumSkillLevel;
 
 #if DEBUG
             _logger.Info(
@@ -77,7 +74,7 @@ namespace AutoPriorities
             return new SaveDataRequest
             {
                 ExcludedPawns = ExcludedPawns, WorkTablesData = WorkTables,
-                IgnoreLearningRate = IgnoreLearningRate, MinimumFitness = MinimumFitness,
+                IgnoreLearningRate = IgnoreLearningRate, MinimumSkillLevel = MinimumSkillLevel,
             };
         }
 
@@ -103,7 +100,7 @@ namespace AutoPriorities
                 SortedPawnFitnessForEveryWork.Clear();
                 foreach (var work in workTypes)
                 {
-                    SortedPawnFitnessForEveryWork[work] = new List<(IPawnWrapper pawn, double fitness)>();
+                    SortedPawnFitnessForEveryWork[work] = new List<PawnFitnessData>();
                     foreach (var pawn in CurrentMapPlayerPawns)
                         try
                         {
@@ -114,8 +111,8 @@ namespace AutoPriorities
                                 double learningRateFactor = IgnoreLearningRate ? 1 : pawn.MaxLearningRateFactor(work);
 
                                 var fitness = skill * learningRateFactor;
-                                SortedPawnFitnessForEveryWork[work]
-                                    .Add((pawn, fitness));
+                                SortedPawnFitnessForEveryWork[work].Add(
+                                    new PawnFitnessData { Fitness = fitness, Pawn = pawn, SkillLevel = skill });
                             }
                         }
                         catch (Exception e)
@@ -133,7 +130,7 @@ namespace AutoPriorities
                 }
 
                 foreach (var keyValue in SortedPawnFitnessForEveryWork)
-                    keyValue.Value.Sort((x, y) => y.fitness.CompareTo(x.fitness));
+                    keyValue.Value.Sort((x, y) => y.Fitness.CompareTo(x.Fitness));
 
                 // _logger.Info(
                 //     $"player pawns: {string.Join("; ", AllPlayerPawns.Select(x => $"{x.NameFullColored}:{x.ThingID}"))}");

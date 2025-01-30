@@ -58,7 +58,7 @@ namespace AutoPriorities
                     _pawnsData.WorkTypes.Subtract(importantWorks)
                         .Where(work => !_pawnsData.WorkTypesNotRequiringSkills.Contains(work)),
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work],
-                    _pawnsData.MinimumFitness);
+                    _pawnsData.MinimumSkillLevel);
 
 #if DEBUG
                 _logger.Info("non skilled");
@@ -70,9 +70,13 @@ namespace AutoPriorities
                     _pawnsData.WorkTypesNotRequiringSkills.Subtract(importantWorks),
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work]
                         .Select(
-                            p => (p.pawn, 1d / (1 + PawnJobsCached[p.pawn]
-                                .Count)))
-                        .OrderByDescending(p => p.Item2)
+                            p => new PawnFitnessData
+                            {
+                                Pawn = p.Pawn,
+                                Fitness = 1d / (1 + PawnJobsCached[p.Pawn].Count),
+                                SkillLevel = 0,
+                            })
+                        .OrderByDescending(p => p.Fitness)
                         .ToList());
             }
             catch (Exception e)
@@ -84,8 +88,8 @@ namespace AutoPriorities
         private void AssignJobs(PawnsData pawnsData,
             IDictionary<IPawnWrapper, Dictionary<IWorkTypeWrapper, Priority>> pawnJobs,
             IEnumerable<IWorkTypeWrapper> workTypes,
-            Func<IWorkTypeWrapper, List<(IPawnWrapper pawn, double fitness)>> fitnessGetter,
-            double? minimumFitness = null)
+            Func<IWorkTypeWrapper, List<PawnFitnessData>> fitnessGetter,
+            double? minimumSkillLevel = null)
         {
             foreach (var work in workTypes)
             {
@@ -97,7 +101,8 @@ namespace AutoPriorities
 #endif
 
 #if DEBUG
-                foreach (var (pawn, fitness) in pawns) _logger.Info($"pawn {pawn.NameFullColored}; fitness {fitness}");
+                foreach (var (pawn, fitness, skillLevel) in pawns)
+                    _logger.Info($"pawn {pawn.NameFullColored}; fitness {fitness}; skill {skillLevel}");
 #endif
 
                 foreach (var (priority, maxJobs, jobsToSet) in PriorityPercentCached
@@ -113,7 +118,7 @@ namespace AutoPriorities
                 {
                     var jobsSet = 0;
                     // iterate over all the pawns for this job with current priority
-                    foreach (var (pawn, fitness) in pawns)
+                    foreach (var (pawn, fitness, skillLevel) in pawns)
                     {
                         if (jobsSet >= jobsToSet)
                             break;
@@ -129,10 +134,10 @@ namespace AutoPriorities
                         if (pawnJobs[pawn].ContainsKey(work) || jobsPawnHasOnThisPriority >= maxJobs.v)
                             continue;
 
-                        if (fitness < minimumFitness)
+                        if (skillLevel < minimumSkillLevel)
                         {
 #if DEBUG
-                            _logger.Info($"fitness < minimumFitness: {fitness} < {minimumFitness}");
+                            _logger.Info($"skillLevel < minimumSkillLevel: {skillLevel} < {minimumSkillLevel}");
 #endif
                             continue;
                         }
@@ -144,7 +149,7 @@ namespace AutoPriorities
                 }
 
                 // set remaining to zero
-                foreach (var (pawn, _) in pawns)
+                foreach (var (pawn, _, _) in pawns)
                 {
                     // if this job was already set, skip
                     if (pawnJobs[pawn].ContainsKey(work))
