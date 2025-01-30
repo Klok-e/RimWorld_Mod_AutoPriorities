@@ -38,6 +38,7 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
                     ExcludedPawns = save.ExcludedPawns,
                     WorkTablesData = save.WorkTablesData,
                     IgnoreLearningRate = false,
+                    IgnoreOppositionToWork = false,
                     MinimumSkillLevel = 3,
                 });
         }
