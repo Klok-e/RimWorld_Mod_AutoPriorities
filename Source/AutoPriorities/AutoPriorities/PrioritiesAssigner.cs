@@ -6,6 +6,7 @@ using AutoPriorities.Core;
 using AutoPriorities.Extensions;
 using AutoPriorities.ImportantJobs;
 using AutoPriorities.Wrappers;
+using Verse;
 
 namespace AutoPriorities
 {
@@ -83,40 +84,46 @@ namespace AutoPriorities
 
             var index = 0;
             foreach (var workTypeKv in _pawnsData.SortedPawnFitnessForEveryWork)
-            foreach (var pfd in workTypeKv.Value)
             {
-                // Negative cost for real priorities => solver maximizes fitness
-                for (var workTableIndex = 0; workTableIndex < workTableEntries.Length; workTableIndex++)
+                foreach (var pfd in workTypeKv.Value)
                 {
-                    var priority = workTableEntries[workTableIndex].Priority.v;
+                    // Negative cost for real priorities => solver maximizes fitness
+                    for (var workTableIndex = 0; workTableIndex < workTableEntries.Length; workTableIndex++)
+                    {
+                        var priority = workTableEntries[workTableIndex].Priority.v;
 
-                    variables.Add(-pfd.Fitness / priority);
+                        variables.Add(-pfd.Fitness / priority);
+                        bndl.Add(0.0);
+                        bndu.Add(1.0);
+                    }
+
+                    // Extra slot for "not assigned"
+                    variables.Add(0.0);
                     bndl.Add(0.0);
                     bndu.Add(1.0);
-                }
 
-                // Extra slot for "not assigned"
-                variables.Add(0.0);
-                bndl.Add(0.0);
-                bndu.Add(1.0);
-                assignmentOffsets[(workTypeKv.Key, pfd.Pawn)] = index;
-                index += workTableEntries.Length + 1;
+                    assignmentOffsets[(workTypeKv.Key, pfd.Pawn)] = index;
+                    index += workTableEntries.Length + 1;
+                }
             }
 
             alglib.minlpcreate(variables.Count, out var state);
-
             alglib.minlpsetcost(state, variables.ToArray());
 
             // Forbid real priorities if pawn is opposed or skill too low
             index = 0;
             foreach (var workTypeKv in _pawnsData.SortedPawnFitnessForEveryWork)
-            foreach (var pfd in workTypeKv.Value)
             {
-                if ((pfd.IsOpposed && !_pawnsData.IgnoreOppositionToWork) || pfd.SkillLevel < _pawnsData.MinimumSkillLevel)
-                    for (var workTableIndex = 0; workTableIndex < workTableEntries.Length; workTableIndex++)
-                        bndu[index + workTableIndex] = 0.0;
+                foreach (var pfd in workTypeKv.Value)
+                {
+                    if ((pfd.IsOpposed && !_pawnsData.IgnoreOppositionToWork) || pfd.SkillLevel < _pawnsData.MinimumSkillLevel)
+                    {
+                        // Forbid all *real* priorities (leave "not assigned" free)
+                        for (var workTableIndex = 0; workTableIndex < workTableEntries.Length; workTableIndex++) bndu[index + workTableIndex] = 0.0;
+                    }
 
-                index += workTableEntries.Length + 1;
+                    index += workTableEntries.Length + 1;
+                }
             }
 
             alglib.minlpsetbc(state, bndl.ToArray(), bndu.ToArray());
@@ -124,41 +131,45 @@ namespace AutoPriorities
             // Exactly one choice (some priority or "not assigned") for each (workType, pawn)
             var sumIndex = 0;
             foreach (var workTypeKv in _pawnsData.SortedPawnFitnessForEveryWork)
-            foreach (var pfd in workTypeKv.Value)
             {
-                var constraintRow = new double[variables.Count];
-                for (var workTableIndex = 0; workTableIndex < workTableEntries.Length + 1; workTableIndex++)
-                    constraintRow[sumIndex + workTableIndex] = 1.0;
+                foreach (var pfd in workTypeKv.Value)
+                {
+                    var constraintRow = new double[variables.Count];
+                    for (var workTableIndex = 0; workTableIndex < workTableEntries.Length + 1; workTableIndex++)
+                        constraintRow[sumIndex + workTableIndex] = 1.0;
 
-                alglib.minlpaddlc2dense(state, constraintRow, 1, 1);
-                sumIndex += workTableEntries.Length + 1;
+                    // sum of real priorities + "not assigned" must be exactly 1
+                    alglib.minlpaddlc2dense(state, constraintRow, 1, 1);
+                    sumIndex += workTableEntries.Length + 1;
+                }
             }
 
             // Enforce exact jobsToSet for each workType+priority
-            foreach (var workTypeKv in _pawnsData.SortedPawnFitnessForEveryWork)
+            foreach (var (workType, pawnData) in _pawnsData.SortedPawnFitnessForEveryWork)
             {
                 PriorityPercentCached.Clear();
-                FillListPriorityPercents(_pawnsData, workTypeKv.Key, PriorityPercentCached);
-                var pawns = workTypeKv.Value;
+                FillListPriorityPercents(_pawnsData, workType, PriorityPercentCached);
                 if (PriorityPercentCached.Count == 0) continue;
 
                 var groups = PriorityPercentCached.Distinct(x => x.priority)
                     .Select(a => a.percent)
-                    .IterPercents(pawns.Count)
+                    .IterPercents(pawnData.Count)
                     .GroupBy(v => v.percentIndex)
-                    .Select(g => (PriorityPercentCached[g.Key].priority, PriorityPercentCached[g.Key].maxJobs, jobsToSet: g.Count()))
+                    .Select(g => (PriorityPercentCached[g.Key].priority, jobsToSet: g.Count()))
                     .OrderBy(x => x.priority.v);
 
-                foreach (var (priority, maxJobsStruct, jobsToSet) in groups)
+                foreach (var (priority, jobsToSet) in groups)
                 {
+                    var workTableIndex = workTableEntries.FirstIndexOf(x => x.Priority.Equals(priority));
+
                     var constraintRow = new double[variables.Count];
-                    foreach (var pfd in pawns)
+                    foreach (var pfd in pawnData)
                     {
-                        var offset = assignmentOffsets[(workTypeKv.Key, pfd.Pawn)];
-                        constraintRow[offset + (priority.v - 1)] = 1.0;
+                        var offset = assignmentOffsets[(workType, pfd.Pawn)];
+                        constraintRow[offset + workTableIndex] = 1.0;
                     }
 
-                    alglib.minlpaddlc2dense(state, constraintRow, jobsToSet, jobsToSet);
+                    alglib.minlpaddlc2dense(state, constraintRow, 0, jobsToSet);
                 }
             }
 
@@ -182,16 +193,23 @@ namespace AutoPriorities
             }
 
             alglib.minlpsetscale(state, Enumerable.Repeat(1.0, variables.Count).ToArray());
-
             alglib.minlpsetalgoipm(state);
             alglib.minlpoptimize(state);
+
             alglib.minlpresults(state, out var solution, out var rep);
 
+            if (rep.terminationtype != 1)
+            {
+                _logger.Warn(
+                    $"{nameof(AssignPrioritiesSmarter)} failed; LP solver termination type: {rep.terminationtype}; abandoning assignment...");
+                return;
+            }
+
+            // Retrieve solution
             foreach (var (workType, pawns) in _pawnsData.SortedPawnFitnessForEveryWork)
             foreach (var pawnFitness in pawns)
             {
                 var ind = assignmentOffsets[(workType, pawnFitness.Pawn)];
-
                 var pawnWorkTypeVariables = solution[ind..(ind + workTableEntries.Length + 1)];
                 var chosenPriorityIndex = pawnWorkTypeVariables.ArgMax();
 

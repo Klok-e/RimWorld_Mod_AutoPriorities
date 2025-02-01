@@ -52,9 +52,40 @@ namespace Tests
             // assert
             _logger.NoWarnReceived();
 
+
+            // pawn1 - cook - 2
+            // pawn1 - haul - 1
+            // pawn1 - crafting - 2
+            //
+            // pawn2 - cook - 1
+            // pawn2 - mine - 2
+            // pawn2 - crafting - 0
+            //
+            // pawn3 - cook - 0
+            // pawn3 - haul - 0
+            // pawn3 - mine - 0
+            // pawn3 - crafting - 0
+            //
+            // pawn4 - cook - 0
+            // pawn4 - haul - 2
+            // pawn4 - mine - 1
+            // pawn4 - crafting - 1
+
             _pw.pawns[0].Received().WorkSettingsSetPriority(_pw.workTypes[0], 2);
+            _pw.pawns[0].Received().WorkSettingsSetPriority(_pw.workTypes[1], 1);
+            _pw.pawns[0].Received().WorkSettingsSetPriority(_pw.workTypes[3], 2);
+
             _pw.pawns[1].Received().WorkSettingsSetPriority(_pw.workTypes[0], 1);
-            _pw.pawns[2].Received().WorkSettingsSetPriority(_pw.workTypes[1], 1);
+            _pw.pawns[1].Received().WorkSettingsSetPriority(_pw.workTypes[2], 2);
+            _pw.pawns[1].Received().WorkSettingsSetPriority(_pw.workTypes[3], 0);
+
+            _pw.pawns[2].Received().WorkSettingsSetPriority(_pw.workTypes[0], 0);
+            _pw.pawns[2].Received().WorkSettingsSetPriority(_pw.workTypes[1], 0);
+            _pw.pawns[2].Received().WorkSettingsSetPriority(_pw.workTypes[2], 0);
+            _pw.pawns[2].Received().WorkSettingsSetPriority(_pw.workTypes[3], 0);
+
+            _pw.pawns[3].Received().WorkSettingsSetPriority(_pw.workTypes[0], 0);
+            _pw.pawns[3].Received().WorkSettingsSetPriority(_pw.workTypes[1], 2);
             _pw.pawns[3].Received().WorkSettingsSetPriority(_pw.workTypes[2], 1);
             _pw.pawns[3].Received().WorkSettingsSetPriority(_pw.workTypes[3], 1);
         }
@@ -71,9 +102,49 @@ namespace Tests
             // assert
             _logger.NoWarnReceived();
 
+            // string.Join("\n\n", _pw.pawns.Select(
+            //     pawn => string.Join(
+            //         "\n",
+            //         pawn.ReceivedCalls()
+            //             .Where(x => x.GetMethodInfo().Name == "WorkSettingsSetPriority")
+            //             .Select(
+            //                 x =>
+            //                     $"{((IPawnWrapper)x.Target()).ThingID} - {((IWorkTypeWrapper)x.GetArguments()[0]).DefName} - {(x.GetArguments()[1])}")
+            //             .ToList())));
+
+            // pawn1 - cook - 0
+            // pawn1 - haul - 1
+            // pawn1 - crafting - 2
+            //
+            // pawn2 - cook - 1
+            // pawn2 - mine - 2
+            // pawn2 - crafting - 0
+            //
+            // pawn3 - cook - 0
+            // pawn3 - haul - 0
+            // pawn3 - mine - 0
+            // pawn3 - crafting - 0
+            //
+            // pawn4 - cook - 0
+            // pawn4 - haul - 2
+            // pawn4 - mine - 1
+            // pawn4 - crafting - 1
+
             _pw.pawns[0].Received().WorkSettingsSetPriority(_pw.workTypes[0], 0);
+            _pw.pawns[0].Received().WorkSettingsSetPriority(_pw.workTypes[1], 1);
+            _pw.pawns[0].Received().WorkSettingsSetPriority(_pw.workTypes[3], 2);
+
             _pw.pawns[1].Received().WorkSettingsSetPriority(_pw.workTypes[0], 1);
-            _pw.pawns[2].Received().WorkSettingsSetPriority(_pw.workTypes[1], 1);
+            _pw.pawns[1].Received().WorkSettingsSetPriority(_pw.workTypes[2], 2);
+            _pw.pawns[1].Received().WorkSettingsSetPriority(_pw.workTypes[3], 0);
+
+            _pw.pawns[2].Received().WorkSettingsSetPriority(_pw.workTypes[0], 0);
+            _pw.pawns[2].Received().WorkSettingsSetPriority(_pw.workTypes[1], 0);
+            _pw.pawns[2].Received().WorkSettingsSetPriority(_pw.workTypes[2], 0);
+            _pw.pawns[2].Received().WorkSettingsSetPriority(_pw.workTypes[3], 0);
+
+            _pw.pawns[3].Received().WorkSettingsSetPriority(_pw.workTypes[0], 0);
+            _pw.pawns[3].Received().WorkSettingsSetPriority(_pw.workTypes[1], 2);
             _pw.pawns[3].Received().WorkSettingsSetPriority(_pw.workTypes[2], 1);
             _pw.pawns[3].Received().WorkSettingsSetPriority(_pw.workTypes[3], 1);
         }
