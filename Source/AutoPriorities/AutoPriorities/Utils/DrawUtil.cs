@@ -21,8 +21,7 @@ namespace AutoPriorities.Utils
             value = !value;
         }
 
-        public static int PriorityBox(float x, float y, int priority, int MaxPriority, float width = 25f,
-            float height = 25f)
+        public static int PriorityBox(float x, float y, int priority, int maxPriority, float width = 25f, float height = 25f)
         {
             var rect = new Rect(x, y, width, height);
             DrawWorkBoxBackground(rect);
@@ -45,7 +44,7 @@ namespace AutoPriorities.Utils
                 case 0:
                 {
                     var priority2 = priorityOrig - 1;
-                    if (priority2 < 0) priority2 = MaxPriority;
+                    if (priority2 < 0) priority2 = maxPriority;
                     priority = priority2;
                     SoundDefOf.Click.PlayOneShotOnCamera();
                     break;
@@ -53,7 +52,7 @@ namespace AutoPriorities.Utils
                 case 1:
                 {
                     var priority2 = priorityOrig + 1;
-                    if (priority2 > MaxPriority) priority2 = 0;
+                    if (priority2 > maxPriority) priority2 = 0;
                     priority = priority2;
                     SoundDefOf.Click.PlayOneShotOnCamera();
                     break;

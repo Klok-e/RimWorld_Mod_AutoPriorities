@@ -18,6 +18,32 @@ namespace AutoPriorities.Extensions
             }
         }
 
+        public static int ArgMax<T>(this T[] span) where T : struct, IComparable<T>
+        {
+            if (span == null) throw new ArgumentNullException(nameof(span));
+
+            var bestIndex = -1;
+            T bestValue = default;
+            var hasValue = false;
+            var index = 0;
+
+            for (var i = 0; i < span.Length; i++)
+            {
+                var item = span[i];
+                if (!hasValue || item.CompareTo(bestValue) > 0)
+                {
+                    bestValue = item;
+                    bestIndex = index;
+                    hasValue = true;
+                }
+
+                index++;
+            }
+
+            if (bestIndex == -1) throw new InvalidOperationException("Sequence contains no elements.");
+            return bestIndex;
+        }
+
         public static IEnumerable<double> Cumulative(this IEnumerable<double> enu)
         {
             double cum = 0;
@@ -59,9 +85,7 @@ namespace AutoPriorities.Extensions
         {
             return assembly.GetTypes()
                 .SelectMany(t => t.GetMethods())
-                .Where(
-                    type => type.GetCustomAttributes(typeof(T), true)
-                        .Length > 0 && type.IsStatic);
+                .Where(type => type.GetCustomAttributes(typeof(T), true).Length > 0 && type.IsStatic);
         }
     }
 }

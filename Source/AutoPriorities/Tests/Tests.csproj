@@ -267,6 +267,7 @@
         <Compile Include="PawnsDataSerializerLoadTests.cs"/>
         <Compile Include="PawnsDataSerializerSaveTests.cs"/>
         <Compile Include="PawnsDataTests.cs"/>
+        <Compile Include="PrioritiesAssignerSmarterTests.cs"/>
         <Compile Include="PrioritiesAssignerTests.cs"/>
         <Compile Include="Tests.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
