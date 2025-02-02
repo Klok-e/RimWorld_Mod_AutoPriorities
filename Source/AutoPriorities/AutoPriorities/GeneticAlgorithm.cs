@@ -10,7 +10,7 @@ namespace AutoPriorities
     public class GeneticAlgorithm
     {
         private readonly float _crossoverRate;
-        private readonly Func<float[], (bool IsFeasible, float Obj)> _evaluateFunc;
+        private readonly Func<double[], (bool IsFeasible, double Obj)> _evaluateFunc;
         private readonly float _infeasiblePenalty; // penalty added if solution is infeasible
         private readonly ILogger _logger;
         private readonly float _mutationRate;
@@ -26,11 +26,11 @@ namespace AutoPriorities
         private readonly float _secondsImproveSolution;
         private readonly float _secondsTimeout;
         private readonly int[] _startingChromosome;
-        private readonly float[] _startingSolution;
+        private readonly double[] _startingSolution;
         private readonly IWorldInfoRetriever _worldInfoRetriever;
 
         public GeneticAlgorithm(ILogger logger, IWorldInfoRetriever worldInfoRetriever,
-            Func<float[], (bool IsFeasible, float Obj)> evaluateFunc, float[] startingSolution, int numPriorities, int numWorkTypePawnPairs,
+            Func<double[], (bool IsFeasible, double Obj)> evaluateFunc, double[] startingSolution, int numPriorities, int numWorkTypePawnPairs,
             float secondsTimeout, float secondsImproveSolution, int populationSize = 30, float crossoverRate = 0.7f,
             float mutationRate = 0.1f, float infeasiblePenalty = 1_000_000.0f)
         {
@@ -54,39 +54,51 @@ namespace AutoPriorities
         ///     Runs the genetic algorithm and returns the best solution found
         ///     as a "double[]" that you can pass to EvaluateSolution again or apply in the game.
         /// </summary>
-        public bool Run(out float[]? solution)
+        public bool Run(out double[]? solution)
         {
             // 1) Generate initial population of chromosomes
             var population = new List<int[]>(_populationSize);
             for (var i = 0; i < _populationSize; i++) population.Add(_startingChromosome);
 
             // Keep track of overall best solution
-            float[]? bestSolution = null;
-            var bestFitness = float.MaxValue; // because we are minimizing
+            double[]? bestSolution = null;
+            var bestFitness = double.MaxValue; // because we are minimizing
             var bestIsFeasible = false;
 
+            var generations = 0;
+            
             var timer = new Stopwatch();
             timer.Start();
 
             while (!bestIsFeasible && timer.Elapsed.TotalSeconds < _secondsTimeout)
+            {
                 population = RunGeneration(population, ref bestFitness, ref bestSolution, ref bestIsFeasible);
+                
+                generations++;
+            }
 
             if (_worldInfoRetriever.DebugLogs())
                 _logger.Info($"Random search run to find feasible solution for seconds: {timer.Elapsed.TotalSeconds}");
 
             timer.Restart();
             while (timer.Elapsed.TotalSeconds < _secondsImproveSolution)
+            {
                 population = RunGeneration(population, ref bestFitness, ref bestSolution, ref bestIsFeasible);
+                
+                generations++;
+            }
 
             if (_worldInfoRetriever.DebugLogs())
                 _logger.Info($"Random search run to improve on solution for seconds: {timer.Elapsed.TotalSeconds}");
+            
+            Console.WriteLine($"Generations: {generations}");
 
             solution = bestSolution;
 
             return bestIsFeasible;
         }
 
-        private List<int[]> RunGeneration(List<int[]> population, ref float bestFitness, ref float[]? bestSolution, ref bool bestIsFeasible)
+        private List<int[]> RunGeneration(List<int[]> population, ref double bestFitness, ref double[]? bestSolution, ref bool bestIsFeasible)
         {
             // Evaluate all individuals and sort them by fitness
             var scoredPopulation = population.Select(chrom => (chrom, fitness: Fitness(chrom, out var isFeasible), isFeasible))
@@ -97,7 +109,7 @@ namespace AutoPriorities
             if (scoredPopulation[0].fitness < bestFitness)
             {
                 bestFitness = scoredPopulation[0].fitness;
-                bestSolution = ChromosomeToFloatArray(scoredPopulation[0].chrom);
+                bestSolution = ChromosomeToDoubleArray(scoredPopulation[0].chrom);
                 bestIsFeasible = scoredPopulation[0].isFeasible;
             }
 
@@ -172,11 +184,11 @@ namespace AutoPriorities
         ///     Convert a chromosome (int[] of length = #_pairs, each in [0.._numPriorities])
         ///     to a double[] for EvaluateSolution.
         /// </summary>
-        private float[] ChromosomeToFloatArray(int[] chromosome)
+        private double[] ChromosomeToDoubleArray(int[] chromosome)
         {
             // We have (#pairs) chunks, each chunk size = (_numPriorities + 1).
             // Initialize a big zero array for all bits.
-            var x = new float[chromosome.Length * (_numPriorities + 1)];
+            var x = new double[chromosome.Length * (_numPriorities + 1)];
 
             for (var i = 0; i < chromosome.Length; i++)
             {
@@ -195,9 +207,9 @@ namespace AutoPriorities
         ///     Since the solver is set up for "minimize cost," we interpret "fitness = cost + penalty if infeasible."
         ///     Smaller fitness is better.
         /// </summary>
-        private float Fitness(int[] chromosome, out bool isFeasible)
+        private double Fitness(int[] chromosome, out bool isFeasible)
         {
-            var x = ChromosomeToFloatArray(chromosome);
+            var x = ChromosomeToDoubleArray(chromosome);
             var (feasible, cost) = _evaluateFunc(x);
 
             isFeasible = feasible;
@@ -257,10 +269,10 @@ namespace AutoPriorities
         ///     Simple tournament selection.
         ///     We pick N random solutions, pick the best (lowest fitness).
         /// </summary>
-        private int[] TournamentSelection(List<(int[] chrom, float fitness, bool isFeasible)> scoredPopulation, int tournamentSize = 3)
+        private int[] TournamentSelection(List<(int[] chrom, double fitness, bool isFeasible)> scoredPopulation, int tournamentSize = 3)
         {
             var bestIndex = -1;
-            var bestFitness = float.MaxValue;
+            var bestFitness = double.MaxValue;
 
             for (var i = 0; i < tournamentSize; i++)
             {

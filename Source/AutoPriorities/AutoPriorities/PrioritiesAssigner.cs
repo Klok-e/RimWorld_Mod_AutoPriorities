@@ -22,6 +22,8 @@ namespace AutoPriorities
         private readonly PawnsData _pawnsData;
         private readonly IWorldInfoRetriever _worldInfoRetriever;
 
+        private double[] _matrixResultCached = [];
+
         public PrioritiesAssigner(PawnsData pawnsData, ILogger logger, IImportantJobsProvider importantJobsProvider,
             IWorldInfoRetriever worldInfoRetriever)
         {
@@ -177,7 +179,7 @@ namespace AutoPriorities
             {
                 var pawnFitnessDatas = workTypeKv.Value;
                 var workType = workTypeKv.Key;
-                
+
                 foreach (var pawnFitnessData in pawnFitnessDatas)
                 {
                     var offset = assignmentOffsets[(workType, pawnFitnessData.Pawn)];
@@ -198,7 +200,7 @@ namespace AutoPriorities
             {
                 var pawnData = workTypeKv.Value;
                 var workType = workTypeKv.Key;
-                
+
                 priorityPercentCached.Clear();
                 FillListPriorityPercents(pawnsData, workType, priorityPercentCached);
                 if (priorityPercentCached.Count == 0) continue;
@@ -254,7 +256,7 @@ namespace AutoPriorities
                     foreach (var workTypeKv in pawnsData.SortedPawnFitnessForEveryWork)
                     {
                         var wType = workTypeKv.Key;
-                        
+
                         if (!assignmentOffsets.TryGetValue((wType, pawn), out var offset)) continue;
 
                         rowPawn[offset + workTableIndex] = 1.0f;
@@ -286,12 +288,12 @@ namespace AutoPriorities
                 return;
             }
 
-            var solutionFloat = solution.ToFloat();
+            var sparseModel = model.CreateLinearModelSparse();
             var algorithm = new GeneticAlgorithm(
                 _logger,
                 _worldInfoRetriever,
-                x => EvaluateSolution(x, model),
-                solutionFloat,
+                x => EvaluateSolution(x, sparseModel),
+                solution,
                 workTableEntries.Length,
                 variables.Count / (workTableEntries.Length + 1),
                 populationSize: _worldInfoRetriever.OptimizationPopulationSize(),
@@ -302,7 +304,7 @@ namespace AutoPriorities
                 infeasiblePenalty: 1000000.0f
             );
 
-            if (!algorithm.Run(out solutionFloat) || solutionFloat == null)
+            if (!algorithm.Run(out solution) || solution == null)
             {
                 _logger.Warn(
                     $"{nameof(AssignPrioritiesByOptimization)} failed; "
@@ -312,7 +314,7 @@ namespace AutoPriorities
                 return;
             }
 
-            AssignPrioritiesFromSolution(workTableEntries, assignmentOffsets, solutionFloat, pawnsData);
+            AssignPrioritiesFromSolution(workTableEntries, assignmentOffsets, solution.ToFloat(), pawnsData);
         }
 
         private void AssignPrioritiesFromSolution(WorkTableEntry[] workTableEntries,
@@ -324,36 +326,37 @@ namespace AutoPriorities
             {
                 var pawns = workTypeKv.Value;
                 var workType = workTypeKv.Key;
-            foreach (var pawnFitness in pawns)
-            {
-                var ind = assignmentOffsets[(workType, pawnFitness.Pawn)];
-
-                for (var i = 0; i < pawnWorkTypeVariables.Length; i++)
-                    pawnWorkTypeVariables[i] = solution[ind + i];
-
-                var chosenPriorityIndex = pawnWorkTypeVariables.ArgMax();
-
-                var priorityV = chosenPriorityIndex == workTableEntries.Length ? 0 : workTableEntries[chosenPriorityIndex].Priority.v;
-
-                if (_worldInfoRetriever.DebugLogs())
+                foreach (var pawnFitness in pawns)
                 {
-                    _logger.Info(
-                        $"pawn {pawnFitness.Pawn.NameFullColored}; work type {workType.LabelShort}; "
-                        + $"fitness {pawnFitness.Fitness}; chosen priority {priorityV}"
-                    );
-                }
+                    var ind = assignmentOffsets[(workType, pawnFitness.Pawn)];
 
-                try
-                {
-                    pawnFitness.Pawn.WorkSettingsSetPriority(workType, priorityV);
+                    for (var i = 0; i < pawnWorkTypeVariables.Length; i++)
+                        pawnWorkTypeVariables[i] = solution[ind + i];
+
+                    var chosenPriorityIndex = pawnWorkTypeVariables.ArgMax();
+
+                    var priorityV = chosenPriorityIndex == workTableEntries.Length ? 0 : workTableEntries[chosenPriorityIndex].Priority.v;
+
+                    if (_worldInfoRetriever.DebugLogs())
+                    {
+                        _logger.Info(
+                            $"pawn {pawnFitness.Pawn.NameFullColored}; work type {workType.LabelShort}; "
+                            + $"fitness {pawnFitness.Fitness}; chosen priority {priorityV}"
+                        );
+                    }
+
+                    try
+                    {
+                        pawnFitness.Pawn.WorkSettingsSetPriority(workType, priorityV);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.Warn(
+                            $"Failed to assign pawn {pawnFitness.Pawn.NameFullColored} to work type {workType.LabelShort} with priority {priorityV}: {e}"
+                        );
+                    }
                 }
-                catch (Exception e)
-                {
-                    _logger.Warn(
-                        $"Failed to assign pawn {pawnFitness.Pawn.NameFullColored} to work type {workType.LabelShort} with priority {priorityV}: {e}"
-                    );
-                }
-            }}
+            }
         }
 
         private static bool CanPawnBeAssigned(PawnFitnessData pawnFitnessData, PawnsData pawnsData)
@@ -449,31 +452,27 @@ namespace AutoPriorities
             priorities.Sort((x, y) => x.Item1.v.CompareTo(y.Item1.v));
         }
 
-        private (bool IsFeasible, float Objective) EvaluateSolution(float[] x, LinearModel model)
+        private (bool IsFeasible, double Objective) EvaluateSolution(double[] x, LinearModelSparse model)
         {
-            // 0) Basic sanity check
-            if (x.Length != model.VariableCount)
-                throw new ArgumentException("Wrong solution size for model.");
-
             // 1) Check variable bounds
             for (var i = 0; i < x.Length; i++)
                 if (x[i] < model.LowerBounds[i] || x[i] > model.UpperBounds[i])
                     return (false, 0.0f); // Out-of-bounds => not feasible
 
             // 2) Check each constraint
-            foreach (var cRow in model.Constraints)
+            alglib.sparsemv(model.constraintCoeff, x, ref _matrixResultCached);
+            for (var i = 0; i < model.constraintLowerBound.Length; i++)
             {
-                var sum = 0.0;
-                for (var i = 0; i < x.Length; i++) sum += cRow.Coeff[i] * x[i];
-
-                if (sum < cRow.LowerBound || sum > cRow.UpperBound)
+                var sum = _matrixResultCached[i];
+                if (sum < model.constraintLowerBound[i] || sum > model.constraintUpperBound[i])
                     // Violates constraint
                     return (false, 0.0f);
             }
 
             // 3) Compute objective = dot(Cost, x).
-            var objective = 0.0f;
-            for (var i = 0; i < x.Length; i++) objective += model.Cost[i] * x[i];
+            var objective = 0.0;
+            for (var i = 0; i < x.Length; i++)
+                objective += model.Cost[i] * x[i];
 
             return (true, objective);
         }

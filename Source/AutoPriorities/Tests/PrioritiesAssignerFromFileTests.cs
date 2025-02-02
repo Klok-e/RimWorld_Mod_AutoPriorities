@@ -84,7 +84,7 @@ namespace Tests
             _assigner.AssignPrioritiesByOptimization(_pawnsData);
 
             // assert
-            // _logger.NoWarnReceived();
+            _logger.NoWarnReceived();
 
             // string.Join("\n\n", _pawns.Select(
             //     pawn => string.Join(
