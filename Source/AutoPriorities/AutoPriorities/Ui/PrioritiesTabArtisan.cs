@@ -38,14 +38,11 @@ namespace AutoPriorities.Ui
             // using (_profilerFactory.CreateProfiler("PrioritiesTab"))
             var workTypes = _pawnsData.SortedPawnFitnessForEveryWork.Count;
 
-            var scrollRect = new Rect(
-                inRect.xMin,
-                inRect.yMin,
-                inRect.width,
-                inRect.height - Consts.DistFromBottomBorder);
+            var scrollRect = new Rect(inRect.xMin, inRect.yMin, inRect.width, inRect.height - Consts.DistFromBottomBorder);
 
-            var tableSizeX = (workTypes + 1) * Consts.SliderMargin + Consts.SlidersDistFromLeftBorder +
-                             Consts.SlidersDistFromRightBorder
+            var tableSizeX = (workTypes + 1) * Consts.SliderMargin
+                             + Consts.SlidersDistFromLeftBorder
+                             + Consts.SlidersDistFromRightBorder
                              + Consts.SliderMargin;
 
             var tableSizeY = (Consts.SliderHeight + 3 * Consts.ButtonHeight) * _pawnsData.WorkTables.Count;
@@ -68,20 +65,23 @@ namespace AutoPriorities.Ui
                     Consts.SlidersDistFromLeftBorder,
                     (Consts.SliderHeight + 3 * Consts.ButtonHeight) * row,
                     tableSizeX + Consts.SlidersDistFromRightBorder + Consts.SliderWidth,
-                    Consts.SliderHeight + 3 * Consts.ButtonHeight + 5f);
+                    Consts.SliderHeight + 3 * Consts.ButtonHeight + 5f
+                );
 
                 //draw bottom line
                 Widgets.DrawLine(
                     new Vector2(slidersRect.xMin, slidersRect.yMax),
                     new Vector2(slidersRect.xMax, slidersRect.yMax),
                     new Color(0.7f, 0.7f, 0.7f),
-                    1f);
+                    1f
+                );
 
                 pr.Priority = DrawUtil.PriorityBox(
                     slidersRect.xMin,
                     slidersRect.yMin + slidersRect.height / 2f,
                     pr.Priority.v,
-                    _worldInfoRetriever.GetMaxPriority());
+                    _worldInfoRetriever.GetMaxPriority()
+                );
                 workTables[table] = pr;
 
                 var maxJobsElementXPos = slidersRect.xMin + Consts.SliderMargin;
@@ -91,30 +91,26 @@ namespace AutoPriorities.Ui
                     maxJobsElementXPos - maxJobsLabel.GetWidthCached() / 2,
                     slidersRect.yMin + 20f,
                     120f,
-                    Consts.LabelHeight);
+                    Consts.LabelHeight
+                );
                 Widgets.Label(maxJobsLabelRect, maxJobsLabel);
 
-                var maxJobsSliderRect = new Rect(
-                    maxJobsElementXPos,
-                    slidersRect.yMin + 60f,
-                    Consts.SliderWidth,
-                    Consts.SliderHeight);
+                var maxJobsSliderRect = new Rect(maxJobsElementXPos, slidersRect.yMin + 60f, Consts.SliderWidth, Consts.SliderHeight);
 
                 var newMaxJobsSliderValue = MaxJobsPerPawnSlider(
                     maxJobsSliderRect,
                     Mathf.Clamp(pr.JobCount.v, 0f, _pawnsData.WorkTypes.Count),
-                    out var skipTextAssign);
+                    out var skipTextAssign
+                );
 
                 var jobCountMaxLabelRect = new Rect(
                     maxJobsSliderRect.xMax - Consts.PercentStringWidth,
                     maxJobsSliderRect.yMax + 3f,
                     Consts.PercentStringWidth,
-                    25f);
+                    25f
+                );
 
-                newMaxJobsSliderValue = MaxJobsPerPawnField(
-                    jobCountMaxLabelRect,
-                    newMaxJobsSliderValue,
-                    skipTextAssign);
+                newMaxJobsSliderValue = MaxJobsPerPawnField(jobCountMaxLabelRect, newMaxJobsSliderValue, skipTextAssign);
 
                 pr.JobCount = Mathf.RoundToInt(newMaxJobsSliderValue);
                 workTables[table] = pr;
@@ -124,11 +120,10 @@ namespace AutoPriorities.Ui
                     new Vector2(maxJobsLabelRect.xMax, slidersRect.yMin),
                     new Vector2(maxJobsLabelRect.xMax, slidersRect.yMax),
                     new Color(0.5f, 0.5f, 0.5f),
-                    1f);
+                    1f
+                );
 
-                DrawWorkListForPriority(
-                    pr,
-                    new Rect(maxJobsLabelRect.xMax, slidersRect.y, slidersRect.width, slidersRect.height));
+                DrawWorkListForPriority(pr, new Rect(maxJobsLabelRect.xMax, slidersRect.y, slidersRect.width, slidersRect.height));
 
                 _prioritiesEncounteredCached.Add(pr.Priority);
                 //return to normal
@@ -141,7 +136,8 @@ namespace AutoPriorities.Ui
                 inRect.xMax - Consts.SliderMargin,
                 scrollRect.yMax + 9f,
                 Consts.ButtonHeight,
-                Consts.ButtonHeight);
+                Consts.ButtonHeight
+            );
             if (Widgets.ButtonImage(removePriorityButtonRect, Resources.MinusIcon))
             {
                 RemovePriority();
@@ -152,7 +148,8 @@ namespace AutoPriorities.Ui
                 removePriorityButtonRect.xMin - Window.StandardMargin - removePriorityButtonRect.width,
                 scrollRect.yMax + 9f,
                 Consts.ButtonHeight,
-                Consts.ButtonHeight);
+                Consts.ButtonHeight
+            );
             if (Widgets.ButtonImage(addPriorityButtonRect, Resources.PlusIcon))
             {
                 AddPriority();
@@ -177,9 +174,7 @@ namespace AutoPriorities.Ui
         {
             if (!jobCountMaxLabelRect.Overlaps(_currViewedScrollRect)) return newMaxJobsSliderValue;
 
-            var maxJobsText = Mathf
-                .RoundToInt(newMaxJobsSliderValue)
-                .ToString();
+            var maxJobsText = Mathf.RoundToInt(newMaxJobsSliderValue).ToString();
             var prevSliderVal = newMaxJobsSliderValue;
             Widgets.TextFieldNumeric(jobCountMaxLabelRect, ref newMaxJobsSliderValue, ref maxJobsText);
 
@@ -212,8 +207,7 @@ namespace AutoPriorities.Ui
                     bool takenMoreThanTotal;
                     // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority PercentColonistsAvailable"))
                     {
-                        var (available1, takenMoreThanTotal1) =
-                            _pawnsData.PercentColonistsAvailable(workType, pr.Priority);
+                        var (available1, takenMoreThanTotal1) = _pawnsData.PercentColonistsAvailable(workType, pr.Priority);
                         available = available1;
                         takenMoreThanTotal = takenMoreThanTotal1;
                         elementXPos = slidersRect.x + Consts.SliderMargin / 2 + Consts.SliderMargin * i;
@@ -221,7 +215,8 @@ namespace AutoPriorities.Ui
                             elementXPos - workName.GetWidthCached() / 2,
                             slidersRect.yMin + (i % 2 == 0 ? 0f : 20f) + 10f,
                             100f,
-                            Consts.LabelHeight);
+                            Consts.LabelHeight
+                        );
 
                         WorkTypeLabel(takenMoreThanTotal, labelRect, workName);
                     }
@@ -231,27 +226,18 @@ namespace AutoPriorities.Ui
                     bool didValueChange;
                     // using (_profilerFactory.CreateProfiler("DrawWorkListForPriority SliderPercentsInput"))
                     {
-                        sliderRect = new Rect(
-                            elementXPos,
-                            slidersRect.yMin + 60f,
-                            Consts.SliderWidth,
-                            Consts.SliderHeight);
+                        sliderRect = new Rect(elementXPos, slidersRect.yMin + 60f, Consts.SliderWidth, Consts.SliderHeight);
                         currSliderVal = (float)_pawnsData.PercentValue(currentPercent, workType, pr.Priority);
 
 #if DEBUG
                         var prevSliderVal = currSliderVal;
 #endif
 
-                        currSliderVal = SliderPercentsInput(
-                            sliderRect,
-                            (float)available,
-                            currSliderVal,
-                            out didValueChange);
+                        currSliderVal = SliderPercentsInput(sliderRect, (float)available, currSliderVal, out didValueChange);
 #if DEBUG
                         if (Math.Abs(currSliderVal - prevSliderVal) > 0.001)
                         {
-                            _logger.Info(
-                                $"slider: available {available}; prevSliderVal {prevSliderVal}; currSliderVal {currSliderVal}");
+                            _logger.Info($"slider: available {available}; prevSliderVal {prevSliderVal}; currSliderVal {currSliderVal}");
                             isCallInteresting = true;
                         }
 #endif
@@ -264,7 +250,8 @@ namespace AutoPriorities.Ui
                             sliderRect.xMax - Consts.PercentStringWidth,
                             sliderRect.yMax + 3f,
                             Consts.PercentStringWidth,
-                            25f);
+                            25f
+                        );
 
 #if DEBUG
                         var prevSliderVal = currSliderVal;
@@ -276,12 +263,12 @@ namespace AutoPriorities.Ui
                             takenMoreThanTotal,
                             (float)available,
                             didValueChange,
-                            numberColonists);
+                            numberColonists
+                        );
 #if DEBUG
                         if (Math.Abs(currSliderVal - prevSliderVal) > 0.001)
                         {
-                            _logger.Info(
-                                $"text: available {available}; prevSliderVal {prevSliderVal}; currSliderVal {currSliderVal}");
+                            _logger.Info($"text: available {available}; prevSliderVal {prevSliderVal}; currSliderVal {currSliderVal}");
                             isCallInteresting = true;
                         }
 #endif
@@ -292,19 +279,22 @@ namespace AutoPriorities.Ui
                     {
                         var switchRect = new Rect(
                             percentsRect.min + new Vector2(5f + Consts.PercentStringLabelWidth, 0f),
-                            percentsRect.size);
+                            percentsRect.size
+                        );
                         var symbolRect = new Rect(switchRect.min + new Vector2(5f, 0f), switchRect.size);
                         var switchPercentsNumbersButton = SwitchPercentsNumbersButton(
                             symbolRect,
                             currentPercent,
                             numberColonists,
                             currSliderVal,
-                            remainPercentExistsForWorkType);
+                            remainPercentExistsForWorkType
+                        );
 #if DEBUG
                         if (isCallInteresting)
                             _logger.Info(
-                                $"button {switchPercentsNumbersButton.Variant.ToString()}; " +
-                                $"percent {_pawnsData.PercentValue(switchPercentsNumbersButton, workType, pr.Priority)}");
+                                $"button {switchPercentsNumbersButton.variant.ToString()}; "
+                                + $"percent {_pawnsData.PercentValue(switchPercentsNumbersButton, workType, pr.Priority)}"
+                            );
 #endif
                         pr.WorkTypes[workType] = switchPercentsNumbersButton;
                     }
@@ -329,10 +319,7 @@ namespace AutoPriorities.Ui
             GUI.color = prevCol;
         }
 
-        private float SliderPercentsInput(Rect sliderRect,
-            float available,
-            float currSliderVal,
-            out bool didValueChange)
+        private float SliderPercentsInput(Rect sliderRect, float available, float currSliderVal, out bool didValueChange)
         {
             if (!sliderRect.Overlaps(_currViewedScrollRect))
             {
@@ -347,27 +334,22 @@ namespace AutoPriorities.Ui
             return Mathf.Clamp(newSliderValue, 0f, Math.Max(available, currSliderVal));
         }
 
-        private float TextPercentsInput(Rect rect,
-            TablePercent currentPercent,
-            float currentValue,
-            bool takenMoreThanTotal,
-            float available,
-            bool skipAssign,
-            int totalColonists)
+        private float TextPercentsInput(Rect rect, TablePercent currentPercent, float currentValue, bool takenMoreThanTotal,
+            float available, bool skipAssign, int totalColonists)
         {
             if (!rect.Overlaps(_currViewedScrollRect)) return currentValue;
 
             var value = Mathf.Round(
-                currentPercent.Variant switch
+                currentPercent.variant switch
                 {
                     PercentVariant.Percent => currentValue * 100f,
                     PercentVariant.PercentRemaining => available * 100f,
                     PercentVariant.Number => currentValue * totalColonists,
                     _ => throw new ArgumentOutOfRangeException(nameof(currentPercent), currentPercent, null),
-                });
+                }
+            );
 
-            var percentsText = Mathf.RoundToInt(value)
-                .ToString(CultureInfo.InvariantCulture);
+            var percentsText = Mathf.RoundToInt(value).ToString(CultureInfo.InvariantCulture);
 
             var prevCol = GUI.color;
             if (takenMoreThanTotal) GUI.color = Color.red;
@@ -377,7 +359,7 @@ namespace AutoPriorities.Ui
             if (skipAssign) return currentValue;
 
             GUI.color = prevCol;
-            var currSliderVal = currentPercent.Variant switch
+            var currSliderVal = currentPercent.variant switch
             {
                 PercentVariant.Percent => value / 100f,
                 PercentVariant.PercentRemaining => value / 100f,
@@ -387,25 +369,18 @@ namespace AutoPriorities.Ui
             return Mathf.Clamp(currSliderVal, 0f, Math.Max(available, currentValue));
         }
 
-        private TablePercent SwitchPercentsNumbersButton(Rect rect,
-            TablePercent currentPercent,
-            int numberColonists,
-            float sliderValue,
+        private TablePercent SwitchPercentsNumbersButton(Rect rect, TablePercent currentPercent, int numberColonists, float sliderValue,
             bool remainPercentExistsForWorkType)
         {
             if (!rect.Overlaps(_currViewedScrollRect)) return currentPercent;
 
-            var switchButtonResult = currentPercent.Variant switch
+            var switchButtonResult = currentPercent.variant switch
             {
-                PercentVariant.Percent => Widgets.ButtonText(rect, "%")
-                    ? PercentVariant.Number
-                    : PercentVariant.Percent,
+                PercentVariant.Percent => Widgets.ButtonText(rect, "%") ? PercentVariant.Number : PercentVariant.Percent,
                 PercentVariant.Number => Widgets.ButtonText(rect, "№")
                     ? remainPercentExistsForWorkType ? PercentVariant.Percent : PercentVariant.PercentRemaining
                     : PercentVariant.Number,
-                PercentVariant.PercentRemaining => Widgets.ButtonText(rect, "R")
-                    ? PercentVariant.Percent
-                    : PercentVariant.PercentRemaining,
+                PercentVariant.PercentRemaining => Widgets.ButtonText(rect, "R") ? PercentVariant.Percent : PercentVariant.PercentRemaining,
                 _ => throw new ArgumentOutOfRangeException(),
             };
 
@@ -424,8 +399,7 @@ namespace AutoPriorities.Ui
         private void AddPriority()
         {
             var dict = new Dictionary<IWorkTypeWrapper, TablePercent>();
-            _pawnsData.WorkTables.Add(
-                new WorkTableEntry { Priority = 0, JobCount = _pawnsData.WorkTypes.Count, WorkTypes = dict });
+            _pawnsData.WorkTables.Add(new WorkTableEntry { Priority = 0, JobCount = _pawnsData.WorkTypes.Count, WorkTypes = dict });
 
             foreach (var keyValue in _pawnsData.WorkTypes) dict.Add(keyValue, TablePercent.Percent(0));
         }

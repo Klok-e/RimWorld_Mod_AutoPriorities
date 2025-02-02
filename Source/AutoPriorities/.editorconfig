@@ -5,7 +5,7 @@ trim_trailing_whitespace = false
 insert_final_newline = false
 indent_style = space
 indent_size = 4
-max_line_length = 150
+max_line_length = 140
 
 [*.xml]
 indent_size = 2
@@ -76,6 +76,8 @@ resharper_wrap_chained_binary_expressions = chop_if_long
 resharper_wrap_chained_method_calls = chop_if_long
 resharper_braces_for_ifelse = required_for_multiline
 resharper_keep_existing_linebreaks = false
+resharper_csharp_indent_invocation_pars = inside
+resharper_csharp_wrap_before_invocation_rpar = true
 
 # ReSharper inspection severities
 resharper_arrange_redundant_parentheses_highlighting = hint

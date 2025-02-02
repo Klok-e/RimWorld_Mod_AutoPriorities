@@ -55,6 +55,11 @@
         <Compile Include="Core\PercentTableSaver.cs"/>
         <Compile Include="Core\Resources.cs"/>
         <Compile Include="Core\Unit.cs"/>
+        <Compile Include="SerializableSimpleData\ArraySimpleData.cs"/>
+        <Compile Include="SerializableSimpleData\PawnSimpleData.cs"/>
+        <Compile Include="SerializableSimpleData\PawnWorkTypeData.cs"/>
+        <Compile Include="SerializableSimpleData\WorkTablesSimpleData.cs"/>
+        <Compile Include="SerializableSimpleData\WorkTypesSimpleData.cs"/>
         <Compile Include="ExcludedPawnEntry.cs"/>
         <Compile Include="Extensions\CollectionExtensions.cs"/>
         <Compile Include="HarmonyPatches\DirtyPawnsNotifyRebuildPawnsTable.cs"/>
@@ -85,7 +90,6 @@
         <Compile Include="Percents\TablePercent.cs"/>
         <Compile Include="PrioritiesAssigner.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
-        <Compile Include="RuntimeHelpers.cs"/>
         <Compile Include="SaveData.cs"/>
         <Compile Include="SaveDataRequest.cs"/>
         <Compile Include="Ui\AutoPriorities_Dialog.cs"/>
@@ -95,6 +99,7 @@
         <Compile Include="Utils\DrawUtil.cs"/>
         <Compile Include="Utils\QuickProfiler.cs"/>
         <Compile Include="Utils\QuickProfilerFactory.cs"/>
+        <Compile Include="Utils\XmlUtils.cs"/>
         <Compile Include="WorkTableEntry.cs"/>
         <Compile Include="WorldInfoRetriever\IWorldInfoFacade.cs"/>
         <Compile Include="WorldInfoRetriever\IWorldInfoRetriever.cs"/>
@@ -103,10 +108,10 @@
         <Compile Include="Wrappers\IPawnWrapper.cs"/>
         <Compile Include="Wrappers\IWorkTypeWrapper.cs"/>
         <Compile Include="Wrappers\PawnWrapper.cs"/>
+        <Compile Include="Wrappers\WorkTypeSimpleData.cs"/>
         <Compile Include="Wrappers\WorkTypeWrapper.cs"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="IndexRange" Version="1.0.3"/>
         <PackageReference Include="JetBrains.Profiler.Api" Version="1.4.8"/>
         <PackageReference Include="Lib.Harmony" Version="2.3.3"/>
         <PackageReference Include="UnlimitedHugs.Rimworld.HugsLib" Version="11.0.3"/>

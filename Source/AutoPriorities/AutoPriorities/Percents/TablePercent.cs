@@ -1,21 +1,22 @@
 using System;
+using UnityEngine;
 
 namespace AutoPriorities.Percents
 {
-    public readonly struct TablePercent
+    [Serializable]
+    public struct TablePercent
     {
-        private readonly double _percentValue;
-        private readonly int _numberCount;
-        public PercentVariant Variant { get; }
+        public readonly double percentValue;
+        public readonly int numberCount;
+        [SerializeField] public PercentVariant variant;
 
         public double PercentValue
         {
             get
             {
-                if (Variant != PercentVariant.Percent)
-                    throw new InvalidOperationException(
-                        $"Tried to access {nameof(PercentValue)} but variant is: {Variant}");
-                return _percentValue;
+                if (variant != PercentVariant.Percent)
+                    throw new InvalidOperationException($"Tried to access {nameof(PercentValue)} but variant is: {variant}");
+                return percentValue;
             }
         }
 
@@ -23,18 +24,17 @@ namespace AutoPriorities.Percents
         {
             get
             {
-                if (Variant != PercentVariant.Number)
-                    throw new InvalidOperationException(
-                        $"Tried to access {nameof(NumberCount)} but variant is: {Variant}");
-                return _numberCount;
+                if (variant != PercentVariant.Number)
+                    throw new InvalidOperationException($"Tried to access {nameof(NumberCount)} but variant is: {variant}");
+                return numberCount;
             }
         }
 
         private TablePercent(PercentVariant variant, double percentValue, int numberCount)
         {
-            Variant = variant;
-            _percentValue = percentValue;
-            _numberCount = numberCount;
+            this.variant = variant;
+            this.percentValue = percentValue;
+            this.numberCount = numberCount;
         }
 
         public static TablePercent Percent(double value)
@@ -54,8 +54,9 @@ namespace AutoPriorities.Percents
 
         public override string ToString()
         {
-            return $"{nameof(Variant)}: {Variant}, " + $"{nameof(PercentValue)}: {PercentValue}, "
-                                                     + $"{nameof(NumberCount)}: {NumberCount}";
+            return $"{nameof(variant)}: {variant}, "
+                   + $"{nameof(PercentValue)}: {PercentValue}, "
+                   + $"{nameof(NumberCount)}: {NumberCount}";
         }
     }
 }

@@ -12,5 +12,7 @@ namespace AutoPriorities.WorldInfoRetriever
         IEnumerable<IPawnWrapper> GetAllAdultPawnsInPlayerFaction();
 
         int GetMaxPriority();
+
+        bool GetUseOldAssignmentAlgorithm();
     }
 }

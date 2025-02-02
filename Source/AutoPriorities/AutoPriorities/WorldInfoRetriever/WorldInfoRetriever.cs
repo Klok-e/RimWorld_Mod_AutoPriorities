@@ -25,19 +25,21 @@ namespace AutoPriorities.WorldInfoRetriever
 
         public IEnumerable<IPawnWrapper> GetAllAdultPawnsInPlayerFaction()
         {
-            var caravans = Find.WorldObjects.Caravans
-                .Where(caravan => caravan.IsPlayerControlled)
+            var caravans = Find.WorldObjects.Caravans.Where(caravan => caravan.IsPlayerControlled)
                 .SelectMany(caravan => caravan.PawnsListForReading)
                 .Where(pawn => pawn.IsColonist || pawn.IsSlaveOfColony);
             var colonists = Find.Maps.SelectMany(x => x.mapPawns.FreeColonists);
-            return caravans.Concat(colonists)
-                .Where(pawn => !pawn.DevelopmentalStage.Baby())
-                .Select(x => new PawnWrapper(x));
+            return caravans.Concat(colonists).Where(pawn => !pawn.DevelopmentalStage.Baby()).Select(x => new PawnWrapper(x));
         }
 
         public int GetMaxPriority()
         {
             return Controller.MaxPriorityAlien ?? Controller.MaxPriority;
+        }
+
+        public bool GetUseOldAssignmentAlgorithm()
+        {
+            return Controller.UseOldAssignmentAlgorithm;
         }
 
         #endregion

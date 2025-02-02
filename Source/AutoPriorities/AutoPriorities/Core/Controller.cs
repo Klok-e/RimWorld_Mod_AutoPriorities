@@ -22,6 +22,9 @@ namespace AutoPriorities.Core
         private static PawnsDataBuilder? _pawnsDataBuilder;
 
         public static SettingHandle<int>? MaxPriority { get; private set; }
+
+        public static SettingHandle<bool>? UseOldAssignmentAlgorithm { get; private set; }
+
         public static int? MaxPriorityAlien { get; set; }
 
         public static AutoPrioritiesDialog? Dialog { get; private set; }
@@ -46,11 +49,14 @@ namespace AutoPriorities.Core
         public override void DefsLoaded()
         {
             base.DefsLoaded();
-            MaxPriority = Settings.GetHandle(
-                "maxPriority",
-                "Max priority",
-                "Sets max priority",
-                4);
+            MaxPriority = Settings.GetHandle("maxPriority", "Max priority", "Sets max priority", 4);
+            UseOldAssignmentAlgorithm = Settings.GetHandle(
+                "useOldAssignmentAlgorithm",
+                "Use old assignment algorithm",
+                "Use the old greedy assignment algorithm; the new algorithm represents "
+                + "assignment problem as a linear programming optimization problem and uses an LP solver to get an optimal solution.",
+                false
+            );
         }
 
         public static void SwitchMap()
@@ -73,8 +79,7 @@ namespace AutoPriorities.Core
 
             logger?.Info($"Patching for: {packageId}");
 
-            var asm = Assembly.LoadFile(
-                Path.Combine(ModContentPack.RootDir, Path.Combine("ConditionalAssemblies/1.5/", patchName)));
+            var asm = Assembly.LoadFile(Path.Combine(ModContentPack.RootDir, Path.Combine("ConditionalAssemblies/1.5/", patchName)));
             HarmonyInst.PatchAll(asm);
 
             var methods = asm.GetMethodsWithHelpAttribute<PatchInitializeAttribute>();
@@ -85,9 +90,7 @@ namespace AutoPriorities.Core
         private static string GetSaveLocation()
         {
             // Get method "FolderUnderSaveData" from GenFilePaths, which is private (NonPublic) and static.
-            var method = typeof(GenFilePaths).GetMethod(
-                "FolderUnderSaveData",
-                BindingFlags.NonPublic | BindingFlags.Static);
+            var method = typeof(GenFilePaths).GetMethod("FolderUnderSaveData", BindingFlags.NonPublic | BindingFlags.Static);
             if (method == null)
                 throw new Exception("AutoPriorities :: FolderUnderSaveData is null [reflection]");
 
@@ -110,21 +113,9 @@ namespace AutoPriorities.Core
             var importantWorkTypes = new ImportantJobsProvider(worldFacade);
             var priorityAssigner = new PrioritiesAssigner(_pawnData, log, importantWorkTypes);
             var saveFilePather = new SaveFilePather(savePath);
-            var pawnDataExporter = new PawnDataExporter(
-                log,
-                savePath,
-                _pawnData,
-                saveFilePather,
-                stringSerializer,
-                saveDataHandler);
+            var pawnDataExporter = new PawnDataExporter(log, savePath, _pawnData, saveFilePather, stringSerializer, saveDataHandler);
 
-            return new AutoPrioritiesDialog(
-                _pawnData,
-                priorityAssigner,
-                log,
-                importantWorkTypes,
-                pawnDataExporter,
-                worldInfo);
+            return new AutoPrioritiesDialog(_pawnData, priorityAssigner, log, importantWorkTypes, pawnDataExporter, worldInfo);
         }
     }
 }

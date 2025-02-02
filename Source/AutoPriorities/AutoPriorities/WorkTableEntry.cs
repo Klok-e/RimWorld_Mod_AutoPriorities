@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using AutoPriorities.Core;
 using AutoPriorities.Percents;
@@ -5,6 +6,7 @@ using AutoPriorities.Wrappers;
 
 namespace AutoPriorities
 {
+    [Serializable]
     public struct WorkTableEntry
     {
         public Priority Priority { get; set; }

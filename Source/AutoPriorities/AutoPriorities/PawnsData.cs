@@ -56,7 +56,8 @@ namespace AutoPriorities
 #if DEBUG
             _logger.Info(
                 $"[SetData] first job count {WorkTables.FirstOrDefault().JobCount.v}; "
-                + $"load job count: {data.WorkTablesData.FirstOrDefault().JobCount.v}");
+                + $"load job count: {data.WorkTablesData.FirstOrDefault().JobCount.v}"
+            );
 #endif
         }
 
@@ -89,8 +90,7 @@ namespace AutoPriorities
             try
             {
                 // get all work types
-                var workTypes = _worldInfoRetriever.GetWorkTypeDefsInPriorityOrder()
-                    .ToArray();
+                var workTypes = _worldInfoRetriever.GetWorkTypeDefsInPriorityOrder().ToArray();
 
                 var allPawns = _worldInfoRetriever.GetAllAdultPawnsInPlayerFaction();
                 AllPlayerPawns.Clear();
@@ -119,9 +119,20 @@ namespace AutoPriorities
                             var skill = pawn.AverageOfRelevantSkillsFor(work);
                             double learningRateFactor = IgnoreLearningRate ? 1 : pawn.MaxLearningRateFactor(work);
 
-                            var fitness = skill * learningRateFactor;
+                            var isDumbWorkType = work.RelevantSkillsCount > 0;
+                            var fitness = isDumbWorkType ? skill * learningRateFactor : 0.001;
+
                             SortedPawnFitnessForEveryWork[work]
-                                .Add(new PawnFitnessData { Fitness = fitness, Pawn = pawn, SkillLevel = skill, IsOpposed = pawn.IsOpposedToWorkType(work) });
+                                .Add(
+                                    new PawnFitnessData
+                                    {
+                                        Fitness = fitness,
+                                        Pawn = pawn,
+                                        SkillLevel = skill,
+                                        IsOpposed = pawn.IsOpposedToWorkType(work),
+                                        IsDumbWorkType = isDumbWorkType,
+                                    }
+                                );
                         }
                         catch (Exception e)
                         {
@@ -146,13 +157,13 @@ namespace AutoPriorities
                 ExcludedPawns.RemoveWhere(
                     wp =>
                     {
-                        var isToBeDeleted = !AllPlayerPawns.Select(x => x.ThingID)
-                            .Contains(wp.PawnThingId);
+                        var isToBeDeleted = !AllPlayerPawns.Select(x => x.ThingID).Contains(wp.PawnThingId);
                         // if (isToBeDeleted)
                         //     _logger.Info($"removing {wp.PawnThingId} from excluded list");
 
                         return isToBeDeleted;
-                    });
+                    }
+                );
             }
             catch (Exception e)
             {
@@ -161,13 +172,12 @@ namespace AutoPriorities
             }
         }
 
-        public (double percent, bool takenMoreThanTotal) PercentColonistsAvailable(IWorkTypeWrapper workType,
-            Priority priorityIgnore)
+        public (double percent, bool takenMoreThanTotal) PercentColonistsAvailable(IWorkTypeWrapper workType, Priority priorityIgnore)
         {
             var taken = 0d;
             var takenTotal = 0d;
             foreach (var it in WorkTables.Distinct(x => x.Priority)
-                         .Where(x => x.WorkTypes[workType].Variant != PercentVariant.PercentRemaining))
+                         .Where(x => x.WorkTypes[workType].variant != PercentVariant.PercentRemaining))
             {
                 var percent = PercentValue(it.WorkTypes[workType], workType, priorityIgnore);
                 if (it.Priority.v != priorityIgnore.v)
@@ -186,20 +196,17 @@ namespace AutoPriorities
 
         public bool PercentRemainExistsForWorkType(IWorkTypeWrapper workType)
         {
-            return WorkTables.Any(workTableEntry => workTableEntry.WorkTypes[workType].Variant == PercentVariant.PercentRemaining);
+            return WorkTables.Any(workTableEntry => workTableEntry.WorkTypes[workType].variant == PercentVariant.PercentRemaining);
         }
 
-        public double PercentValue(TablePercent tablePercent,
-            IWorkTypeWrapper workTypeWrapper,
-            Priority currentPriority)
+        public double PercentValue(TablePercent tablePercent, IWorkTypeWrapper workTypeWrapper, Priority currentPriority)
         {
             var numberColonists = NumberColonists(workTypeWrapper);
-            return tablePercent.Variant switch
+            return tablePercent.variant switch
             {
                 PercentVariant.Percent => tablePercent.PercentValue,
                 PercentVariant.Number => numberColonists > 0 ? (double)tablePercent.NumberCount / numberColonists : 0,
-                PercentVariant.PercentRemaining => PercentColonistsAvailable(workTypeWrapper, currentPriority)
-                    .percent,
+                PercentVariant.PercentRemaining => PercentColonistsAvailable(workTypeWrapper, currentPriority).percent,
                 _ => throw new ArgumentOutOfRangeException(),
             };
         }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 using AutoPriorities.Extensions;
 using AutoPriorities.ImportantJobs;
 using AutoPriorities.Wrappers;
 using Verse;
+using ILogger = AutoPriorities.APLogger.ILogger;
 
 namespace AutoPriorities
 {
@@ -51,7 +51,8 @@ namespace AutoPriorities
                     PawnJobsCached,
                     _pawnsData.WorkTypes.Subtract(importantWorks).Where(work => !_pawnsData.WorkTypesNotRequiringSkills.Contains(work)),
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work],
-                    _pawnsData.MinimumSkillLevel);
+                    _pawnsData.MinimumSkillLevel
+                );
 
 #if DEBUG
                 _logger.Info("non skilled");
@@ -62,9 +63,12 @@ namespace AutoPriorities
                     PawnJobsCached,
                     _pawnsData.WorkTypesNotRequiringSkills.Subtract(importantWorks),
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work]
-                        .Select(p => new PawnFitnessData { Pawn = p.Pawn, Fitness = 1d / (1 + PawnJobsCached[p.Pawn].Count), SkillLevel = 0 })
+                        .Select(
+                            p => new PawnFitnessData { Pawn = p.Pawn, Fitness = 1d / (1 + PawnJobsCached[p.Pawn].Count), SkillLevel = 0 }
+                        )
                         .OrderByDescending(p => p.Fitness)
-                        .ToList());
+                        .ToList()
+                );
             }
             catch (Exception e)
             {
@@ -74,6 +78,43 @@ namespace AutoPriorities
 
         public void AssignPrioritiesSmarter()
         {
+#if DEBUG
+            // File.WriteAllBytes(
+            //     "PrioritiesSmarterWorkTables.xml",
+            //     new ArraySimpleData<WorkTablesSimpleData>(
+            //         _pawnsData.WorkTables.Select(
+            //                 x => new WorkTablesSimpleData
+            //                 {
+            //                     priority = x.Priority,
+            //                     jobCount = x.JobCount,
+            //                     workTypes = x.WorkTypes.Select(
+            //                             y => new WorkTypesSimpleData { key = new WorkTypeSimpleData(y.Key), value = y.Value }
+            //                         )
+            //                         .ToList(),
+            //                 }
+            //             )
+            //             .ToList()
+            //     ).GetBytesXml()
+            // );
+            //
+            // File.WriteAllBytes(
+            //     "PrioritiesSmarterWorkTypes.xml",
+            //     new ArraySimpleData<WorkTypeSimpleData>(_pawnsData.WorkTypes.Select(y => new WorkTypeSimpleData(y)).ToList()).GetBytesXml()
+            // );
+            // File.WriteAllBytes(
+            //     "PrioritiesSmarterAllPlayerPawns.xml",
+            //     new ArraySimpleData<PawnSimpleData>(
+            //         _pawnsData.AllPlayerPawns.Select(
+            //                 y => new PawnSimpleData(y)
+            //                 {
+            //                     pawnWorkTypeData = _pawnsData.WorkTypes.Select(x => new PawnWorkTypeData(y, x)).ToList(),
+            //                 }
+            //             )
+            //             .ToList()
+            //     ).GetBytesXml()
+            // );
+#endif
+
             // Setup the solver decision variables (cost) for each (workType, pawn, priority + not_assigned)
             var workTableEntries = _pawnsData.WorkTables.Distinct(y => y.Priority.v).ToArray();
             var assignmentOffsets = new Dictionary<(IWorkTypeWrapper, IPawnWrapper), int>();
@@ -112,14 +153,16 @@ namespace AutoPriorities
 
             // Forbid real priorities if pawn is opposed or skill too low
             index = 0;
-            foreach (var workTypeKv in _pawnsData.SortedPawnFitnessForEveryWork)
+            foreach (var (_, pawnFitnessDatas) in _pawnsData.SortedPawnFitnessForEveryWork)
             {
-                foreach (var pfd in workTypeKv.Value)
+                foreach (var pawnFitnessData in pawnFitnessDatas)
                 {
-                    if ((pfd.IsOpposed && !_pawnsData.IgnoreOppositionToWork) || pfd.SkillLevel < _pawnsData.MinimumSkillLevel)
+                    if ((pawnFitnessData.IsOpposed && !_pawnsData.IgnoreOppositionToWork)
+                        || (pawnFitnessData.SkillLevel < _pawnsData.MinimumSkillLevel && !pawnFitnessData.IsDumbWorkType))
                     {
                         // Forbid all *real* priorities (leave "not assigned" free)
-                        for (var workTableIndex = 0; workTableIndex < workTableEntries.Length; workTableIndex++) bndu[index + workTableIndex] = 0.0;
+                        for (var workTableIndex = 0; workTableIndex < workTableEntries.Length; workTableIndex++)
+                            bndu[index + workTableIndex] = 0.0;
                     }
 
                     index += workTableEntries.Length + 1;
@@ -130,9 +173,9 @@ namespace AutoPriorities
 
             // Exactly one choice (some priority or "not assigned") for each (workType, pawn)
             var sumIndex = 0;
-            foreach (var workTypeKv in _pawnsData.SortedPawnFitnessForEveryWork)
+            foreach (var (_, pawnFitnessDatas) in _pawnsData.SortedPawnFitnessForEveryWork)
             {
-                foreach (var pfd in workTypeKv.Value)
+                foreach (var _ in pawnFitnessDatas)
                 {
                     var constraintRow = new double[variables.Count];
                     for (var workTableIndex = 0; workTableIndex < workTableEntries.Length + 1; workTableIndex++)
@@ -201,7 +244,8 @@ namespace AutoPriorities
             if (rep.terminationtype != 1)
             {
                 _logger.Warn(
-                    $"{nameof(AssignPrioritiesSmarter)} failed; LP solver termination type: {rep.terminationtype}; abandoning assignment...");
+                    $"{nameof(AssignPrioritiesSmarter)} failed; LP solver termination type: {rep.terminationtype}; abandoning assignment..."
+                );
                 return;
             }
 
@@ -210,17 +254,29 @@ namespace AutoPriorities
             foreach (var pawnFitness in pawns)
             {
                 var ind = assignmentOffsets[(workType, pawnFitness.Pawn)];
-                var pawnWorkTypeVariables = solution[ind..(ind + workTableEntries.Length + 1)];
+
+                var pawnWorkTypeVariables = new double[workTableEntries.Length + 1];
+                for (var i = 0; i < pawnWorkTypeVariables.Length; i++)
+                    pawnWorkTypeVariables[i] = solution[ind + i];
+
                 var chosenPriorityIndex = pawnWorkTypeVariables.ArgMax();
 
-                pawnFitness.Pawn.WorkSettingsSetPriority(
-                    workType,
-                    chosenPriorityIndex == workTableEntries.Length ? 0 : workTableEntries[chosenPriorityIndex].Priority.v);
+                var priorityV = chosenPriorityIndex == workTableEntries.Length ? 0 : workTableEntries[chosenPriorityIndex].Priority.v;
+
+#if DEBUG
+                _logger.Info(
+                    $"pawn {pawnFitness.Pawn.NameFullColored}; work type {workType.LabelShort}; "
+                    + $"fitness {pawnFitness.Fitness}; chosen priority {priorityV}"
+                );
+#endif
+
+                pawnFitness.Pawn.WorkSettingsSetPriority(workType, priorityV);
             }
         }
 
         private void AssignJobs(PawnsData pawnsData, IDictionary<IPawnWrapper, Dictionary<IWorkTypeWrapper, Priority>> pawnJobs,
-            IEnumerable<IWorkTypeWrapper> workTypes, Func<IWorkTypeWrapper, List<PawnFitnessData>> fitnessGetter, double? minimumSkillLevel = null)
+            IEnumerable<IWorkTypeWrapper> workTypes, Func<IWorkTypeWrapper, List<PawnFitnessData>> fitnessGetter,
+            double? minimumSkillLevel = null)
         {
             foreach (var work in workTypes)
             {
@@ -232,7 +288,7 @@ namespace AutoPriorities
 #endif
 
 #if DEBUG
-                foreach (var (pawn, fitness, skillLevel, isOpposed) in pawns)
+                foreach (var (pawn, fitness, skillLevel, isOpposed, _) in pawns)
                     _logger.Info($"pawn {pawn.NameFullColored}; fitness {fitness}; skill {skillLevel}; isOpposed {isOpposed}");
 #endif
 
@@ -245,7 +301,7 @@ namespace AutoPriorities
                 {
                     var jobsSet = 0;
                     // iterate over all the pawns for this job with current priority
-                    foreach (var (pawn, fitness, skillLevel, isOpposed) in pawns)
+                    foreach (var (pawn, fitness, skillLevel, isOpposed, _) in pawns)
                     {
                         if (jobsSet >= jobsToSet)
                             break;
@@ -255,7 +311,8 @@ namespace AutoPriorities
                         _logger.Info(
                             $"pawn {pawn.NameFullColored}; fitness {fitness}; jobsSet {jobsSet}; "
                             + $"jobsToSet {jobsToSet}; priority {priority.v}; "
-                            + $"jobsPawnHasOnThisPriority {jobsPawnHasOnThisPriority}; maxJobs {maxJobs.v}");
+                            + $"jobsPawnHasOnThisPriority {jobsPawnHasOnThisPriority}; maxJobs {maxJobs.v}"
+                        );
 #endif
 
                         if (pawnJobs[pawn].ContainsKey(work)
@@ -278,7 +335,7 @@ namespace AutoPriorities
                 }
 
                 // set remaining to zero
-                foreach (var (pawn, _, _, _) in pawns)
+                foreach (var (pawn, _, _, _, _) in pawns)
                 {
                     // if this job was already set, skip
                     if (pawnJobs[pawn].ContainsKey(work))
@@ -294,9 +351,12 @@ namespace AutoPriorities
             priorities.Clear();
             priorities.AddRange(
                 pawnsData.WorkTables.Select(
-                        tup => (priority: tup.Priority, jobCount: tup.JobCount, _pawnsData.PercentValue(tup.WorkTypes[work], work, tup.Priority)))
+                        tup => (priority: tup.Priority, jobCount: tup.JobCount,
+                            _pawnsData.PercentValue(tup.WorkTypes[work], work, tup.Priority))
+                    )
                     .Distinct(t => t.priority)
-                    .Where(t => t.priority.v > 0));
+                    .Where(t => t.priority.v > 0)
+            );
             priorities.Sort((x, y) => x.Item1.v.CompareTo(y.Item1.v));
         }
     }

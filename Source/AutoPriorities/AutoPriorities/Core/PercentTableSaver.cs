@@ -23,19 +23,14 @@ namespace AutoPriorities.Core
 
             public List<WorkTableEntry> ParsedData(IWorldInfoFacade serializer)
             {
-                return data.Select(x => x.Parsed(serializer))
-                    .ToList();
+                return data.Select(x => x.Parsed(serializer)).ToList();
             }
 
             public HashSet<ExcludedPawnEntry> ParsedExcluded(IWorldInfoFacade serializer)
             {
                 return excludedPawns.Select(x => x.Parsed(serializer))
                     .Where(p => p.Item1 != null && p.Item2 != null)
-                    .Select(
-                        p => new ExcludedPawnEntry
-                        {
-                            WorkDef = p.Item1!.DefName, PawnThingId = p.Item2!.ThingID,
-                        })
+                    .Select(p => new ExcludedPawnEntry { WorkDef = p.Item1!.DefName, PawnThingId = p.Item2!.ThingID })
                     .ToHashSet();
             }
 
@@ -43,10 +38,8 @@ namespace AutoPriorities.Core
             {
                 return new Ser
                 {
-                    data = data.percents.Select(Tupl.Serialized)
-                        .ToList(),
-                    excludedPawns = data.excluded.Select(WorktypePawn.Serialized)
-                        .ToList(),
+                    data = data.percents.Select(Tupl.Serialized).ToList(),
+                    excludedPawns = data.excluded.Select(WorktypePawn.Serialized).ToList(),
                 };
             }
         }
@@ -75,18 +68,12 @@ namespace AutoPriorities.Core
 
             public WorkTableEntry Parsed(IWorldInfoFacade serializer)
             {
-                return new WorkTableEntry
-                {
-                    Priority = priority, JobCount = jobsMax, WorkTypes = dict.Parsed(serializer),
-                };
+                return new WorkTableEntry { Priority = priority, JobCount = jobsMax, WorkTypes = dict.Parsed(serializer) };
             }
 
             public static Tupl Serialized(WorkTableEntry val)
             {
-                return new Tupl
-                {
-                    priority = val.Priority.v, jobsMax = val.JobCount.v, dict = Dic.Serialized(val.WorkTypes),
-                };
+                return new Tupl { priority = val.Priority.v, jobsMax = val.JobCount.v, dict = Dic.Serialized(val.WorkTypes) };
             }
         }
 
@@ -96,18 +83,12 @@ namespace AutoPriorities.Core
 
             public Dictionary<IWorkTypeWrapper, TablePercent> Parsed(IWorldInfoFacade serializer)
             {
-                return percents.Select(x => x.Parsed(serializer))
-                    .Where(x => x.Item1 != null)
-                    .ToDictionary(x => x.Item1!, x => x.Item2);
+                return percents.Select(x => x.Parsed(serializer)).Where(x => x.Item1 != null).ToDictionary(x => x.Item1!, x => x.Item2);
             }
 
             public static Dic Serialized(Dictionary<IWorkTypeWrapper, TablePercent> dic)
             {
-                return new Dic
-                {
-                    percents = dic.Select(kv => StrPercent.Serialized((kv.Key, kv.Value)))
-                        .ToList(),
-                };
+                return new Dic { percents = dic.Select(kv => StrPercent.Serialized((kv.Key, kv.Value))).ToList() };
             }
         }
 
@@ -147,20 +128,11 @@ namespace AutoPriorities.Core
 
             public static UnionPercent Serialized(TablePercent percent)
             {
-                return percent.Variant switch
+                return percent.variant switch
                 {
-                    PercentVariant.Number => new UnionPercent
-                    {
-                        variant = Variant.Number, number = percent.NumberCount,
-                    },
-                    PercentVariant.Percent => new UnionPercent
-                    {
-                        variant = Variant.Percent, percent = percent.PercentValue,
-                    },
-                    PercentVariant.PercentRemaining => new UnionPercent
-                    {
-                        variant = Variant.PercentRemaining,
-                    },
+                    PercentVariant.Number => new UnionPercent { variant = Variant.Number, number = percent.NumberCount },
+                    PercentVariant.Percent => new UnionPercent { variant = Variant.Percent, percent = percent.PercentValue },
+                    PercentVariant.PercentRemaining => new UnionPercent { variant = Variant.PercentRemaining },
                     _ => throw new Exception(),
                 };
             }

@@ -29,6 +29,7 @@ namespace AutoPriorities.Ui
         private readonly float _prioritiesLabelWidth = Consts.PrioritiesLabel.GetWidthCached() + 10f;
         private readonly PrioritiesTabArtisan _prioritiesTabArtisan;
         private readonly QuickProfilerFactory _profilerFactory = new();
+        private readonly IWorldInfoRetriever _worldInfoRetriever;
 
         private SelectedTab _currentlySelectedTab = SelectedTab.Priorities;
         private Vector2 _importantWorksScrollPos;
@@ -47,10 +48,11 @@ namespace AutoPriorities.Ui
             _logger = logger;
             _importantJobsProvider = importantJobsProvider;
             _pawnDataExporter = pawnDataExporter;
+            _worldInfoRetriever = worldInfoRetriever;
             doCloseButton = true;
             draggable = true;
             resizeable = true;
-            _prioritiesTabArtisan = new PrioritiesTabArtisan(_pawnsData, _logger, worldInfoRetriever);
+            _prioritiesTabArtisan = new PrioritiesTabArtisan(_pawnsData, _logger, _worldInfoRetriever);
         }
 
         public override Vector2 InitialSize => new(
@@ -61,7 +63,8 @@ namespace AutoPriorities.Ui
             + _importExportDeleteLabelWidth * 4
             + Consts.LabelMargin * 6
             + 50,
-            500);
+            500
+        );
 
         public override void PostClose()
         {
@@ -98,7 +101,8 @@ namespace AutoPriorities.Ui
                     prioritiesButtonRect.xMax + Consts.LabelMargin,
                     prioritiesButtonRect.yMin,
                     _pawnExcludeLabelWidth,
-                    Consts.LabelHeight);
+                    Consts.LabelHeight
+                );
                 if (Widgets.ButtonText(excludedButtonRect, Consts.PawnExcludeLabel))
                 {
                     _currentlySelectedTab = SelectedTab.PawnExclusion;
@@ -109,7 +113,8 @@ namespace AutoPriorities.Ui
                     excludedButtonRect.xMax + Consts.LabelMargin,
                     prioritiesButtonRect.yMin,
                     _importantJobsLabelWidth,
-                    Consts.LabelHeight);
+                    Consts.LabelHeight
+                );
                 if (Widgets.ButtonText(importantButtonRect, Consts.ImportantJobsLabel))
                 {
                     _currentlySelectedTab = SelectedTab.ImportantWorkTypes;
@@ -120,7 +125,8 @@ namespace AutoPriorities.Ui
                     importantButtonRect.xMax + Consts.LabelMargin,
                     prioritiesButtonRect.yMin,
                     _miscLabelWidth,
-                    Consts.LabelHeight);
+                    Consts.LabelHeight
+                );
                 if (Widgets.ButtonText(miscButtonRect, Consts.Misc))
                 {
                     _currentlySelectedTab = SelectedTab.Misc;
@@ -154,21 +160,24 @@ namespace AutoPriorities.Ui
                     inRect.xMax - _importExportDeleteLabelWidth,
                     inRect.yMin,
                     _importExportDeleteLabelWidth,
-                    Consts.LabelHeight);
+                    Consts.LabelHeight
+                );
                 DrawDeleteButton(buttonDeleteRect);
 
                 var buttonImportRect = new Rect(
                     buttonDeleteRect.xMin - _importExportDeleteLabelWidth - Consts.LabelMargin,
                     inRect.yMin,
                     _importExportDeleteLabelWidth,
-                    Consts.LabelHeight);
+                    Consts.LabelHeight
+                );
                 DrawImportButton(buttonImportRect);
 
                 var buttonExportRect = new Rect(
                     buttonImportRect.xMin - _importExportDeleteLabelWidth - Consts.LabelMargin,
                     inRect.yMin,
                     _importExportDeleteLabelWidth,
-                    Consts.LabelHeight);
+                    Consts.LabelHeight
+                );
                 DrawExportButton(buttonExportRect);
 
                 var buttonRunRect = new Rect(inRect.xMin, inRect.yMax - Consts.ButtonHeight, _labelWidth, Consts.ButtonHeight);
@@ -189,7 +198,12 @@ namespace AutoPriorities.Ui
             if (Widgets.ButtonText(inRect, Consts.Label))
             {
                 _pawnsData.Rebuild();
-                _prioritiesAssigner.AssignPriorities();
+
+                if (_worldInfoRetriever.GetUseOldAssignmentAlgorithm())
+                    _prioritiesAssigner.AssignPriorities();
+                else
+                    _prioritiesAssigner.AssignPrioritiesSmarter();
+
                 _pawnsData.SaveState();
                 SoundDefOf.Click.PlayOneShotOnCamera();
             }
@@ -203,7 +217,12 @@ namespace AutoPriorities.Ui
             var minFitnessRect = new Rect(inRect.xMin, checkLrIgnoreRect.yMax + Consts.LabelMargin, inRect.width, Consts.ButtonHeight);
             DrawMinimumFitnessInput(minFitnessRect);
 
-            var checkIgnoreOppositionToWorkRect = new Rect(inRect.xMin, minFitnessRect.yMax + Consts.LabelMargin, inRect.width, Consts.ButtonHeight);
+            var checkIgnoreOppositionToWorkRect = new Rect(
+                inRect.xMin,
+                minFitnessRect.yMax + Consts.LabelMargin,
+                inRect.width,
+                Consts.ButtonHeight
+            );
             DrawIgnoreOppositionToWorkCheckbox(checkIgnoreOppositionToWorkRect);
         }
 
@@ -285,7 +304,8 @@ namespace AutoPriorities.Ui
                 Consts.MinimumSkillLevel,
                 Consts.MinimumSkillLevelTooltip,
                 ref pawnsDataMinimumSkillLevel,
-                ref _minimumFitnessInputBuffer);
+                ref _minimumFitnessInputBuffer
+            );
 
             _pawnsData.MinimumSkillLevel = pawnsDataMinimumSkillLevel;
         }
@@ -351,7 +371,8 @@ namespace AutoPriorities.Ui
                     tickboxesRect.xMin + Consts.WorkLabelHorizOffset * i,
                     i % 2 == 0 ? 0f : Consts.WorkLabelOffset,
                     Consts.WorkLabelWidth,
-                    Consts.LabelHeight);
+                    Consts.LabelHeight
+                );
                 Widgets.Label(rect, workLabel);
 
                 // Widgets.DrawBox(rect);
@@ -389,7 +410,8 @@ namespace AutoPriorities.Ui
                 inRect.xMin,
                 inRect.yMin + fromTopToTickboxesVertical,
                 Consts.PawnNameCoWidth,
-                Consts.LabelHeight + Consts.LabelMargin);
+                Consts.LabelHeight + Consts.LabelMargin
+            );
 
             foreach (var pawn in _pawnsData.CurrentMapPlayerPawns)
             {
@@ -416,7 +438,8 @@ namespace AutoPriorities.Ui
 
             var tableSizeX = Consts.WorkLabelWidth / 2 + Consts.WorkLabelHorizOffset * _pawnsData.WorkTypes.Count;
 
-            var tableSizeY = fromTopToTickboxesVertical + (Consts.LabelMargin + Consts.ButtonHeight) * _pawnsData.CurrentMapPlayerPawns.Count;
+            var tableSizeY = fromTopToTickboxesVertical
+                             + (Consts.LabelMargin + Consts.ButtonHeight) * _pawnsData.CurrentMapPlayerPawns.Count;
             Widgets.BeginScrollView(scrollRect, ref _pawnExcludeScrollPos, new Rect(0, 0, tableSizeX, tableSizeY));
 
             anchor = Text.Anchor;
@@ -432,7 +455,8 @@ namespace AutoPriorities.Ui
                     tickboxesRect.xMin + Consts.WorkLabelHorizOffset * i,
                     i % 2 == 0 ? 0f : Consts.WorkLabelOffset,
                     Consts.WorkLabelWidth,
-                    Consts.LabelHeight);
+                    Consts.LabelHeight
+                );
                 Widgets.Label(rect, workLabel);
 
                 var horizLinePos = rect.center.x;
@@ -447,23 +471,28 @@ namespace AutoPriorities.Ui
                     0f,
                     tickboxesRect.yMin + (Consts.LabelMargin + Consts.ButtonHeight) * rowi,
                     Consts.PawnNameCoWidth,
-                    Consts.LabelHeight + Consts.LabelMargin);
+                    Consts.LabelHeight + Consts.LabelMargin
+                );
 
                 Widgets.DrawLine(
                     new Vector2(pawnNameRect.xMin, pawnNameRect.yMax),
                     new Vector2(tickboxesRect.xMax, pawnNameRect.yMax),
                     Color.grey,
-                    1f);
+                    1f
+                );
 
                 // draw tickboxes
                 foreach (var (workType, i) in _pawnsData.WorkTypes.Zip(Enumerable.Range(0, _pawnsData.WorkTypes.Count), (w, i) => (w, i)))
                 {
-                    var prev = _pawnsData.ExcludedPawns.Contains(new ExcludedPawnEntry { WorkDef = workType.DefName, PawnThingId = pawn.ThingID });
+                    var prev = _pawnsData.ExcludedPawns.Contains(
+                        new ExcludedPawnEntry { WorkDef = workType.DefName, PawnThingId = pawn.ThingID }
+                    );
                     var next = prev;
                     DrawUtil.EmptyCheckbox(
                         pawnNameRect.xMax - (Consts.ButtonHeight - 1) / 2 + (i + 1) * Consts.WorkLabelHorizOffset,
                         pawnNameRect.yMin,
-                        ref next);
+                        ref next
+                    );
                     if (prev == next)
                         continue;
 
