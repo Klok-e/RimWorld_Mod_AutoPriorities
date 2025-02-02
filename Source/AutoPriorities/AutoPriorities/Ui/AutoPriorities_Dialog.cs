@@ -92,44 +92,47 @@ namespace AutoPriorities.Ui
             try
             {
                 // draw select tab buttons
-                var prioritiesButtonRect = new Rect(inRect.xMin, inRect.yMin, _prioritiesLabelWidth, Consts.LabelHeight);
-                if (Widgets.ButtonText(prioritiesButtonRect, Consts.PrioritiesLabel))
+                var tabButtonsRect = new Rect(inRect.xMin, inRect.yMin, _prioritiesLabelWidth, Consts.LabelHeight);
+                if (Widgets.ButtonText(tabButtonsRect, Consts.PrioritiesLabel))
                 {
                     _currentlySelectedTab = SelectedTab.Priorities;
                     _pawnsData.Rebuild();
                 }
 
-                var excludedButtonRect = new Rect(
-                    prioritiesButtonRect.xMax + Consts.LabelMargin,
-                    prioritiesButtonRect.yMin,
+                tabButtonsRect = new Rect(
+                    tabButtonsRect.xMax + Consts.LabelMargin,
+                    tabButtonsRect.yMin,
                     _pawnExcludeLabelWidth,
                     Consts.LabelHeight
                 );
-                if (Widgets.ButtonText(excludedButtonRect, Consts.PawnExcludeLabel))
+                if (Widgets.ButtonText(tabButtonsRect, Consts.PawnExcludeLabel))
                 {
                     _currentlySelectedTab = SelectedTab.PawnExclusion;
                     _pawnsData.Rebuild();
                 }
 
-                var importantButtonRect = new Rect(
-                    excludedButtonRect.xMax + Consts.LabelMargin,
-                    prioritiesButtonRect.yMin,
-                    _importantJobsLabelWidth,
-                    Consts.LabelHeight
-                );
-                if (Widgets.ButtonText(importantButtonRect, Consts.ImportantJobsLabel))
+                if (_worldInfoRetriever.GetUseOldAssignmentAlgorithm())
                 {
-                    _currentlySelectedTab = SelectedTab.ImportantWorkTypes;
-                    _pawnsData.Rebuild();
+                    tabButtonsRect = new Rect(
+                        tabButtonsRect.xMax + Consts.LabelMargin,
+                        tabButtonsRect.yMin,
+                        _importantJobsLabelWidth,
+                        Consts.LabelHeight
+                    );
+                    if (Widgets.ButtonText(tabButtonsRect, Consts.ImportantJobsLabel))
+                    {
+                        _currentlySelectedTab = SelectedTab.ImportantWorkTypes;
+                        _pawnsData.Rebuild();
+                    }
                 }
 
-                var miscButtonRect = new Rect(
-                    importantButtonRect.xMax + Consts.LabelMargin,
-                    prioritiesButtonRect.yMin,
+                tabButtonsRect = new Rect(
+                    tabButtonsRect.xMax + Consts.LabelMargin,
+                    tabButtonsRect.yMin,
                     _miscLabelWidth,
                     Consts.LabelHeight
                 );
-                if (Widgets.ButtonText(miscButtonRect, Consts.Misc))
+                if (Widgets.ButtonText(tabButtonsRect, Consts.Misc))
                 {
                     _currentlySelectedTab = SelectedTab.Misc;
                     _pawnsData.Rebuild();
