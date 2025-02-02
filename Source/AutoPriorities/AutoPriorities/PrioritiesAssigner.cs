@@ -209,12 +209,13 @@ namespace AutoPriorities
                 var maxJobs = workTableEntries[workTableIndex].JobCount.v;
                 if (maxJobs <= 0) continue;
 
-                foreach (var (wType, pawns) in _pawnsData.SortedPawnFitnessForEveryWork)
+                foreach (var pawn in _pawnsData.CurrentMapPlayerPawns)
                 {
                     var rowPawn = new double[variables.Count];
-                    foreach (var pawnFitness in pawns)
+                    foreach (var (wType, _) in _pawnsData.SortedPawnFitnessForEveryWork)
                     {
-                        var offset = assignmentOffsets[(wType, pawnFitness.Pawn)];
+                        if (!assignmentOffsets.TryGetValue((wType, pawn), out var offset)) continue;
+
                         rowPawn[offset + workTableIndex] = 1.0;
                     }
 
@@ -228,7 +229,7 @@ namespace AutoPriorities
 
             alglib.minlpresults(state, out var solution, out var rep);
 
-            if (rep.terminationtype != 1)
+            if (rep.terminationtype < 1)
             {
                 _logger.Warn(
                     $"{nameof(AssignPrioritiesSmarter)} failed; LP solver termination type: {rep.terminationtype}; abandoning assignment..."
@@ -250,12 +251,13 @@ namespace AutoPriorities
 
                 var priorityV = chosenPriorityIndex == workTableEntries.Length ? 0 : workTableEntries[chosenPriorityIndex].Priority.v;
 
-#if DEBUG
-                _logger.Info(
-                    $"pawn {pawnFitness.Pawn.NameFullColored}; work type {workType.LabelShort}; "
-                    + $"fitness {pawnFitness.Fitness}; chosen priority {priorityV}"
-                );
-#endif
+                if (_worldInfoRetriever.DebugLogs())
+                {
+                    _logger.Info(
+                        $"pawn {pawnFitness.Pawn.NameFullColored}; work type {workType.LabelShort}; "
+                        + $"fitness {pawnFitness.Fitness}; chosen priority {priorityV}"
+                    );
+                }
 
                 pawnFitness.Pawn.WorkSettingsSetPriority(workType, priorityV);
             }
@@ -339,13 +341,14 @@ namespace AutoPriorities
             }
         }
 
-        private void FillListPriorityPercents(PawnsData pawnsData, IWorkTypeWrapper work, List<(Priority, JobCount, double)> priorities)
+        private static void FillListPriorityPercents(PawnsData pawnsData, IWorkTypeWrapper work,
+            List<(Priority, JobCount, double)> priorities)
         {
             priorities.Clear();
             priorities.AddRange(
                 pawnsData.WorkTables.Select(
                         tup => (priority: tup.Priority, jobCount: tup.JobCount,
-                            _pawnsData.PercentValue(tup.WorkTypes[work], work, tup.Priority))
+                            pawnsData.PercentValue(tup.WorkTypes[work], work, tup.Priority))
                     )
                     .Distinct(t => t.priority)
                     .Where(t => t.priority.v > 0)
@@ -382,7 +385,7 @@ namespace AutoPriorities
             File.WriteAllBytes(
                 "PrioritiesSmarterAllPlayerPawns.xml",
                 new ArraySimpleData<PawnSimpleData>(
-                    _pawnsData.AllPlayerPawns.Select(
+                    _pawnsData.CurrentMapPlayerPawns.Select(
                             y => new PawnSimpleData(y)
                             {
                                 pawnWorkTypeData = _pawnsData.WorkTypes.Select(x => new PawnWorkTypeData(y, x)).ToList(),

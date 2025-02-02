@@ -47,6 +47,11 @@ namespace AutoPriorities.WorldInfoRetriever
             return Controller.DebugSaveTablesAndPawns;
         }
 
+        public bool DebugLogs()
+        {
+            return Controller.DebugLogs;
+        }
+
         #endregion
     }
 }

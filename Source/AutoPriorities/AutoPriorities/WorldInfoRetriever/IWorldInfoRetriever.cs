@@ -16,5 +16,7 @@ namespace AutoPriorities.WorldInfoRetriever
         bool GetUseOldAssignmentAlgorithm();
 
         bool DebugSaveTablesAndPawns();
+
+        bool DebugLogs();
     }
 }

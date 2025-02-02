@@ -27,6 +27,8 @@ namespace AutoPriorities.Core
 
         public static SettingHandle<bool>? DebugSaveTablesAndPawns { get; private set; }
 
+        public static SettingHandle<bool>? DebugLogs { get; private set; }
+
         public static int? MaxPriorityAlien { get; set; }
 
         public static AutoPrioritiesDialog? Dialog { get; private set; }
@@ -65,6 +67,7 @@ namespace AutoPriorities.Core
                 "Debug save tables and pawns",
                 false
             );
+            DebugLogs = Settings.GetHandle("debugLogs", "Debug logs", "Debug logs", false);
         }
 
         public static void SwitchMap()
