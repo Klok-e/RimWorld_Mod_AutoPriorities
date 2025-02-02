@@ -150,17 +150,22 @@ namespace AutoPriorities
             }
 
             // Forbid real priorities if pawn is opposed or skill too low
-            foreach (var (workType, pawnFitnessDatas) in pawnsData.SortedPawnFitnessForEveryWork)
-            foreach (var pawnFitnessData in pawnFitnessDatas)
+            foreach (var workTypeKv in pawnsData.SortedPawnFitnessForEveryWork)
             {
-                if (!CanPawnBeAssigned(pawnFitnessData, pawnsData))
-                {
-                    var offset = assignmentOffsets[(workType, pawnFitnessData.Pawn)];
+                var pawnFitnessDatas = workTypeKv.Value;
+                var workType = workTypeKv.Key;
 
-                    // Forbid all *real* priorities (leave "not assigned" free)
-                    for (var workTableIndex = 0; workTableIndex < workTableEntries.Length; workTableIndex++)
+                foreach (var pawnFitnessData in pawnFitnessDatas)
+                {
+                    if (!CanPawnBeAssigned(pawnFitnessData, pawnsData))
                     {
-                        bndu[offset + workTableIndex] = 0.0f;
+                        var offset = assignmentOffsets[(workType, pawnFitnessData.Pawn)];
+
+                        // Forbid all *real* priorities (leave "not assigned" free)
+                        for (var workTableIndex = 0; workTableIndex < workTableEntries.Length; workTableIndex++)
+                        {
+                            bndu[offset + workTableIndex] = 0.0f;
+                        }
                     }
                 }
             }
@@ -168,8 +173,11 @@ namespace AutoPriorities
             var model = new LinearModel(variables.ToArray(), bndl.ToArray(), bndu.ToArray());
 
             // Exactly one choice (some priority or "not assigned") for each (workType, pawn)
-            foreach (var (workType, pawnFitnessDatas) in pawnsData.SortedPawnFitnessForEveryWork)
+            foreach (var workTypeKv in pawnsData.SortedPawnFitnessForEveryWork)
             {
+                var pawnFitnessDatas = workTypeKv.Value;
+                var workType = workTypeKv.Key;
+                
                 foreach (var pawnFitnessData in pawnFitnessDatas)
                 {
                     var offset = assignmentOffsets[(workType, pawnFitnessData.Pawn)];
@@ -186,8 +194,11 @@ namespace AutoPriorities
             var priorityPercentCached = new List<(Priority priority, JobCount maxJobs, double percent)>();
 
             // Enforce exact jobsToSet for each workType+priority
-            foreach (var (workType, pawnData) in pawnsData.SortedPawnFitnessForEveryWork)
+            foreach (var workTypeKv in pawnsData.SortedPawnFitnessForEveryWork)
             {
+                var pawnData = workTypeKv.Value;
+                var workType = workTypeKv.Key;
+                
                 priorityPercentCached.Clear();
                 FillListPriorityPercents(pawnsData, workType, priorityPercentCached);
                 if (priorityPercentCached.Count == 0) continue;
@@ -240,8 +251,10 @@ namespace AutoPriorities
                 foreach (var pawn in pawnsData.CurrentMapPlayerPawns)
                 {
                     var rowPawn = new float[variables.Count];
-                    foreach (var (wType, _) in pawnsData.SortedPawnFitnessForEveryWork)
+                    foreach (var workTypeKv in pawnsData.SortedPawnFitnessForEveryWork)
                     {
+                        var wType = workTypeKv.Key;
+                        
                         if (!assignmentOffsets.TryGetValue((wType, pawn), out var offset)) continue;
 
                         rowPawn[offset + workTableIndex] = 1.0f;
@@ -307,7 +320,10 @@ namespace AutoPriorities
         {
             var pawnWorkTypeVariables = new float[workTableEntries.Length + 1];
 
-            foreach (var (workType, pawns) in pawnsData.SortedPawnFitnessForEveryWork)
+            foreach (var workTypeKv in pawnsData.SortedPawnFitnessForEveryWork)
+            {
+                var pawns = workTypeKv.Value;
+                var workType = workTypeKv.Key;
             foreach (var pawnFitness in pawns)
             {
                 var ind = assignmentOffsets[(workType, pawnFitness.Pawn)];
@@ -337,7 +353,7 @@ namespace AutoPriorities
                         $"Failed to assign pawn {pawnFitness.Pawn.NameFullColored} to work type {workType.LabelShort} with priority {priorityV}: {e}"
                     );
                 }
-            }
+            }}
         }
 
         private static bool CanPawnBeAssigned(PawnFitnessData pawnFitnessData, PawnsData pawnsData)
