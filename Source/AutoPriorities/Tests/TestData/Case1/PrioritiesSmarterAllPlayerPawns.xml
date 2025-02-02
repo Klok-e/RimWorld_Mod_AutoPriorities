@@ -2,704 +2,704 @@
 <ArraySimpleDataOfPawnSimpleData>
   <array>
     <PawnSimpleData>
-      <thingID>Human241</thingID>
-      <nameFullColored>Theodore 'Theo' Cervi</nameFullColored>
       <labelNoCount>Theodore 'Theo' Cervi</labelNoCount>
+      <nameFullColored>Theodore 'Theo' Cervi</nameFullColored>
       <pawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Firefighter</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Patient</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>2</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Doctor</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>PatientBedRest</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>HaulingUrgent</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>0</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Childcare</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>BasicWorker</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>4</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>FinishingOff</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>0</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Warden</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>7</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Handling</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>2</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Cooking</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>5</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Hunting</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1.5</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>11</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1.5</maxLearningRateFactor>
           <workTypeDefName>Construction</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>5</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Growing</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1.5</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>11</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1.5</maxLearningRateFactor>
           <workTypeDefName>Mining</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>5</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>PlantCutting</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>0</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Smithing</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>0</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Tailoring</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Art</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>0</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Crafting</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Hauling</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Cleaning</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>7</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>DarkStudy</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>7</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Research</workTypeDefName>
         </PawnWorkTypeData>
       </pawnWorkTypeData>
+      <thingID>Human241</thingID>
     </PawnSimpleData>
     <PawnSimpleData>
-      <thingID>Human67650</thingID>
-      <nameFullColored>Harburn Firiz</nameFullColored>
       <labelNoCount>Harburn Firiz</labelNoCount>
+      <nameFullColored>Harburn Firiz</nameFullColored>
       <pawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Firefighter</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Patient</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>4</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Doctor</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>PatientBedRest</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>HaulingUrgent</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>7</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Childcare</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>BasicWorker</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1.5</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>7</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1.5</maxLearningRateFactor>
           <workTypeDefName>FinishingOff</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>7</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Warden</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>0</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Handling</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>2</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Cooking</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Hunting</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>5</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Construction</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Growing</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1.5</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>7</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1.5</maxLearningRateFactor>
           <workTypeDefName>Mining</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>PlantCutting</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>0</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Smithing</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>0</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Tailoring</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>0</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Art</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>0</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Crafting</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Hauling</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Cleaning</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>DarkStudy</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Research</workTypeDefName>
         </PawnWorkTypeData>
       </pawnWorkTypeData>
+      <thingID>Human67650</thingID>
     </PawnSimpleData>
     <PawnSimpleData>
-      <thingID>CreepJoiner103705</thingID>
-      <nameFullColored>Galina Aldridge</nameFullColored>
       <labelNoCount>Galina Aldridge</labelNoCount>
+      <nameFullColored>Galina Aldridge</nameFullColored>
       <pawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Firefighter</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Patient</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <workTypeDefName>Doctor</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>PatientBedRest</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>HaulingUrgent</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>0</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <workTypeDefName>Childcare</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>BasicWorker</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>2.625</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>5</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>2.625</maxLearningRateFactor>
           <workTypeDefName>FinishingOff</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>0</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <workTypeDefName>Warden</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <workTypeDefName>Handling</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <workTypeDefName>Cooking</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1.75</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>2.5</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>true</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>true</isOpposedToWorkType>
+          <maxLearningRateFactor>1.75</maxLearningRateFactor>
           <workTypeDefName>Hunting</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>2</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <workTypeDefName>Construction</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <workTypeDefName>Growing</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>2</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <workTypeDefName>Mining</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <workTypeDefName>PlantCutting</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <workTypeDefName>Smithing</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <workTypeDefName>Tailoring</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1.75</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>5</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1.75</maxLearningRateFactor>
           <workTypeDefName>Art</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.6125</maxLearningRateFactor>
           <workTypeDefName>Crafting</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Hauling</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Cleaning</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>2.625</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>15</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>2.625</maxLearningRateFactor>
           <workTypeDefName>DarkStudy</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>2.625</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>15</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>2.625</maxLearningRateFactor>
           <workTypeDefName>Research</workTypeDefName>
         </PawnWorkTypeData>
       </pawnWorkTypeData>
+      <thingID>CreepJoiner103705</thingID>
     </PawnSimpleData>
     <PawnSimpleData>
-      <thingID>Human116785</thingID>
-      <nameFullColored>Proseria Osro</nameFullColored>
       <labelNoCount>Proseria Osro</labelNoCount>
+      <nameFullColored>Proseria Osro</nameFullColored>
       <pawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Firefighter</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Patient</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>2</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Doctor</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>PatientBedRest</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>HaulingUrgent</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>6</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Childcare</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>BasicWorker</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>0</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>FinishingOff</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>6</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Warden</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>2</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Handling</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Cooking</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>5</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Hunting</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Construction</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Growing</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>0</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Mining</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>PlantCutting</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Smithing</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Tailoring</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>0</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Art</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>1</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>0.35</maxLearningRateFactor>
           <workTypeDefName>Crafting</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Hauling</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>3</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Cleaning</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>4</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>DarkStudy</workTypeDefName>
         </PawnWorkTypeData>
         <PawnWorkTypeData>
-          <maxLearningRateFactor>1</maxLearningRateFactor>
           <averageOfRelevantSkillsFor>4</averageOfRelevantSkillsFor>
-          <isOpposedToWorkType>false</isOpposedToWorkType>
           <isCapableOfWholeWorkType>true</isCapableOfWholeWorkType>
+          <isOpposedToWorkType>false</isOpposedToWorkType>
+          <maxLearningRateFactor>1</maxLearningRateFactor>
           <workTypeDefName>Research</workTypeDefName>
         </PawnWorkTypeData>
       </pawnWorkTypeData>
+      <thingID>Human116785</thingID>
     </PawnSimpleData>
   </array>
 </ArraySimpleDataOfPawnSimpleData>

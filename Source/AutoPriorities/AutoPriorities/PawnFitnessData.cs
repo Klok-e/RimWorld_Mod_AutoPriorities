@@ -10,7 +10,7 @@ namespace AutoPriorities
 
         public double SkillLevel { get; set; }
 
-        public bool IsDumbWorkType { get; set; }
+        public bool IsSkilledWorkType { get; set; }
 
         public bool IsOpposed { get; set; }
 
@@ -21,7 +21,7 @@ namespace AutoPriorities
             fitness = Fitness;
             skillLevel = SkillLevel;
             isOpposed = IsOpposed;
-            isDumbWorkType = IsDumbWorkType;
+            isDumbWorkType = IsSkilledWorkType;
         }
     }
 }

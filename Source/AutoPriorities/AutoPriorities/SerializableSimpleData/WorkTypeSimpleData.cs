@@ -1,16 +1,14 @@
-using System;
-using UnityEngine;
+using AutoPriorities.Wrappers;
 using Verse;
 
-namespace AutoPriorities.Wrappers
+namespace AutoPriorities.SerializableSimpleData
 {
-    [Serializable]
     public record WorkTypeSimpleData
     {
-        [SerializeField] public string? defName;
-        [SerializeField] public WorkTags workTags;
-        [SerializeField] public int relevantSkillsCount;
-        [SerializeField] public string? labelShort;
+        public string? defName;
+        public string? labelShort;
+        public int relevantSkillsCount;
+        public WorkTags workTags;
 
         public WorkTypeSimpleData()
         {

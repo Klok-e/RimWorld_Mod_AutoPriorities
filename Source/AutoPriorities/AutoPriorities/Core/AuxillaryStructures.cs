@@ -1,12 +1,10 @@
 using System;
-using UnityEngine;
 
 namespace AutoPriorities.Core
 {
-    [Serializable]
     public struct Priority : IEquatable<Priority>
     {
-        [SerializeField] public int v;
+        public int v;
 
         public static implicit operator Priority(int value)
         {
@@ -29,10 +27,10 @@ namespace AutoPriorities.Core
         }
     }
 
-    [Serializable]
+
     public struct JobCount
     {
-        [SerializeField] public int v;
+        public int v;
 
         public static implicit operator JobCount(int value)
         {

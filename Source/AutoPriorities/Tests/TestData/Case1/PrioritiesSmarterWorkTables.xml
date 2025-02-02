@@ -2,12 +2,12 @@
 <ArraySimpleDataOfWorkTablesSimpleData>
   <array>
     <WorkTablesSimpleData>
+      <jobCount>
+        <v>24</v>
+      </jobCount>
       <priority>
         <v>1</v>
       </priority>
-      <jobCount>
-        <v>24</v>
-      </jobCount>
       <workTypes>
         <WorkTypesSimpleData>
           <key>
@@ -17,6 +17,8 @@
             <labelShort>Firefight</labelShort>
           </key>
           <value>
+            <percentValue>1</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -28,6 +30,8 @@
             <labelShort>Patient</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -39,6 +43,8 @@
             <labelShort>Doctor</labelShort>
           </key>
           <value>
+            <percentValue>0.20000000298023224</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -50,6 +56,8 @@
             <labelShort>Bed rest</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -61,6 +69,8 @@
             <labelShort>Haul+</labelShort>
           </key>
           <value>
+            <percentValue>1</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -72,6 +82,8 @@
             <labelShort>Childcare</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -83,6 +95,8 @@
             <labelShort>Basic</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -94,6 +108,8 @@
             <labelShort>Finish</labelShort>
           </key>
           <value>
+            <percentValue>1</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -105,6 +121,8 @@
             <labelShort>Warden</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -116,6 +134,8 @@
             <labelShort>Handle</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -127,6 +147,8 @@
             <labelShort>Cook</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -138,6 +160,8 @@
             <labelShort>Hunt</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -149,6 +173,8 @@
             <labelShort>Construct</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -160,6 +186,8 @@
             <labelShort>Grow</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -171,6 +199,8 @@
             <labelShort>Mine</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -182,6 +212,8 @@
             <labelShort>Plant cut</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -193,6 +225,8 @@
             <labelShort>Smith</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -204,6 +238,8 @@
             <labelShort>Tailor</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -215,6 +251,8 @@
             <labelShort>Art</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -226,6 +264,8 @@
             <labelShort>Craft</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -237,6 +277,8 @@
             <labelShort>Haul</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -248,6 +290,8 @@
             <labelShort>Clean</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -259,6 +303,8 @@
             <labelShort>Dark study</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -270,18 +316,20 @@
             <labelShort>Research</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
       </workTypes>
     </WorkTablesSimpleData>
     <WorkTablesSimpleData>
+      <jobCount>
+        <v>24</v>
+      </jobCount>
       <priority>
         <v>2</v>
       </priority>
-      <jobCount>
-        <v>24</v>
-      </jobCount>
       <workTypes>
         <WorkTypesSimpleData>
           <key>
@@ -291,6 +339,8 @@
             <labelShort>Firefight</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -302,6 +352,8 @@
             <labelShort>Patient</labelShort>
           </key>
           <value>
+            <percentValue>1</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -313,6 +365,8 @@
             <labelShort>Doctor</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -324,6 +378,8 @@
             <labelShort>Bed rest</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -335,6 +391,8 @@
             <labelShort>Haul+</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -346,6 +404,8 @@
             <labelShort>Childcare</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -357,6 +417,8 @@
             <labelShort>Basic</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -368,6 +430,8 @@
             <labelShort>Finish</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -379,6 +443,8 @@
             <labelShort>Warden</labelShort>
           </key>
           <value>
+            <percentValue>1</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -390,6 +456,8 @@
             <labelShort>Handle</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -401,6 +469,8 @@
             <labelShort>Cook</labelShort>
           </key>
           <value>
+            <percentValue>0.20000000298023224</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -412,6 +482,8 @@
             <labelShort>Hunt</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -423,6 +495,8 @@
             <labelShort>Construct</labelShort>
           </key>
           <value>
+            <percentValue>0.20000000298023224</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -434,6 +508,8 @@
             <labelShort>Grow</labelShort>
           </key>
           <value>
+            <percentValue>0.20000000298023224</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -445,6 +521,8 @@
             <labelShort>Mine</labelShort>
           </key>
           <value>
+            <percentValue>0.20000000298023224</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -456,6 +534,8 @@
             <labelShort>Plant cut</labelShort>
           </key>
           <value>
+            <percentValue>0.20000000298023224</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -467,6 +547,8 @@
             <labelShort>Smith</labelShort>
           </key>
           <value>
+            <percentValue>0.20000000298023224</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -478,6 +560,8 @@
             <labelShort>Tailor</labelShort>
           </key>
           <value>
+            <percentValue>0.20000000298023224</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -489,6 +573,8 @@
             <labelShort>Art</labelShort>
           </key>
           <value>
+            <percentValue>0.20000000298023224</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -500,6 +586,8 @@
             <labelShort>Craft</labelShort>
           </key>
           <value>
+            <percentValue>0.20000000298023224</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -511,6 +599,8 @@
             <labelShort>Haul</labelShort>
           </key>
           <value>
+            <percentValue>0.20000000298023224</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -522,6 +612,8 @@
             <labelShort>Clean</labelShort>
           </key>
           <value>
+            <percentValue>0.20000000298023224</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -533,6 +625,8 @@
             <labelShort>Dark study</labelShort>
           </key>
           <value>
+            <percentValue>0.20000000298023224</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -544,18 +638,20 @@
             <labelShort>Research</labelShort>
           </key>
           <value>
+            <percentValue>0.20000000298023224</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
       </workTypes>
     </WorkTablesSimpleData>
     <WorkTablesSimpleData>
+      <jobCount>
+        <v>24</v>
+      </jobCount>
       <priority>
         <v>3</v>
       </priority>
-      <jobCount>
-        <v>24</v>
-      </jobCount>
       <workTypes>
         <WorkTypesSimpleData>
           <key>
@@ -565,6 +661,8 @@
             <labelShort>Firefight</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -576,6 +674,8 @@
             <labelShort>Patient</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -587,6 +687,8 @@
             <labelShort>Doctor</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -598,6 +700,8 @@
             <labelShort>Bed rest</labelShort>
           </key>
           <value>
+            <percentValue>1</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -609,6 +713,8 @@
             <labelShort>Haul+</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -620,6 +726,8 @@
             <labelShort>Childcare</labelShort>
           </key>
           <value>
+            <percentValue>1</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -631,6 +739,8 @@
             <labelShort>Basic</labelShort>
           </key>
           <value>
+            <percentValue>1</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -642,6 +752,8 @@
             <labelShort>Finish</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -653,6 +765,8 @@
             <labelShort>Warden</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -664,6 +778,8 @@
             <labelShort>Handle</labelShort>
           </key>
           <value>
+            <percentValue>1</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -675,6 +791,8 @@
             <labelShort>Cook</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -686,6 +804,8 @@
             <labelShort>Hunt</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -697,6 +817,8 @@
             <labelShort>Construct</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -708,6 +830,8 @@
             <labelShort>Grow</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -719,6 +843,8 @@
             <labelShort>Mine</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -730,6 +856,8 @@
             <labelShort>Plant cut</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -741,6 +869,8 @@
             <labelShort>Smith</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -752,6 +882,8 @@
             <labelShort>Tailor</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -763,6 +895,8 @@
             <labelShort>Art</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -774,6 +908,8 @@
             <labelShort>Craft</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -785,6 +921,8 @@
             <labelShort>Haul</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -796,6 +934,8 @@
             <labelShort>Clean</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -807,6 +947,8 @@
             <labelShort>Dark study</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
@@ -818,18 +960,20 @@
             <labelShort>Research</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>Percent</variant>
           </value>
         </WorkTypesSimpleData>
       </workTypes>
     </WorkTablesSimpleData>
     <WorkTablesSimpleData>
-      <priority>
-        <v>4</v>
-      </priority>
       <jobCount>
         <v>24</v>
       </jobCount>
+      <priority>
+        <v>4</v>
+      </priority>
       <workTypes>
         <WorkTypesSimpleData>
           <key>
@@ -839,6 +983,8 @@
             <labelShort>Firefight</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -850,6 +996,8 @@
             <labelShort>Patient</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -861,6 +1009,8 @@
             <labelShort>Doctor</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -872,6 +1022,8 @@
             <labelShort>Bed rest</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -883,6 +1035,8 @@
             <labelShort>Haul+</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -894,6 +1048,8 @@
             <labelShort>Childcare</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -905,6 +1061,8 @@
             <labelShort>Basic</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -916,6 +1074,8 @@
             <labelShort>Finish</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -927,6 +1087,8 @@
             <labelShort>Warden</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -938,6 +1100,8 @@
             <labelShort>Handle</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -949,6 +1113,8 @@
             <labelShort>Cook</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -960,6 +1126,8 @@
             <labelShort>Hunt</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -971,6 +1139,8 @@
             <labelShort>Construct</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -982,6 +1152,8 @@
             <labelShort>Grow</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -993,6 +1165,8 @@
             <labelShort>Mine</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -1004,6 +1178,8 @@
             <labelShort>Plant cut</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -1015,6 +1191,8 @@
             <labelShort>Smith</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -1026,6 +1204,8 @@
             <labelShort>Tailor</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -1037,6 +1217,8 @@
             <labelShort>Art</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -1048,6 +1230,8 @@
             <labelShort>Craft</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -1059,6 +1243,8 @@
             <labelShort>Haul</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -1070,6 +1256,8 @@
             <labelShort>Clean</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -1081,6 +1269,8 @@
             <labelShort>Dark study</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>
@@ -1092,6 +1282,8 @@
             <labelShort>Research</labelShort>
           </key>
           <value>
+            <percentValue>0</percentValue>
+            <numberCount>0</numberCount>
             <variant>PercentRemaining</variant>
           </value>
         </WorkTypesSimpleData>

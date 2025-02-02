@@ -42,6 +42,11 @@ namespace AutoPriorities.WorldInfoRetriever
             return Controller.UseOldAssignmentAlgorithm;
         }
 
+        public bool DebugSaveTablesAndPawns()
+        {
+            return Controller.DebugSaveTablesAndPawns;
+        }
+
         #endregion
     }
 }

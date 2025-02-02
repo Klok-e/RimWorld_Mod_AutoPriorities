@@ -14,5 +14,7 @@ namespace AutoPriorities.WorldInfoRetriever
         int GetMaxPriority();
 
         bool GetUseOldAssignmentAlgorithm();
+
+        bool DebugSaveTablesAndPawns();
     }
 }

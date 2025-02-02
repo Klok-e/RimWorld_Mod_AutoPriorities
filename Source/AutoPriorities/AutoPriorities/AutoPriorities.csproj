@@ -59,6 +59,7 @@
         <Compile Include="SerializableSimpleData\PawnSimpleData.cs"/>
         <Compile Include="SerializableSimpleData\PawnWorkTypeData.cs"/>
         <Compile Include="SerializableSimpleData\WorkTablesSimpleData.cs"/>
+        <Compile Include="SerializableSimpleData\WorkTypeSimpleData.cs"/>
         <Compile Include="SerializableSimpleData\WorkTypesSimpleData.cs"/>
         <Compile Include="ExcludedPawnEntry.cs"/>
         <Compile Include="Extensions\CollectionExtensions.cs"/>
@@ -108,7 +109,6 @@
         <Compile Include="Wrappers\IPawnWrapper.cs"/>
         <Compile Include="Wrappers\IWorkTypeWrapper.cs"/>
         <Compile Include="Wrappers\PawnWrapper.cs"/>
-        <Compile Include="Wrappers\WorkTypeSimpleData.cs"/>
         <Compile Include="Wrappers\WorkTypeWrapper.cs"/>
     </ItemGroup>
     <ItemGroup>

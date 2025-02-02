@@ -1,14 +1,17 @@
 using System;
-using UnityEngine;
 
 namespace AutoPriorities.Percents
 {
-    [Serializable]
     public struct TablePercent
     {
-        public readonly double percentValue;
-        public readonly int numberCount;
-        [SerializeField] public PercentVariant variant;
+        // ReSharper disable once MemberCanBePrivate.Global
+        // ReSharper disable once FieldCanBeMadeReadOnly.Global
+        public double percentValue;
+
+        // ReSharper disable once MemberCanBePrivate.Global
+        // ReSharper disable once FieldCanBeMadeReadOnly.Global
+        public int numberCount;
+        public PercentVariant variant;
 
         public double PercentValue
         {

@@ -119,8 +119,8 @@ namespace AutoPriorities
                             var skill = pawn.AverageOfRelevantSkillsFor(work);
                             double learningRateFactor = IgnoreLearningRate ? 1 : pawn.MaxLearningRateFactor(work);
 
-                            var isDumbWorkType = work.RelevantSkillsCount > 0;
-                            var fitness = isDumbWorkType ? skill * learningRateFactor : 0.001;
+                            var isSkilledWorkType = work.RelevantSkillsCount > 0;
+                            var fitness = isSkilledWorkType ? skill * learningRateFactor : 0.001;
 
                             SortedPawnFitnessForEveryWork[work]
                                 .Add(
@@ -130,7 +130,7 @@ namespace AutoPriorities
                                         Pawn = pawn,
                                         SkillLevel = skill,
                                         IsOpposed = pawn.IsOpposedToWorkType(work),
-                                        IsDumbWorkType = isDumbWorkType,
+                                        IsSkilledWorkType = isSkilledWorkType,
                                     }
                                 );
                         }

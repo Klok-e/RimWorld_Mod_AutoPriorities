@@ -25,6 +25,8 @@ namespace AutoPriorities.Core
 
         public static SettingHandle<bool>? UseOldAssignmentAlgorithm { get; private set; }
 
+        public static SettingHandle<bool>? DebugSaveTablesAndPawns { get; private set; }
+
         public static int? MaxPriorityAlien { get; set; }
 
         public static AutoPrioritiesDialog? Dialog { get; private set; }
@@ -55,6 +57,12 @@ namespace AutoPriorities.Core
                 "Use old assignment algorithm",
                 "Use the old greedy assignment algorithm; the new algorithm represents "
                 + "assignment problem as a linear programming optimization problem and uses an LP solver to get an optimal solution.",
+                false
+            );
+            DebugSaveTablesAndPawns = Settings.GetHandle(
+                "debugSaveTablesAndPawns",
+                "Debug save tables and pawns",
+                "Debug save tables and pawns",
                 false
             );
         }
@@ -102,20 +110,20 @@ namespace AutoPriorities.Core
         {
             var savePath = GetSaveLocation();
 
-            var worldInfo = new WorldInfoRetriever.WorldInfoRetriever();
+            var worldInfoRetriever = new WorldInfoRetriever.WorldInfoRetriever();
             var log = logger!;
-            var worldFacade = new WorldInfoFacade(worldInfo, log);
+            var worldFacade = new WorldInfoFacade(worldInfoRetriever, log);
             var stringSerializer = new PawnDataStringSerializer(log, worldFacade);
             var saveDataHandler = new SaveDataHandler(log, stringSerializer);
             var mapSpecificSerializer = new MapSpecificDataPawnsDataSerializer(log, stringSerializer, saveDataHandler);
-            _pawnsDataBuilder = new PawnsDataBuilder(mapSpecificSerializer, worldInfo, log);
+            _pawnsDataBuilder = new PawnsDataBuilder(mapSpecificSerializer, worldInfoRetriever, log);
             _pawnData = _pawnsDataBuilder.Build();
             var importantWorkTypes = new ImportantJobsProvider(worldFacade);
-            var priorityAssigner = new PrioritiesAssigner(_pawnData, log, importantWorkTypes);
+            var priorityAssigner = new PrioritiesAssigner(_pawnData, log, importantWorkTypes, worldInfoRetriever);
             var saveFilePather = new SaveFilePather(savePath);
             var pawnDataExporter = new PawnDataExporter(log, savePath, _pawnData, saveFilePather, stringSerializer, saveDataHandler);
 
-            return new AutoPrioritiesDialog(_pawnData, priorityAssigner, log, importantWorkTypes, pawnDataExporter, worldInfo);
+            return new AutoPrioritiesDialog(_pawnData, priorityAssigner, log, importantWorkTypes, pawnDataExporter, worldInfoRetriever);
         }
     }
 }

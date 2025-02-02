@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using AutoPriorities.Core;
 using AutoPriorities.Extensions;
 using AutoPriorities.ImportantJobs;
+using AutoPriorities.SerializableSimpleData;
+using AutoPriorities.Utils;
+using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
 using Verse;
 using ILogger = AutoPriorities.APLogger.ILogger;
@@ -15,12 +19,15 @@ namespace AutoPriorities
         private readonly IImportantJobsProvider _importantJobsProvider;
         private readonly ILogger _logger;
         private readonly PawnsData _pawnsData;
+        private readonly IWorldInfoRetriever _worldInfoRetriever;
 
-        public PrioritiesAssigner(PawnsData pawnsData, ILogger logger, IImportantJobsProvider importantJobsProvider)
+        public PrioritiesAssigner(PawnsData pawnsData, ILogger logger, IImportantJobsProvider importantJobsProvider,
+            IWorldInfoRetriever worldInfoRetriever)
         {
             _pawnsData = pawnsData;
             _logger = logger;
             _importantJobsProvider = importantJobsProvider;
+            _worldInfoRetriever = worldInfoRetriever;
         }
 
         private List<(Priority priority, JobCount maxJobs, double percent)> PriorityPercentCached { get; } = new();
@@ -78,42 +85,7 @@ namespace AutoPriorities
 
         public void AssignPrioritiesSmarter()
         {
-#if DEBUG
-            // File.WriteAllBytes(
-            //     "PrioritiesSmarterWorkTables.xml",
-            //     new ArraySimpleData<WorkTablesSimpleData>(
-            //         _pawnsData.WorkTables.Select(
-            //                 x => new WorkTablesSimpleData
-            //                 {
-            //                     priority = x.Priority,
-            //                     jobCount = x.JobCount,
-            //                     workTypes = x.WorkTypes.Select(
-            //                             y => new WorkTypesSimpleData { key = new WorkTypeSimpleData(y.Key), value = y.Value }
-            //                         )
-            //                         .ToList(),
-            //                 }
-            //             )
-            //             .ToList()
-            //     ).GetBytesXml()
-            // );
-            //
-            // File.WriteAllBytes(
-            //     "PrioritiesSmarterWorkTypes.xml",
-            //     new ArraySimpleData<WorkTypeSimpleData>(_pawnsData.WorkTypes.Select(y => new WorkTypeSimpleData(y)).ToList()).GetBytesXml()
-            // );
-            // File.WriteAllBytes(
-            //     "PrioritiesSmarterAllPlayerPawns.xml",
-            //     new ArraySimpleData<PawnSimpleData>(
-            //         _pawnsData.AllPlayerPawns.Select(
-            //                 y => new PawnSimpleData(y)
-            //                 {
-            //                     pawnWorkTypeData = _pawnsData.WorkTypes.Select(x => new PawnWorkTypeData(y, x)).ToList(),
-            //                 }
-            //             )
-            //             .ToList()
-            //     ).GetBytesXml()
-            // );
-#endif
+            SaveTablesAndPawnsIfDebug();
 
             // Setup the solver decision variables (cost) for each (workType, pawn, priority + not_assigned)
             var workTableEntries = _pawnsData.WorkTables.Distinct(y => y.Priority.v).ToArray();
@@ -123,9 +95,9 @@ namespace AutoPriorities
             var bndl = new List<double>();
             var bndu = new List<double>();
 
-            var index = 0;
-            foreach (var workTypeKv in _pawnsData.SortedPawnFitnessForEveryWork)
             {
+                var index = 0;
+                foreach (var workTypeKv in _pawnsData.SortedPawnFitnessForEveryWork)
                 foreach (var pfd in workTypeKv.Value)
                 {
                     // Negative cost for real priorities => solver maximizes fitness
@@ -152,38 +124,36 @@ namespace AutoPriorities
             alglib.minlpsetcost(state, variables.ToArray());
 
             // Forbid real priorities if pawn is opposed or skill too low
-            index = 0;
-            foreach (var (_, pawnFitnessDatas) in _pawnsData.SortedPawnFitnessForEveryWork)
+            foreach (var (workType, pawnFitnessDatas) in _pawnsData.SortedPawnFitnessForEveryWork)
+            foreach (var pawnFitnessData in pawnFitnessDatas)
             {
-                foreach (var pawnFitnessData in pawnFitnessDatas)
+                if (!CanPawnBeAssigned(pawnFitnessData))
                 {
-                    if ((pawnFitnessData.IsOpposed && !_pawnsData.IgnoreOppositionToWork)
-                        || (pawnFitnessData.SkillLevel < _pawnsData.MinimumSkillLevel && !pawnFitnessData.IsDumbWorkType))
-                    {
-                        // Forbid all *real* priorities (leave "not assigned" free)
-                        for (var workTableIndex = 0; workTableIndex < workTableEntries.Length; workTableIndex++)
-                            bndu[index + workTableIndex] = 0.0;
-                    }
+                    var offset = assignmentOffsets[(workType, pawnFitnessData.Pawn)];
 
-                    index += workTableEntries.Length + 1;
+                    // Forbid all *real* priorities (leave "not assigned" free)
+                    for (var workTableIndex = 0; workTableIndex < workTableEntries.Length; workTableIndex++)
+                    {
+                        bndu[offset + workTableIndex] = 0.0;
+                    }
                 }
             }
 
             alglib.minlpsetbc(state, bndl.ToArray(), bndu.ToArray());
 
             // Exactly one choice (some priority or "not assigned") for each (workType, pawn)
-            var sumIndex = 0;
-            foreach (var (_, pawnFitnessDatas) in _pawnsData.SortedPawnFitnessForEveryWork)
+            foreach (var (workType, pawnFitnessDatas) in _pawnsData.SortedPawnFitnessForEveryWork)
             {
-                foreach (var _ in pawnFitnessDatas)
+                foreach (var pawnFitnessData in pawnFitnessDatas)
                 {
+                    var offset = assignmentOffsets[(workType, pawnFitnessData.Pawn)];
+
                     var constraintRow = new double[variables.Count];
                     for (var workTableIndex = 0; workTableIndex < workTableEntries.Length + 1; workTableIndex++)
-                        constraintRow[sumIndex + workTableIndex] = 1.0;
+                        constraintRow[offset + workTableIndex] = 1.0;
 
                     // sum of real priorities + "not assigned" must be exactly 1
                     alglib.minlpaddlc2dense(state, constraintRow, 1, 1);
-                    sumIndex += workTableEntries.Length + 1;
                 }
             }
 
@@ -196,11 +166,12 @@ namespace AutoPriorities
 
                 var groups = PriorityPercentCached.Distinct(x => x.priority)
                     .Select(a => a.percent)
-                    .IterPercents(pawnData.Count)
+                    .IterPercents(pawnData.Count(CanPawnBeAssigned))
                     .GroupBy(v => v.percentIndex)
                     .Select(g => (PriorityPercentCached[g.Key].priority, jobsToSet: g.Count()))
                     .OrderBy(x => x.priority.v);
 
+                var sumJobsRemain = pawnData.Count;
                 foreach (var (priority, jobsToSet) in groups)
                 {
                     var workTableIndex = workTableEntries.FirstIndexOf(x => x.Priority.Equals(priority));
@@ -212,7 +183,23 @@ namespace AutoPriorities
                         constraintRow[offset + workTableIndex] = 1.0;
                     }
 
-                    alglib.minlpaddlc2dense(state, constraintRow, 0, jobsToSet);
+                    alglib.minlpaddlc2dense(state, constraintRow, jobsToSet, jobsToSet);
+
+                    sumJobsRemain -= jobsToSet;
+                }
+
+                if (sumJobsRemain > 0)
+                {
+                    var unsetPriorityIndex = workTableEntries.Length;
+
+                    var constraintRow = new double[variables.Count];
+                    foreach (var pfd in pawnData)
+                    {
+                        var offset = assignmentOffsets[(workType, pfd.Pawn)];
+                        constraintRow[offset + unsetPriorityIndex] = 1.0;
+                    }
+
+                    alglib.minlpaddlc2dense(state, constraintRow, sumJobsRemain, sumJobsRemain);
                 }
             }
 
@@ -272,6 +259,12 @@ namespace AutoPriorities
 
                 pawnFitness.Pawn.WorkSettingsSetPriority(workType, priorityV);
             }
+        }
+
+        private bool CanPawnBeAssigned(PawnFitnessData pawnFitnessData)
+        {
+            return (!pawnFitnessData.IsOpposed || _pawnsData.IgnoreOppositionToWork)
+                   && (pawnFitnessData.SkillLevel >= _pawnsData.MinimumSkillLevel || !pawnFitnessData.IsSkilledWorkType);
         }
 
         private void AssignJobs(PawnsData pawnsData, IDictionary<IPawnWrapper, Dictionary<IWorkTypeWrapper, Priority>> pawnJobs,
@@ -358,6 +351,46 @@ namespace AutoPriorities
                     .Where(t => t.priority.v > 0)
             );
             priorities.Sort((x, y) => x.Item1.v.CompareTo(y.Item1.v));
+        }
+
+        private void SaveTablesAndPawnsIfDebug()
+        {
+            if (!_worldInfoRetriever.DebugSaveTablesAndPawns()) return;
+
+            File.WriteAllBytes(
+                "PrioritiesSmarterWorkTables.xml",
+                new ArraySimpleData<WorkTablesSimpleData>(
+                    _pawnsData.WorkTables.Select(
+                            x => new WorkTablesSimpleData
+                            {
+                                priority = x.Priority,
+                                jobCount = x.JobCount,
+                                workTypes = x.WorkTypes.Select(
+                                        y => new WorkTypesSimpleData { key = new WorkTypeSimpleData(y.Key), value = y.Value }
+                                    )
+                                    .ToList(),
+                            }
+                        )
+                        .ToList()
+                ).GetBytesXml()
+            );
+
+            File.WriteAllBytes(
+                "PrioritiesSmarterWorkTypes.xml",
+                new ArraySimpleData<WorkTypeSimpleData>(_pawnsData.WorkTypes.Select(y => new WorkTypeSimpleData(y)).ToList()).GetBytesXml()
+            );
+            File.WriteAllBytes(
+                "PrioritiesSmarterAllPlayerPawns.xml",
+                new ArraySimpleData<PawnSimpleData>(
+                    _pawnsData.AllPlayerPawns.Select(
+                            y => new PawnSimpleData(y)
+                            {
+                                pawnWorkTypeData = _pawnsData.WorkTypes.Select(x => new PawnWorkTypeData(y, x)).ToList(),
+                            }
+                        )
+                        .ToList()
+                ).GetBytesXml()
+            );
         }
     }
 }
