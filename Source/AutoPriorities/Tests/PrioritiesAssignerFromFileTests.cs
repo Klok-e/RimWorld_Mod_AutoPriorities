@@ -168,9 +168,9 @@ namespace Tests
             // Human116785 - Research - 4
 
             GetAssignedPriorities().Count(x => x.Priority == 1).Should().Be(12);
-            GetAssignedPriorities().Count(x => x.Priority == 2).Should().Be(13);
+            GetAssignedPriorities().Count(x => x.Priority == 2).Should().Be(15);
             GetAssignedPriorities().Count(x => x.Priority == 3).Should().Be(11);
-            GetAssignedPriorities().Count(x => x.Priority == 4).Should().Be(19);
+            GetAssignedPriorities().Count(x => x.Priority == 4).Should().Be(17);
         }
 
         private IEnumerable<(IPawnWrapper Pawn, IWorkTypeWrapper WorkType, int Priority)> GetAssignedPriorities()

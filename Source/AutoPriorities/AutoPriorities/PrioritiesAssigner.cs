@@ -71,7 +71,7 @@ namespace AutoPriorities
                     _pawnsData.WorkTypesNotRequiringSkills.Subtract(importantWorks),
                     work => _pawnsData.SortedPawnFitnessForEveryWork[work]
                         .Select(
-                            p => new PawnFitnessData { Pawn = p.Pawn, Fitness = 1d / (1 + PawnJobsCached[p.Pawn].Count), SkillLevel = 0 }
+                            p => new PawnFitnessData { Pawn = p.Pawn, Fitness = 1f / (1 + PawnJobsCached[p.Pawn].Count), SkillLevel = 0 }
                         )
                         .OrderByDescending(p => p.Fitness)
                         .ToList()
@@ -91,9 +91,9 @@ namespace AutoPriorities
             var workTableEntries = _pawnsData.WorkTables.Distinct(y => y.Priority.v).ToArray();
             var assignmentOffsets = new Dictionary<(IWorkTypeWrapper, IPawnWrapper), int>();
 
-            var variables = new List<double>();
-            var bndl = new List<double>();
-            var bndu = new List<double>();
+            var variables = new List<float>();
+            var bndl = new List<float>();
+            var bndu = new List<float>();
 
             {
                 var index = 0;
@@ -106,22 +106,19 @@ namespace AutoPriorities
                         var priority = workTableEntries[workTableIndex].Priority.v;
 
                         variables.Add(-pfd.Fitness / priority);
-                        bndl.Add(0.0);
-                        bndu.Add(1.0);
+                        bndl.Add(0.0f);
+                        bndu.Add(1.0f);
                     }
 
                     // Extra slot for "not assigned"
-                    variables.Add(0.0);
-                    bndl.Add(0.0);
-                    bndu.Add(1.0);
+                    variables.Add(0.0f);
+                    bndl.Add(0.0f);
+                    bndu.Add(1.0f);
 
                     assignmentOffsets[(workTypeKv.Key, pfd.Pawn)] = index;
                     index += workTableEntries.Length + 1;
                 }
             }
-
-            alglib.minlpcreate(variables.Count, out var state);
-            alglib.minlpsetcost(state, variables.ToArray());
 
             // Forbid real priorities if pawn is opposed or skill too low
             foreach (var (workType, pawnFitnessDatas) in _pawnsData.SortedPawnFitnessForEveryWork)
@@ -134,12 +131,12 @@ namespace AutoPriorities
                     // Forbid all *real* priorities (leave "not assigned" free)
                     for (var workTableIndex = 0; workTableIndex < workTableEntries.Length; workTableIndex++)
                     {
-                        bndu[offset + workTableIndex] = 0.0;
+                        bndu[offset + workTableIndex] = 0.0f;
                     }
                 }
             }
 
-            alglib.minlpsetbc(state, bndl.ToArray(), bndu.ToArray());
+            var model = new LinearModel(variables.ToArray(), bndl.ToArray(), bndu.ToArray());
 
             // Exactly one choice (some priority or "not assigned") for each (workType, pawn)
             foreach (var (workType, pawnFitnessDatas) in _pawnsData.SortedPawnFitnessForEveryWork)
@@ -148,12 +145,12 @@ namespace AutoPriorities
                 {
                     var offset = assignmentOffsets[(workType, pawnFitnessData.Pawn)];
 
-                    var constraintRow = new double[variables.Count];
+                    var constraintRow = new float[variables.Count];
                     for (var workTableIndex = 0; workTableIndex < workTableEntries.Length + 1; workTableIndex++)
-                        constraintRow[offset + workTableIndex] = 1.0;
+                        constraintRow[offset + workTableIndex] = 1.0f;
 
                     // sum of real priorities + "not assigned" must be exactly 1
-                    alglib.minlpaddlc2dense(state, constraintRow, 1, 1);
+                    model.AddConstraint(constraintRow, 1, 1);
                 }
             }
 
@@ -176,14 +173,14 @@ namespace AutoPriorities
                 {
                     var workTableIndex = workTableEntries.FirstIndexOf(x => x.Priority.Equals(priority));
 
-                    var constraintRow = new double[variables.Count];
+                    var constraintRow = new float[variables.Count];
                     foreach (var pfd in pawnData)
                     {
                         var offset = assignmentOffsets[(workType, pfd.Pawn)];
-                        constraintRow[offset + workTableIndex] = 1.0;
+                        constraintRow[offset + workTableIndex] = 1.0f;
                     }
 
-                    alglib.minlpaddlc2dense(state, constraintRow, jobsToSet, jobsToSet);
+                    model.AddConstraint(constraintRow, jobsToSet, jobsToSet);
 
                     sumJobsRemain -= jobsToSet;
                 }
@@ -192,14 +189,14 @@ namespace AutoPriorities
                 {
                     var unsetPriorityIndex = workTableEntries.Length;
 
-                    var constraintRow = new double[variables.Count];
+                    var constraintRow = new float[variables.Count];
                     foreach (var pfd in pawnData)
                     {
                         var offset = assignmentOffsets[(workType, pfd.Pawn)];
-                        constraintRow[offset + unsetPriorityIndex] = 1.0;
+                        constraintRow[offset + unsetPriorityIndex] = 1.0f;
                     }
 
-                    alglib.minlpaddlc2dense(state, constraintRow, sumJobsRemain, sumJobsRemain);
+                    model.AddConstraint(constraintRow, sumJobsRemain, sumJobsRemain);
                 }
             }
 
@@ -211,17 +208,23 @@ namespace AutoPriorities
 
                 foreach (var pawn in _pawnsData.CurrentMapPlayerPawns)
                 {
-                    var rowPawn = new double[variables.Count];
+                    var rowPawn = new float[variables.Count];
                     foreach (var (wType, _) in _pawnsData.SortedPawnFitnessForEveryWork)
                     {
                         if (!assignmentOffsets.TryGetValue((wType, pawn), out var offset)) continue;
 
-                        rowPawn[offset + workTableIndex] = 1.0;
+                        rowPawn[offset + workTableIndex] = 1.0f;
                     }
 
-                    alglib.minlpaddlc2dense(state, rowPawn, 0, maxJobs);
+                    model.AddConstraint(rowPawn, 0, maxJobs);
                 }
             }
+
+            alglib.minlpcreate(variables.Count, out var state);
+            alglib.minlpsetcost(state, variables.ToArray().ToDouble());
+            alglib.minlpsetbc(state, bndl.ToArray().ToDouble(), bndu.ToArray().ToDouble());
+
+            foreach (var cRow in model.Constraints) alglib.minlpaddlc2dense(state, cRow.Coeff.ToDouble(), cRow.LowerBound, cRow.UpperBound);
 
             alglib.minlpsetscale(state, Enumerable.Repeat(1.0, variables.Count).ToArray());
             alglib.minlpsetalgoipm(state);
@@ -232,18 +235,50 @@ namespace AutoPriorities
             if (rep.terminationtype < 1)
             {
                 _logger.Warn(
-                    $"{nameof(AssignPrioritiesSmarter)} failed; LP solver termination type: {rep.terminationtype}; abandoning assignment..."
+                    $"{nameof(AssignPrioritiesSmarter)} failed; "
+                    + $"LP solver termination type: {rep.terminationtype}; abandoning assignment..."
                 );
                 return;
             }
 
-            // Retrieve solution
+            var solutionFloat = solution.ToFloat();
+            var algorithm = new GeneticAlgorithm(
+                _logger,
+                _worldInfoRetriever,
+                x => EvaluateSolution(x, model),
+                solutionFloat,
+                workTableEntries.Length,
+                variables.Count / (workTableEntries.Length + 1),
+                populationSize: 256,
+                secondsTimeout: 10,
+                secondsImproveSolution: 1,
+                crossoverRate: 0.6f,
+                mutationRate: 0.5f,
+                infeasiblePenalty: 1000000.0f
+            );
+
+            if (!algorithm.Run(out solutionFloat) || solutionFloat == null)
+            {
+                _logger.Warn(
+                    $"{nameof(AssignPrioritiesSmarter)} failed; "
+                    + "random search failed to find a solution which satisfies constraints; abandoning assignment..."
+                );
+                return;
+            }
+
+            AssignPrioritiesFromSolution(workTableEntries, assignmentOffsets, solutionFloat);
+        }
+
+        private void AssignPrioritiesFromSolution(WorkTableEntry[] workTableEntries,
+            Dictionary<(IWorkTypeWrapper, IPawnWrapper), int> assignmentOffsets, float[] solution)
+        {
+            Span<double> pawnWorkTypeVariables = stackalloc double[workTableEntries.Length + 1];
+
             foreach (var (workType, pawns) in _pawnsData.SortedPawnFitnessForEveryWork)
             foreach (var pawnFitness in pawns)
             {
                 var ind = assignmentOffsets[(workType, pawnFitness.Pawn)];
 
-                var pawnWorkTypeVariables = new double[workTableEntries.Length + 1];
                 for (var i = 0; i < pawnWorkTypeVariables.Length; i++)
                     pawnWorkTypeVariables[i] = solution[ind + i];
 
@@ -354,6 +389,35 @@ namespace AutoPriorities
                     .Where(t => t.priority.v > 0)
             );
             priorities.Sort((x, y) => x.Item1.v.CompareTo(y.Item1.v));
+        }
+
+        public (bool IsFeasible, float Objective) EvaluateSolution(float[] x, LinearModel model)
+        {
+            // 0) Basic sanity check
+            if (x.Length != model.VariableCount)
+                throw new ArgumentException("Wrong solution size for model.");
+
+            // 1) Check variable bounds
+            for (var i = 0; i < x.Length; i++)
+                if (x[i] < model.LowerBounds[i] || x[i] > model.UpperBounds[i])
+                    return (false, 0.0f); // Out-of-bounds => not feasible
+
+            // 2) Check each constraint
+            foreach (var cRow in model.Constraints)
+            {
+                var sum = 0.0;
+                for (var i = 0; i < x.Length; i++) sum += cRow.Coeff[i] * x[i];
+
+                if (sum < cRow.LowerBound || sum > cRow.UpperBound)
+                    // Violates constraint
+                    return (false, 0.0f);
+            }
+
+            // 3) Compute objective = dot(Cost, x).
+            var objective = 0.0f;
+            for (var i = 0; i < x.Length; i++) objective += model.Cost[i] * x[i];
+
+            return (true, objective);
         }
 
         private void SaveTablesAndPawnsIfDebug()

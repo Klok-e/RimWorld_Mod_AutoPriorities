@@ -117,10 +117,10 @@ namespace AutoPriorities
                             }
 
                             var skill = pawn.AverageOfRelevantSkillsFor(work);
-                            double learningRateFactor = IgnoreLearningRate ? 1 : pawn.MaxLearningRateFactor(work);
+                            var learningRateFactor = IgnoreLearningRate ? 1 : pawn.MaxLearningRateFactor(work);
 
                             var isSkilledWorkType = work.RelevantSkillsCount > 0;
-                            var fitness = isSkilledWorkType ? skill * learningRateFactor : 0.001;
+                            var fitness = isSkilledWorkType ? skill * learningRateFactor : 0.001f;
 
                             SortedPawnFitnessForEveryWork[work]
                                 .Add(

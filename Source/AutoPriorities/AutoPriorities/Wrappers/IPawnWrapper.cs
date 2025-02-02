@@ -12,7 +12,7 @@ namespace AutoPriorities.Wrappers
 
         bool IsOpposedToWorkType(IWorkTypeWrapper work);
 
-        double AverageOfRelevantSkillsFor(IWorkTypeWrapper work);
+        float AverageOfRelevantSkillsFor(IWorkTypeWrapper work);
 
         float MaxLearningRateFactor(IWorkTypeWrapper work);
 

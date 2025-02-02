@@ -18,7 +18,7 @@ namespace AutoPriorities.Extensions
             }
         }
 
-        public static int ArgMax<T>(this T[] span) where T : struct, IComparable<T>
+        public static int ArgMax<T>(this Span<T> span) where T : struct, IComparable<T>
         {
             if (span == null) throw new ArgumentNullException(nameof(span));
 
@@ -52,6 +52,22 @@ namespace AutoPriorities.Extensions
                 cum += v;
                 yield return cum;
             }
+        }
+
+        public static float[] ToFloat(this double[] array)
+        {
+            var result = new float[array.Length];
+            for (var i = 0; i < array.Length; i++) result[i] = (float)array[i];
+
+            return result;
+        }
+
+        public static double[] ToDouble(this float[] array)
+        {
+            var result = new double[array.Length];
+            for (var i = 0; i < array.Length; i++) result[i] = array[i];
+
+            return result;
         }
 
         public static IEnumerable<(int i, int percentIndex)> IterPercents(this IEnumerable<double> percents, int total)

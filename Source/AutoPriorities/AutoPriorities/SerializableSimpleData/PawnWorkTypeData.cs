@@ -4,7 +4,7 @@ namespace AutoPriorities.SerializableSimpleData
 {
     public class PawnWorkTypeData
     {
-        public double averageOfRelevantSkillsFor;
+        public float averageOfRelevantSkillsFor;
 
         public bool isCapableOfWholeWorkType;
 

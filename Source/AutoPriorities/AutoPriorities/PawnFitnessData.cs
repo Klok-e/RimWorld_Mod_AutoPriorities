@@ -6,16 +6,15 @@ namespace AutoPriorities
     {
         public IPawnWrapper Pawn { get; set; }
 
-        public double Fitness { get; set; }
+        public float Fitness { get; set; }
 
-        public double SkillLevel { get; set; }
+        public float SkillLevel { get; set; }
 
         public bool IsSkilledWorkType { get; set; }
 
         public bool IsOpposed { get; set; }
 
-        public void Deconstruct(out IPawnWrapper pawn, out double fitness, out double skillLevel, out bool isOpposed,
-            out bool isDumbWorkType)
+        public void Deconstruct(out IPawnWrapper pawn, out float fitness, out float skillLevel, out bool isOpposed, out bool isDumbWorkType)
         {
             pawn = Pawn;
             fitness = Fitness;

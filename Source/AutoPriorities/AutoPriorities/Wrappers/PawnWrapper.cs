@@ -30,7 +30,7 @@ namespace AutoPriorities.Wrappers
             return _pawn.Ideo?.IsWorkTypeConsideredDangerous(((WorkTypeWrapper)work).workTypeDef) == true;
         }
 
-        public double AverageOfRelevantSkillsFor(IWorkTypeWrapper work)
+        public float AverageOfRelevantSkillsFor(IWorkTypeWrapper work)
         {
             return _pawn.skills.AverageOfRelevantSkillsFor(((WorkTypeWrapper)work).workTypeDef);
         }
