@@ -30,19 +30,37 @@ namespace AutoPriorities
 
         public HashSet<IWorkTypeWrapper> WorkTypes { get; } = new();
 
-        public HashSet<IWorkTypeWrapper> WorkTypesNotRequiringSkills { get; } = new();
+        public HashSet<IWorkTypeWrapper> WorkTypesNotRequiringSkills { get; private set; } = new();
 
-        public Dictionary<IWorkTypeWrapper, List<PawnFitnessData>> SortedPawnFitnessForEveryWork { get; } = new();
+        public Dictionary<IWorkTypeWrapper, List<PawnFitnessData>> SortedPawnFitnessForEveryWork { get; private set; } = new();
 
-        public List<IPawnWrapper> CurrentMapPlayerPawns { get; } = new();
+        public List<IPawnWrapper> CurrentMapPlayerPawns { get; private set; } = new();
 
-        public List<IPawnWrapper> AllPlayerPawns { get; } = new();
+        public List<IPawnWrapper> AllPlayerPawns { get; private set; } = new();
 
         public bool IgnoreLearningRate { get; set; }
 
         public bool IgnoreOppositionToWork { get; set; }
 
         public float MinimumSkillLevel { get; set; }
+
+        public PawnsData ShallowCopy()
+        {
+            var shallowCopy = new PawnsData(_serializer, _worldInfoRetriever, _logger)
+            {
+                WorkTables = WorkTables.Select(x => x.ShallowCopy()).ToList(),
+                ExcludedPawns = ExcludedPawns.ToHashSet(),
+                WorkTypesNotRequiringSkills = WorkTypesNotRequiringSkills.ToHashSet(),
+                SortedPawnFitnessForEveryWork = SortedPawnFitnessForEveryWork.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
+                CurrentMapPlayerPawns = CurrentMapPlayerPawns.ToList(),
+                AllPlayerPawns = AllPlayerPawns.ToList(),
+                IgnoreLearningRate = IgnoreLearningRate,
+                IgnoreOppositionToWork = IgnoreOppositionToWork,
+                MinimumSkillLevel = MinimumSkillLevel,
+            };
+
+            return shallowCopy;
+        }
 
         public void SetData(SaveData data)
         {

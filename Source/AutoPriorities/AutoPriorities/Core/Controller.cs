@@ -23,6 +23,16 @@ namespace AutoPriorities.Core
 
         public static SettingHandle<int>? MaxPriority { get; private set; }
 
+        public static SettingHandle<float>? OptimizationFeasibleSolutionTimeoutSeconds { get; private set; }
+
+        public static SettingHandle<float>? OptimizationImprovementSeconds { get; private set; }
+
+        public static SettingHandle<float>? OptimizationCrossoverRate { get; private set; }
+
+        public static SettingHandle<float>? OptimizationMutationRate { get; private set; }
+
+        public static SettingHandle<int>? OptimizationPopulationSize { get; private set; }
+
         public static SettingHandle<bool>? UseOldAssignmentAlgorithm { get; private set; }
 
         public static SettingHandle<bool>? DebugSaveTablesAndPawns { get; private set; }
@@ -61,6 +71,7 @@ namespace AutoPriorities.Core
                 + "assignment problem as a linear programming optimization problem and uses an LP solver to get an optimal solution.",
                 false
             );
+
             DebugSaveTablesAndPawns = Settings.GetHandle(
                 "debugSaveTablesAndPawns",
                 "Debug save tables and pawns",
@@ -68,6 +79,41 @@ namespace AutoPriorities.Core
                 false
             );
             DebugLogs = Settings.GetHandle("debugLogs", "Debug logs", "Debug logs", false);
+            OptimizationFeasibleSolutionTimeoutSeconds = Settings.GetHandle(
+                "optimizationFeasibleSolutionTimeoutSeconds",
+                "Optimization feasible solution timeout",
+                "For how long to wait before abandoning finding a solution which satisfies all restrictions (random search).",
+                10f,
+                x => float.TryParse(x, out var result) && result is >= 0f and <= 120
+            );
+            OptimizationImprovementSeconds = Settings.GetHandle(
+                "optimizationImprovementSeconds",
+                "Optimization improvement seconds",
+                "For how long to try to optimize the solution after finding a solution which satisfies all restrictions. Increase to increase likelihood of an optimal solution.",
+                2f,
+                x => float.TryParse(x, out var result) && result is >= 0f and <= 60
+            );
+            OptimizationCrossoverRate = Settings.GetHandle(
+                "optimizationCrossoverRate",
+                "Optimization crossover rate",
+                "The rate at which crossover occurs during the optimization process. Parameter of random search.",
+                0.6f,
+                x => float.TryParse(x, out var result) && result is >= 0f and <= 1f
+            );
+            OptimizationMutationRate = Settings.GetHandle(
+                "optimizationMutationRate",
+                "Optimization mutation rate",
+                "The rate at which mutations occur during the optimization process. Parameter of random search.",
+                0.5f,
+                x => float.TryParse(x, out var result) && result is >= 0f and <= 1f
+            );
+            OptimizationPopulationSize = Settings.GetHandle(
+                "optimizationPopulationSize",
+                "Optimization population size",
+                "The population size used in the optimization algorithm. Reduce to reduce memory footprint.",
+                256,
+                x => int.TryParse(x, out var result) && result is >= 2 and <= 4096
+            );
         }
 
         public static void SwitchMap()

@@ -18,5 +18,15 @@ namespace AutoPriorities.WorldInfoRetriever
         bool DebugSaveTablesAndPawns();
 
         bool DebugLogs();
+
+        float OptimizationFeasibleSolutionTimeoutSeconds();
+
+        float OptimizationImprovementSeconds();
+
+        float OptimizationCrossoverRate();
+
+        float OptimizationMutationRate();
+
+        int OptimizationPopulationSize();
     }
 }

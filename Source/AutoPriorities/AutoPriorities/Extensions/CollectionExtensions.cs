@@ -18,7 +18,7 @@ namespace AutoPriorities.Extensions
             }
         }
 
-        public static int ArgMax<T>(this Span<T> span) where T : struct, IComparable<T>
+        public static int ArgMax<T>(this T[] span) where T : struct, IComparable<T>
         {
             if (span == null) throw new ArgumentNullException(nameof(span));
 

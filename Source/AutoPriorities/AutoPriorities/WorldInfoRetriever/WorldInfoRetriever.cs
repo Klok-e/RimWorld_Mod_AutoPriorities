@@ -52,6 +52,31 @@ namespace AutoPriorities.WorldInfoRetriever
             return Controller.DebugLogs;
         }
 
+        public float OptimizationFeasibleSolutionTimeoutSeconds()
+        {
+            return Controller.OptimizationFeasibleSolutionTimeoutSeconds;
+        }
+
+        public float OptimizationImprovementSeconds()
+        {
+            return Controller.OptimizationImprovementSeconds;
+        }
+
+        public float OptimizationCrossoverRate()
+        {
+            return Controller.OptimizationCrossoverRate;
+        }
+
+        public float OptimizationMutationRate()
+        {
+            return Controller.OptimizationMutationRate;
+        }
+
+        public int OptimizationPopulationSize()
+        {
+            return Controller.OptimizationPopulationSize;
+        }
+
         #endregion
     }
 }

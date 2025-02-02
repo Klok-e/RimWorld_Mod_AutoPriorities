@@ -24,7 +24,7 @@ namespace Tests
         public void SetUp()
         {
             _logger = Substitute.For<ILogger>();
-            _worldInfoRetriever = Substitute.For<IWorldInfoRetriever>();
+            _worldInfoRetriever = TestHelper.CreateWorldInfoRetrieverSubstitute();
             _serializer = Substitute.For<IPawnsDataSerializer>();
             _importantWorkTypesProvider = Substitute.For<IImportantJobsProvider>();
 
@@ -52,7 +52,7 @@ namespace Tests
             _pawnsData.MinimumSkillLevel = 3;
 
             // act
-            _assigner.AssignPrioritiesSmarter();
+            _assigner.AssignPrioritiesByOptimization(_pawnsData);
 
             // assert
             _logger.NoWarnReceived();

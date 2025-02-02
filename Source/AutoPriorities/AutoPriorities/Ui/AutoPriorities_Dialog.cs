@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using AutoPriorities.ImportantJobs;
 using AutoPriorities.PawnDataSerializer.Exporter;
 using AutoPriorities.Utils;
@@ -33,6 +34,7 @@ namespace AutoPriorities.Ui
 
         private SelectedTab _currentlySelectedTab = SelectedTab.Priorities;
         private Vector2 _importantWorksScrollPos;
+        private volatile bool _isRunPrioritiesLoading;
         private string? _minimumFitnessInputBuffer;
         private bool _openedOnce;
         private Vector2 _pawnExcludeScrollPos;
@@ -195,14 +197,33 @@ namespace AutoPriorities.Ui
 
         private void DrawRunButton(Rect inRect)
         {
-            if (Widgets.ButtonText(inRect, Consts.Label))
+            string priorities;
+            if (_isRunPrioritiesLoading)
+            {
+                var dotCount = (int)(Time.realtimeSinceStartup * 2f) % 4;
+
+                var builder = new StringBuilder(Consts.LoadingOptimizing);
+                for (var i = 0; i < dotCount; i++) builder.Append(Consts.LoadingDot);
+
+                priorities = builder.ToString();
+            }
+            else
+                priorities = Consts.Label;
+
+            if (Widgets.ButtonText(inRect, priorities, active: !_isRunPrioritiesLoading))
             {
                 _pawnsData.Rebuild();
 
                 if (_worldInfoRetriever.GetUseOldAssignmentAlgorithm())
                     _prioritiesAssigner.AssignPriorities();
                 else
-                    _prioritiesAssigner.AssignPrioritiesSmarter();
+                {
+                    _isRunPrioritiesLoading = true;
+                    _prioritiesAssigner.StartOptimizationTaskOfAssignPriorities(
+                        () => _isRunPrioritiesLoading = false,
+                        () => { Messages.Message(Consts.OptimizationFailedMessage, MessageTypeDefOf.RejectInput, false); }
+                    );
+                }
 
                 _pawnsData.SaveState();
                 SoundDefOf.Click.PlayOneShotOnCamera();

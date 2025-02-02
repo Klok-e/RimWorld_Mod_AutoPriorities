@@ -22,11 +22,13 @@ namespace AutoPriorities.Ui
         public const string PawnExcludeLabel = "Exclude Colonists";
         public const string ImportantJobsLabel = "Important Jobs";
         public const string Label = "Set priorities";
+        public const string LoadingOptimizing = "Optimizing";
+        public const string LoadingDot = ".";
+        public const string OptimizationFailedMessage = "Set priorities failed to find a solution which satisfies all requirements";
 
         public const string IgnoreLearningRate = "Ignore learning rate";
 
-        public const string IgnoreLearningRateTooltip =
-            "If true, learning rate won't be taken into account when assigning priorities.";
+        public const string IgnoreLearningRateTooltip = "If true, learning rate won't be taken into account when assigning priorities.";
 
         public const string IgnoreOppositionToWork = "Ignore opposition to work";
 
