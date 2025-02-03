@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoPriorities.APLogger;
 using AutoPriorities.Core;
-using AutoPriorities.Extensions;
 using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.Percents;
+using AutoPriorities.Utils.Extensions;
 using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
 

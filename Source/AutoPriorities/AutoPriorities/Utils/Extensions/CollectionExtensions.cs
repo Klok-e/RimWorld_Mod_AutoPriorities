@@ -3,10 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace AutoPriorities.Extensions
+namespace AutoPriorities.Utils.Extensions
 {
     public static class CollectionExtensions
     {
+        public static void Shuffle<T>(this IList<T> list, Random rng)  
+        {  
+            var n = list.Count;  
+            while (n > 1) {  
+                n--;  
+                var k = rng.Next(n + 1);  
+                (list[k], list[n]) = (list[n], list[k]);
+            }  
+        }
+        
         public static IEnumerable<T> Distinct<T, TK>(this IEnumerable<T> enumer, Func<T, TK> key)
         {
             var hashSet = new HashSet<TK>();

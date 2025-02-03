@@ -4,12 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using AutoPriorities.Core;
-using AutoPriorities.Extensions;
 using AutoPriorities.ImportantJobs;
 using AutoPriorities.SerializableSimpleData;
 using AutoPriorities.Utils;
+using AutoPriorities.Utils.Extensions;
 using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
+using UnityEngine;
 using Verse;
 using ILogger = AutoPriorities.APLogger.ILogger;
 
@@ -454,25 +455,56 @@ namespace AutoPriorities
 
         private (bool IsFeasible, double Objective) EvaluateSolution(double[] x, LinearModelSparse model)
         {
-            // 1) Check variable bounds
-            for (var i = 0; i < x.Length; i++)
-                if (x[i] < model.LowerBounds[i] || x[i] > model.UpperBounds[i])
-                    return (false, 0.0f); // Out-of-bounds => not feasible
+            double totalViolation = 0.0;
 
-            // 2) Check each constraint
-            alglib.sparsemv(model.constraintCoeff, x, ref _matrixResultCached);
-            for (var i = 0; i < model.constraintLowerBound.Length; i++)
+            // 1) Check variable bounds and accumulate violation if out of bounds.
+            for (int i = 0; i < x.Length; i++)
             {
-                var sum = _matrixResultCached[i];
-                if (sum < model.constraintLowerBound[i] || sum > model.constraintUpperBound[i])
-                    // Violates constraint
-                    return (false, 0.0f);
+                if (x[i] < model.LowerBounds[i])
+                {
+                    // how far below the lower bound?
+                    totalViolation += (model.LowerBounds[i] - x[i]);
+                }
+                else if (x[i] > model.UpperBounds[i])
+                {
+                    // how far above the upper bound?
+                    totalViolation += (x[i] - model.UpperBounds[i]);
+                }
             }
 
-            // 3) Compute objective = dot(Cost, x).
-            var objective = 0.0;
-            for (var i = 0; i < x.Length; i++)
+            // 2) Check constraints via sparse-matrix multiplication
+            alglib.sparsemv(model.constraintCoeff, x, ref _matrixResultCached);
+
+            // Accumulate violation if constraint is out of its allowed [lower, upper].
+            for (int i = 0; i < model.constraintLowerBound.Length; i++)
+            {
+                double sum = _matrixResultCached[i];
+
+                if (sum < model.constraintLowerBound[i])
+                {
+                    // how far below the lower bound?
+                    totalViolation += (model.constraintLowerBound[i] - sum);
+                }
+                else if (sum > model.constraintUpperBound[i])
+                {
+                    // how far above the upper bound?
+                    totalViolation += (sum - model.constraintUpperBound[i]);
+                }
+            }
+
+            // If totalViolation == 0, then no bound/constraint was violated => feasible
+            if (Mathf.Approximately((float)totalViolation, 0.0f))
+            {
+                return (false, totalViolation);
+            }
+
+            // 3) Compute objective if needed (often we compute it whether feasible or not).
+            //    Some might skip if infeasible, but it can be informative to keep it.
+            double objective = 0.0;
+            for (int i = 0; i < x.Length; i++)
+            {
                 objective += model.Cost[i] * x[i];
+            }
 
             return (true, objective);
         }

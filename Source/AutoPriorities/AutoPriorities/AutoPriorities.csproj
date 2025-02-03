@@ -64,7 +64,6 @@
         <Compile Include="SerializableSimpleData\WorkTypeSimpleData.cs"/>
         <Compile Include="SerializableSimpleData\WorkTypesSimpleData.cs"/>
         <Compile Include="ExcludedPawnEntry.cs"/>
-        <Compile Include="Extensions\CollectionExtensions.cs"/>
         <Compile Include="HarmonyPatches\DirtyPawnsNotifyRebuildPawnsTable.cs"/>
         <Compile Include="HarmonyPatches\SwitchedMap.cs"/>
         <Compile Include="ImportantJobs\IImportantJobsProvider.cs"/>
@@ -100,6 +99,7 @@
         <Compile Include="Ui\NameExportDialog.cs"/>
         <Compile Include="Ui\PrioritiesTabArtisan.cs"/>
         <Compile Include="Utils\DrawUtil.cs"/>
+        <Compile Include="Utils\Extensions\CollectionExtensions.cs" />
         <Compile Include="Utils\QuickProfiler.cs"/>
         <Compile Include="Utils\QuickProfilerFactory.cs"/>
         <Compile Include="Utils\XmlUtils.cs"/>

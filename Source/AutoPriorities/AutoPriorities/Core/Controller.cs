@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 using System.Reflection;
-using AutoPriorities.Extensions;
 using AutoPriorities.ImportantJobs;
 using AutoPriorities.PawnDataSerializer;
 using AutoPriorities.PawnDataSerializer.Exporter;
 using AutoPriorities.Ui;
+using AutoPriorities.Utils.Extensions;
 using AutoPriorities.WorldInfoRetriever;
 using HugsLib;
 using HugsLib.Settings;

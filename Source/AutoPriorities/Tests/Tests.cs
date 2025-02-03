@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using AutoPriorities.Extensions;
+using AutoPriorities.Utils.Extensions;
 using NUnit.Framework;
 
 namespace Tests

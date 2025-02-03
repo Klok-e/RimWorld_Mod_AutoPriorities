@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using AutoPriorities.APLogger;
+using AutoPriorities.Utils.Extensions;
 using AutoPriorities.WorldInfoRetriever;
+using Verse;
 
 namespace AutoPriorities
 {
@@ -100,8 +102,12 @@ namespace AutoPriorities
 
         private List<int[]> RunGeneration(List<int[]> population, ref double bestFitness, ref double[]? bestSolution, ref bool bestIsFeasible)
         {
+            
             // Evaluate all individuals and sort them by fitness
-            var scoredPopulation = population.Select(chrom => (chrom, fitness: Fitness(chrom, out var isFeasible), isFeasible))
+            var popFitnesses = population.Select(chrom => (chrom, fitness: Fitness(chrom, out var isFeasible), isFeasible)).ToList();
+            popFitnesses.Shuffle(_random);
+            
+            var scoredPopulation = popFitnesses
                 .OrderBy(t => t.fitness)
                 .ToList();
 
@@ -121,7 +127,7 @@ namespace AutoPriorities
             var newPopulation = new List<int[]>(_populationSize) { _startingChromosome };
 
             // Keep some elites (the top few) to carry over
-            var elitesCount = (int)(0.1 * _populationSize);
+            var elitesCount = (int)(0.3 * _populationSize);
             for (var e = 0; e < elitesCount; e++) newPopulation.Add(scoredPopulation[e].chrom);
 
             // Fill the rest of the population
