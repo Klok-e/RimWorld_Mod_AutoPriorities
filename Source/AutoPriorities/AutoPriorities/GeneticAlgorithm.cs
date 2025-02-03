@@ -12,14 +12,14 @@ namespace AutoPriorities
     public class GeneticAlgorithm
     {
         private readonly float _crossoverRate;
-        private readonly Func<double[], (bool IsFeasible, double Obj)> _evaluateFunc;
+        private readonly int[] _freeGeneIndices;
         private readonly float _infeasiblePenalty; // penalty added if solution is infeasible
         private readonly ILogger _logger;
+        private readonly LinearModel _model;
         private readonly float _mutationRate;
 
         // Number of priorities (K) for each (WorkType, Pawn), plus "0" = not assigned => total K+1
         private readonly int _numPriorities;
-        private readonly int _numWorkTypePawnPairs;
 
         // GA parameters (tweak them as you like)
         private readonly int _populationSize;
@@ -27,55 +27,52 @@ namespace AutoPriorities
         private readonly Random _random = new(42);
         private readonly float _secondsImproveSolution;
         private readonly float _secondsTimeout;
-        private readonly int[] _startingChromosome;
-        private readonly double[] _startingSolution;
+        private readonly Chromosome _startingChromosome;
         private readonly IWorldInfoRetriever _worldInfoRetriever;
 
-        public GeneticAlgorithm(ILogger logger, IWorldInfoRetriever worldInfoRetriever,
-            Func<double[], (bool IsFeasible, double Obj)> evaluateFunc, double[] startingSolution, int numPriorities, int numWorkTypePawnPairs,
-            float secondsTimeout, float secondsImproveSolution, int populationSize = 30, float crossoverRate = 0.7f,
-            float mutationRate = 0.1f, float infeasiblePenalty = 1_000_000.0f)
+        public GeneticAlgorithm(ILogger logger, IWorldInfoRetriever worldInfoRetriever, double[] startingSolution, int numPriorities,
+            LinearModel model, int[] freeVariableIndices, float secondsTimeout, float secondsImproveSolution, int populationSize = 30,
+            float crossoverRate = 0.7f, float mutationRate = 0.1f, float infeasiblePenalty = 1_000_000.0f)
         {
             _logger = logger;
             _worldInfoRetriever = worldInfoRetriever;
-            _evaluateFunc = evaluateFunc;
-            _startingSolution = startingSolution;
 
             _numPriorities = numPriorities; // K
-            _numWorkTypePawnPairs = numWorkTypePawnPairs;
+            _model = model;
             _secondsTimeout = secondsTimeout;
             _secondsImproveSolution = secondsImproveSolution;
             _populationSize = populationSize;
             _crossoverRate = crossoverRate;
             _mutationRate = mutationRate;
             _infeasiblePenalty = infeasiblePenalty;
-            _startingChromosome = StartingSolutionToChromosome();
+            _startingChromosome = StartingSolutionToChromosome(startingSolution);
+            _freeGeneIndices = FreeGenes(freeVariableIndices);
         }
 
         /// <summary>
         ///     Runs the genetic algorithm and returns the best solution found
         ///     as a "double[]" that you can pass to EvaluateSolution again or apply in the game.
         /// </summary>
-        public bool Run(out double[]? solution)
+        public bool Run(out float[]? solution)
         {
             // 1) Generate initial population of chromosomes
-            var population = new List<int[]>(_populationSize);
+            var population = new List<Chromosome>(_populationSize);
             for (var i = 0; i < _populationSize; i++) population.Add(_startingChromosome);
 
             // Keep track of overall best solution
-            double[]? bestSolution = null;
+            Chromosome? bestSolution = null;
             var bestFitness = double.MaxValue; // because we are minimizing
             var bestIsFeasible = false;
 
             var generations = 0;
-            
+
             var timer = new Stopwatch();
             timer.Start();
 
             while (!bestIsFeasible && timer.Elapsed.TotalSeconds < _secondsTimeout)
             {
                 population = RunGeneration(population, ref bestFitness, ref bestSolution, ref bestIsFeasible);
-                
+
                 generations++;
             }
 
@@ -86,36 +83,36 @@ namespace AutoPriorities
             while (timer.Elapsed.TotalSeconds < _secondsImproveSolution)
             {
                 population = RunGeneration(population, ref bestFitness, ref bestSolution, ref bestIsFeasible);
-                
+
                 generations++;
             }
 
             if (_worldInfoRetriever.DebugLogs())
                 _logger.Info($"Random search run to improve on solution for seconds: {timer.Elapsed.TotalSeconds}");
-            
+
             Console.WriteLine($"Generations: {generations}");
 
-            solution = bestSolution;
+            if (bestSolution is { } value)
+                solution = ChromosomeToDoubleArray(value);
+            else
+                solution = null;
 
             return bestIsFeasible;
         }
 
-        private List<int[]> RunGeneration(List<int[]> population, ref double bestFitness, ref double[]? bestSolution, ref bool bestIsFeasible)
+        private List<Chromosome> RunGeneration(List<Chromosome> population, ref double bestFitness, ref Chromosome? bestSolution,
+            ref bool bestIsFeasible)
         {
-            
             // Evaluate all individuals and sort them by fitness
-            var popFitnesses = population.Select(chrom => (chrom, fitness: Fitness(chrom, out var isFeasible), isFeasible)).ToList();
-            popFitnesses.Shuffle(_random);
-            
-            var scoredPopulation = popFitnesses
-                .OrderBy(t => t.fitness)
-                .ToList();
+            var scoredPopulation = population.Select(chrom => (chrom, fitness: Fitness(chrom, out var isFeasible), isFeasible)).ToList();
+            scoredPopulation.Shuffle(_random);
+            scoredPopulation.SortBy(t => t.fitness);
 
             // Update best solution
             if (scoredPopulation[0].fitness < bestFitness)
             {
                 bestFitness = scoredPopulation[0].fitness;
-                bestSolution = ChromosomeToDoubleArray(scoredPopulation[0].chrom);
+                bestSolution = scoredPopulation[0].chrom;
                 bestIsFeasible = scoredPopulation[0].isFeasible;
             }
 
@@ -124,10 +121,10 @@ namespace AutoPriorities
 
             // 3) Selection + Reproduction
             // always keep starting chromosome
-            var newPopulation = new List<int[]>(_populationSize) { _startingChromosome };
+            var newPopulation = new List<Chromosome>(_populationSize) { _startingChromosome };
 
             // Keep some elites (the top few) to carry over
-            var elitesCount = (int)(0.3 * _populationSize);
+            var elitesCount = (int)(0.1 * _populationSize);
             for (var e = 0; e < elitesCount; e++) newPopulation.Add(scoredPopulation[e].chrom);
 
             // Fill the rest of the population
@@ -138,12 +135,11 @@ namespace AutoPriorities
                 var parent2 = TournamentSelection(scoredPopulation);
 
                 // 5) Crossover
-                int[] child1, child2;
-                (child1, child2) = UniformCrossover(parent1, parent2, _crossoverRate);
+                var (child1, child2) = UniformCrossover(parent1, parent2, _crossoverRate);
 
                 // 6) Mutation
-                Mutate(child1, _mutationRate);
-                Mutate(child2, _mutationRate);
+                Mutate(ref child1, _mutationRate);
+                Mutate(ref child2, _mutationRate);
 
                 newPopulation.Add(child1);
                 if (newPopulation.Count < _populationSize)
@@ -154,14 +150,15 @@ namespace AutoPriorities
             return population;
         }
 
-        private int[] StartingSolutionToChromosome()
+        private Chromosome StartingSolutionToChromosome(double[] startingSolution)
         {
             // Each chunk is size (_numPriorities + 1).
             // We have _numWorkTypePawnPairs such chunks in _startingSolution.
             var chunkSize = _numPriorities + 1;
-            var chromosome = new int[_numWorkTypePawnPairs];
+            var genes = startingSolution.Length / chunkSize;
+            var chromosome = new Chromosome { chrom = new int[genes] };
 
-            for (var i = 0; i < _numWorkTypePawnPairs; i++)
+            for (var i = 0; i < genes; i++)
             {
                 var offset = i * chunkSize;
 
@@ -171,7 +168,7 @@ namespace AutoPriorities
 
                 for (var j = 0; j < chunkSize; j++)
                 {
-                    double val = _startingSolution[offset + j];
+                    var val = startingSolution[offset + j];
                     if (val > bestValue)
                     {
                         bestValue = val;
@@ -180,25 +177,34 @@ namespace AutoPriorities
                 }
 
                 // bestIndex is the chosen priority for pair i
-                chromosome[i] = bestIndex;
+                chromosome.chrom[i] = bestIndex;
             }
 
             return chromosome;
+        }
+
+        private int[] FreeGenes(int[] freeVariableIndices)
+        {
+            var freeGenes = new int[freeVariableIndices.Length];
+
+            for (var i = 0; i < freeVariableIndices.Length; i++) freeGenes[i] = freeVariableIndices[i] / (_numPriorities + 1);
+
+            return freeGenes;
         }
 
         /// <summary>
         ///     Convert a chromosome (int[] of length = #_pairs, each in [0.._numPriorities])
         ///     to a double[] for EvaluateSolution.
         /// </summary>
-        private double[] ChromosomeToDoubleArray(int[] chromosome)
+        private float[] ChromosomeToDoubleArray(Chromosome chromosome)
         {
             // We have (#pairs) chunks, each chunk size = (_numPriorities + 1).
             // Initialize a big zero array for all bits.
-            var x = new double[chromosome.Length * (_numPriorities + 1)];
+            var x = new float[chromosome.chrom.Length * (_numPriorities + 1)];
 
-            for (var i = 0; i < chromosome.Length; i++)
+            for (var i = 0; i < chromosome.chrom.Length; i++)
             {
-                var chosenPriority = chromosome[i];
+                var chosenPriority = chromosome.chrom[i];
 
                 var offset = i * (_numPriorities + 1);
                 x[offset + chosenPriority] = 1.0f;
@@ -213,14 +219,14 @@ namespace AutoPriorities
         ///     Since the solver is set up for "minimize cost," we interpret "fitness = cost + penalty if infeasible."
         ///     Smaller fitness is better.
         /// </summary>
-        private double Fitness(int[] chromosome, out bool isFeasible)
+        private double Fitness(Chromosome chromosome, out bool isFeasible)
         {
             var x = ChromosomeToDoubleArray(chromosome);
-            var (feasible, cost) = _evaluateFunc(x);
+            var (feasible, cost) = EvaluateSolution(x);
 
             isFeasible = feasible;
 
-            return isFeasible ? cost : _infeasiblePenalty; // lower is better
+            return isFeasible ? cost : cost + _infeasiblePenalty; // lower is better
         }
 
         /// <summary>
@@ -229,14 +235,16 @@ namespace AutoPriorities
         ///     If you want multiple mutations per chromosome or a different mutation approach,
         ///     you can tweak it here.
         /// </summary>
-        private void Mutate(int[] chrom, double mutationRate)
+        private void Mutate(ref Chromosome chrom, double mutationRate)
         {
             if (_random.NextDouble() < mutationRate)
             {
                 // pick a random gene
-                var idx = _random.Next(0, chrom.Length);
+                var idx = _random.Next(0, _freeGeneIndices.Length);
+                var freeGeneIndex = _freeGeneIndices[idx];
+
                 // set it to a new random priority
-                chrom[idx] = _random.Next(0, _numPriorities + 1);
+                chrom.chrom[freeGeneIndex] = _random.Next(0, _numPriorities + 1);
             }
         }
 
@@ -244,29 +252,31 @@ namespace AutoPriorities
         ///     Uniform crossover: for each gene, pick from parent1 or parent2 with 50% chance.
         ///     If random > crossoverRate, we just clone parents.
         /// </summary>
-        private (int[], int[]) UniformCrossover(int[] parent1, int[] parent2, double rate)
+        private (Chromosome, Chromosome) UniformCrossover(Chromosome parent1, Chromosome parent2, double rate)
         {
             if (_random.NextDouble() > rate)
             {
                 // No crossover => return clones
-                return (parent1.ToArray(), parent2.ToArray());
+                return (parent1, parent2);
             }
 
-            var length = parent1.Length;
-            var child1 = new int[length];
-            var child2 = new int[length];
+            var length = parent1.chrom.Length;
+            var child1 = new Chromosome { chrom = new int[length] };
+            var child2 = new Chromosome { chrom = new int[length] };
 
-            for (var i = 0; i < length; i++)
+            foreach (var freeGeneIndex in _freeGeneIndices)
+            {
                 if (_random.NextDouble() < 0.5)
                 {
-                    child1[i] = parent1[i];
-                    child2[i] = parent2[i];
+                    child1.chrom[freeGeneIndex] = parent1.chrom[freeGeneIndex];
+                    child2.chrom[freeGeneIndex] = parent2.chrom[freeGeneIndex];
                 }
                 else
                 {
-                    child1[i] = parent2[i];
-                    child2[i] = parent1[i];
+                    child1.chrom[freeGeneIndex] = parent2.chrom[freeGeneIndex];
+                    child2.chrom[freeGeneIndex] = parent1.chrom[freeGeneIndex];
                 }
+            }
 
             return (child1, child2);
         }
@@ -275,7 +285,8 @@ namespace AutoPriorities
         ///     Simple tournament selection.
         ///     We pick N random solutions, pick the best (lowest fitness).
         /// </summary>
-        private int[] TournamentSelection(List<(int[] chrom, double fitness, bool isFeasible)> scoredPopulation, int tournamentSize = 3)
+        private Chromosome TournamentSelection(List<(Chromosome chrom, double fitness, bool isFeasible)> scoredPopulation,
+            int tournamentSize = 3)
         {
             var bestIndex = -1;
             var bestFitness = double.MaxValue;
@@ -293,6 +304,36 @@ namespace AutoPriorities
 
             // Return the chromosome of the best in the random subset
             return scoredPopulation[bestIndex].chrom;
+        }
+
+        private (bool IsFeasible, float Objective) EvaluateSolution(float[] x)
+        {
+            // 1) Check variable bounds
+            for (var i = 0; i < x.Length; i++)
+                if (x[i] < _model.LowerBounds[i] || x[i] > _model.UpperBounds[i])
+                    return (false, 0.0f); // Out-of-bounds => not feasible
+
+            // 2) Check each constraint
+            foreach (var cRow in _model.Constraints)
+            {
+                var sum = 0.0;
+                for (var i = 0; i < x.Length; i++) sum += cRow.Coeff[i] * x[i];
+
+                if (sum < cRow.LowerBound || sum > cRow.UpperBound)
+                    // Violates constraint
+                    return (false, 0.0f);
+            }
+
+            // 3) Compute objective = dot(Cost, x).
+            var objective = 0.0f;
+            for (var i = 0; i < x.Length; i++) objective += _model.Cost[i] * x[i];
+
+            return (true, objective);
+        }
+
+        private struct Chromosome
+        {
+            public int[] chrom;
         }
     }
 }

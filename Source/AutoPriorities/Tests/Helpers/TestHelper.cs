@@ -32,10 +32,10 @@ namespace Tests.Helpers
         {
             var worldInfoRetriever = Substitute.For<IWorldInfoRetriever>();
             worldInfoRetriever.OptimizationPopulationSize().Returns(256);
-            worldInfoRetriever.OptimizationFeasibleSolutionTimeoutSeconds().Returns(30);
-            worldInfoRetriever.OptimizationImprovementSeconds().Returns(2);
-            worldInfoRetriever.OptimizationCrossoverRate().Returns(0.6f);
-            worldInfoRetriever.OptimizationMutationRate().Returns(0.5f);
+            worldInfoRetriever.OptimizationFeasibleSolutionTimeoutSeconds().Returns(10);
+            worldInfoRetriever.OptimizationImprovementSeconds().Returns(1);
+            worldInfoRetriever.OptimizationCrossoverRate().Returns(0.2f);
+            worldInfoRetriever.OptimizationMutationRate().Returns(0.9f);
 
             return worldInfoRetriever;
         }

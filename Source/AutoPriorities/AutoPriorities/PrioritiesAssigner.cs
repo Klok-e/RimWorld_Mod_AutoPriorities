@@ -10,7 +10,6 @@ using AutoPriorities.Utils;
 using AutoPriorities.Utils.Extensions;
 using AutoPriorities.WorldInfoRetriever;
 using AutoPriorities.Wrappers;
-using UnityEngine;
 using Verse;
 using ILogger = AutoPriorities.APLogger.ILogger;
 
@@ -22,8 +21,6 @@ namespace AutoPriorities
         private readonly ILogger _logger;
         private readonly PawnsData _pawnsData;
         private readonly IWorldInfoRetriever _worldInfoRetriever;
-
-        private double[] _matrixResultCached = [];
 
         public PrioritiesAssigner(PawnsData pawnsData, ILogger logger, IImportantJobsProvider importantJobsProvider,
             IWorldInfoRetriever worldInfoRetriever)
@@ -289,14 +286,16 @@ namespace AutoPriorities
                 return;
             }
 
-            var sparseModel = model.CreateLinearModelSparse();
+            // find indices of variables which are fractional
+            var freeVariableIndices = solution.SelectMany((x, i) => x is > 0.001 and < 0.999 ? new[] { i } : Array.Empty<int>()).ToArray();
+
             var algorithm = new GeneticAlgorithm(
                 _logger,
                 _worldInfoRetriever,
-                x => EvaluateSolution(x, sparseModel),
                 solution,
                 workTableEntries.Length,
-                variables.Count / (workTableEntries.Length + 1),
+                model,
+                freeVariableIndices,
                 populationSize: _worldInfoRetriever.OptimizationPopulationSize(),
                 secondsTimeout: _worldInfoRetriever.OptimizationFeasibleSolutionTimeoutSeconds(),
                 secondsImproveSolution: _worldInfoRetriever.OptimizationImprovementSeconds(),
@@ -305,7 +304,7 @@ namespace AutoPriorities
                 infeasiblePenalty: 1000000.0f
             );
 
-            if (!algorithm.Run(out solution) || solution == null)
+            if (!algorithm.Run(out var floatSolution) || floatSolution == null)
             {
                 _logger.Warn(
                     $"{nameof(AssignPrioritiesByOptimization)} failed; "
@@ -315,7 +314,7 @@ namespace AutoPriorities
                 return;
             }
 
-            AssignPrioritiesFromSolution(workTableEntries, assignmentOffsets, solution.ToFloat(), pawnsData);
+            AssignPrioritiesFromSolution(workTableEntries, assignmentOffsets, floatSolution, pawnsData);
         }
 
         private void AssignPrioritiesFromSolution(WorkTableEntry[] workTableEntries,
@@ -451,62 +450,6 @@ namespace AutoPriorities
                     .Where(t => t.priority.v > 0)
             );
             priorities.Sort((x, y) => x.Item1.v.CompareTo(y.Item1.v));
-        }
-
-        private (bool IsFeasible, double Objective) EvaluateSolution(double[] x, LinearModelSparse model)
-        {
-            double totalViolation = 0.0;
-
-            // 1) Check variable bounds and accumulate violation if out of bounds.
-            for (int i = 0; i < x.Length; i++)
-            {
-                if (x[i] < model.LowerBounds[i])
-                {
-                    // how far below the lower bound?
-                    totalViolation += (model.LowerBounds[i] - x[i]);
-                }
-                else if (x[i] > model.UpperBounds[i])
-                {
-                    // how far above the upper bound?
-                    totalViolation += (x[i] - model.UpperBounds[i]);
-                }
-            }
-
-            // 2) Check constraints via sparse-matrix multiplication
-            alglib.sparsemv(model.constraintCoeff, x, ref _matrixResultCached);
-
-            // Accumulate violation if constraint is out of its allowed [lower, upper].
-            for (int i = 0; i < model.constraintLowerBound.Length; i++)
-            {
-                double sum = _matrixResultCached[i];
-
-                if (sum < model.constraintLowerBound[i])
-                {
-                    // how far below the lower bound?
-                    totalViolation += (model.constraintLowerBound[i] - sum);
-                }
-                else if (sum > model.constraintUpperBound[i])
-                {
-                    // how far above the upper bound?
-                    totalViolation += (sum - model.constraintUpperBound[i]);
-                }
-            }
-
-            // If totalViolation == 0, then no bound/constraint was violated => feasible
-            if (Mathf.Approximately((float)totalViolation, 0.0f))
-            {
-                return (false, totalViolation);
-            }
-
-            // 3) Compute objective if needed (often we compute it whether feasible or not).
-            //    Some might skip if infeasible, but it can be informative to keep it.
-            double objective = 0.0;
-            for (int i = 0; i < x.Length; i++)
-            {
-                objective += model.Cost[i] * x[i];
-            }
-
-            return (true, objective);
         }
 
         private void SaveTablesAndPawnsIfDebug()
