@@ -191,6 +191,8 @@ namespace AutoPriorities
                 }
             }
 
+            var sumPrioritiesCount = model.Constraints.Count;
+
             var priorityPercentCached = new List<(Priority priority, JobCount maxJobs, double percent)>();
 
             // Enforce exact jobsToSet for each workType+priority
@@ -286,16 +288,13 @@ namespace AutoPriorities
                 return;
             }
 
-            // find indices of variables which are fractional
-            var freeVariableIndices = solution.SelectMany((x, i) => x is > 0.001 and < 0.999 ? new[] { i } : Array.Empty<int>()).ToArray();
-
             var algorithm = new GeneticAlgorithm(
                 _logger,
                 _worldInfoRetriever,
                 solution,
                 workTableEntries.Length,
                 model,
-                freeVariableIndices,
+                sumPrioritiesCount,
                 populationSize: _worldInfoRetriever.OptimizationPopulationSize(),
                 secondsTimeout: _worldInfoRetriever.OptimizationFeasibleSolutionTimeoutSeconds(),
                 secondsImproveSolution: _worldInfoRetriever.OptimizationImprovementSeconds(),

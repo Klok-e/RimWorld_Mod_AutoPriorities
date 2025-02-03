@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using AutoPriorities.Utils.Extensions;
 
 namespace AutoPriorities
 {
@@ -40,11 +38,6 @@ namespace AutoPriorities
             Constraints.Add(new ConstraintRow { Coeff = coeff, LowerBound = lowerBound, UpperBound = upperBound });
         }
 
-        public LinearModelSparse CreateLinearModelSparse()
-        {
-            return new LinearModelSparse(this);
-        }
-
 
         /// <summary>
         ///     A single constraint's data.
@@ -55,39 +48,5 @@ namespace AutoPriorities
             public float LowerBound { get; init; }
             public float UpperBound { get; init; }
         }
-    }
-
-    public class LinearModelSparse
-    {
-        public LinearModelSparse(LinearModel model)
-        {
-            VariableCount = model.VariableCount;
-            Cost = model.Cost.ToDouble();
-            LowerBounds = model.LowerBounds.ToDouble();
-            UpperBounds = model.UpperBounds.ToDouble();
-
-            alglib.sparsecreate(model.Constraints.Count, VariableCount, out constraintCoeff);
-            for (var index = 0; index < model.Constraints.Count; index++)
-            {
-                var modelConstraint = model.Constraints[index];
-                for (int i = 0; i < modelConstraint.Coeff.Length; i++) alglib.sparseset(constraintCoeff, index, i, modelConstraint.Coeff[i]);
-            }
-
-            alglib.sparseconverttocrs(constraintCoeff);
-
-            constraintLowerBound = model.Constraints.Select(x => (double)x.LowerBound).ToArray();
-            constraintUpperBound = model.Constraints.Select(x => (double)x.UpperBound).ToArray();
-        }
-
-        public int VariableCount { get; }
-
-        public double[] Cost { get; private set; }
-
-        public double[] LowerBounds { get; private set; }
-        public double[] UpperBounds { get; private set; }
-
-        public alglib.sparsematrix constraintCoeff;
-        public double[] constraintLowerBound;
-        public double[] constraintUpperBound;
     }
 }

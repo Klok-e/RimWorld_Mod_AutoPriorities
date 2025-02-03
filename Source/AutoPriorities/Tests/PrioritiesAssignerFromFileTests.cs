@@ -66,6 +66,106 @@ namespace Tests
             //                     $"{((IPawnWrapper)x.Target()).ThingID} - {((IWorkTypeWrapper)x.GetArguments()[0]).DefName} - {(x.GetArguments()[1])}")
             //             .ToList())))
 
+            // Human241 - Firefighter - 1
+            // Human241 - Patient - 2
+            // Human241 - Doctor - 0
+            // Human241 - PatientBedRest - 3
+            // Human241 - HaulingUrgent - 1
+            // Human241 - Childcare - 0
+            // Human241 - BasicWorker - 3
+            // Human241 - FinishingOff - 1
+            // Human241 - Warden - 0
+            // Human241 - Handling - 3
+            // Human241 - Cooking - 0
+            // Human241 - Hunting - 4
+            // Human241 - Construction - 2
+            // Human241 - Growing - 2
+            // Human241 - Mining - 2
+            // Human241 - PlantCutting - 2
+            // Human241 - Smithing - 0
+            // Human241 - Tailoring - 0
+            // Human241 - Art - 0
+            // Human241 - Crafting - 0
+            // Human241 - Hauling - 1
+            // Human241 - Cleaning - 1
+            // Human241 - DarkStudy - 4
+            // Human241 - Research - 4
+            //
+            // Human67650 - Firefighter - 1
+            // Human67650 - Patient - 2
+            // Human67650 - Doctor - 4
+            // Human67650 - PatientBedRest - 3
+            // Human67650 - HaulingUrgent - 1
+            // Human67650 - Childcare - 3
+            // Human67650 - BasicWorker - 3
+            // Human67650 - FinishingOff - 1
+            // Human67650 - Warden - 2
+            // Human67650 - Handling - 0
+            // Human67650 - Cooking - 0
+            // Human67650 - Hunting - 0
+            // Human67650 - Construction - 4
+            // Human67650 - Growing - 4
+            // Human67650 - Mining - 4
+            // Human67650 - PlantCutting - 4
+            // Human67650 - Smithing - 0
+            // Human67650 - Tailoring - 0
+            // Human67650 - Art - 0
+            // Human67650 - Crafting - 0
+            // Human67650 - Hauling - 1
+            // Human67650 - Cleaning - 1
+            // Human67650 - DarkStudy - 0
+            // Human67650 - Research - 0
+            //
+            // CreepJoiner103705 - Firefighter - 1
+            // CreepJoiner103705 - Patient - 2
+            // CreepJoiner103705 - Doctor - 1
+            // CreepJoiner103705 - PatientBedRest - 3
+            // CreepJoiner103705 - HaulingUrgent - 1
+            // CreepJoiner103705 - Childcare - 0
+            // CreepJoiner103705 - BasicWorker - 3
+            // CreepJoiner103705 - FinishingOff - 1
+            // CreepJoiner103705 - Warden - 0
+            // CreepJoiner103705 - Handling - 0
+            // CreepJoiner103705 - Cooking - 0
+            // CreepJoiner103705 - Hunting - 0
+            // CreepJoiner103705 - Construction - 0
+            // CreepJoiner103705 - Growing - 0
+            // CreepJoiner103705 - Mining - 0
+            // CreepJoiner103705 - PlantCutting - 0
+            // CreepJoiner103705 - Smithing - 0
+            // CreepJoiner103705 - Tailoring - 0
+            // CreepJoiner103705 - Art - 2
+            // CreepJoiner103705 - Crafting - 0
+            // CreepJoiner103705 - Hauling - 1
+            // CreepJoiner103705 - Cleaning - 1
+            // CreepJoiner103705 - DarkStudy - 2
+            // CreepJoiner103705 - Research - 2
+            //
+            // Human116785 - Firefighter - 1
+            // Human116785 - Patient - 2
+            // Human116785 - Doctor - 0
+            // Human116785 - PatientBedRest - 3
+            // Human116785 - HaulingUrgent - 1
+            // Human116785 - Childcare - 3
+            // Human116785 - BasicWorker - 3
+            // Human116785 - FinishingOff - 0
+            // Human116785 - Warden - 2
+            // Human116785 - Handling - 0
+            // Human116785 - Cooking - 0
+            // Human116785 - Hunting - 4
+            // Human116785 - Construction - 0
+            // Human116785 - Growing - 0
+            // Human116785 - Mining - 0
+            // Human116785 - PlantCutting - 0
+            // Human116785 - Smithing - 0
+            // Human116785 - Tailoring - 0
+            // Human116785 - Art - 0
+            // Human116785 - Crafting - 0
+            // Human116785 - Hauling - 1
+            // Human116785 - Cleaning - 1
+            // Human116785 - DarkStudy - 4
+            // Human116785 - Research - 4
+
 
             GetAssignedPriorities().Count(x => x.Priority == 1).Should().Be(12);
             GetAssignedPriorities().Count(x => x.Priority == 2).Should().Be(15);
