@@ -23,8 +23,6 @@ namespace AutoPriorities.WorldInfoRetriever
 
         float OptimizationImprovementSeconds();
 
-        float OptimizationCrossoverRate();
-
         float OptimizationMutationRate();
 
         int OptimizationPopulationSize();

@@ -298,7 +298,6 @@ namespace AutoPriorities
                 populationSize: _worldInfoRetriever.OptimizationPopulationSize(),
                 secondsTimeout: _worldInfoRetriever.OptimizationFeasibleSolutionTimeoutSeconds(),
                 secondsImproveSolution: _worldInfoRetriever.OptimizationImprovementSeconds(),
-                crossoverRate: _worldInfoRetriever.OptimizationCrossoverRate(),
                 mutationRate: _worldInfoRetriever.OptimizationMutationRate(),
                 infeasiblePenalty: 1000000.0f
             );

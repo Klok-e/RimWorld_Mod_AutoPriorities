@@ -34,8 +34,7 @@ namespace Tests.Helpers
             worldInfoRetriever.OptimizationPopulationSize().Returns(256);
             worldInfoRetriever.OptimizationFeasibleSolutionTimeoutSeconds().Returns(10);
             worldInfoRetriever.OptimizationImprovementSeconds().Returns(1);
-            worldInfoRetriever.OptimizationCrossoverRate().Returns(0.01f);
-            worldInfoRetriever.OptimizationMutationRate().Returns(0.99f);
+            worldInfoRetriever.OptimizationMutationRate().Returns(0.5f);
 
             return worldInfoRetriever;
         }

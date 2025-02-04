@@ -62,11 +62,6 @@ namespace AutoPriorities.WorldInfoRetriever
             return Controller.OptimizationImprovementSeconds;
         }
 
-        public float OptimizationCrossoverRate()
-        {
-            return Controller.OptimizationCrossoverRate;
-        }
-
         public float OptimizationMutationRate()
         {
             return Controller.OptimizationMutationRate;

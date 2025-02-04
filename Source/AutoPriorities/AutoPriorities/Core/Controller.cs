@@ -27,8 +27,6 @@ namespace AutoPriorities.Core
 
         public static SettingHandle<float>? OptimizationImprovementSeconds { get; private set; }
 
-        public static SettingHandle<float>? OptimizationCrossoverRate { get; private set; }
-
         public static SettingHandle<float>? OptimizationMutationRate { get; private set; }
 
         public static SettingHandle<int>? OptimizationPopulationSize { get; private set; }
@@ -89,16 +87,10 @@ namespace AutoPriorities.Core
             OptimizationImprovementSeconds = Settings.GetHandle(
                 "optimizationImprovementSeconds",
                 "Optimization improvement seconds",
-                "For how long to try to optimize the solution after finding a solution which satisfies all restrictions. Increase to increase likelihood of an optimal solution.",
-                2f,
+                "For how long to try to optimize the solution after finding a solution which satisfies all restrictions. "
+                + "Increase to increase likelihood of an optimal or a more consistent solution.",
+                1f,
                 x => float.TryParse(x, out var result) && result is >= 0f and <= 60
-            );
-            OptimizationCrossoverRate = Settings.GetHandle(
-                "optimizationCrossoverRate",
-                "Optimization crossover rate",
-                "The rate at which crossover occurs during the optimization process. Parameter of random search.",
-                0.6f,
-                x => float.TryParse(x, out var result) && result is >= 0f and <= 1f
             );
             OptimizationMutationRate = Settings.GetHandle(
                 "optimizationMutationRate",

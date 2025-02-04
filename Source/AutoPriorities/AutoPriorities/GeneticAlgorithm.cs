@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using AutoPriorities.Utils.Extensions;
 using AutoPriorities.WorldInfoRetriever;
+using UnityEngine;
 using Verse;
 using ILogger = AutoPriorities.APLogger.ILogger;
 using Random = System.Random;
@@ -12,7 +13,6 @@ namespace AutoPriorities
 {
     public class GeneticAlgorithm
     {
-        private readonly float _crossoverRate;
         private readonly int[] _freeGeneIndices;
         private readonly float _infeasiblePenalty; // penalty added if solution is infeasible
         private readonly ILogger _logger;
@@ -33,7 +33,7 @@ namespace AutoPriorities
 
         public GeneticAlgorithm(ILogger logger, IWorldInfoRetriever worldInfoRetriever, double[] startingSolution, int numPriorities,
             LinearModel model, int sumPrioritiesCount, float secondsTimeout, float secondsImproveSolution, int populationSize = 30,
-            float crossoverRate = 0.7f, float mutationRate = 0.1f, float infeasiblePenalty = 1_000_000.0f)
+            float mutationRate = 0.1f, float infeasiblePenalty = 1_000_000.0f)
         {
             _logger = logger;
             _worldInfoRetriever = worldInfoRetriever;
@@ -43,7 +43,6 @@ namespace AutoPriorities
             _secondsTimeout = secondsTimeout;
             _secondsImproveSolution = secondsImproveSolution;
             _populationSize = populationSize;
-            _crossoverRate = crossoverRate;
             _mutationRate = mutationRate;
             _infeasiblePenalty = infeasiblePenalty;
             (_startingChromosome, _freeGeneIndices) = StartingSolutionToChromosome(startingSolution);
@@ -124,13 +123,17 @@ namespace AutoPriorities
             var newPopulation = new List<Chromosome>(_populationSize) { _startingChromosome };
 
             // Keep some elites (the top few) to carry over
-            var elitesCount = (int)(0.2 * _populationSize);
+            var elitesCount = (int)(0.1 * _populationSize);
             for (var e = 0; e < elitesCount; e++) newPopulation.Add(scoredPopulation[e].chrom);
 
             // add retain some infeasible solutions
+            var infeasibleElitesCount = (int)(0.2 * _populationSize);
             var firstInfeasibleIndex = scoredPopulation.FindIndex(x => !x.isFeasible);
-            for (var e = firstInfeasibleIndex; e < elitesCount + firstInfeasibleIndex && e < scoredPopulation.Count; e++)
-                newPopulation.Add(scoredPopulation[e].chrom);
+            if (firstInfeasibleIndex >= 0)
+            {
+                for (var e = firstInfeasibleIndex; e < infeasibleElitesCount + firstInfeasibleIndex && e < scoredPopulation.Count; e++)
+                    newPopulation.Add(scoredPopulation[e].chrom);
+            }
 
             // Fill the rest of the population
             while (newPopulation.Count < _populationSize)
@@ -220,45 +223,66 @@ namespace AutoPriorities
 
         private void Mutate(ref Chromosome chrom, double mutationRate)
         {
-            // random number of mutations
-            for (var idx = 0; idx < _random.Next((int)(_freeGeneIndices.Length * mutationRate)); idx++)
+            // random number of genes to mutate
+            var numMutations = _random.Next((int)(_freeGeneIndices.Length * mutationRate));
+
+            for (var i = 0; i < numMutations; i++)
             {
-                // pick a random gene index among the "free" ones
-                // var idx = _random.Next(0, _freeGeneIndices.Length);
-                var freeGeneIndex = _freeGeneIndices[idx];
+                var m = _random.Next(0, _freeGeneIndices.Length);
+                var freeGeneIndex = _freeGeneIndices[m];
 
                 // oldPriority -> newPriority
                 var oldPriority = chrom.chrom[freeGeneIndex];
                 var newPriority = _random.Next(0, _numPriorities + 1);
                 if (newPriority == oldPriority)
-                    return; // no actual change
+                    continue; // no actual change
 
-                // === INCREMENTAL UPDATE: remove old, add new ===
+                // === INCREMENTAL UPDATE ===
                 var chunkSize = _numPriorities + 1;
-
                 var oldVarIndex = freeGeneIndex * chunkSize + oldPriority;
                 var newVarIndex = freeGeneIndex * chunkSize + newPriority;
 
-                // 1) Subtract old priority's cost, add new
+                // 1) Objective
                 chrom.objective -= _model.Cost[oldVarIndex];
                 chrom.objective += _model.Cost[newVarIndex];
 
-                // 2) For each constraint, subtract old coefficient, add new
+                // 2) For each constraint
                 for (var cIndex = 0; cIndex < chrom.constraintSums.Length; cIndex++)
                 {
-                    chrom.constraintSums[cIndex] -= _model.constraintCoeff[cIndex, oldVarIndex];
-                    chrom.constraintSums[cIndex] += _model.constraintCoeff[cIndex, newVarIndex];
+                    var oldSum = chrom.constraintSums[cIndex];
+                    var oldViolation = chrom.constraintViolations[cIndex];
+
+                    // Update partial sum
+                    var updatedSum = oldSum - _model.constraintCoeff[cIndex, oldVarIndex] + _model.constraintCoeff[cIndex, newVarIndex];
+                    chrom.constraintSums[cIndex] = updatedSum;
+
+                    // Compute new violation
+                    var lb = _model.constraintLowerBound[cIndex];
+                    var ub = _model.constraintUpperBound[cIndex];
+
+                    var newViolation = 0f;
+                    if (updatedSum < lb)
+                        newViolation = lb - updatedSum;
+                    else if (updatedSum > ub)
+                        newViolation = updatedSum - ub;
+
+                    // 3) Update total violation
+                    var difference = newViolation - oldViolation;
+                    chrom.totalViolation += difference;
+                    chrom.constraintViolations[cIndex] = newViolation;
                 }
 
-                // 3) Update the gene in the chromosome
-                chrom.chrom[freeGeneIndex] = newPriority;
-
                 // 4) Re-check feasibility and update fitness
-                chrom.isFeasible = CheckFeasibleAndBounds(chrom);
-                chrom.fitness = chrom.isFeasible ? chrom.objective : _infeasiblePenalty;
+                chrom.isFeasible = Mathf.Approximately(chrom.totalViolation, 0f);
+                if (chrom.isFeasible)
+                    chrom.fitness = chrom.objective;
+                else
+                    chrom.fitness = chrom.totalViolation + _infeasiblePenalty;
+
+                // 5) Finally, update the gene in the chromosome
+                chrom.chrom[freeGeneIndex] = newPriority;
             }
         }
-
 
         /// <summary>
         ///     Simple tournament selection.
@@ -286,78 +310,79 @@ namespace AutoPriorities
         }
 
         /// <summary>
-        ///     Fill Chromosome.constraintSums and Chromosome.objective from scratch.
-        ///     Then check feasibility and set Chromosome.fitness accordingly.
+        /// Fill Chromosome.constraintSums and Chromosome.objective from scratch,
+        /// then compute constraintViolations & totalViolation,
+        /// then set isFeasible and fitness accordingly.
         /// </summary>
         private void InitializeChromosomeFields(ref Chromosome c)
         {
-            // Prepare to accumulate
             var constraintCount = _model.constraintCoeff.GetLength(0);
             c.constraintSums = new float[constraintCount];
+            c.constraintViolations = new float[constraintCount];
             c.objective = 0.0f;
+            c.totalViolation = 0.0f;
 
-            // We'll build the partial sums by iterating over each gene.
-            // For gene i, the "expanded" variable that is 1 is offset + chosenPriority.
+            // Build partial sums (one nonzero variable per gene)
             var chunkSize = _numPriorities + 1;
-
             for (var i = 0; i < c.chrom.Length; i++)
             {
                 var chosenPriority = c.chrom[i];
                 var offset = i * chunkSize + chosenPriority;
 
-                // Add to objective
+                // Objective
                 c.objective += _model.Cost[offset];
 
-                // Add to each constraint's sum
+                // Each constraint's sum
                 for (var constrIndex = 0; constrIndex < constraintCount; constrIndex++)
+                {
                     c.constraintSums[constrIndex] += _model.constraintCoeff[constrIndex, offset];
+                }
             }
 
-            // Now check feasibility and set fitness
-            c.isFeasible = CheckFeasibleAndBounds(c);
-            c.fitness = c.isFeasible ? c.objective : c.objective + _infeasiblePenalty;
-        }
-
-        /// <summary>
-        ///     Return true if all constraints and variable bounds are satisfied.
-        ///     We already have partial sums for constraints,
-        ///     but we still check them individually for feasibility.
-        /// </summary>
-        private bool CheckFeasibleAndBounds(Chromosome c)
-        {
-            // 1) Check constraint bounds using partial sums
-            for (var i = 0; i < _model.constraintCoeff.GetLength(0); i++)
+            // Compute violations for each constraint
+            for (var i = 0; i < constraintCount; i++)
             {
                 var sum = c.constraintSums[i];
-                var lowerBound = _model.constraintLowerBound[i];
-                var upperBound = _model.constraintUpperBound[i];
-                if (sum < lowerBound || sum > upperBound) return false;
+                var lb = _model.constraintLowerBound[i];
+                var ub = _model.constraintUpperBound[i];
+
+                var violation = 0f;
+                if (sum < lb)
+                    violation = lb - sum;
+                else if (sum > ub)
+                    violation = sum - ub;
+
+                c.constraintViolations[i] = violation;
+                c.totalViolation += violation;
             }
 
-            return true;
+            // Now set feasibility & fitness
+            c.isFeasible = c.totalViolation == 0.0f;
+            if (c.isFeasible)
+                c.fitness = c.objective;
+            else
+                c.fitness = c.totalViolation + _infeasiblePenalty;
         }
 
         private struct Chromosome
         {
             public int[] chrom; // The gene array: which priority index is used for each "slot"
-            public float[] constraintSums; // One sum per constraint
+            public float[] constraintSums; // One partial sum per constraint
+            public float[] constraintViolations; // How far each constraint is from feasibility
+            public float totalViolation; // Sum of all constraintViolations
+
             public float objective; // dot(Cost, x)
-            public float fitness; // objective (+ penalty if infeasible)
-            public bool isFeasible; // True if all constraints/bounds satisfied
+            public float fitness; // If feasible: = objective; otherwise = objective + totalViolation + penalty
+            public bool isFeasible; // True if totalViolation == 0
 
             public Chromosome Clone()
             {
-                // Shallow copy of the struct
+                // Shallow copy of 'this'
                 var clone = this;
-
-                // Deep copy of the int[] array using CopyTo
-                clone.chrom = new int[chrom.Length];
-                chrom.CopyTo(clone.chrom, 0);
-
-                // Deep copy of the float[] array using CopyTo
-                clone.constraintSums = new float[constraintSums.Length];
-                constraintSums.CopyTo(clone.constraintSums, 0);
-
+                // Deep copy arrays
+                clone.chrom = (int[])chrom.Clone();
+                clone.constraintSums = (float[])constraintSums.Clone();
+                clone.constraintViolations = (float[])constraintViolations.Clone();
                 return clone;
             }
         }
