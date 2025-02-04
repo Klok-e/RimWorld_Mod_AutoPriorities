@@ -25,7 +25,7 @@ namespace AutoPriorities
         // GA parameters (tweak them as you like)
         private readonly int _populationSize;
 
-        private readonly Random _random = new(42);
+        private readonly Random _random = new();
         private readonly float _secondsImproveSolution;
         private readonly float _secondsTimeout;
         private readonly Chromosome _startingChromosome;
@@ -124,26 +124,27 @@ namespace AutoPriorities
             var newPopulation = new List<Chromosome>(_populationSize) { _startingChromosome };
 
             // Keep some elites (the top few) to carry over
-            var elitesCount = (int)(0.4 * _populationSize);
+            var elitesCount = (int)(0.2 * _populationSize);
             for (var e = 0; e < elitesCount; e++) newPopulation.Add(scoredPopulation[e].chrom);
+
+            // add retain some infeasible solutions
+            var firstInfeasibleIndex = scoredPopulation.FindIndex(x => !x.isFeasible);
+            for (var e = firstInfeasibleIndex; e < elitesCount + firstInfeasibleIndex && e < scoredPopulation.Count; e++)
+                newPopulation.Add(scoredPopulation[e].chrom);
 
             // Fill the rest of the population
             while (newPopulation.Count < _populationSize)
             {
                 // 4) Selection
-                var parent1 = TournamentSelection(scoredPopulation);
-                var parent2 = TournamentSelection(scoredPopulation);
+                var parent = TournamentSelection(scoredPopulation);
 
                 // 5) Crossover
-                var (child1, child2) = UniformCrossover(parent1, parent2, _crossoverRate);
+                var child = parent.Clone();
 
                 // 6) Mutation
-                Mutate(ref child1, _mutationRate);
-                Mutate(ref child2, _mutationRate);
+                Mutate(ref child, _mutationRate);
 
-                newPopulation.Add(child1);
-                if (newPopulation.Count < _populationSize)
-                    newPopulation.Add(child2);
+                newPopulation.Add(child);
             }
 
             population = newPopulation;
@@ -219,10 +220,11 @@ namespace AutoPriorities
 
         private void Mutate(ref Chromosome chrom, double mutationRate)
         {
-            if (_random.NextDouble() < mutationRate)
+            // random number of mutations
+            for (var idx = 0; idx < _random.Next((int)(_freeGeneIndices.Length * mutationRate)); idx++)
             {
                 // pick a random gene index among the "free" ones
-                var idx = _random.Next(0, _freeGeneIndices.Length);
+                // var idx = _random.Next(0, _freeGeneIndices.Length);
                 var freeGeneIndex = _freeGeneIndices[idx];
 
                 // oldPriority -> newPriority
@@ -253,46 +255,10 @@ namespace AutoPriorities
 
                 // 4) Re-check feasibility and update fitness
                 chrom.isFeasible = CheckFeasibleAndBounds(chrom);
-                chrom.fitness = chrom.isFeasible ? chrom.objective : chrom.objective + _infeasiblePenalty;
+                chrom.fitness = chrom.isFeasible ? chrom.objective : _infeasiblePenalty;
             }
         }
 
-        private (Chromosome, Chromosome) UniformCrossover(Chromosome parent1, Chromosome parent2, double rate)
-        {
-            if (_random.NextDouble() > rate)
-            {
-                // No crossover => return clones as is
-                return (parent1.Clone(), parent2.Clone());
-            }
-
-            var length = parent1.chrom.Length;
-            var child1 = new Chromosome { chrom = new int[length] };
-            var child2 = new Chromosome { chrom = new int[length] };
-
-            parent1.chrom.CopyTo(child1.chrom, 0);
-            parent1.chrom.CopyTo(child2.chrom, 0);
-
-            // Only crossover the "freeGeneIndices" to keep it consistent with your existing logic
-            foreach (var freeGeneIndex in _freeGeneIndices)
-            {
-                if (_random.NextDouble() < 0.5)
-                {
-                    child1.chrom[freeGeneIndex] = parent1.chrom[freeGeneIndex];
-                    child2.chrom[freeGeneIndex] = parent2.chrom[freeGeneIndex];
-                }
-                else
-                {
-                    child1.chrom[freeGeneIndex] = parent2.chrom[freeGeneIndex];
-                    child2.chrom[freeGeneIndex] = parent1.chrom[freeGeneIndex];
-                }
-            }
-
-            // Now initialize partial sums from scratch
-            InitializeChromosomeFields(ref child1);
-            InitializeChromosomeFields(ref child2);
-
-            return (child1, child2);
-        }
 
         /// <summary>
         ///     Simple tournament selection.
@@ -416,7 +382,7 @@ namespace AutoPriorities
 
                 for (var index = 0; index < newConstraintsCount; index++)
                 {
-                    var modelConstraint = model.Constraints[newConstraintsCount + index];
+                    var modelConstraint = model.Constraints[skipConstraintsCount + index];
                     for (var i = 0; i < modelConstraint.Coeff.Length; i++) constraintCoeff[index, i] = modelConstraint.Coeff[i];
 
                     constraintLowerBound[index] = modelConstraint.LowerBound;
