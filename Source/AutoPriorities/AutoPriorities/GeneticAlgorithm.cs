@@ -32,14 +32,14 @@ namespace AutoPriorities
         private readonly IWorldInfoRetriever _worldInfoRetriever;
 
         public GeneticAlgorithm(ILogger logger, IWorldInfoRetriever worldInfoRetriever, double[] startingSolution, int numPriorities,
-            LinearModel model, int sumPrioritiesCount, float secondsTimeout, float secondsImproveSolution, int populationSize = 30,
-            float mutationRate = 0.1f, float infeasiblePenalty = 1_000_000.0f)
+            LinearModel model, float secondsTimeout, float secondsImproveSolution, int populationSize = 30, float mutationRate = 0.1f,
+            float infeasiblePenalty = 1_000_000.0f)
         {
             _logger = logger;
             _worldInfoRetriever = worldInfoRetriever;
 
             _numPriorities = numPriorities; // K
-            _model = new LinearModelOpt(model, sumPrioritiesCount);
+            _model = new LinearModelOpt(model);
             _secondsTimeout = secondsTimeout;
             _secondsImproveSolution = secondsImproveSolution;
             _populationSize = populationSize;
@@ -270,12 +270,17 @@ namespace AutoPriorities
                     var difference = newViolation - oldViolation;
                     chrom.totalViolation += difference;
                     chrom.constraintViolations[cIndex] = newViolation;
+
+                    if (_model.JobsConstraintPriorityRanges.Length <= 0
+                        || cIndex < _model.JobsConstraintPriorityRanges[0].indexStart) continue;
+
+                    // todo
                 }
 
                 // 4) Re-check feasibility and update fitness
                 chrom.isFeasible = Mathf.Approximately(chrom.totalViolation, 0f);
                 if (chrom.isFeasible)
-                    chrom.fitness = chrom.objective;
+                    chrom.fitness = chrom.objective + chrom.sumOfMaxPriorities;
                 else
                     chrom.fitness = chrom.totalViolation + _infeasiblePenalty;
 
@@ -321,6 +326,7 @@ namespace AutoPriorities
             c.constraintViolations = new float[constraintCount];
             c.objective = 0.0f;
             c.totalViolation = 0.0f;
+            c.sumOfMaxPriorities = 0.0f;
 
             // Build partial sums (one nonzero variable per gene)
             var chunkSize = _numPriorities + 1;
@@ -356,10 +362,21 @@ namespace AutoPriorities
                 c.totalViolation += violation;
             }
 
+            // calculate sum of max jobs for all pawns for each priority (to spread out jobs of one priority over more pawns)
+            foreach (var jobPriorityRange in _model.JobsConstraintPriorityRanges)
+            {
+                var max = c.constraintSums[jobPriorityRange.indexStart];
+                for (var i = jobPriorityRange.indexStart; i <= jobPriorityRange.indexEnd; i++)
+                    if (max < c.constraintSums[i])
+                        max = c.constraintSums[i];
+
+                c.sumOfMaxPriorities += max;
+            }
+
             // Now set feasibility & fitness
             c.isFeasible = c.totalViolation == 0.0f;
             if (c.isFeasible)
-                c.fitness = c.objective;
+                c.fitness = c.objective + c.sumOfMaxPriorities;
             else
                 c.fitness = c.totalViolation + _infeasiblePenalty;
         }
@@ -372,6 +389,7 @@ namespace AutoPriorities
             public float totalViolation; // Sum of all constraintViolations
 
             public float objective; // dot(Cost, x)
+            public float sumOfMaxPriorities; // sum(max(jobPriorityConstraintSum))
             public float fitness; // If feasible: = objective; otherwise = objective + totalViolation + penalty
             public bool isFeasible; // True if totalViolation == 0
 
@@ -393,29 +411,54 @@ namespace AutoPriorities
             public float[] constraintLowerBound;
             public float[] constraintUpperBound;
 
-            public LinearModelOpt(LinearModel model, int skipConstraintsCount)
+            public LinearModelOpt(LinearModel model)
             {
                 VariableCount = model.VariableCount;
                 Cost = model.Cost;
                 LowerBounds = model.LowerBounds;
                 UpperBounds = model.UpperBounds;
 
-                var newConstraintsCount = model.Constraints.Count - skipConstraintsCount;
+                var newConstraintsCount = model.Constraints.Count + model.MaxJobsConstraints.Count;
                 constraintCoeff = new float[newConstraintsCount, VariableCount];
                 constraintLowerBound = new float[newConstraintsCount];
                 constraintUpperBound = new float[newConstraintsCount];
 
-                for (var index = 0; index < newConstraintsCount; index++)
+                for (var index = 0; index < model.Constraints.Count; index++)
                 {
-                    var modelConstraint = model.Constraints[skipConstraintsCount + index];
+                    var modelConstraint = model.Constraints[index];
                     for (var i = 0; i < modelConstraint.Coeff.Length; i++) constraintCoeff[index, i] = modelConstraint.Coeff[i];
 
                     constraintLowerBound[index] = modelConstraint.LowerBound;
                     constraintUpperBound[index] = modelConstraint.UpperBound;
                 }
 
-                var a = 1;
+                var maxJobConstraintRanges = new List<MaxJobCountIndices>();
+                int? groupPriority = null;
+                var groupStartIndex = 0;
+                for (var index = model.Constraints.Count; index < newConstraintsCount; index++)
+                {
+                    var modelConstraint = model.MaxJobsConstraints[index - model.Constraints.Count];
+                    for (var i = 0; i < modelConstraint.Coeff.Length; i++) constraintCoeff[index, i] = modelConstraint.Coeff[i];
+
+                    constraintLowerBound[index] = modelConstraint.LowerBound;
+                    constraintUpperBound[index] = modelConstraint.UpperBound;
+
+                    groupPriority ??= modelConstraint.PriorityIndex;
+
+                    if (groupPriority == modelConstraint.PriorityIndex) continue;
+
+                    maxJobConstraintRanges.Add(
+                        new MaxJobCountIndices { indexStart = groupStartIndex, indexEnd = index - 1, priorityIndex = groupPriority.Value }
+                    );
+
+                    groupPriority = modelConstraint.PriorityIndex;
+                    groupStartIndex = index;
+                }
+
+                JobsConstraintPriorityRanges = maxJobConstraintRanges.ToArray();
             }
+
+            public MaxJobCountIndices[] JobsConstraintPriorityRanges { get; set; }
 
             public int VariableCount { get; }
 
@@ -423,6 +466,15 @@ namespace AutoPriorities
 
             public float[] LowerBounds { get; private set; }
             public float[] UpperBounds { get; private set; }
+
+            public struct MaxJobCountIndices
+            {
+                public int indexStart;
+
+                public int indexEnd;
+
+                public int priorityIndex;
+            }
         }
     }
 }

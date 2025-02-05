@@ -187,11 +187,9 @@ namespace AutoPriorities
                         constraintRow[offset + workTableIndex] = 1.0f;
 
                     // sum of real priorities + "not assigned" must be exactly 1
-                    model.AddConstraint(constraintRow, 1, 1);
+                    model.AddExactlyOneChoiceConstraint(constraintRow, 1, 1);
                 }
             }
-
-            var sumPrioritiesCount = model.Constraints.Count;
 
             var priorityPercentCached = new List<(Priority priority, JobCount maxJobs, double percent)>();
 
@@ -262,7 +260,7 @@ namespace AutoPriorities
                         rowPawn[offset + workTableIndex] = 1.0f;
                     }
 
-                    model.AddConstraint(rowPawn, 0, maxJobs);
+                    model.AddMaxJobsConstraint(rowPawn, 0, maxJobs, workTableIndex);
                 }
             }
 
@@ -270,7 +268,9 @@ namespace AutoPriorities
             alglib.minlpsetcost(state, variables.ToArray().ToDouble());
             alglib.minlpsetbc(state, bndl.ToArray().ToDouble(), bndu.ToArray().ToDouble());
 
-            foreach (var cRow in model.Constraints) alglib.minlpaddlc2dense(state, cRow.Coeff.ToDouble(), cRow.LowerBound, cRow.UpperBound);
+            AddConstraintsToAlglibState(model.ExactlyOneChoiceConstraints, state);
+            AddConstraintsToAlglibState(model.Constraints, state);
+            AddConstraintsToAlglibState(model.MaxJobsConstraints, state);
 
             alglib.minlpsetscale(state, Enumerable.Repeat(1.0, variables.Count).ToArray());
             alglib.minlpsetalgoipm(state);
@@ -294,7 +294,6 @@ namespace AutoPriorities
                 solution,
                 workTableEntries.Length,
                 model,
-                sumPrioritiesCount,
                 populationSize: _worldInfoRetriever.OptimizationPopulationSize(),
                 secondsTimeout: _worldInfoRetriever.OptimizationFeasibleSolutionTimeoutSeconds(),
                 secondsImproveSolution: _worldInfoRetriever.OptimizationImprovementSeconds(),
@@ -313,6 +312,12 @@ namespace AutoPriorities
             }
 
             AssignPrioritiesFromSolution(workTableEntries, assignmentOffsets, floatSolution, pawnsData);
+        }
+
+        private static void AddConstraintsToAlglibState<T>(List<T> constraints, alglib.minlpstate state) where T : LinearModel.ConstraintRow
+        {
+            foreach (var cRow in constraints)
+                alglib.minlpaddlc2dense(state, cRow.Coeff.ToDouble(), cRow.LowerBound, cRow.UpperBound);
         }
 
         private void AssignPrioritiesFromSolution(WorkTableEntry[] workTableEntries,

@@ -15,21 +15,17 @@ namespace AutoPriorities
 
         public int VariableCount { get; }
 
-        // Cost array: cost[i] is the coefficient for variable x_i.
         public float[] Cost { get; private set; }
 
-        // Bounds for each variable: x_i in [LowerBounds[i], UpperBounds[i]].
         public float[] LowerBounds { get; private set; }
         public float[] UpperBounds { get; private set; }
 
-        // Each constraint: sum_i( Coeff[i] * x_i ) in [LowerBound, UpperBound].
         public List<ConstraintRow> Constraints { get; } = new();
 
-        /// <summary>
-        ///     Adds a linear constraint of the form:
-        ///     sum_i( Coeff[i] * x_i ) in [lowerBound, upperBound]
-        ///     Coeff array must have length == VariableCount.
-        /// </summary>
+        public List<ConstraintRow> ExactlyOneChoiceConstraints { get; } = new();
+
+        public List<MaxJobsConstraintRow> MaxJobsConstraints { get; } = new();
+
         public void AddConstraint(float[] coeff, float lowerBound, float upperBound)
         {
             if (coeff.Length != VariableCount)
@@ -38,15 +34,34 @@ namespace AutoPriorities
             Constraints.Add(new ConstraintRow { Coeff = coeff, LowerBound = lowerBound, UpperBound = upperBound });
         }
 
+        public void AddMaxJobsConstraint(float[] coeff, float lowerBound, float upperBound, int priorityIndex)
+        {
+            if (coeff.Length != VariableCount)
+                throw new ArgumentException("Coefficient array size mismatch.");
 
-        /// <summary>
-        ///     A single constraint's data.
-        /// </summary>
+            MaxJobsConstraints.Add(
+                new MaxJobsConstraintRow { Coeff = coeff, LowerBound = lowerBound, UpperBound = upperBound, PriorityIndex = priorityIndex }
+            );
+        }
+
+        public void AddExactlyOneChoiceConstraint(float[] coeff, float lowerBound, float upperBound)
+        {
+            if (coeff.Length != VariableCount)
+                throw new ArgumentException("Coefficient array size mismatch.");
+
+            ExactlyOneChoiceConstraints.Add(new ConstraintRow { Coeff = coeff, LowerBound = lowerBound, UpperBound = upperBound });
+        }
+
         public class ConstraintRow
         {
             public float[] Coeff { get; init; } = null!;
             public float LowerBound { get; init; }
             public float UpperBound { get; init; }
+        }
+
+        public class MaxJobsConstraintRow : ConstraintRow
+        {
+            public int PriorityIndex { get; init; }
         }
     }
 }
