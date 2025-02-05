@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<ArraySimpleDataOfWorkTypeSimpleData>
+  <array>
+    <WorkTypeSimpleData>
+      <defName>Firefighter</defName>
+      <labelShort>Firefight</labelShort>
+      <relevantSkillsCount>0</relevantSkillsCount>
+      <workTags>Commoner Firefighting AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Patient</defName>
+      <labelShort>Patient</labelShort>
+      <relevantSkillsCount>0</relevantSkillsCount>
+      <workTags>None</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Doctor</defName>
+      <labelShort>Doctor</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>Caring Commoner AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>PatientBedRest</defName>
+      <labelShort>Bed rest</labelShort>
+      <relevantSkillsCount>0</relevantSkillsCount>
+      <workTags>None</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>HaulingUrgent</defName>
+      <labelShort>Haul+</labelShort>
+      <relevantSkillsCount>0</relevantSkillsCount>
+      <workTags>ManualDumb Hauling AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Childcare</defName>
+      <labelShort>Childcare</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>Caring Social AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>BasicWorker</defName>
+      <labelShort>Basic</labelShort>
+      <relevantSkillsCount>0</relevantSkillsCount>
+      <workTags>Commoner AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>FinishingOff</defName>
+      <labelShort>Finish</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>Violent AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Warden</defName>
+      <labelShort>Warden</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>Social AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Handling</defName>
+      <labelShort>Handle</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>Commoner Animals AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Cooking</defName>
+      <labelShort>Cook</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>ManualSkilled Commoner Cooking AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Hunting</defName>
+      <labelShort>Hunt</labelShort>
+      <relevantSkillsCount>2</relevantSkillsCount>
+      <workTags>Violent Commoner Hunting Shooting AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Construction</defName>
+      <labelShort>Construct</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>ManualSkilled Commoner Constructing AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Growing</defName>
+      <labelShort>Grow</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>ManualSkilled Commoner PlantWork AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Mining</defName>
+      <labelShort>Mine</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>ManualSkilled Commoner Mining AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>PlantCutting</defName>
+      <labelShort>Plant cut</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>ManualSkilled Commoner PlantWork AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Smithing</defName>
+      <labelShort>Smith</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>ManualSkilled Commoner Crafting AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Tailoring</defName>
+      <labelShort>Tailor</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>ManualSkilled Commoner Crafting AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Art</defName>
+      <labelShort>Art</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>Commoner Artistic AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Crafting</defName>
+      <labelShort>Craft</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>ManualSkilled Commoner Crafting AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Hauling</defName>
+      <labelShort>Haul</labelShort>
+      <relevantSkillsCount>0</relevantSkillsCount>
+      <workTags>ManualDumb Commoner Hauling AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Cleaning</defName>
+      <labelShort>Clean</labelShort>
+      <relevantSkillsCount>0</relevantSkillsCount>
+      <workTags>ManualDumb Commoner Cleaning AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>DarkStudy</defName>
+      <labelShort>Dark study</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>Commoner Intellectual AllWork</workTags>
+    </WorkTypeSimpleData>
+    <WorkTypeSimpleData>
+      <defName>Research</defName>
+      <labelShort>Research</labelShort>
+      <relevantSkillsCount>1</relevantSkillsCount>
+      <workTags>Commoner Intellectual AllWork</workTags>
+    </WorkTypeSimpleData>
+  </array>
+</ArraySimpleDataOfWorkTypeSimpleData>

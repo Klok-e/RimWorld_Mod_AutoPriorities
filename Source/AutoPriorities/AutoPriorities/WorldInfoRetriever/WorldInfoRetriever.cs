@@ -72,6 +72,11 @@ namespace AutoPriorities.WorldInfoRetriever
             return Controller.OptimizationPopulationSize;
         }
 
+        public float OptimizationJobsPerPawnWeight()
+        {
+            return Controller.OptimizationJobsPerPawnWeight;
+        }
+
         #endregion
     }
 }

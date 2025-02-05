@@ -35,6 +35,7 @@ namespace Tests.Helpers
             worldInfoRetriever.OptimizationFeasibleSolutionTimeoutSeconds().Returns(10);
             worldInfoRetriever.OptimizationImprovementSeconds().Returns(1);
             worldInfoRetriever.OptimizationMutationRate().Returns(0.5f);
+            worldInfoRetriever.OptimizationJobsPerPawnWeight().Returns(0.01f);
 
             return worldInfoRetriever;
         }

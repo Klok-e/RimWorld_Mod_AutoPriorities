@@ -26,5 +26,7 @@ namespace AutoPriorities.WorldInfoRetriever
         float OptimizationMutationRate();
 
         int OptimizationPopulationSize();
+
+        float OptimizationJobsPerPawnWeight();
     }
 }

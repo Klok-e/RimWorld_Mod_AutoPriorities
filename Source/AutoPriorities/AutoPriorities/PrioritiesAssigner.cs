@@ -116,6 +116,9 @@ namespace AutoPriorities
 
         public void AssignPrioritiesByOptimization(PawnsData pawnsData, Action? onSolverFailed = null)
         {
+            if (pawnsData.CurrentMapPlayerPawns.Count == 0)
+                return;
+
             // Setup the solver decision variables (cost) for each (workType, pawn, priority + not_assigned)
             var workTableEntries = pawnsData.WorkTables.Distinct(y => y.Priority.v).ToArray();
             var assignmentOffsets = new Dictionary<(IWorkTypeWrapper, IPawnWrapper), int>();
@@ -298,6 +301,7 @@ namespace AutoPriorities
                 secondsTimeout: _worldInfoRetriever.OptimizationFeasibleSolutionTimeoutSeconds(),
                 secondsImproveSolution: _worldInfoRetriever.OptimizationImprovementSeconds(),
                 mutationRate: _worldInfoRetriever.OptimizationMutationRate(),
+                jobsPerPawnWeight: _worldInfoRetriever.OptimizationJobsPerPawnWeight(),
                 infeasiblePenalty: 1000000.0f
             );
 

@@ -126,11 +126,37 @@ namespace Tests
             //                     $"{((IPawnWrapper)x.Target()).ThingID} - {((IWorkTypeWrapper)x.GetArguments()[0]).DefName} - {(x.GetArguments()[1])}")
             //             .ToList())))
 
-            GetAssignedPriorities().Count(x => x.Priority == 0).Should().Be(41);
-            GetAssignedPriorities().Count(x => x.Priority == 1).Should().Be(12);
-            GetAssignedPriorities().Count(x => x.Priority == 2).Should().Be(15);
-            GetAssignedPriorities().Count(x => x.Priority == 3).Should().Be(11);
-            GetAssignedPriorities().Count(x => x.Priority == 4).Should().Be(17);
+            GetMaxJobsForPawn().First(x => x.Priority == 2).Count.Should().Be(4);
+        }
+
+        [Test]
+        public void AssignPrioritiesSmarter_FromFileJobSpread()
+        {
+            // arrange
+            LoadPawnsDataFromFile(4);
+
+            _pawnsData.MinimumSkillLevel = 3;
+
+            _worldInfoRetriever.OptimizationJobsPerPawnWeight().Returns(10f);
+            _worldInfoRetriever.OptimizationImprovementSeconds().Returns(4f);
+
+            // act
+            _assigner.AssignPrioritiesByOptimization(_pawnsData);
+
+            // assert
+            _logger.NoWarnReceived();
+
+            var priorityGroupsCountMaxPerAllPawns = GetMaxJobsForPawn();
+
+            priorityGroupsCountMaxPerAllPawns.First(x => x.Priority == 2).Count.Should().Be(7);
+        }
+
+        private List<(int Priority, int Count)> GetMaxJobsForPawn()
+        {
+            return GetAssignedPriorities()
+                .GroupBy(x => x.Priority)
+                .Select(x => (x.Key, x.GroupBy(y => y.Pawn).Select(y => y.Count()).Max()))
+                .ToList();
         }
 
         private IEnumerable<(IPawnWrapper Pawn, IWorkTypeWrapper WorkType, int Priority)> GetAssignedPriorities()

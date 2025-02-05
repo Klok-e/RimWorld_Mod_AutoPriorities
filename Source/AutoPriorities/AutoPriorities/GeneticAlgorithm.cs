@@ -15,6 +15,7 @@ namespace AutoPriorities
     {
         private readonly int[] _freeGeneIndices;
         private readonly float _infeasiblePenalty; // penalty added if solution is infeasible
+        private readonly float _jobsPerPawnWeight;
         private readonly ILogger _logger;
         private readonly LinearModelOpt _model;
         private readonly float _mutationRate;
@@ -33,7 +34,7 @@ namespace AutoPriorities
 
         public GeneticAlgorithm(ILogger logger, IWorldInfoRetriever worldInfoRetriever, double[] startingSolution, int numPriorities,
             LinearModel model, float secondsTimeout, float secondsImproveSolution, int populationSize = 30, float mutationRate = 0.1f,
-            float infeasiblePenalty = 1_000_000.0f)
+            float infeasiblePenalty = 1_000_000.0f, float jobsPerPawnWeight = 0.01f)
         {
             _logger = logger;
             _worldInfoRetriever = worldInfoRetriever;
@@ -45,6 +46,7 @@ namespace AutoPriorities
             _populationSize = populationSize;
             _mutationRate = mutationRate;
             _infeasiblePenalty = infeasiblePenalty;
+            _jobsPerPawnWeight = jobsPerPawnWeight;
             (_startingChromosome, _freeGeneIndices) = StartingSolutionToChromosome(startingSolution);
         }
 
@@ -87,9 +89,9 @@ namespace AutoPriorities
             }
 
             if (_worldInfoRetriever.DebugLogs())
-                _logger.Info($"Random search run to improve on solution for seconds: {timer.Elapsed.TotalSeconds}");
-
-            Console.WriteLine($"Generations: {generations}");
+                _logger.Info(
+                    $"Random search run to improve on solution for seconds: {timer.Elapsed.TotalSeconds}. Generations: {generations}"
+                );
 
             if (bestSolution is { } value)
                 solution = ChromosomeToDoubleArray(value);
@@ -115,10 +117,6 @@ namespace AutoPriorities
                 bestIsFeasible = scoredPopulation[0].isFeasible;
             }
 
-            // Print or log some info if you want
-            // Console.WriteLine($"Gen {gen}, BestFitness: {bestFitness}");
-
-            // 3) Selection + Reproduction
             // always keep starting chromosome
             var newPopulation = new List<Chromosome>(_populationSize) { _startingChromosome };
 
@@ -138,13 +136,10 @@ namespace AutoPriorities
             // Fill the rest of the population
             while (newPopulation.Count < _populationSize)
             {
-                // 4) Selection
                 var parent = TournamentSelection(scoredPopulation);
 
-                // 5) Crossover
                 var child = parent.Clone();
 
-                // 6) Mutation
                 Mutate(ref child, _mutationRate);
 
                 newPopulation.Add(child);
@@ -225,13 +220,16 @@ namespace AutoPriorities
         {
             // random number of genes to mutate
             var numMutations = _random.Next((int)(_freeGeneIndices.Length * mutationRate));
+            if (numMutations == 0) return; // nothing changes, so no recalc needed
 
-            for (var i = 0; i < numMutations; i++)
+            _freeGeneIndices.Shuffle(_random);
+
+            // Apply incremental updates for each mutated gene
+            var freeGeneArrayIndex = 0;
+            for (var m = 0; m < numMutations; m++)
             {
-                var m = _random.Next(0, _freeGeneIndices.Length);
-                var freeGeneIndex = _freeGeneIndices[m];
+                var freeGeneIndex = _freeGeneIndices[freeGeneArrayIndex++];
 
-                // oldPriority -> newPriority
                 var oldPriority = chrom.chrom[freeGeneIndex];
                 var newPriority = _random.Next(0, _numPriorities + 1);
                 if (newPriority == oldPriority)
@@ -256,37 +254,34 @@ namespace AutoPriorities
                     var updatedSum = oldSum - _model.constraintCoeff[cIndex, oldVarIndex] + _model.constraintCoeff[cIndex, newVarIndex];
                     chrom.constraintSums[cIndex] = updatedSum;
 
-                    // Compute new violation
+                    // Compute new violation for this constraint
                     var lb = _model.constraintLowerBound[cIndex];
                     var ub = _model.constraintUpperBound[cIndex];
-
                     var newViolation = 0f;
+
                     if (updatedSum < lb)
                         newViolation = lb - updatedSum;
                     else if (updatedSum > ub)
                         newViolation = updatedSum - ub;
 
-                    // 3) Update total violation
-                    var difference = newViolation - oldViolation;
-                    chrom.totalViolation += difference;
+                    // 3) Update totalViolation
+                    var diff = newViolation - oldViolation;
+                    chrom.totalViolation += diff;
                     chrom.constraintViolations[cIndex] = newViolation;
-
-                    if (_model.JobsConstraintPriorityRanges.Length <= 0
-                        || cIndex < _model.JobsConstraintPriorityRanges[0].indexStart) continue;
-
-                    // todo
                 }
 
-                // 4) Re-check feasibility and update fitness
-                chrom.isFeasible = Mathf.Approximately(chrom.totalViolation, 0f);
-                if (chrom.isFeasible)
-                    chrom.fitness = chrom.objective + chrom.sumOfMaxPriorities;
-                else
-                    chrom.fitness = chrom.totalViolation + _infeasiblePenalty;
-
-                // 5) Finally, update the gene in the chromosome
+                // Finally, update the gene in the chromosome
                 chrom.chrom[freeGeneIndex] = newPriority;
             }
+
+            RecomputeSumOfMaxPriorities(ref chrom);
+
+            // 4) Re-check feasibility and update fitness
+            chrom.isFeasible = Mathf.Approximately(chrom.totalViolation, 0f);
+            if (chrom.isFeasible)
+                chrom.fitness = chrom.objective + chrom.sumOfMaxPriorities * _jobsPerPawnWeight;
+            else
+                chrom.fitness = chrom.totalViolation + _infeasiblePenalty;
         }
 
         /// <summary>
@@ -326,7 +321,6 @@ namespace AutoPriorities
             c.constraintViolations = new float[constraintCount];
             c.objective = 0.0f;
             c.totalViolation = 0.0f;
-            c.sumOfMaxPriorities = 0.0f;
 
             // Build partial sums (one nonzero variable per gene)
             var chunkSize = _numPriorities + 1;
@@ -362,23 +356,35 @@ namespace AutoPriorities
                 c.totalViolation += violation;
             }
 
-            // calculate sum of max jobs for all pawns for each priority (to spread out jobs of one priority over more pawns)
-            foreach (var jobPriorityRange in _model.JobsConstraintPriorityRanges)
-            {
-                var max = c.constraintSums[jobPriorityRange.indexStart];
-                for (var i = jobPriorityRange.indexStart; i <= jobPriorityRange.indexEnd; i++)
-                    if (max < c.constraintSums[i])
-                        max = c.constraintSums[i];
-
-                c.sumOfMaxPriorities += max;
-            }
+            RecomputeSumOfMaxPriorities(ref c);
 
             // Now set feasibility & fitness
             c.isFeasible = c.totalViolation == 0.0f;
             if (c.isFeasible)
-                c.fitness = c.objective + c.sumOfMaxPriorities;
+                c.fitness = c.objective + c.sumOfMaxPriorities * _jobsPerPawnWeight;
             else
                 c.fitness = c.totalViolation + _infeasiblePenalty;
+        }
+
+        private void RecomputeSumOfMaxPriorities(ref Chromosome chrom)
+        {
+            chrom.sumOfMaxPriorities = 0f;
+
+            // For each priority "group"
+            foreach (var jobPriorityRange in _model.JobsConstraintPriorityRanges)
+            {
+                var maxVal = float.NegativeInfinity;
+                // Find the maximum partial sum in that group
+                for (var i = jobPriorityRange.indexStart; i <= jobPriorityRange.indexEnd; i++)
+                {
+                    var val = chrom.constraintSums[i];
+                    if (val > maxVal)
+                        maxVal = val;
+                }
+
+                // Accumulate into sumOfMaxPriorities
+                chrom.sumOfMaxPriorities += maxVal;
+            }
         }
 
         private struct Chromosome
@@ -418,62 +424,92 @@ namespace AutoPriorities
                 LowerBounds = model.LowerBounds;
                 UpperBounds = model.UpperBounds;
 
-                var newConstraintsCount = model.Constraints.Count + model.MaxJobsConstraints.Count;
-                constraintCoeff = new float[newConstraintsCount, VariableCount];
-                constraintLowerBound = new float[newConstraintsCount];
-                constraintUpperBound = new float[newConstraintsCount];
+                // 1) Figure out how many total constraints = "regular" + "max jobs"
+                var totalConstraints = model.Constraints.Count + model.MaxJobsConstraints.Count;
 
-                for (var index = 0; index < model.Constraints.Count; index++)
+                // 2) Allocate matrix + bound arrays
+                constraintCoeff = new float[totalConstraints, VariableCount];
+                constraintLowerBound = new float[totalConstraints];
+                constraintUpperBound = new float[totalConstraints];
+
+                // 3) First, copy "regular" constraints
+                for (var row = 0; row < model.Constraints.Count; row++)
                 {
-                    var modelConstraint = model.Constraints[index];
-                    for (var i = 0; i < modelConstraint.Coeff.Length; i++) constraintCoeff[index, i] = modelConstraint.Coeff[i];
+                    var mc = model.Constraints[row];
+                    for (var col = 0; col < VariableCount; col++)
+                        constraintCoeff[row, col] = mc.Coeff[col];
 
-                    constraintLowerBound[index] = modelConstraint.LowerBound;
-                    constraintUpperBound[index] = modelConstraint.UpperBound;
+                    constraintLowerBound[row] = mc.LowerBound;
+                    constraintUpperBound[row] = mc.UpperBound;
                 }
+
+                // 4) Next, copy "max jobs" constraints, if any
+                var offset = model.Constraints.Count;
+                for (var i = 0; i < model.MaxJobsConstraints.Count; i++)
+                {
+                    var mc = model.MaxJobsConstraints[i];
+                    var row = offset + i;
+                    for (var col = 0; col < VariableCount; col++)
+                        constraintCoeff[row, col] = mc.Coeff[col];
+
+                    constraintLowerBound[row] = mc.LowerBound;
+                    constraintUpperBound[row] = mc.UpperBound;
+                }
+
+                // 5) Build "priority ranges" only if MaxJobsConstraints is non-empty
+                if (model.MaxJobsConstraints.Count <= 0) return;
 
                 var maxJobConstraintRanges = new List<MaxJobCountIndices>();
-                int? groupPriority = null;
-                var groupStartIndex = 0;
-                for (var index = model.Constraints.Count; index < newConstraintsCount; index++)
+
+                // We'll track the start of a "block" of constraints all sharing
+                // the same mc.PriorityIndex.
+                var groupStartIndex = offset; // where "max jobs" constraints begin
+                var currentPriorityIndex = model.MaxJobsConstraints[0].PriorityIndex;
+
+                // We'll iterate from the 2nd constraint onward
+                for (var i = 1; i < model.MaxJobsConstraints.Count; i++)
                 {
-                    var modelConstraint = model.MaxJobsConstraints[index - model.Constraints.Count];
-                    for (var i = 0; i < modelConstraint.Coeff.Length; i++) constraintCoeff[index, i] = modelConstraint.Coeff[i];
+                    var mc = model.MaxJobsConstraints[i];
+                    if (mc.PriorityIndex != currentPriorityIndex)
+                    {
+                        // We reached a new priority => close out the old group
+                        maxJobConstraintRanges.Add(
+                            new MaxJobCountIndices
+                            {
+                                indexStart = groupStartIndex,
+                                // The group ends at row (offset + i - 1)
+                                indexEnd = offset + i - 1,
+                            }
+                        );
 
-                    constraintLowerBound[index] = modelConstraint.LowerBound;
-                    constraintUpperBound[index] = modelConstraint.UpperBound;
-
-                    groupPriority ??= modelConstraint.PriorityIndex;
-
-                    if (groupPriority == modelConstraint.PriorityIndex) continue;
-
-                    maxJobConstraintRanges.Add(
-                        new MaxJobCountIndices { indexStart = groupStartIndex, indexEnd = index - 1, priorityIndex = groupPriority.Value }
-                    );
-
-                    groupPriority = modelConstraint.PriorityIndex;
-                    groupStartIndex = index;
+                        // Start a new group
+                        groupStartIndex = offset + i;
+                        currentPriorityIndex = mc.PriorityIndex;
+                    }
                 }
+
+                // Add the final group
+                maxJobConstraintRanges.Add(
+                    new MaxJobCountIndices { indexStart = groupStartIndex, indexEnd = offset + model.MaxJobsConstraints.Count - 1 }
+                );
 
                 JobsConstraintPriorityRanges = maxJobConstraintRanges.ToArray();
             }
 
-            public MaxJobCountIndices[] JobsConstraintPriorityRanges { get; set; }
+            public MaxJobCountIndices[] JobsConstraintPriorityRanges { get; } = Array.Empty<MaxJobCountIndices>();
 
             public int VariableCount { get; }
 
             public float[] Cost { get; }
+            public float[] LowerBounds { get; }
+            public float[] UpperBounds { get; }
 
-            public float[] LowerBounds { get; private set; }
-            public float[] UpperBounds { get; private set; }
-
+            // A struct marking the [start..end] rows for each group of constraints 
+            // that share one PriorityIndex.
             public struct MaxJobCountIndices
             {
                 public int indexStart;
-
                 public int indexEnd;
-
-                public int priorityIndex;
             }
         }
     }

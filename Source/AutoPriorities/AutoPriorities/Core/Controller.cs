@@ -37,6 +37,8 @@ namespace AutoPriorities.Core
 
         public static SettingHandle<bool>? DebugLogs { get; private set; }
 
+        public static SettingHandle<float>? OptimizationJobsPerPawnWeight { get; private set; }
+
         public static int? MaxPriorityAlien { get; set; }
 
         public static AutoPrioritiesDialog? Dialog { get; private set; }
@@ -105,6 +107,13 @@ namespace AutoPriorities.Core
                 "The population size used in the optimization algorithm. Reduce to reduce memory footprint.",
                 256,
                 x => int.TryParse(x, out var result) && result is >= 2 and <= 4096
+            );
+            OptimizationJobsPerPawnWeight = Settings.GetHandle(
+                "optimizationJobsPerPawnWeight",
+                "Optimization jobs per pawn weight",
+                "Controls spread of jobs over multiple pawns.",
+                1f,
+                x => float.TryParse(x, out var result) && result >= 0
             );
         }
 
