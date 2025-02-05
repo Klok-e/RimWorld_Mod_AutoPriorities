@@ -437,6 +437,15 @@ namespace AutoPriorities.Ui
                 Consts.LabelHeight + Consts.LabelMargin
             );
 
+            var scrollRect = new Rect(pawnNameRect.xMin, inRect.yMin, inRect.width, inRect.height - Consts.DistFromBottomBorder);
+
+            Widgets.BeginScrollView(
+                scrollRect,
+                ref _pawnExcludeScrollPos,
+                new Rect(0, 0, Consts.PawnNameCoWidth, _pawnsData.CurrentMapPlayerPawns.Count * (Consts.LabelHeight + Consts.LabelMargin)),
+                false
+            );
+
             foreach (var pawn in _pawnsData.CurrentMapPlayerPawns)
             {
                 Widgets.Label(pawnNameRect, pawn.LabelNoCount);
@@ -458,7 +467,9 @@ namespace AutoPriorities.Ui
 
             Text.Anchor = anchor;
 
-            var scrollRect = new Rect(pawnNameRect.xMax, inRect.yMin, inRect.width, inRect.height - Consts.DistFromBottomBorder);
+            Widgets.EndScrollView();
+
+            scrollRect = new Rect(pawnNameRect.xMax, inRect.yMin, inRect.width, inRect.height - Consts.DistFromBottomBorder);
 
             var tableSizeX = Consts.WorkLabelWidth / 2 + Consts.WorkLabelHorizOffset * _pawnsData.WorkTypes.Count;
 
