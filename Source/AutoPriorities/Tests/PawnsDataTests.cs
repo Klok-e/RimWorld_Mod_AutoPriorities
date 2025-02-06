@@ -47,8 +47,7 @@ namespace Tests
             var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y)).ToDictionary(k => k.x, v => v.y);
             var save = new SaveData
             {
-                ExcludedPawns =
-                    new HashSet<ExcludedPawnEntry> { new() { WorkDef = _pw.workTypes[1].DefName, PawnThingId = _pw.pawns[1].ThingID } },
+                ExcludedPawns = new HashSet<ExcludedPawnEntry> { new() { WorkDef = _pw.workTypes[1], Pawn = _pw.pawns[1] } },
                 WorkTablesData = new List<WorkTableEntry> { new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent } },
             };
             _serializer.LoadSavedData().Returns(save);
@@ -92,8 +91,7 @@ namespace Tests
             var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y)).ToDictionary(k => k.x, v => v.y);
             var save = new SaveData
             {
-                ExcludedPawns =
-                    new HashSet<ExcludedPawnEntry> { new() { WorkDef = _pw.workTypes[1].DefName, PawnThingId = _pw.pawns[1].ThingID } },
+                ExcludedPawns = new HashSet<ExcludedPawnEntry> { new() { WorkDef = _pw.workTypes[1], Pawn = _pw.pawns[1] } },
                 WorkTablesData = new List<WorkTableEntry> { new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent } },
             };
             _serializer.LoadSavedData().Returns(save);

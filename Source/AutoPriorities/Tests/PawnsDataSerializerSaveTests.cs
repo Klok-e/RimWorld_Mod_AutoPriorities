@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -43,8 +44,7 @@ namespace Tests
         public void LoadSavedData_SaveState_LoadAndSave_IdenticalResult()
         {
             // arrange
-            _retriever.GetAdultPawnsInPlayerFactionInCurrentMap()
-                .Returns(_fixture.CreateMany<IPawnWrapper>());
+            _retriever.GetAdultPawnsInPlayerFactionInCurrentMap().Returns(_fixture.CreateMany<IPawnWrapper>());
 
             _retriever.GetWorkTypeDefsInPriorityOrder()
                 .Returns(
@@ -54,27 +54,29 @@ namespace Tests
                             var workTypeWrapper = _fixture.Create<IWorkTypeWrapper>();
                             workTypeWrapper.DefName.Returns(x);
                             return workTypeWrapper;
-                        }));
+                        }
+                    )
+                );
             var fileContents = File.ReadAllBytes(TestHelper.SavePath);
             _mapSpecificData.PawnsDataXml.Returns(fileContents);
+            _mapSpecificData.ExcludedPawns.Returns(new List<ExcludedPawnEntry>());
 
             var expectedString = Encoding.UTF8.GetString(fileContents);
             var loaded = _saveDataHandler.GetSavedData(_mapSpecificData);
 
             var actualBytes = Array.Empty<byte>();
-            _mapSpecificData.WhenForAnyArgs(x => x.PawnsDataXml = Array.Empty<byte>())
-                .Do(x => actualBytes = x.Arg<byte[]>());
+            _mapSpecificData.WhenForAnyArgs(x => x.PawnsDataXml = Array.Empty<byte>()).Do(x => actualBytes = x.Arg<byte[]>());
 
             // act
             _saveDataHandler.SaveData(
                 new SaveDataRequest { ExcludedPawns = loaded!.ExcludedPawns, WorkTablesData = loaded.WorkTablesData },
-                _mapSpecificData);
+                _mapSpecificData
+            );
             var actualString = Encoding.UTF8.GetString(actualBytes);
 
             // assert
             _logger.NoWarnReceived();
-            actualString.Should()
-                .Be(expectedString);
+            actualString.Should().Be(expectedString);
         }
     }
 }

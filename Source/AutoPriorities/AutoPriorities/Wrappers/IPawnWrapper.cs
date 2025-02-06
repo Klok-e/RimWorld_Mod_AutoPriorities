@@ -1,12 +1,18 @@
+using Verse;
+
 namespace AutoPriorities.Wrappers
 {
     public interface IPawnWrapper
     {
+        Pawn? Pawn { get; }
+
         string ThingID { get; }
 
         string NameFullColored { get; }
 
         string LabelNoCount { get; }
+
+        Pawn GetPawnOrThrow();
 
         bool IsCapableOfWholeWorkType(IWorkTypeWrapper work);
 

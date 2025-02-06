@@ -460,13 +460,13 @@ namespace AutoPriorities.Ui
                 TooltipHandler.TipRegion(pawnNameRect, "Click here to toggle all jobs");
                 if (Widgets.ButtonInvisible(pawnNameRect))
                 {
-                    var c = _pawnsData.ExcludedPawns.Count(x => x.PawnThingId == pawn.ThingID);
+                    var c = _pawnsData.ExcludedPawns.Count(x => x.Pawn == pawn);
                     if (c > _pawnsData.WorkTypes.Count / 2)
-                        _pawnsData.ExcludedPawns.RemoveWhere(x => x.PawnThingId == pawn.ThingID);
+                        _pawnsData.ExcludedPawns.RemoveWhere(x => x.Pawn == pawn);
                     else
                     {
                         foreach (var work in _pawnsData.WorkTypes)
-                            _pawnsData.ExcludedPawns.Add(new ExcludedPawnEntry { WorkDef = work.DefName, PawnThingId = pawn.ThingID });
+                            _pawnsData.ExcludedPawns.Add(new ExcludedPawnEntry { WorkDef = work, Pawn = pawn });
                     }
                 }
 
@@ -550,9 +550,7 @@ namespace AutoPriorities.Ui
                 // draw tickboxes
                 foreach (var (workType, i) in _pawnsData.WorkTypes.Zip(Enumerable.Range(0, _pawnsData.WorkTypes.Count), (w, i) => (w, i)))
                 {
-                    var prev = _pawnsData.ExcludedPawns.Contains(
-                        new ExcludedPawnEntry { WorkDef = workType.DefName, PawnThingId = pawn.ThingID }
-                    );
+                    var prev = _pawnsData.ExcludedPawns.Contains(new ExcludedPawnEntry { WorkDef = workType, Pawn = pawn });
                     var next = prev;
 
                     DrawUtil.EmptyCheckbox(
@@ -565,13 +563,13 @@ namespace AutoPriorities.Ui
 
                     if (next)
                     {
-                        _pawnsData.ExcludedPawns.Add(new ExcludedPawnEntry { WorkDef = workType.DefName, PawnThingId = pawn.ThingID });
+                        _pawnsData.ExcludedPawns.Add(new ExcludedPawnEntry { WorkDef = workType, Pawn = pawn });
                         if (_worldInfoRetriever.DebugLogs())
                             _logger.Info($"Pawn {pawn.NameFullColored} with work {workType.DefName} was added to the Excluded list");
                     }
                     else
                     {
-                        _pawnsData.ExcludedPawns.Remove(new ExcludedPawnEntry { WorkDef = workType.DefName, PawnThingId = pawn.ThingID });
+                        _pawnsData.ExcludedPawns.Remove(new ExcludedPawnEntry { WorkDef = workType, Pawn = pawn });
                         if (_worldInfoRetriever.DebugLogs())
                             _logger.Info($"Pawn {pawn.NameFullColored} with work {workType.DefName} was removed from the Excluded list");
                     }

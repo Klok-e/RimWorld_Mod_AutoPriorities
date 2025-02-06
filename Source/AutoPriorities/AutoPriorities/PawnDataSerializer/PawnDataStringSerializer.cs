@@ -44,9 +44,7 @@ namespace AutoPriorities.PawnDataSerializer
         {
             var stream = new MemoryStream();
 
-            new XmlSerializer(typeof(PercentTableSaver.Ser)).Serialize(
-                stream,
-                PercentTableSaver.Ser.Serialized((request.WorkTablesData, request.ExcludedPawns)));
+            new XmlSerializer(typeof(PercentTableSaver.Ser)).Serialize(stream, PercentTableSaver.Ser.Serialized(request.WorkTablesData));
 
             stream.Position = 0;
             return stream.ToArray();

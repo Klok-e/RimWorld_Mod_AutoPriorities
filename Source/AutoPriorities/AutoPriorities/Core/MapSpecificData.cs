@@ -1,18 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using AutoPriorities.PawnDataSerializer;
+using AutoPriorities.Wrappers;
 using Verse;
 
 namespace AutoPriorities.Core
 {
     public class MapSpecificData : MapComponent, IMapSpecificData
     {
+        private List<ExcludedPawnSerializableEntry> _excludedPawns = new();
         private bool _ignoreLearningRate;
         private bool _ignoreOppositionToWork;
         private List<string>? _importantWorkTypes = new() { "Firefighter", "Patient", "PatientBedRest", "BasicWorker" };
         private float _minimumSkillLevel;
 
-        public MapSpecificData(Map map)
-            : base(map)
+        public MapSpecificData(Map map) : base(map)
         {
         }
 
@@ -28,6 +31,25 @@ namespace AutoPriorities.Core
         {
             get => _minimumSkillLevel;
             set => _minimumSkillLevel = value;
+        }
+
+        public List<ExcludedPawnEntry> ExcludedPawns
+        {
+            get => _excludedPawns.Select(
+                    x => new ExcludedPawnEntry
+                    {
+                        WorkDef = new WorkTypeWrapper(x.workTypeDef ?? throw new NullReferenceException(nameof(x.workTypeDef))),
+                        Pawn = new PawnWrapper(x.pawn ?? throw new NullReferenceException(nameof(x.pawn))),
+                    }
+                )
+                .ToList();
+            set => _excludedPawns = value.Select(
+                    x => new ExcludedPawnSerializableEntry
+                        {
+                            pawn = x.Pawn.GetPawnOrThrow(), workTypeDef = x.WorkDef.GetWorkTypeDefOrThrow(),
+                        }
+                )
+                .ToList();
         }
 
         public bool IgnoreLearningRate
@@ -50,6 +72,7 @@ namespace AutoPriorities.Core
             Scribe_Values.Look(ref _minimumSkillLevel, "AutoPriorities_MinimumSkillLevel");
             Scribe_Values.Look(ref _ignoreLearningRate, "AutoPriorities_IgnoreLearningRate");
             Scribe_Values.Look(ref _ignoreOppositionToWork, "AutoPriorities_IgnoreOppositionToWork");
+            Scribe_Collections.Look(ref _excludedPawns, "AutoPriorities_ExcludedPawns", LookMode.Value);
 
             var dataStr = Convert.ToBase64String(PawnsDataXml ?? Array.Empty<byte>());
             Scribe_Values.Look(ref dataStr, "AutoPriorities_PawnsDataXml");

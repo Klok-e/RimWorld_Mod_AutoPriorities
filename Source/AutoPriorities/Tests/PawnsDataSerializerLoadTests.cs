@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AutoFixture;
+using AutoPriorities;
 using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 using AutoPriorities.PawnDataSerializer;
@@ -40,8 +42,7 @@ namespace Tests
         public void LoadFromFile()
         {
             // arrange
-            _retriever.GetAdultPawnsInPlayerFactionInCurrentMap()
-                .Returns(_fixture.CreateMany<IPawnWrapper>());
+            _retriever.GetAdultPawnsInPlayerFactionInCurrentMap().Returns(_fixture.CreateMany<IPawnWrapper>());
 
             _retriever.GetWorkTypeDefsInPriorityOrder()
                 .Returns(
@@ -51,29 +52,23 @@ namespace Tests
                             var workTypeWrapper = _fixture.Create<IWorkTypeWrapper>();
                             workTypeWrapper.DefName.Returns(x);
                             return workTypeWrapper;
-                        }));
+                        }
+                    )
+                );
             var fileContents = File.ReadAllBytes(TestHelper.SavePath);
             _mapSpecificData.PawnsDataXml.Returns(fileContents);
+            _mapSpecificData.ExcludedPawns.Returns(new List<ExcludedPawnEntry>());
 
             // act
             var savedData = _saveDataHandler.GetSavedData(_mapSpecificData);
 
             // assert
-            savedData.Should()
-                .NotBeNull();
-            savedData.ExcludedPawns.Should()
-                .BeEmpty();
-            savedData.WorkTablesData.Should()
-                .HaveCount(2);
-            savedData.WorkTablesData[0]
-                .Priority.v.Should()
-                .Be(2);
-            savedData.WorkTablesData[1]
-                .Priority.v.Should()
-                .Be(3);
-            savedData.WorkTablesData[0]
-                .WorkTypes.Should()
-                .HaveCount(20);
+            savedData.Should().NotBeNull();
+            savedData.ExcludedPawns.Should().BeEmpty();
+            savedData.WorkTablesData.Should().HaveCount(2);
+            savedData.WorkTablesData[0].Priority.v.Should().Be(2);
+            savedData.WorkTablesData[1].Priority.v.Should().Be(3);
+            savedData.WorkTablesData[0].WorkTypes.Should().HaveCount(20);
 
             _logger.NoWarnReceived();
         }
@@ -82,8 +77,7 @@ namespace Tests
         public void LoadSavedData_Warning_UnknownWorktypeInSave()
         {
             // arrange
-            _retriever.GetAdultPawnsInPlayerFactionInCurrentMap()
-                .Returns(_fixture.CreateMany<IPawnWrapper>());
+            _retriever.GetAdultPawnsInPlayerFactionInCurrentMap().Returns(_fixture.CreateMany<IPawnWrapper>());
 
             _retriever.GetWorkTypeDefsInPriorityOrder()
                 .Returns(
@@ -93,16 +87,18 @@ namespace Tests
                             var workTypeWrapper = _fixture.Create<IWorkTypeWrapper>();
                             workTypeWrapper.DefName.Returns(x);
                             return workTypeWrapper;
-                        }));
+                        }
+                    )
+                );
             var fileContents = File.ReadAllBytes(TestHelper.SavePath);
             _mapSpecificData.PawnsDataXml.Returns(fileContents);
+            _mapSpecificData.ExcludedPawns.Returns(new List<ExcludedPawnEntry>());
 
             // act
             _ = _saveDataHandler.GetSavedData(_mapSpecificData);
 
             // assert
-            _logger.Received(10)
-                .Warn(Arg.Any<string>());
+            _logger.Received(10).Warn(Arg.Any<string>());
         }
     }
 }

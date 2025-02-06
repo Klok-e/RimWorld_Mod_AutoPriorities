@@ -1,16 +1,17 @@
 using System;
+using AutoPriorities.Wrappers;
 
 namespace AutoPriorities
 {
     public struct ExcludedPawnEntry : IEquatable<ExcludedPawnEntry>
     {
-        public string WorkDef { get; set; }
+        public IWorkTypeWrapper WorkDef { get; set; }
 
-        public string PawnThingId { get; set; }
+        public IPawnWrapper Pawn { get; set; }
 
         public bool Equals(ExcludedPawnEntry other)
         {
-            return WorkDef == other.WorkDef && PawnThingId == other.PawnThingId;
+            return WorkDef.Equals(other.WorkDef) && Pawn.Equals(other.Pawn);
         }
 
         public override bool Equals(object? obj)
@@ -20,8 +21,7 @@ namespace AutoPriorities
 
         public override int GetHashCode()
         {
-            return (WorkDef != null ? WorkDef.GetHashCode() : 0) ^
-                   (PawnThingId != null ? PawnThingId.GetHashCode() : 0);
+            return WorkDef.GetHashCode() ^ Pawn.GetHashCode();
         }
     }
 }

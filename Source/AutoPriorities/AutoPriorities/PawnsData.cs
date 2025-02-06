@@ -129,7 +129,7 @@ namespace AutoPriorities
                         try
                         {
                             if (!pawn.IsCapableOfWholeWorkType(work)
-                                || ExcludedPawns.Contains(new ExcludedPawnEntry { WorkDef = work.DefName, PawnThingId = pawn.ThingID }))
+                                || ExcludedPawns.Contains(new ExcludedPawnEntry { WorkDef = work, Pawn = pawn }))
                             {
                                 continue;
                             }
@@ -169,15 +169,14 @@ namespace AutoPriorities
                 foreach (var keyValue in SortedPawnFitnessForEveryWork)
                     keyValue.Value.Sort((x, y) => y.Fitness.CompareTo(x.Fitness));
 
-                // _logger.Info(
-                //     $"player pawns: {string.Join("; ", AllPlayerPawns.Select(x => $"{x.NameFullColored}:{x.ThingID}"))}");
                 // remove all non player pawns
                 ExcludedPawns.RemoveWhere(
                     wp =>
                     {
-                        var isToBeDeleted = !AllPlayerPawns.Select(x => x.ThingID).Contains(wp.PawnThingId);
-                        // if (isToBeDeleted)
-                        //     _logger.Info($"removing {wp.PawnThingId} from excluded list");
+                        var isToBeDeleted = !AllPlayerPawns.Contains(wp.Pawn);
+
+                        if (isToBeDeleted && _worldInfoRetriever.DebugLogs())
+                            _logger.Info($"removing {wp.Pawn.NameFullColored} from excluded list");
 
                         return isToBeDeleted;
                     }

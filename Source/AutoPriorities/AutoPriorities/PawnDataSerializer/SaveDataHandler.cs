@@ -1,3 +1,4 @@
+using System.Linq;
 using AutoPriorities.APLogger;
 using AutoPriorities.Core;
 
@@ -27,7 +28,9 @@ namespace AutoPriorities.PawnDataSerializer
 
             return new SaveData
             {
-                ExcludedPawns = deserialized.ExcludedPawns,
+                ExcludedPawns = deserialized.ExcludedPawns.Count > 0
+                    ? deserialized.ExcludedPawns
+                    : mapSpecificData.ExcludedPawns.ToHashSet(),
                 WorkTablesData = deserialized.WorkTablesData,
                 IgnoreLearningRate = mapSpecificData.IgnoreLearningRate,
                 MinimumSkillLevel = mapSpecificData.MinimumSkillLevel,
@@ -41,6 +44,7 @@ namespace AutoPriorities.PawnDataSerializer
             mapDataSaveTo.PawnsDataXml = ser;
 
             mapDataSaveTo.MinimumSkillLevel = request.MinimumSkillLevel;
+            mapDataSaveTo.ExcludedPawns = request.ExcludedPawns.ToList();
             mapDataSaveTo.IgnoreLearningRate = request.IgnoreLearningRate;
             mapDataSaveTo.IgnoreOppositionToWork = request.IgnoreOppositionToWork;
         }

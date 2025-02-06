@@ -19,6 +19,8 @@ namespace AutoPriorities.Core
         public class Ser
         {
             public List<Tupl> data = new();
+
+            // serialized from file only now for backward compatibility, TODO: delete sometimes in the future
             public List<WorktypePawn> excludedPawns = new();
 
             public List<WorkTableEntry> ParsedData(IWorldInfoFacade serializer)
@@ -29,18 +31,14 @@ namespace AutoPriorities.Core
             public HashSet<ExcludedPawnEntry> ParsedExcluded(IWorldInfoFacade serializer)
             {
                 return excludedPawns.Select(x => x.Parsed(serializer))
-                    .Where(p => p.Item1 != null && p.Item2 != null)
-                    .Select(p => new ExcludedPawnEntry { WorkDef = p.Item1!.DefName, PawnThingId = p.Item2!.ThingID })
+                    .Where(p => p is { Item1: not null, Item2: not null })
+                    .Select(p => new ExcludedPawnEntry { WorkDef = p.Item1!, Pawn = p.Item2! })
                     .ToHashSet();
             }
 
-            public static Ser Serialized((List<WorkTableEntry> percents, HashSet<ExcludedPawnEntry> excluded) data)
+            public static Ser Serialized(List<WorkTableEntry> percents)
             {
-                return new Ser
-                {
-                    data = data.percents.Select(Tupl.Serialized).ToList(),
-                    excludedPawns = data.excluded.Select(WorktypePawn.Serialized).ToList(),
-                };
+                return new Ser { data = percents.Select(Tupl.Serialized).ToList() };
             }
         }
 
@@ -52,11 +50,6 @@ namespace AutoPriorities.Core
             public (IWorkTypeWrapper?, IPawnWrapper?) Parsed(IWorldInfoFacade serializer)
             {
                 return (serializer.StringToDef(workType), serializer.IdToPawn(pawnId));
-            }
-
-            public static WorktypePawn Serialized(ExcludedPawnEntry data)
-            {
-                return new WorktypePawn { workType = data.WorkDef, pawnId = data.PawnThingId };
             }
         }
 

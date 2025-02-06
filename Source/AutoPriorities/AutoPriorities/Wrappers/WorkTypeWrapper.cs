@@ -1,25 +1,31 @@
+using System;
 using Verse;
 
 namespace AutoPriorities.Wrappers
 {
     public record WorkTypeWrapper : IWorkTypeWrapper
     {
-        public readonly WorkTypeDef workTypeDef;
-
-        public WorkTypeWrapper(WorkTypeDef workTypeDef)
+        public WorkTypeWrapper(WorkTypeDef workWorkTypeDef)
         {
-            this.workTypeDef = workTypeDef;
+            WorkTypeDef = workWorkTypeDef;
         }
+
+        public WorkTypeDef? WorkTypeDef { get; }
 
         #region IWorkTypeWrapper Members
 
-        public string DefName => workTypeDef.defName;
+        public WorkTypeDef GetWorkTypeDefOrThrow()
+        {
+            return WorkTypeDef ?? throw new NullReferenceException(nameof(WorkTypeDef));
+        }
 
-        public WorkTags WorkTags => workTypeDef.workTags;
+        public string DefName => GetWorkTypeDefOrThrow().defName;
 
-        public int RelevantSkillsCount => workTypeDef.relevantSkills.Count;
+        public WorkTags WorkTags => GetWorkTypeDefOrThrow().workTags;
 
-        public string LabelShort => workTypeDef.labelShort.CapitalizeFirst();
+        public int RelevantSkillsCount => GetWorkTypeDefOrThrow().relevantSkills.Count;
+
+        public string LabelShort => GetWorkTypeDefOrThrow().labelShort.CapitalizeFirst();
 
         #endregion
     }
