@@ -37,7 +37,10 @@ namespace AutoPriorities.Ui
         private volatile bool _isRunPrioritiesLoading;
         private string? _minimumFitnessInputBuffer;
         private bool _openedOnce;
-        private Vector2 _pawnExcludeScrollPos;
+        private Vector2 _pawnExcludeScrollPosCenter;
+
+        private Vector2 _pawnExcludeScrollPosLeft;
+        private Vector2 _pawnExcludeScrollPosTop;
 
         private Rect _rect;
         // private int _windowContentsCalls;
@@ -427,24 +430,29 @@ namespace AutoPriorities.Ui
         {
             const float fromTopToTickboxesVertical = Consts.WorkLabelOffset + Consts.LabelHeight + 15f;
 
+            var tableSizeX = Consts.WorkLabelWidth / 2 + Consts.WorkLabelHorizOffset * _pawnsData.WorkTypes.Count;
+
+            var tableSizeY = (Consts.LabelMargin + Consts.ButtonHeight) * _pawnsData.CurrentMapPlayerPawns.Count
+                             + Consts.CheckboxHeight / 2;
+
             var anchor = Text.Anchor;
             Text.Anchor = TextAnchor.UpperLeft;
 
-            var pawnNameRect = new Rect(
+            var pawnsScrollRect = new Rect(
                 inRect.xMin,
                 inRect.yMin + fromTopToTickboxesVertical,
                 Consts.PawnNameCoWidth,
-                Consts.LabelHeight + Consts.LabelMargin
+                inRect.height - Consts.DistFromBottomBorder - fromTopToTickboxesVertical
             );
-
-            var scrollRect = new Rect(pawnNameRect.xMin, inRect.yMin, inRect.width, inRect.height - Consts.DistFromBottomBorder);
 
             Widgets.BeginScrollView(
-                scrollRect,
-                ref _pawnExcludeScrollPos,
-                new Rect(0, 0, Consts.PawnNameCoWidth, _pawnsData.CurrentMapPlayerPawns.Count * (Consts.LabelHeight + Consts.LabelMargin)),
+                pawnsScrollRect,
+                ref _pawnExcludeScrollPosLeft,
+                new Rect(0, 0, Consts.PawnNameCoWidth, tableSizeY),
                 false
             );
+
+            var pawnNameRect = new Rect(0, 0, Consts.PawnNameCoWidth, Consts.LabelHeight + Consts.LabelMargin);
 
             foreach (var pawn in _pawnsData.CurrentMapPlayerPawns)
             {
@@ -469,17 +477,23 @@ namespace AutoPriorities.Ui
 
             Widgets.EndScrollView();
 
-            scrollRect = new Rect(pawnNameRect.xMax, inRect.yMin, inRect.width, inRect.height - Consts.DistFromBottomBorder);
+            _pawnExcludeScrollPosCenter.y = _pawnExcludeScrollPosLeft.y;
 
-            var tableSizeX = Consts.WorkLabelWidth / 2 + Consts.WorkLabelHorizOffset * _pawnsData.WorkTypes.Count;
+            var workTypesScrollRect = new Rect(
+                pawnsScrollRect.xMax,
+                inRect.yMin,
+                inRect.width - pawnsScrollRect.width,
+                fromTopToTickboxesVertical
+            );
 
-            var tableSizeY = fromTopToTickboxesVertical
-                             + (Consts.LabelMargin + Consts.ButtonHeight) * _pawnsData.CurrentMapPlayerPawns.Count;
-            Widgets.BeginScrollView(scrollRect, ref _pawnExcludeScrollPos, new Rect(0, 0, tableSizeX, tableSizeY));
+            Widgets.BeginScrollView(
+                workTypesScrollRect,
+                ref _pawnExcludeScrollPosTop,
+                new Rect(0, 0, tableSizeX, fromTopToTickboxesVertical),
+                false
+            );
 
             anchor = Text.Anchor;
-
-            var tickboxesRect = new Rect(0, fromTopToTickboxesVertical, tableSizeX, tableSizeY - fromTopToTickboxesVertical);
 
             // draw worktypes
             Text.Anchor = TextAnchor.UpperCenter;
@@ -487,7 +501,7 @@ namespace AutoPriorities.Ui
             {
                 var workLabel = workType.LabelShort;
                 var rect = new Rect(
-                    tickboxesRect.xMin + Consts.WorkLabelHorizOffset * i,
+                    Consts.WorkLabelHorizOffset * i,
                     i % 2 == 0 ? 0f : Consts.WorkLabelOffset,
                     Consts.WorkLabelWidth,
                     Consts.LabelHeight
@@ -495,23 +509,40 @@ namespace AutoPriorities.Ui
                 Widgets.Label(rect, workLabel);
 
                 var horizLinePos = rect.center.x;
-                Widgets.DrawLine(new Vector2(horizLinePos, rect.yMax), new Vector2(horizLinePos, tickboxesRect.yMin), Color.grey, 1f);
+                Widgets.DrawLine(
+                    new Vector2(horizLinePos, rect.yMax),
+                    new Vector2(horizLinePos, fromTopToTickboxesVertical),
+                    Color.grey,
+                    1f
+                );
             }
+
+            Widgets.EndScrollView();
+
+            _pawnExcludeScrollPosCenter.x = _pawnExcludeScrollPosTop.x;
+
+            var checkboxesScrollRect = new Rect(
+                pawnsScrollRect.xMax,
+                workTypesScrollRect.yMax,
+                workTypesScrollRect.width,
+                inRect.height - Consts.DistFromBottomBorder - workTypesScrollRect.height
+            );
+
+            Widgets.BeginScrollView(checkboxesScrollRect, ref _pawnExcludeScrollPosCenter, new Rect(0, 0, tableSizeX, tableSizeY));
 
             Text.Anchor = TextAnchor.UpperLeft;
             foreach (var (pawn, rowi) in _pawnsData.CurrentMapPlayerPawns.Select((w, i) => (w, i)))
             {
-                // draw pawn name
-                pawnNameRect = new Rect(
+                var checkboxesRect = new Rect(
                     0f,
-                    tickboxesRect.yMin + (Consts.LabelMargin + Consts.ButtonHeight) * rowi,
-                    Consts.PawnNameCoWidth,
+                    (Consts.LabelMargin + Consts.ButtonHeight) * rowi,
+                    Consts.WorkLabelWidth / 2 + Consts.WorkLabelHorizOffset * _pawnsData.WorkTypes.Count,
                     Consts.LabelHeight + Consts.LabelMargin
                 );
 
                 Widgets.DrawLine(
-                    new Vector2(pawnNameRect.xMin, pawnNameRect.yMax),
-                    new Vector2(tickboxesRect.xMax, pawnNameRect.yMax),
+                    new Vector2(checkboxesRect.xMin, checkboxesRect.yMax),
+                    new Vector2(checkboxesRect.xMax, checkboxesRect.yMax),
                     Color.grey,
                     1f
                 );
@@ -523,9 +554,10 @@ namespace AutoPriorities.Ui
                         new ExcludedPawnEntry { WorkDef = workType.DefName, PawnThingId = pawn.ThingID }
                     );
                     var next = prev;
+
                     DrawUtil.EmptyCheckbox(
-                        pawnNameRect.xMax - (Consts.ButtonHeight - 1) / 2 + (i + 1) * Consts.WorkLabelHorizOffset,
-                        pawnNameRect.yMin,
+                        Consts.WorkLabelHorizOffset * i + Consts.WorkLabelWidth / 2 - Consts.CheckboxHeight / 2,
+                        checkboxesRect.yMin,
                         ref next
                     );
                     if (prev == next)
@@ -534,21 +566,22 @@ namespace AutoPriorities.Ui
                     if (next)
                     {
                         _pawnsData.ExcludedPawns.Add(new ExcludedPawnEntry { WorkDef = workType.DefName, PawnThingId = pawn.ThingID });
-#if DEBUG
-                        _logger.Info($"Pawn {pawn.NameFullColored} with work {workType.DefName} was added to the Excluded list");
-#endif
+                        if (_worldInfoRetriever.DebugLogs())
+                            _logger.Info($"Pawn {pawn.NameFullColored} with work {workType.DefName} was added to the Excluded list");
                     }
                     else
                     {
                         _pawnsData.ExcludedPawns.Remove(new ExcludedPawnEntry { WorkDef = workType.DefName, PawnThingId = pawn.ThingID });
-#if DEBUG
-                        _logger.Info($"Pawn {pawn.NameFullColored} with work {workType.DefName} was removed from the Excluded list");
-#endif
+                        if (_worldInfoRetriever.DebugLogs())
+                            _logger.Info($"Pawn {pawn.NameFullColored} with work {workType.DefName} was removed from the Excluded list");
                     }
                 }
             }
 
             Widgets.EndScrollView();
+
+            _pawnExcludeScrollPosLeft.y = _pawnExcludeScrollPosCenter.y;
+            _pawnExcludeScrollPosTop.x = _pawnExcludeScrollPosCenter.x;
 
             Text.Anchor = anchor;
         }

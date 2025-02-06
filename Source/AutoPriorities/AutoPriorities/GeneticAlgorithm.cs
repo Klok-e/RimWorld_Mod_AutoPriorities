@@ -175,7 +175,8 @@ namespace AutoPriorities
                     }
                 }
 
-                if (bestValue is > 0.001 and < 0.999) freeVariableIndices.Add(i);
+                if (bestValue is > 0.001 and < 0.999)
+                    freeVariableIndices.Add(i);
 
                 // bestIndex is the chosen priority for pair i
                 chromosome.chrom[i] = bestIndex;

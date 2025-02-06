@@ -10,6 +10,7 @@ namespace AutoPriorities.Ui
         public const float SlidersDistFromRightBorder = 20f;
         public const float DistFromBottomBorder = 50f;
         public const float ButtonHeight = 30f;
+        public const float CheckboxHeight = 24f;
         public const float LabelHeight = 22f;
         public const float LabelMargin = 5f;
         public const float WorkLabelWidth = 75f;
