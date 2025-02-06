@@ -91,7 +91,7 @@ namespace AutoPriorities.Core
                 "Optimization improvement seconds",
                 "For how long to try to optimize the solution after finding a solution which satisfies all restrictions. "
                 + "Increase to increase likelihood of an optimal or a more consistent solution.",
-                1f,
+                0.2f,
                 x => float.TryParse(x, out var result) && result is >= 0f and <= 60
             );
             OptimizationMutationRate = Settings.GetHandle(
@@ -111,7 +111,7 @@ namespace AutoPriorities.Core
             OptimizationJobsPerPawnWeight = Settings.GetHandle(
                 "optimizationJobsPerPawnWeight",
                 "Optimization jobs per pawn weight",
-                "Controls spread of jobs over multiple pawns.",
+                "Controls spread of jobs over multiple pawns. Applies only for variables which weren't found with a continuous LP solver. Very minor impact.",
                 1f,
                 x => float.TryParse(x, out var result) && result >= 0
             );
