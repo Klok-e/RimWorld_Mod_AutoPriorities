@@ -26,6 +26,7 @@ namespace Tests
             _logger = Substitute.For<ILogger>();
             _worldInfoRetriever = TestHelper.CreateWorldInfoRetrieverSubstitute();
             _serializer = Substitute.For<IPawnsDataSerializer>();
+            _workSpeedCalculator = Substitute.For<IWorkSpeedCalculator>();
             _importantWorkTypesProvider = Substitute.For<IImportantJobsProvider>();
 
             _importantWorkTypesProvider.ImportantWorkTypes().Returns(new HashSet<IWorkTypeWrapper>());
@@ -42,6 +43,7 @@ namespace Tests
         private List<IWorkTypeWrapper> _workTypes = null!;
         private List<IPawnWrapper> _pawns = null!;
         private List<WorkTableEntry>? _workTablesData;
+        private IWorkSpeedCalculator _workSpeedCalculator = null!;
 
         [Test]
         public void AssignPrioritiesSmarter_FromFile()
@@ -249,10 +251,10 @@ namespace Tests
                 )
                 .ToList();
 
-            var save = new SaveData { WorkTablesData = _workTablesData ?? throw new InvalidOperationException() };
+            var save = new SaveData { WorkTablesData = _workTablesData ?? throw new InvalidOperationException(), IgnoreWorkSpeed = true };
             _serializer.LoadSavedData().Returns(save);
 
-            _pawnsData = new PawnsDataBuilder(_serializer, _worldInfoRetriever, _logger).Build();
+            _pawnsData = new PawnsDataBuilder(_serializer, _worldInfoRetriever, _logger, _workSpeedCalculator).Build();
         }
     }
 }

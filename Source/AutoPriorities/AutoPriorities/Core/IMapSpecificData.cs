@@ -10,5 +10,6 @@ namespace AutoPriorities.Core
         public List<ExcludedPawnEntry> ExcludedPawns { get; set; }
         public bool IgnoreLearningRate { get; set; }
         bool IgnoreOppositionToWork { get; set; }
+        bool IgnoreWorkSpeed { get; set; }
     }
 }

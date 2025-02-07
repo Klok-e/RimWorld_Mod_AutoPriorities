@@ -22,7 +22,8 @@ namespace Tests
             _logger = Substitute.For<ILogger>();
             _retriever = Substitute.For<IWorldInfoRetriever>();
             _serializer = Substitute.For<IPawnsDataSerializer>();
-            _pawnsData = new PawnsDataBuilder(_serializer, _retriever, _logger);
+            _workSpeedCalculator = Substitute.For<IWorkSpeedCalculator>();
+            _pawnsData = new PawnsDataBuilder(_serializer, _retriever, _logger, _workSpeedCalculator);
             FixtureBuilder.Create();
             _pw = PawnWorktypeCreator.Create();
             _retriever.GetAdultPawnsInPlayerFactionInCurrentMap().Returns(_pw.pawns);
@@ -34,6 +35,7 @@ namespace Tests
         private PawnWorktypeCreator _pw = null!;
         private IWorldInfoRetriever _retriever = null!;
         private IPawnsDataSerializer _serializer = null!;
+        private IWorkSpeedCalculator _workSpeedCalculator = null!;
 
         [Test]
         public void Build()
@@ -49,6 +51,7 @@ namespace Tests
             {
                 ExcludedPawns = new HashSet<ExcludedPawnEntry> { new() { WorkDef = _pw.workTypes[1], Pawn = _pw.pawns[1] } },
                 WorkTablesData = new List<WorkTableEntry> { new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent } },
+                IgnoreWorkSpeed = true,
             };
             _serializer.LoadSavedData().Returns(save);
 

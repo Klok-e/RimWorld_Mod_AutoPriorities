@@ -22,6 +22,7 @@ namespace Tests
             _logger = Substitute.For<ILogger>();
             _worldInfoRetriever = Substitute.For<IWorldInfoRetriever>();
             _serializer = Substitute.For<IPawnsDataSerializer>();
+            _workSpeedCalculator = Substitute.For<IWorkSpeedCalculator>();
             _pw = PawnWorktypeCreator.Create();
             // AddMorePawnsToPw();
             _worldInfoRetriever.GetAdultPawnsInPlayerFactionInCurrentMap().Returns(_pw.pawns);
@@ -39,6 +40,7 @@ namespace Tests
         private PawnWorktypeCreator _pw = null!;
         private IWorldInfoRetriever _worldInfoRetriever = null!;
         private IPawnsDataSerializer _serializer = null!;
+        private IWorkSpeedCalculator _workSpeedCalculator = null!;
 
         [Test]
         public void AssignPriorities_Numbers()
@@ -90,10 +92,11 @@ namespace Tests
                     new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent },
                     new() { Priority = 2, JobCount = 4, WorkTypes = workTypePercent },
                 },
+                IgnoreWorkSpeed = true,
             };
             _serializer.LoadSavedData().Returns(save);
 
-            _pawnsData = new PawnsDataBuilder(_serializer, _worldInfoRetriever, _logger).Build();
+            _pawnsData = new PawnsDataBuilder(_serializer, _worldInfoRetriever, _logger, _workSpeedCalculator).Build();
         }
     }
 }

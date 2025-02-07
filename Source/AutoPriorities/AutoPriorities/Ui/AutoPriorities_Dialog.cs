@@ -251,6 +251,14 @@ namespace AutoPriorities.Ui
                 Consts.ButtonHeight
             );
             DrawIgnoreOppositionToWorkCheckbox(checkIgnoreOppositionToWorkRect);
+
+            var checkIgnoreWorkSpeedRect = new Rect(
+                inRect.xMin,
+                checkIgnoreOppositionToWorkRect.yMax + Consts.LabelMargin,
+                inRect.width,
+                Consts.ButtonHeight
+            );
+            DrawIgnoreWorkSpeedCheckbox(checkIgnoreWorkSpeedRect);
         }
 
         private void DrawCheckbox(Rect inRect, string labelText, string tooltipText, ref bool value)
@@ -300,6 +308,15 @@ namespace AutoPriorities.Ui
             DrawCheckbox(inRect, Consts.IgnoreOppositionToWork, Consts.IgnoreOppositionToWorkTooltip, ref pawnsDataIgnoreOppositionToWork);
 
             _pawnsData.IgnoreOppositionToWork = pawnsDataIgnoreOppositionToWork;
+        }
+
+        private void DrawIgnoreWorkSpeedCheckbox(Rect inRect)
+        {
+            var pawnsDataIgnoreWorkSpeed = _pawnsData.IgnoreWorkSpeed;
+
+            DrawCheckbox(inRect, Consts.IgnoreWorkSpeed, Consts.IgnoreWorkSpeedTooltip, ref pawnsDataIgnoreWorkSpeed);
+
+            _pawnsData.IgnoreWorkSpeed = pawnsDataIgnoreWorkSpeed;
         }
 
         private void DrawNumericInput(Rect inRect, string labelText, string tooltipText, ref float value, ref string? buffer)

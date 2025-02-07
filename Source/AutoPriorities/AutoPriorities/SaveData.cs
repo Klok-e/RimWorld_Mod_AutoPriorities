@@ -13,5 +13,7 @@ namespace AutoPriorities
         public float MinimumSkillLevel { get; init; }
 
         public bool IgnoreOppositionToWork { get; init; }
+
+        public bool IgnoreWorkSpeed { get; init; }
     }
 }

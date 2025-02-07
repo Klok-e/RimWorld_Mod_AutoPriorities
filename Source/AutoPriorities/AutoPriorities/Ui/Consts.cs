@@ -41,6 +41,10 @@ namespace AutoPriorities.Ui
         public const string MinimumSkillLevelTooltip =
             "Determines whether the pawn is eligible for the work type. If MinimumSkillLevel < skill, work type isn't assigned.";
 
+        public const string IgnoreWorkSpeed = "Ignore work speed";
+        public const string IgnoreWorkSpeedTooltip = "Ignore work speed for priority calculation.";
+
+
         public const string Misc = "Misc";
         public const string DeleteLabel = "Delete";
         public const string ExportLabel = "Export";

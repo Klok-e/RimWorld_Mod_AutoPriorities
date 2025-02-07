@@ -98,7 +98,7 @@ namespace AutoPriorities.Core
                 "optimizationMutationRate",
                 "Optimization mutation rate",
                 "The rate at which mutations occur during the optimization process. Parameter of random search.",
-                0.5f,
+                0.8f,
                 x => float.TryParse(x, out var result) && result is >= 0f and <= 1f
             );
             OptimizationPopulationSize = Settings.GetHandle(
@@ -166,7 +166,8 @@ namespace AutoPriorities.Core
             var stringSerializer = new PawnDataStringSerializer(log, worldFacade);
             var saveDataHandler = new SaveDataHandler(log, stringSerializer);
             var mapSpecificSerializer = new MapSpecificDataPawnsDataSerializer(log, stringSerializer, saveDataHandler);
-            _pawnsDataBuilder = new PawnsDataBuilder(mapSpecificSerializer, worldInfoRetriever, log);
+            var workSpeedCalculator = new WorkSpeedCalculator(log, worldInfoRetriever);
+            _pawnsDataBuilder = new PawnsDataBuilder(mapSpecificSerializer, worldInfoRetriever, log, workSpeedCalculator);
             _pawnData = _pawnsDataBuilder.Build();
             var importantWorkTypes = new ImportantJobsProvider(worldFacade);
             var priorityAssigner = new PrioritiesAssigner(_pawnData, log, importantWorkTypes, worldInfoRetriever);

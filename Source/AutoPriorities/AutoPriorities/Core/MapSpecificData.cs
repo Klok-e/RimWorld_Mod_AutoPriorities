@@ -12,6 +12,7 @@ namespace AutoPriorities.Core
         private List<ExcludedPawnSerializableEntry>? _excludedPawns;
         private bool _ignoreLearningRate;
         private bool _ignoreOppositionToWork;
+        private bool _ignoreWorkSpeed;
         private List<string>? _importantWorkTypes = new() { "Firefighter", "Patient", "PatientBedRest", "BasicWorker" };
         private float _minimumSkillLevel;
 
@@ -65,6 +66,12 @@ namespace AutoPriorities.Core
             set => _ignoreOppositionToWork = value;
         }
 
+        public bool IgnoreWorkSpeed
+        {
+            get => _ignoreWorkSpeed;
+            set => _ignoreWorkSpeed = value;
+        }
+
         public override void ExposeData()
         {
             base.ExposeData();
@@ -73,6 +80,7 @@ namespace AutoPriorities.Core
             Scribe_Values.Look(ref _minimumSkillLevel, "AutoPriorities_MinimumSkillLevel");
             Scribe_Values.Look(ref _ignoreLearningRate, "AutoPriorities_IgnoreLearningRate");
             Scribe_Values.Look(ref _ignoreOppositionToWork, "AutoPriorities_IgnoreOppositionToWork");
+            Scribe_Values.Look(ref _ignoreWorkSpeed, "AutoPriorities_IgnoreWorkSpeed");
             Scribe_Collections.Look(ref _excludedPawns, "AutoPriorities_ExcludedPawns", LookMode.Deep);
 
             var dataStr = Convert.ToBase64String(PawnsDataXml ?? Array.Empty<byte>());

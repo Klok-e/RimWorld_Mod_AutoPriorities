@@ -15,13 +15,16 @@ namespace AutoPriorities
     {
         private readonly ILogger _logger;
         private readonly IPawnsDataSerializer _serializer;
+        private readonly IWorkSpeedCalculator _workSpeedCalculator;
         private readonly IWorldInfoRetriever _worldInfoRetriever;
 
-        public PawnsData(IPawnsDataSerializer serializer, IWorldInfoRetriever worldInfoRetriever, ILogger logger)
+        public PawnsData(IPawnsDataSerializer serializer, IWorldInfoRetriever worldInfoRetriever, ILogger logger,
+            IWorkSpeedCalculator workSpeedCalculator)
         {
             _serializer = serializer;
             _worldInfoRetriever = worldInfoRetriever;
             _logger = logger;
+            _workSpeedCalculator = workSpeedCalculator;
         }
 
         public List<WorkTableEntry> WorkTables { get; private set; } = new();
@@ -40,13 +43,15 @@ namespace AutoPriorities
 
         public bool IgnoreLearningRate { get; set; }
 
+        public bool IgnoreWorkSpeed { get; set; }
+
         public bool IgnoreOppositionToWork { get; set; }
 
         public float MinimumSkillLevel { get; set; }
 
         public PawnsData ShallowCopy()
         {
-            var shallowCopy = new PawnsData(_serializer, _worldInfoRetriever, _logger)
+            var shallowCopy = new PawnsData(_serializer, _worldInfoRetriever, _logger, _workSpeedCalculator)
             {
                 WorkTables = WorkTables.Select(x => x.ShallowCopy()).ToList(),
                 ExcludedPawns = ExcludedPawns.ToHashSet(),
@@ -66,17 +71,20 @@ namespace AutoPriorities
         {
             // Excluded must be loaded first because State depends on ExcludedPawns being filled
             ExcludedPawns = data.ExcludedPawns;
-            WorkTables = LoadSavedState(data.WorkTablesData);
             IgnoreLearningRate = data.IgnoreLearningRate;
             MinimumSkillLevel = data.MinimumSkillLevel;
             IgnoreOppositionToWork = data.IgnoreOppositionToWork;
+            IgnoreWorkSpeed = data.IgnoreWorkSpeed;
 
-#if DEBUG
-            _logger.Info(
-                $"[SetData] first job count {WorkTables.FirstOrDefault().JobCount.v}; "
-                + $"load job count: {data.WorkTablesData.FirstOrDefault().JobCount.v}"
-            );
-#endif
+            WorkTables = LoadSavedState(data.WorkTablesData);
+
+            if (_worldInfoRetriever.DebugLogs())
+            {
+                _logger.Info(
+                    $"[SetData] first job count {WorkTables.FirstOrDefault().JobCount.v}; "
+                    + $"load job count: {data.WorkTablesData.FirstOrDefault().JobCount.v}"
+                );
+            }
         }
 
         public void SaveState()
@@ -100,6 +108,7 @@ namespace AutoPriorities
                 IgnoreLearningRate = IgnoreLearningRate,
                 MinimumSkillLevel = MinimumSkillLevel,
                 IgnoreOppositionToWork = IgnoreOppositionToWork,
+                IgnoreWorkSpeed = IgnoreWorkSpeed,
             };
         }
 
@@ -136,9 +145,10 @@ namespace AutoPriorities
 
                             var skill = pawn.AverageOfRelevantSkillsFor(work);
                             var learningRateFactor = IgnoreLearningRate ? 1 : pawn.MaxLearningRateFactor(work);
+                            var averageWorkSpeed = IgnoreWorkSpeed ? 1 : _workSpeedCalculator.AverageWorkSpeed(pawn, work);
 
                             var isSkilledWorkType = work.RelevantSkillsCount > 0;
-                            var fitness = isSkilledWorkType ? skill * learningRateFactor : 0.001f;
+                            var fitness = (isSkilledWorkType ? skill * learningRateFactor : 0.001f) * averageWorkSpeed;
 
                             SortedPawnFitnessForEveryWork[work]
                                 .Add(
