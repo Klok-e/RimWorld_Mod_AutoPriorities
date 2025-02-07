@@ -91,7 +91,7 @@ namespace AutoPriorities.Core
                 "Optimization improvement seconds",
                 "For how long to try to optimize the solution after finding a solution which satisfies all restrictions. "
                 + "Increase to increase likelihood of an optimal or a more consistent solution.",
-                0.2f,
+                1f,
                 x => float.TryParse(x, out var result) && result is >= 0f and <= 60
             );
             OptimizationMutationRate = Settings.GetHandle(
