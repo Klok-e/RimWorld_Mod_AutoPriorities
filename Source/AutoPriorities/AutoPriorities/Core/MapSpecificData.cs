@@ -35,11 +35,12 @@ namespace AutoPriorities.Core
 
         public List<ExcludedPawnEntry> ExcludedPawns
         {
-            get => _excludedPawns.Select(
+            get => _excludedPawns.Where(x => x.workTypeDef != null && x.pawn != null)
+                .Select(
                     x => new ExcludedPawnEntry
                     {
-                        WorkDef = new WorkTypeWrapper(x.workTypeDef ?? throw new NullReferenceException(nameof(x.workTypeDef))),
-                        Pawn = new PawnWrapper(x.pawn ?? throw new NullReferenceException(nameof(x.pawn))),
+                        WorkDef = new WorkTypeWrapper(x.workTypeDef ?? throw new InvalidOperationException()),
+                        Pawn = new PawnWrapper(x.pawn ?? throw new InvalidOperationException()),
                     }
                 )
                 .ToList();
