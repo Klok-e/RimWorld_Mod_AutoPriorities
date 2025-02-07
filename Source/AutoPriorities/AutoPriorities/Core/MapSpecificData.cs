@@ -9,7 +9,7 @@ namespace AutoPriorities.Core
 {
     public class MapSpecificData : MapComponent, IMapSpecificData
     {
-        private List<ExcludedPawnSerializableEntry> _excludedPawns = new();
+        private List<ExcludedPawnSerializableEntry>? _excludedPawns;
         private bool _ignoreLearningRate;
         private bool _ignoreOppositionToWork;
         private List<string>? _importantWorkTypes = new() { "Firefighter", "Patient", "PatientBedRest", "BasicWorker" };
@@ -35,7 +35,7 @@ namespace AutoPriorities.Core
 
         public List<ExcludedPawnEntry> ExcludedPawns
         {
-            get => _excludedPawns.Where(x => x.workTypeDef != null && x.pawn != null)
+            get => (_excludedPawns ?? new List<ExcludedPawnSerializableEntry>()).Where(x => x.workTypeDef != null && x.pawn != null)
                 .Select(
                     x => new ExcludedPawnEntry
                     {
@@ -73,7 +73,7 @@ namespace AutoPriorities.Core
             Scribe_Values.Look(ref _minimumSkillLevel, "AutoPriorities_MinimumSkillLevel");
             Scribe_Values.Look(ref _ignoreLearningRate, "AutoPriorities_IgnoreLearningRate");
             Scribe_Values.Look(ref _ignoreOppositionToWork, "AutoPriorities_IgnoreOppositionToWork");
-            Scribe_Collections.Look(ref _excludedPawns, "AutoPriorities_ExcludedPawns", LookMode.Value);
+            Scribe_Collections.Look(ref _excludedPawns, "AutoPriorities_ExcludedPawns", LookMode.Deep);
 
             var dataStr = Convert.ToBase64String(PawnsDataXml ?? Array.Empty<byte>());
             Scribe_Values.Look(ref dataStr, "AutoPriorities_PawnsDataXml");
