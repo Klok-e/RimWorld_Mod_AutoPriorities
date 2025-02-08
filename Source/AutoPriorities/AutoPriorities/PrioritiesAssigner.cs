@@ -160,7 +160,7 @@ namespace AutoPriorities
 
                 foreach (var pawnFitnessData in pawnFitnessDatas)
                 {
-                    if (!CanPawnBeAssigned(pawnFitnessData, pawnsData))
+                    if (!pawnsData.CanPawnBeAssigned(pawnFitnessData))
                     {
                         var offset = assignmentOffsets[(workType, pawnFitnessData.Pawn)];
 
@@ -208,7 +208,7 @@ namespace AutoPriorities
 
                 var groups = priorityPercentCached.Distinct(x => x.priority)
                     .Select(a => a.percent)
-                    .IterPercents(pawnData.Count(pawnFitnessData => CanPawnBeAssigned(pawnFitnessData, pawnsData)))
+                    .IterPercents(pawnData.Count(pawnsData.CanPawnBeAssigned))
                     .GroupBy(v => v.percentIndex)
                     .Select(g => (priorityPercentCached[g.Key].priority, jobsToSet: g.Count()))
                     .OrderBy(x => x.priority.v);
@@ -366,11 +366,6 @@ namespace AutoPriorities
             }
         }
 
-        private static bool CanPawnBeAssigned(PawnFitnessData pawnFitnessData, PawnsData pawnsData)
-        {
-            return (!pawnFitnessData.IsOpposed || pawnsData.IgnoreOppositionToWork)
-                   && (pawnFitnessData.SkillLevel >= pawnsData.MinimumSkillLevel || !pawnFitnessData.IsSkilledWorkType);
-        }
 
         private void AssignJobs(PawnsData pawnsData, IDictionary<IPawnWrapper, Dictionary<IWorkTypeWrapper, Priority>> pawnJobs,
             IEnumerable<IWorkTypeWrapper> workTypes, Func<IWorkTypeWrapper, List<PawnFitnessData>> fitnessGetter,
@@ -399,8 +394,10 @@ namespace AutoPriorities
                 {
                     var jobsSet = 0;
                     // iterate over all the pawns for this job with current priority
-                    foreach (var (pawn, fitness, skillLevel, isOpposed, _) in pawns)
+                    foreach (var pawnFitness in pawns)
                     {
+                        var (pawn, fitness, skillLevel, _, _) = pawnFitness;
+
                         if (jobsSet >= jobsToSet)
                             break;
 
@@ -415,7 +412,7 @@ namespace AutoPriorities
 
                         if (pawnJobs[pawn].ContainsKey(work)
                             || jobsPawnHasOnThisPriority >= maxJobs.v
-                            || (isOpposed && !pawnsData.IgnoreOppositionToWork))
+                            || !pawnsData.CanPawnBeAssigned(pawnFitness))
                             continue;
 
                         if (skillLevel < minimumSkillLevel)

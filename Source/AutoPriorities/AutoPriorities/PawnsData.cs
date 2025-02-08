@@ -209,9 +209,15 @@ namespace AutoPriorities
             return (Math.Max(1d - taken, 0d), takenTotal > 1.0001d);
         }
 
+        public bool CanPawnBeAssigned(PawnFitnessData pawnFitnessData)
+        {
+            return (!pawnFitnessData.IsOpposed || IgnoreOppositionToWork)
+                   && (pawnFitnessData.SkillLevel >= MinimumSkillLevel || !pawnFitnessData.IsSkilledWorkType);
+        }
+
         public int NumberColonists(IWorkTypeWrapper workType)
         {
-            return SortedPawnFitnessForEveryWork[workType].Count;
+            return SortedPawnFitnessForEveryWork[workType].Count(CanPawnBeAssigned);
         }
 
         public bool PercentRemainExistsForWorkType(IWorkTypeWrapper workType)
