@@ -47,6 +47,8 @@ namespace AutoPriorities
 
         public bool IgnoreOppositionToWork { get; set; }
 
+        public bool RunOncePerDay { get; set; }
+
         public float MinimumSkillLevel { get; set; }
 
         public PawnsData ShallowCopy()
@@ -62,6 +64,8 @@ namespace AutoPriorities
                 IgnoreLearningRate = IgnoreLearningRate,
                 IgnoreOppositionToWork = IgnoreOppositionToWork,
                 MinimumSkillLevel = MinimumSkillLevel,
+                IgnoreWorkSpeed = IgnoreWorkSpeed,
+                RunOncePerDay = RunOncePerDay,
             };
 
             return shallowCopy;
@@ -75,6 +79,7 @@ namespace AutoPriorities
             MinimumSkillLevel = data.MinimumSkillLevel;
             IgnoreOppositionToWork = data.IgnoreOppositionToWork;
             IgnoreWorkSpeed = data.IgnoreWorkSpeed;
+            RunOncePerDay = data.RunOncePerDay;
 
             WorkTables = LoadSavedState(data.WorkTablesData);
 
@@ -109,6 +114,7 @@ namespace AutoPriorities
                 MinimumSkillLevel = MinimumSkillLevel,
                 IgnoreOppositionToWork = IgnoreOppositionToWork,
                 IgnoreWorkSpeed = IgnoreWorkSpeed,
+                RunOncePerDay = RunOncePerDay,
             };
         }
 

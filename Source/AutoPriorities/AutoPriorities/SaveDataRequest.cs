@@ -15,5 +15,7 @@ namespace AutoPriorities
         public bool IgnoreOppositionToWork { get; set; }
 
         public bool IgnoreWorkSpeed { get; set; }
+
+        public bool RunOncePerDay { get; set; }
     }
 }

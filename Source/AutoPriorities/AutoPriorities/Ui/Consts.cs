@@ -44,6 +44,10 @@ namespace AutoPriorities.Ui
         public const string IgnoreWorkSpeed = "Ignore work speed";
         public const string IgnoreWorkSpeedTooltip = "Ignore work speed for priority calculation.";
 
+        public const string RunOnTimer = "Run periodically";
+
+        public const string RunOnTimerTooltip =
+            "Run once every N ticks. Default is 60000 - 24 hours. Interval can be changed in the mod settings.";
 
         public const string Misc = "Misc";
         public const string DeleteLabel = "Delete";

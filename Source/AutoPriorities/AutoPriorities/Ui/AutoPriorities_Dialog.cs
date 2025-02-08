@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using AutoPriorities.Core;
 using AutoPriorities.ImportantJobs;
 using AutoPriorities.PawnDataSerializer.Exporter;
 using AutoPriorities.Utils;
@@ -218,22 +219,33 @@ namespace AutoPriorities.Ui
 
             if (Widgets.ButtonText(inRect, priorities, active: !_isRunPrioritiesLoading))
             {
-                _pawnsData.Rebuild();
-
-                if (_worldInfoRetriever.GetUseOldAssignmentAlgorithm())
-                    _prioritiesAssigner.AssignPriorities();
-                else
-                {
-                    _isRunPrioritiesLoading = true;
-                    _prioritiesAssigner.StartOptimizationTaskOfAssignPriorities(
-                        () => _isRunPrioritiesLoading = false,
-                        () => { Messages.Message(Consts.OptimizationFailedMessage, MessageTypeDefOf.RejectInput, false); }
-                    );
-                }
-
-                _pawnsData.SaveState();
-                SoundDefOf.Click.PlayOneShotOnCamera();
+                RunSetPriorities();
             }
+        }
+
+        public void RunSetPriorities()
+        {
+            if (_isRunPrioritiesLoading)
+            {
+                _logger.Warn($"{nameof(RunSetPriorities)} called when the previous call wasn't finished.");
+                return;
+            }
+
+            _pawnsData.Rebuild();
+
+            if (_worldInfoRetriever.GetUseOldAssignmentAlgorithm())
+                _prioritiesAssigner.AssignPriorities();
+            else
+            {
+                _isRunPrioritiesLoading = true;
+                _prioritiesAssigner.StartOptimizationTaskOfAssignPriorities(
+                    () => _isRunPrioritiesLoading = false,
+                    () => { Messages.Message(Consts.OptimizationFailedMessage, MessageTypeDefOf.RejectInput, false); }
+                );
+            }
+
+            _pawnsData.SaveState();
+            SoundDefOf.Click.PlayOneShotOnCamera();
         }
 
         private void MiscTab(Rect inRect)
@@ -259,6 +271,14 @@ namespace AutoPriorities.Ui
                 Consts.ButtonHeight
             );
             DrawIgnoreWorkSpeedCheckbox(checkIgnoreWorkSpeedRect);
+
+            var checkRunOncePerDayRect = new Rect(
+                inRect.xMin,
+                checkIgnoreWorkSpeedRect.yMax + Consts.LabelMargin,
+                inRect.width,
+                Consts.ButtonHeight
+            );
+            DrawRunOncePerDayCheckbox(checkRunOncePerDayRect);
         }
 
         private void DrawCheckbox(Rect inRect, string labelText, string tooltipText, ref bool value)
@@ -317,6 +337,18 @@ namespace AutoPriorities.Ui
             DrawCheckbox(inRect, Consts.IgnoreWorkSpeed, Consts.IgnoreWorkSpeedTooltip, ref pawnsDataIgnoreWorkSpeed);
 
             _pawnsData.IgnoreWorkSpeed = pawnsDataIgnoreWorkSpeed;
+        }
+
+
+        private void DrawRunOncePerDayCheckbox(Rect inRect)
+        {
+            var runOncePerDay = _pawnsData.RunOncePerDay;
+
+            DrawCheckbox(inRect, Consts.RunOnTimer, Consts.RunOnTimerTooltip, ref runOncePerDay);
+
+            if (runOncePerDay != _pawnsData.RunOncePerDay) Controller.SetupPrioritiesOnTimerIfNeeded();
+
+            _pawnsData.RunOncePerDay = runOncePerDay;
         }
 
         private void DrawNumericInput(Rect inRect, string labelText, string tooltipText, ref float value, ref string? buffer)

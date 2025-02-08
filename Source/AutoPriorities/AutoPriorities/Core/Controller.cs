@@ -39,6 +39,8 @@ namespace AutoPriorities.Core
 
         public static SettingHandle<float>? OptimizationJobsPerPawnWeight { get; private set; }
 
+        public static SettingHandle<int>? TimerTicks { get; private set; }
+
         public static int? MaxPriorityAlien { get; set; }
 
         public static AutoPrioritiesDialog? Dialog { get; private set; }
@@ -58,6 +60,8 @@ namespace AutoPriorities.Core
         {
             base.WorldLoaded();
             Dialog = CreateDialog();
+
+            SetupPrioritiesOnTimerIfNeeded();
         }
 
         public override void DefsLoaded()
@@ -115,6 +119,15 @@ namespace AutoPriorities.Core
                 1f,
                 x => float.TryParse(x, out var result) && result >= 0
             );
+
+            TimerTicks = Settings.GetHandle(
+                "timerTicks",
+                "Timer ticks",
+                "Used in a timer for setting priorities periodically. Default - 24 hours (60000 ticks).",
+                60000,
+                x => int.TryParse(x, out var result) && result > 0
+            );
+            TimerTicks.ValueChanged += _ => { SetupPrioritiesOnTimerIfNeeded(); };
         }
 
         public static void SwitchMap()
@@ -123,11 +136,34 @@ namespace AutoPriorities.Core
                 return;
 
             _pawnsDataBuilder?.Build(_pawnData);
+
+            SetupPrioritiesOnTimerIfNeeded();
         }
 
         public static void RebuildPawns()
         {
             _pawnData?.Rebuild();
+        }
+
+        public static void SetupPrioritiesOnTimerIfNeeded()
+        {
+            HugsLibController.Instance.TickDelayScheduler.TryUnscheduleCallback(SetPriorities);
+
+            if (_pawnData?.RunOncePerDay != true)
+                return;
+
+            if (DebugLogs)
+                logger?.Info($"Set up set priorities to run every {TimerTicks} ticks");
+
+            HugsLibController.Instance.TickDelayScheduler.ScheduleCallback(SetPriorities, TimerTicks, repeat: true);
+        }
+
+        private static void SetPriorities()
+        {
+            if (DebugLogs)
+                logger?.Info("Auto running priorities on timer...");
+
+            Dialog?.RunSetPriorities();
         }
 
         private void PatchMod(string packageId, string patchName)
