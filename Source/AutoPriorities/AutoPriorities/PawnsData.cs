@@ -184,19 +184,6 @@ namespace AutoPriorities
 
                 foreach (var keyValue in SortedPawnFitnessForEveryWork)
                     keyValue.Value.Sort((x, y) => y.Fitness.CompareTo(x.Fitness));
-
-                // remove all non player pawns
-                ExcludedPawns.RemoveWhere(
-                    wp =>
-                    {
-                        var isToBeDeleted = !AllPlayerPawns.Contains(wp.Pawn);
-
-                        if (isToBeDeleted && _worldInfoRetriever.DebugLogs())
-                            _logger.Info($"removing {wp.Pawn.NameFullColored} from excluded list");
-
-                        return isToBeDeleted;
-                    }
-                );
             }
             catch (Exception e)
             {
