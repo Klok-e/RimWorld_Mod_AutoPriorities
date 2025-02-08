@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluffyWorktabPatch", "FluffyWorktabPatch\FluffyWorktabPatch.csproj", "{B088D1BC-BFB3-4F1F-AC65-F70BBD4F21B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterPawnControl", "..\BetterPawnControl\Source\BetterPawnControl.csproj", "{F2890CB9-7419-4089-A934-99CF6C0BCAA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterPawnControlPatch", "BetterPawnControlPatch\BetterPawnControlPatch.csproj", "{E4EFB480-15E0-4DD7-858A-5333619CDFFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{B088D1BC-BFB3-4F1F-AC65-F70BBD4F21B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B088D1BC-BFB3-4F1F-AC65-F70BBD4F21B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B088D1BC-BFB3-4F1F-AC65-F70BBD4F21B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2890CB9-7419-4089-A934-99CF6C0BCAA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2890CB9-7419-4089-A934-99CF6C0BCAA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2890CB9-7419-4089-A934-99CF6C0BCAA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2890CB9-7419-4089-A934-99CF6C0BCAA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4EFB480-15E0-4DD7-858A-5333619CDFFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4EFB480-15E0-4DD7-858A-5333619CDFFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4EFB480-15E0-4DD7-858A-5333619CDFFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4EFB480-15E0-4DD7-858A-5333619CDFFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

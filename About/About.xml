@@ -35,5 +35,7 @@
     <loadAfter>
         <li>UnlimitedHugs.HugsLib</li>
         <li>fluffy.worktab</li>
+        <li>arof.fluffy.worktab</li>
+        <li>VouLT.BetterPawnControl</li>
     </loadAfter>
 </ModMetaData>

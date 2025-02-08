@@ -223,7 +223,7 @@ namespace AutoPriorities.Ui
             }
         }
 
-        public void RunSetPriorities()
+        public void RunSetPriorities(Action? callback = null)
         {
             if (_isRunPrioritiesLoading)
             {
@@ -239,7 +239,19 @@ namespace AutoPriorities.Ui
             {
                 _isRunPrioritiesLoading = true;
                 _prioritiesAssigner.StartOptimizationTaskOfAssignPriorities(
-                    () => _isRunPrioritiesLoading = false,
+                    () =>
+                    {
+                        _isRunPrioritiesLoading = false;
+
+                        try
+                        {
+                            callback?.Invoke();
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.Err($"RunSetPriorities callback exception: {e}");
+                        }
+                    },
                     () => { Messages.Message(Consts.OptimizationFailedMessage, MessageTypeDefOf.RejectInput, false); }
                 );
             }

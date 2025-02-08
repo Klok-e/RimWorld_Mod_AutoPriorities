@@ -37,6 +37,8 @@ namespace AutoPriorities.Core
 
         public static SettingHandle<bool>? DebugLogs { get; private set; }
 
+        public static SettingHandle<bool>? AnnonyingDebugLogs { get; private set; }
+
         public static SettingHandle<float>? OptimizationJobsPerPawnWeight { get; private set; }
 
         public static SettingHandle<int>? TimerTicks { get; private set; }
@@ -45,6 +47,8 @@ namespace AutoPriorities.Core
 
         public static AutoPrioritiesDialog? Dialog { get; private set; }
 
+        public static event Action? SetPrioritiesOnTimerCallback;
+
         public override void Initialize()
         {
             base.Initialize();
@@ -52,6 +56,7 @@ namespace AutoPriorities.Core
 
             PatchMod("fluffy.worktab", "FluffyWorktabPatch.dll");
             PatchMod("arof.fluffy.worktab", "FluffyWorktabPatch.dll");
+            PatchMod("voult.betterpawncontrol", "BetterPawnControlPatch.dll");
 
             HarmonyInst.PatchAll();
         }
@@ -83,6 +88,7 @@ namespace AutoPriorities.Core
                 false
             );
             DebugLogs = Settings.GetHandle("debugLogs", "Debug logs", "Debug logs", false);
+            AnnonyingDebugLogs = Settings.GetHandle("annonyingDebugLogs", "Annoying debug logs", "Annoying debug logs", false);
             OptimizationFeasibleSolutionTimeoutSeconds = Settings.GetHandle(
                 "optimizationFeasibleSolutionTimeoutSeconds",
                 "Optimization feasible solution timeout",
@@ -163,7 +169,7 @@ namespace AutoPriorities.Core
             if (DebugLogs)
                 logger?.Info("Auto running priorities on timer...");
 
-            Dialog?.RunSetPriorities();
+            Dialog?.RunSetPriorities(() => SetPrioritiesOnTimerCallback?.Invoke());
         }
 
         private void PatchMod(string packageId, string patchName)

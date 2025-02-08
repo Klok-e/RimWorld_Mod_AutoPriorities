@@ -5,3 +5,6 @@
 [submodule "Source/InterestsFramework"]
 	path = Source/InterestsFramework
 	url = https://github.com/dametdame/InterestsFramework.git
+[submodule "Source/BetterPawnControl"]
+	path = Source/BetterPawnControl
+	url = https://github.com/voult2/BetterPawnControl.git

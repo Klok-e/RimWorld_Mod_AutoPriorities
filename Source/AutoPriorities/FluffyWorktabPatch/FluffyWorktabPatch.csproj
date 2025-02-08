@@ -281,7 +281,7 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="JetBrains.Profiler.Api" Version="1.4.8" />
-        <PackageReference Include="Lib.Harmony" Version="2.3.3" />
+        <PackageReference Include="Lib.Harmony" Version="2.3.5"/>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <Import Project="..\.targets" />

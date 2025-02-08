@@ -56,6 +56,7 @@
         <Compile Include="Core\Resources.cs"/>
         <Compile Include="Core\Unit.cs"/>
         <Compile Include="GeneticAlgorithm.cs"/>
+        <Compile Include="HarmonyPatches\PawnWorkSettingsSetPriorityPatch.cs"/>
         <Compile Include="IWorkSpeedCalculator.cs"/>
         <Compile Include="LinearModel.cs"/>
         <Compile Include="PawnDataSerializer\ExcludedPawnSerializableEntry.cs"/>
@@ -118,7 +119,7 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="JetBrains.Profiler.Api" Version="1.4.8"/>
-        <PackageReference Include="Lib.Harmony" Version="2.3.3"/>
+        <PackageReference Include="Lib.Harmony" Version="2.3.5"/>
         <PackageReference Include="UnlimitedHugs.Rimworld.HugsLib" Version="11.0.3"/>
     </ItemGroup>
     <ItemGroup>

@@ -14,6 +14,7 @@ cp -Rf "Source/AutoPriorities/AutoPriorities/bin/$BUILD_CONFIGURATION/." "$RIMWO
 
 mkdir -p "ConditionalAssemblies/$RIMWORLD_VERSION/"
 cp -Rf "Source/AutoPriorities/FluffyWorktabPatch/bin/$BUILD_CONFIGURATION/." "ConditionalAssemblies/$RIMWORLD_VERSION/"
+cp -Rf "Source/AutoPriorities/BetterPawnControlPatch/bin/$BUILD_CONFIGURATION/." "ConditionalAssemblies/$RIMWORLD_VERSION/"
 
 mkdir "./Build"
 echo building mod to $(realpath ./Build)
