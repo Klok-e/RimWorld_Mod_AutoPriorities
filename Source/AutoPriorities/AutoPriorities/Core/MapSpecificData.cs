@@ -15,7 +15,7 @@ namespace AutoPriorities.Core
         private bool _ignoreWorkSpeed;
         private List<string>? _importantWorkTypes = new() { "Firefighter", "Patient", "PatientBedRest", "BasicWorker" };
         private float _minimumSkillLevel;
-        private bool _runOncePerDay;
+        private bool _runOnTimer;
 
         public MapSpecificData(Map map) : base(map)
         {
@@ -73,10 +73,10 @@ namespace AutoPriorities.Core
             set => _ignoreWorkSpeed = value;
         }
 
-        public bool RunOncePerDay
+        public bool RunOnTimer
         {
-            get => _runOncePerDay;
-            set => _runOncePerDay = value;
+            get => _runOnTimer;
+            set => _runOnTimer = value;
         }
 
         public override void ExposeData()
@@ -88,7 +88,7 @@ namespace AutoPriorities.Core
             Scribe_Values.Look(ref _ignoreLearningRate, "AutoPriorities_IgnoreLearningRate");
             Scribe_Values.Look(ref _ignoreOppositionToWork, "AutoPriorities_IgnoreOppositionToWork");
             Scribe_Values.Look(ref _ignoreWorkSpeed, "AutoPriorities_IgnoreWorkSpeed");
-            Scribe_Values.Look(ref _runOncePerDay, "runOncePerDay");
+            Scribe_Values.Look(ref _runOnTimer, "runOncePerDay");
             Scribe_Collections.Look(ref _excludedPawns, "AutoPriorities_ExcludedPawns", LookMode.Deep);
 
             var dataStr = Convert.ToBase64String(PawnsDataXml ?? Array.Empty<byte>());

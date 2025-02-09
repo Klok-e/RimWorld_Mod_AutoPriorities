@@ -220,6 +220,7 @@ namespace AutoPriorities.Ui
             if (Widgets.ButtonText(inRect, priorities, active: !_isRunPrioritiesLoading))
             {
                 RunSetPriorities();
+                SoundDefOf.Click.PlayOneShotOnCamera();
             }
         }
 
@@ -257,7 +258,6 @@ namespace AutoPriorities.Ui
             }
 
             _pawnsData.SaveState();
-            SoundDefOf.Click.PlayOneShotOnCamera();
         }
 
         private void MiscTab(Rect inRect)
@@ -354,13 +354,13 @@ namespace AutoPriorities.Ui
 
         private void DrawRunOncePerDayCheckbox(Rect inRect)
         {
-            var runOncePerDay = _pawnsData.RunOncePerDay;
+            var runOnTimer = _pawnsData.RunOnTimer;
 
-            DrawCheckbox(inRect, Consts.RunOnTimer, Consts.RunOnTimerTooltip, ref runOncePerDay);
+            DrawCheckbox(inRect, Consts.RunOnTimer, Consts.RunOnTimerTooltip, ref runOnTimer);
 
-            if (runOncePerDay != _pawnsData.RunOncePerDay) Controller.SetupPrioritiesOnTimerIfNeeded();
+            if (runOnTimer != _pawnsData.RunOnTimer) Controller.SetupPrioritiesOnTimerIfNeeded();
 
-            _pawnsData.RunOncePerDay = runOncePerDay;
+            _pawnsData.RunOnTimer = runOnTimer;
         }
 
         private void DrawNumericInput(Rect inRect, string labelText, string tooltipText, ref float value, ref string? buffer)

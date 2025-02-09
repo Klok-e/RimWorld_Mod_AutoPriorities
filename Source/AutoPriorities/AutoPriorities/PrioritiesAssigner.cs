@@ -100,7 +100,10 @@ namespace AutoPriorities
                 {
                     try
                     {
-                        AssignPrioritiesByOptimization(pawnsDataCopy, onSolverFailed);
+                        var assignPrioritiesAction = AssignPrioritiesByOptimization(pawnsDataCopy, onSolverFailed);
+
+                        // so that it's called in the main thread
+                        if (assignPrioritiesAction != null) Controller.Instance?.delayedActionsQueue.Enqueue(assignPrioritiesAction);
                     }
                     catch (Exception e)
                     {
@@ -114,10 +117,10 @@ namespace AutoPriorities
             );
         }
 
-        public void AssignPrioritiesByOptimization(PawnsData pawnsData, Action? onSolverFailed = null)
+        public Action? AssignPrioritiesByOptimization(PawnsData pawnsData, Action? onSolverFailed = null)
         {
             if (pawnsData.CurrentMapPlayerPawns.Count == 0)
-                return;
+                return null;
 
             // Setup the solver decision variables (cost) for each (workType, pawn, priority + not_assigned)
             var workTableEntries = pawnsData.WorkTables.Distinct(y => y.Priority.v).ToArray();
@@ -288,7 +291,7 @@ namespace AutoPriorities
                     + $"LP solver termination type: {rep.terminationtype}; abandoning assignment..."
                 );
                 onSolverFailed?.Invoke();
-                return;
+                return null;
             }
 
             var algorithm = new GeneticAlgorithm(
@@ -312,10 +315,11 @@ namespace AutoPriorities
                     + "random search failed to find a solution which satisfies constraints; abandoning assignment..."
                 );
                 onSolverFailed?.Invoke();
-                return;
+                return null;
             }
 
-            AssignPrioritiesFromSolution(workTableEntries, assignmentOffsets, floatSolution, pawnsData);
+
+            return () => AssignPrioritiesFromSolution(workTableEntries, assignmentOffsets, floatSolution, pawnsData);
         }
 
         private static void AddConstraintsToAlglibState<T>(List<T> constraints, alglib.minlpstate state) where T : LinearModel.ConstraintRow

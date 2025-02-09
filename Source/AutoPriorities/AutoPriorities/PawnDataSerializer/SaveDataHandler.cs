@@ -36,7 +36,7 @@ namespace AutoPriorities.PawnDataSerializer
                 MinimumSkillLevel = mapSpecificData.MinimumSkillLevel,
                 IgnoreOppositionToWork = mapSpecificData.IgnoreOppositionToWork,
                 IgnoreWorkSpeed = mapSpecificData.IgnoreWorkSpeed,
-                RunOncePerDay = mapSpecificData.RunOncePerDay,
+                RunOnTimer = mapSpecificData.RunOnTimer,
             };
         }
 
@@ -49,7 +49,7 @@ namespace AutoPriorities.PawnDataSerializer
             mapDataSaveTo.ExcludedPawns = request.ExcludedPawns.ToList();
             mapDataSaveTo.IgnoreLearningRate = request.IgnoreLearningRate;
             mapDataSaveTo.IgnoreWorkSpeed = request.IgnoreWorkSpeed;
-            mapDataSaveTo.RunOncePerDay = request.RunOncePerDay;
+            mapDataSaveTo.RunOnTimer = request.RunOnTimer;
         }
     }
 }

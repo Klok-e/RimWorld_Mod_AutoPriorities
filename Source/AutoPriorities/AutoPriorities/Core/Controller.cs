@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Reflection;
 using AutoPriorities.ImportantJobs;
@@ -20,6 +21,9 @@ namespace AutoPriorities.Core
         public static ILogger? logger;
         private static PawnsData? _pawnData;
         private static PawnsDataBuilder? _pawnsDataBuilder;
+
+        public readonly ConcurrentQueue<Action> delayedActionsQueue = new();
+        public static Controller? Instance { get; private set; }
 
         public static SettingHandle<int>? MaxPriority { get; private set; }
 
@@ -53,6 +57,7 @@ namespace AutoPriorities.Core
         {
             base.Initialize();
             logger = new Logger(Logger);
+            Instance = this;
 
             PatchMod("fluffy.worktab", "FluffyWorktabPatch.dll");
             PatchMod("arof.fluffy.worktab", "FluffyWorktabPatch.dll");
@@ -155,13 +160,26 @@ namespace AutoPriorities.Core
         {
             HugsLibController.Instance.TickDelayScheduler.TryUnscheduleCallback(SetPriorities);
 
-            if (_pawnData?.RunOncePerDay != true)
+            if (_pawnData?.RunOnTimer != true)
                 return;
 
             if (DebugLogs)
                 logger?.Info($"Set up set priorities to run every {TimerTicks} ticks");
 
             HugsLibController.Instance.TickDelayScheduler.ScheduleCallback(SetPriorities, TimerTicks, repeat: true);
+        }
+
+        public override void Update()
+        {
+            while (!delayedActionsQueue.IsEmpty && delayedActionsQueue.TryDequeue(out var action))
+                try
+                {
+                    action();
+                }
+                catch (Exception e)
+                {
+                    logger?.Err($"Exception thrown while executing action: {e}");
+                }
         }
 
         private static void SetPriorities()

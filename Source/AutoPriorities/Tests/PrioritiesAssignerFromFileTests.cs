@@ -53,7 +53,7 @@ namespace Tests
             _pawnsData.MinimumSkillLevel = 3;
 
             // act
-            _assigner.AssignPrioritiesByOptimization(_pawnsData);
+            _assigner.AssignPrioritiesByOptimization(_pawnsData)?.Invoke();
 
             // assert
             _logger.NoWarnReceived();
@@ -83,7 +83,7 @@ namespace Tests
             _pawnsData.MinimumSkillLevel = 3;
 
             // act
-            _assigner.AssignPrioritiesByOptimization(_pawnsData);
+            _assigner.AssignPrioritiesByOptimization(_pawnsData)?.Invoke();
 
             // assert
             _logger.NoWarnReceived();
@@ -113,7 +113,7 @@ namespace Tests
             _pawnsData.MinimumSkillLevel = 3;
 
             // act
-            _assigner.AssignPrioritiesByOptimization(_pawnsData);
+            _assigner.AssignPrioritiesByOptimization(_pawnsData)?.Invoke();
 
             // assert
             _logger.NoWarnReceived();
@@ -143,7 +143,7 @@ namespace Tests
             _worldInfoRetriever.OptimizationImprovementSeconds().Returns(4f);
 
             // act
-            _assigner.AssignPrioritiesByOptimization(_pawnsData);
+            _assigner.AssignPrioritiesByOptimization(_pawnsData)?.Invoke();
 
             // assert
             _logger.NoWarnReceived();
