@@ -16,26 +16,24 @@ namespace AutoPriorities.PawnDataSerializer
             _serializer = serializer;
         }
 
-        public SaveData? GetSavedData(IMapSpecificData mapSpecificData, IWorldSpecificData worldSpecificData)
+        public SaveData GetSavedData(IMapSpecificData mapSpecificData, IWorldSpecificData worldSpecificData)
         {
             var pawnsDataXml = mapSpecificData.PawnsDataXml;
-            if (pawnsDataXml == null)
-                return null;
 
-            var deserialized = _serializer.Deserialize(pawnsDataXml);
+            DeserializedData? deserialized = null;
+            if (pawnsDataXml != null) deserialized = _serializer.Deserialize(pawnsDataXml);
 
-            if (deserialized == null)
-                return null;
+            var deserializedExcluded = deserialized?.ExcludedPawns ?? new HashSet<ExcludedPawnEntry>();
 
             return new SaveData
             {
                 ExcludedPawns =
-                    deserialized.ExcludedPawns is { Count: > 0 }
-                        ? deserialized.ExcludedPawns
+                    deserializedExcluded is { Count: > 0 }
+                        ? deserializedExcluded
                         : mapSpecificData.ExcludedPawns is { Count: > 0 }
                             ? mapSpecificData.ExcludedPawns.ToHashSet()
                             : worldSpecificData.ExcludedPawns.ToHashSet(),
-                WorkTablesData = deserialized.WorkTablesData,
+                WorkTablesData = deserialized?.WorkTablesData ?? new List<WorkTableEntry>(),
                 IgnoreLearningRate = mapSpecificData.IgnoreLearningRate,
                 MinimumSkillLevel = mapSpecificData.MinimumSkillLevel,
                 IgnoreOppositionToWork = mapSpecificData.IgnoreOppositionToWork,

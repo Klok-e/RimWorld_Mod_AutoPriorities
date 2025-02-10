@@ -119,8 +119,6 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
             _logger.Info("Loading successful. Setting loaded data.");
 #endif
             var savedData = _saveDataHandler.GetSavedData(mapData, worldData);
-            if (savedData == null)
-                return;
 
             _pawnsData.SetData(savedData);
         }
