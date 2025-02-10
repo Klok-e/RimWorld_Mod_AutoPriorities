@@ -29,6 +29,7 @@ namespace Tests
             _fixture = FixtureBuilder.Create();
 
             _mapSpecificData = Substitute.For<IMapSpecificData>();
+            _worldSpecificData = Substitute.For<IWorldSpecificData>();
         }
 
         private IFixture _fixture = null!;
@@ -37,6 +38,7 @@ namespace Tests
         private IWorldInfoFacade _worldInfo = null!;
         private SaveDataHandler _saveDataHandler = null!;
         private IMapSpecificData _mapSpecificData = null!;
+        private IWorldSpecificData _worldSpecificData = null!;
 
         [Test]
         public void LoadFromFile()
@@ -57,10 +59,10 @@ namespace Tests
                 );
             var fileContents = File.ReadAllBytes(TestHelper.SavePath);
             _mapSpecificData.PawnsDataXml.Returns(fileContents);
-            _mapSpecificData.ExcludedPawns.Returns(new List<ExcludedPawnEntry>());
+            _worldSpecificData.ExcludedPawns.Returns(new List<ExcludedPawnEntry>());
 
             // act
-            var savedData = _saveDataHandler.GetSavedData(_mapSpecificData);
+            var savedData = _saveDataHandler.GetSavedData(_mapSpecificData, _worldSpecificData);
 
             // assert
             savedData.Should().NotBeNull();
@@ -92,10 +94,10 @@ namespace Tests
                 );
             var fileContents = File.ReadAllBytes(TestHelper.SavePath);
             _mapSpecificData.PawnsDataXml.Returns(fileContents);
-            _mapSpecificData.ExcludedPawns.Returns(new List<ExcludedPawnEntry>());
+            _worldSpecificData.ExcludedPawns.Returns(new List<ExcludedPawnEntry>());
 
             // act
-            _ = _saveDataHandler.GetSavedData(_mapSpecificData);
+            _ = _saveDataHandler.GetSavedData(_mapSpecificData, _worldSpecificData);
 
             // assert
             _logger.Received(10).Warn(Arg.Any<string>());

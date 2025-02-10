@@ -31,6 +31,7 @@ namespace Tests
             _fixture = FixtureBuilder.Create();
 
             _mapSpecificData = Substitute.For<IMapSpecificData>();
+            _worldSpecificData = Substitute.For<IWorldSpecificData>();
         }
 
         private IFixture _fixture = null!;
@@ -39,6 +40,7 @@ namespace Tests
         private IWorldInfoFacade _worldInfo = null!;
         private SaveDataHandler _saveDataHandler = null!;
         private IMapSpecificData _mapSpecificData = null!;
+        private IWorldSpecificData _worldSpecificData = null!;
 
         [Test]
         public void LoadSavedData_SaveState_LoadAndSave_IdenticalResult()
@@ -59,10 +61,10 @@ namespace Tests
                 );
             var fileContents = File.ReadAllBytes(TestHelper.SavePath);
             _mapSpecificData.PawnsDataXml.Returns(fileContents);
-            _mapSpecificData.ExcludedPawns.Returns(new List<ExcludedPawnEntry>());
+            _worldSpecificData.ExcludedPawns.Returns(new List<ExcludedPawnEntry>());
 
             var expectedString = Encoding.UTF8.GetString(fileContents);
-            var loaded = _saveDataHandler.GetSavedData(_mapSpecificData);
+            var loaded = _saveDataHandler.GetSavedData(_mapSpecificData, _worldSpecificData);
 
             var actualBytes = Array.Empty<byte>();
             _mapSpecificData.WhenForAnyArgs(x => x.PawnsDataXml = Array.Empty<byte>()).Do(x => actualBytes = x.Arg<byte[]>());
@@ -70,7 +72,8 @@ namespace Tests
             // act
             _saveDataHandler.SaveData(
                 new SaveDataRequest { ExcludedPawns = loaded!.ExcludedPawns, WorkTablesData = loaded.WorkTablesData },
-                _mapSpecificData
+                _mapSpecificData,
+                _worldSpecificData
             );
             var actualString = Encoding.UTF8.GetString(actualBytes);
 

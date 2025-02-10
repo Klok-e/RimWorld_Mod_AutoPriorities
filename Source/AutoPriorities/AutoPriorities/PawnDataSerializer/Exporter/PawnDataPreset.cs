@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using AutoPriorities.APLogger;
 using AutoPriorities.Core;
@@ -35,12 +37,13 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
             _pawnsData.SetData(
                 new SaveData
                 {
-                    ExcludedPawns = save.ExcludedPawns,
+                    ExcludedPawns = WorldSpecificData.GetForCurrentWorld()?.ExcludedPawns.ToHashSet() ?? new HashSet<ExcludedPawnEntry>(),
                     WorkTablesData = save.WorkTablesData,
                     IgnoreLearningRate = false,
                     IgnoreOppositionToWork = false,
                     MinimumSkillLevel = 3,
-                });
+                }
+            );
         }
     }
 }

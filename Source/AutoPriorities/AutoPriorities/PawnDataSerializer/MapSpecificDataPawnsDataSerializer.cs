@@ -9,8 +9,7 @@ namespace AutoPriorities.PawnDataSerializer
         private readonly SaveDataHandler _saveDataHandler;
         private readonly IPawnDataStringSerializer _serializer;
 
-        public MapSpecificDataPawnsDataSerializer(ILogger logger, IPawnDataStringSerializer serializer,
-            SaveDataHandler saveDataHandler)
+        public MapSpecificDataPawnsDataSerializer(ILogger logger, IPawnDataStringSerializer serializer, SaveDataHandler saveDataHandler)
         {
             _logger = logger;
             _serializer = serializer;
@@ -22,15 +21,20 @@ namespace AutoPriorities.PawnDataSerializer
         public SaveData? LoadSavedData()
         {
             var mapSpecificData = MapSpecificData.GetForCurrentMap();
-            return mapSpecificData == null ? null : _saveDataHandler.GetSavedData(mapSpecificData);
+            var worldSpecificData = WorldSpecificData.GetForCurrentWorld();
+
+            return mapSpecificData == null || worldSpecificData == null
+                ? null
+                : _saveDataHandler.GetSavedData(mapSpecificData, worldSpecificData);
         }
 
         public void SaveData(SaveDataRequest request)
         {
             var mapData = MapSpecificData.GetForCurrentMap();
-            if (mapData == null) return;
+            var worldSpecificData = WorldSpecificData.GetForCurrentWorld();
+            if (mapData == null || worldSpecificData == null) return;
 
-            _saveDataHandler.SaveData(request, mapData);
+            _saveDataHandler.SaveData(request, mapData, worldSpecificData);
         }
 
         #endregion

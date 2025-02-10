@@ -20,12 +20,8 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
         private readonly SaveFilePather _saveFilePather;
         private List<IPawnDataImportable> _savesCached = new();
 
-        public PawnDataExporter(ILogger logger,
-            string saveDirectoryPath,
-            PawnsData pawnsData,
-            SaveFilePather saveFilePather,
-            IPawnDataStringSerializer pawnDataStringSerializer,
-            SaveDataHandler saveDataHandler)
+        public PawnDataExporter(ILogger logger, string saveDirectoryPath, PawnsData pawnsData, SaveFilePather saveFilePather,
+            IPawnDataStringSerializer pawnDataStringSerializer, SaveDataHandler saveDataHandler)
         {
             _logger = logger;
             _saveDirectoryPath = saveDirectoryPath;
@@ -39,22 +35,21 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
 
         private void RecacheSaves()
         {
-            _savesCached = Directory.EnumerateFiles(_saveDirectoryPath)
-                .Select<string, IPawnDataImportable>(
-                    x => new PawnDataImportableReference(
-                        Path.GetFileNameWithoutExtension(x),
-                        this))
-                .Prepend(new PawnDataPreset(_logger, _pawnDataStringSerializer, _pawnsData))
-                .ToList();
+            _savesCached =
+                Directory.EnumerateFiles(_saveDirectoryPath)
+                    .Select<string, IPawnDataImportable>(x => new PawnDataImportableReference(Path.GetFileNameWithoutExtension(x), this))
+                    .Prepend(new PawnDataPreset(_logger, _pawnDataStringSerializer, _pawnsData))
+                    .ToList();
         }
 
         private void ExportCurrentPawnData(string name)
         {
             var mapData = MapSpecificData.GetForCurrentMap();
-            if (mapData == null)
+            var worldData = WorldSpecificData.GetForCurrentWorld();
+            if (mapData == null || worldData == null)
                 throw new Exception("Current map null, couldn't export");
 
-            _saveDataHandler.SaveData(_pawnsData.GetSaveDataRequest(), mapData);
+            _saveDataHandler.SaveData(_pawnsData.GetSaveDataRequest(), mapData, worldData);
 
             try
             {
@@ -87,7 +82,8 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
         public void ImportPawnData(string name)
         {
             var mapData = MapSpecificData.GetForCurrentMap();
-            if (mapData == null)
+            var worldData = WorldSpecificData.GetForCurrentWorld();
+            if (mapData == null || worldData == null)
                 return;
 
 #if DEBUG
@@ -122,7 +118,7 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
 #if DEBUG
             _logger.Info("Loading successful. Setting loaded data.");
 #endif
-            var savedData = _saveDataHandler.GetSavedData(mapData);
+            var savedData = _saveDataHandler.GetSavedData(mapData, worldData);
             if (savedData == null)
                 return;
 
@@ -151,29 +147,28 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
 
         public SavedPawnDataRenameableReference ExportCurrentData()
         {
-            var number = _savesCached.Select(
-                    savedPawnDataReference => Regex.Match(savedPawnDataReference.FileName, @"^([\w]+?)([\d]*)$"))
-                .Where(match => match.Success)
-                .Select(
-                    match =>
-                    {
-                        var s = match.Groups[2]
-                            .ToString();
+            var number =
+                _savesCached.Select(savedPawnDataReference => Regex.Match(savedPawnDataReference.FileName, @"^([\w]+?)([\d]*)$"))
+                    .Where(match => match.Success)
+                    .Select(
+                        match =>
+                        {
+                            var s = match.Groups[2].ToString();
 #if DEBUG
-                        _logger.Info($"Group 2: {s}");
+                            _logger.Info($"Group 2: {s}");
 #endif
-                        return int.TryParse(s, out var num) ? num : 0;
-                    })
-                .DefaultIfEmpty(0)
-                .Max() + 1;
+                            return int.TryParse(s, out var num) ? num : 0;
+                        }
+                    )
+                    .DefaultIfEmpty(0)
+                    .Max()
+                + 1;
 
             var savedDataName = $"{SavedPawnDataRenameableReference.StartingName}{number}";
 
             ExportCurrentPawnData(savedDataName);
 
-            return new SavedPawnDataRenameableReference(
-                this,
-                savedDataName);
+            return new SavedPawnDataRenameableReference(this, savedDataName);
         }
 
         public void DeleteSave(string name)
