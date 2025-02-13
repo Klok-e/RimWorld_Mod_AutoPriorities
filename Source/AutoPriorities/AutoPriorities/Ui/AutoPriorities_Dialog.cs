@@ -103,12 +103,8 @@ namespace AutoPriorities.Ui
                     _pawnsData.Rebuild();
                 }
 
-                tabButtonsRect = new Rect(
-                    tabButtonsRect.xMax + Consts.LabelMargin,
-                    tabButtonsRect.yMin,
-                    _pawnExcludeLabelWidth,
-                    Consts.LabelHeight
-                );
+                tabButtonsRect =
+                    new Rect(tabButtonsRect.xMax + Consts.LabelMargin, tabButtonsRect.yMin, _pawnExcludeLabelWidth, Consts.LabelHeight);
                 if (Widgets.ButtonText(tabButtonsRect, Consts.PawnExcludeLabel))
                 {
                     _currentlySelectedTab = SelectedTab.PawnExclusion;
@@ -117,12 +113,13 @@ namespace AutoPriorities.Ui
 
                 if (_worldInfoRetriever.GetUseOldAssignmentAlgorithm())
                 {
-                    tabButtonsRect = new Rect(
-                        tabButtonsRect.xMax + Consts.LabelMargin,
-                        tabButtonsRect.yMin,
-                        _importantJobsLabelWidth,
-                        Consts.LabelHeight
-                    );
+                    tabButtonsRect =
+                        new Rect(
+                            tabButtonsRect.xMax + Consts.LabelMargin,
+                            tabButtonsRect.yMin,
+                            _importantJobsLabelWidth,
+                            Consts.LabelHeight
+                        );
                     if (Widgets.ButtonText(tabButtonsRect, Consts.ImportantJobsLabel))
                     {
                         _currentlySelectedTab = SelectedTab.ImportantWorkTypes;
@@ -130,12 +127,8 @@ namespace AutoPriorities.Ui
                     }
                 }
 
-                tabButtonsRect = new Rect(
-                    tabButtonsRect.xMax + Consts.LabelMargin,
-                    tabButtonsRect.yMin,
-                    _miscLabelWidth,
-                    Consts.LabelHeight
-                );
+                tabButtonsRect =
+                    new Rect(tabButtonsRect.xMax + Consts.LabelMargin, tabButtonsRect.yMin, _miscLabelWidth, Consts.LabelHeight);
                 if (Widgets.ButtonText(tabButtonsRect, Consts.Misc))
                 {
                     _currentlySelectedTab = SelectedTab.Misc;
@@ -165,28 +158,26 @@ namespace AutoPriorities.Ui
                         throw new ArgumentOutOfRangeException(nameof(_currentlySelectedTab));
                 }
 
-                var buttonDeleteRect = new Rect(
-                    inRect.xMax - _importExportDeleteLabelWidth,
-                    inRect.yMin,
-                    _importExportDeleteLabelWidth,
-                    Consts.LabelHeight
-                );
+                var buttonDeleteRect =
+                    new Rect(inRect.xMax - _importExportDeleteLabelWidth, inRect.yMin, _importExportDeleteLabelWidth, Consts.LabelHeight);
                 DrawDeleteButton(buttonDeleteRect);
 
-                var buttonImportRect = new Rect(
-                    buttonDeleteRect.xMin - _importExportDeleteLabelWidth - Consts.LabelMargin,
-                    inRect.yMin,
-                    _importExportDeleteLabelWidth,
-                    Consts.LabelHeight
-                );
+                var buttonImportRect =
+                    new Rect(
+                        buttonDeleteRect.xMin - _importExportDeleteLabelWidth - Consts.LabelMargin,
+                        inRect.yMin,
+                        _importExportDeleteLabelWidth,
+                        Consts.LabelHeight
+                    );
                 DrawImportButton(buttonImportRect);
 
-                var buttonExportRect = new Rect(
-                    buttonImportRect.xMin - _importExportDeleteLabelWidth - Consts.LabelMargin,
-                    inRect.yMin,
-                    _importExportDeleteLabelWidth,
-                    Consts.LabelHeight
-                );
+                var buttonExportRect =
+                    new Rect(
+                        buttonImportRect.xMin - _importExportDeleteLabelWidth - Consts.LabelMargin,
+                        inRect.yMin,
+                        _importExportDeleteLabelWidth,
+                        Consts.LabelHeight
+                    );
                 DrawExportButton(buttonExportRect);
 
                 var buttonRunRect = new Rect(inRect.xMin, inRect.yMax - Consts.ButtonHeight, _labelWidth, Consts.ButtonHeight);
@@ -268,28 +259,16 @@ namespace AutoPriorities.Ui
             var minFitnessRect = new Rect(inRect.xMin, checkLrIgnoreRect.yMax + Consts.LabelMargin, inRect.width, Consts.ButtonHeight);
             DrawMinimumFitnessInput(minFitnessRect);
 
-            var checkIgnoreOppositionToWorkRect = new Rect(
-                inRect.xMin,
-                minFitnessRect.yMax + Consts.LabelMargin,
-                inRect.width,
-                Consts.ButtonHeight
-            );
+            var checkIgnoreOppositionToWorkRect =
+                new Rect(inRect.xMin, minFitnessRect.yMax + Consts.LabelMargin, inRect.width, Consts.ButtonHeight);
             DrawIgnoreOppositionToWorkCheckbox(checkIgnoreOppositionToWorkRect);
 
-            var checkIgnoreWorkSpeedRect = new Rect(
-                inRect.xMin,
-                checkIgnoreOppositionToWorkRect.yMax + Consts.LabelMargin,
-                inRect.width,
-                Consts.ButtonHeight
-            );
+            var checkIgnoreWorkSpeedRect =
+                new Rect(inRect.xMin, checkIgnoreOppositionToWorkRect.yMax + Consts.LabelMargin, inRect.width, Consts.ButtonHeight);
             DrawIgnoreWorkSpeedCheckbox(checkIgnoreWorkSpeedRect);
 
-            var checkRunOncePerDayRect = new Rect(
-                inRect.xMin,
-                checkIgnoreWorkSpeedRect.yMax + Consts.LabelMargin,
-                inRect.width,
-                Consts.ButtonHeight
-            );
+            var checkRunOncePerDayRect =
+                new Rect(inRect.xMin, checkIgnoreWorkSpeedRect.yMax + Consts.LabelMargin, inRect.width, Consts.ButtonHeight);
             DrawRunOncePerDayCheckbox(checkRunOncePerDayRect);
         }
 
@@ -355,12 +334,13 @@ namespace AutoPriorities.Ui
         private void DrawRunOncePerDayCheckbox(Rect inRect)
         {
             var runOnTimer = _pawnsData.RunOnTimer;
+            var oldValue = _pawnsData.RunOnTimer;
 
             DrawCheckbox(inRect, Consts.RunOnTimer, Consts.RunOnTimerTooltip, ref runOnTimer);
 
-            if (runOnTimer != _pawnsData.RunOnTimer) Controller.SetupPrioritiesOnTimerIfNeeded();
-
             _pawnsData.RunOnTimer = runOnTimer;
+
+            if (runOnTimer != oldValue) Controller.SetupPrioritiesOnTimerIfNeeded();
         }
 
         private void DrawNumericInput(Rect inRect, string labelText, string tooltipText, ref float value, ref string? buffer)
@@ -455,12 +435,13 @@ namespace AutoPriorities.Ui
             foreach (var (workType, i) in _pawnsData.WorkTypesNotRequiringSkills.Select((w, i) => (w, i)))
             {
                 var workLabel = workType.LabelShort;
-                var rect = new Rect(
-                    tickboxesRect.xMin + Consts.WorkLabelHorizOffset * i,
-                    i % 2 == 0 ? 0f : Consts.WorkLabelOffset,
-                    Consts.WorkLabelWidth,
-                    Consts.LabelHeight
-                );
+                var rect =
+                    new Rect(
+                        tickboxesRect.xMin + Consts.WorkLabelHorizOffset * i,
+                        i % 2 == 0 ? 0f : Consts.WorkLabelOffset,
+                        Consts.WorkLabelWidth,
+                        Consts.LabelHeight
+                    );
                 Widgets.Label(rect, workLabel);
 
                 // Widgets.DrawBox(rect);
@@ -493,18 +474,19 @@ namespace AutoPriorities.Ui
 
             var tableSizeX = Consts.WorkLabelWidth / 2 + Consts.WorkLabelHorizOffset * _pawnsData.WorkTypes.Count;
 
-            var tableSizeY = (Consts.LabelMargin + Consts.ButtonHeight) * _pawnsData.CurrentMapPlayerPawns.Count
-                             + Consts.CheckboxHeight / 2;
+            var tableSizeY =
+                (Consts.LabelMargin + Consts.ButtonHeight) * _pawnsData.CurrentMapPlayerPawns.Count + Consts.CheckboxHeight / 2;
 
             var anchor = Text.Anchor;
             Text.Anchor = TextAnchor.UpperLeft;
 
-            var pawnsScrollRect = new Rect(
-                inRect.xMin,
-                inRect.yMin + fromTopToTickboxesVertical,
-                Consts.PawnNameCoWidth,
-                inRect.height - Consts.DistFromBottomBorder - fromTopToTickboxesVertical
-            );
+            var pawnsScrollRect =
+                new Rect(
+                    inRect.xMin,
+                    inRect.yMin + fromTopToTickboxesVertical,
+                    Consts.PawnNameCoWidth,
+                    inRect.height - Consts.DistFromBottomBorder - fromTopToTickboxesVertical
+                );
 
             Widgets.BeginScrollView(
                 pawnsScrollRect,
@@ -540,12 +522,8 @@ namespace AutoPriorities.Ui
 
             _pawnExcludeScrollPosCenter.y = _pawnExcludeScrollPosLeft.y;
 
-            var workTypesScrollRect = new Rect(
-                pawnsScrollRect.xMax,
-                inRect.yMin,
-                inRect.width - pawnsScrollRect.width,
-                fromTopToTickboxesVertical
-            );
+            var workTypesScrollRect =
+                new Rect(pawnsScrollRect.xMax, inRect.yMin, inRect.width - pawnsScrollRect.width, fromTopToTickboxesVertical);
 
             Widgets.BeginScrollView(
                 workTypesScrollRect,
@@ -561,12 +539,13 @@ namespace AutoPriorities.Ui
             foreach (var (workType, i) in _pawnsData.WorkTypes.Zip(Enumerable.Range(0, _pawnsData.WorkTypes.Count), (w, i) => (w, i)))
             {
                 var workLabel = workType.LabelShort;
-                var rect = new Rect(
-                    Consts.WorkLabelHorizOffset * i,
-                    i % 2 == 0 ? 0f : Consts.WorkLabelOffset,
-                    Consts.WorkLabelWidth,
-                    Consts.LabelHeight
-                );
+                var rect =
+                    new Rect(
+                        Consts.WorkLabelHorizOffset * i,
+                        i % 2 == 0 ? 0f : Consts.WorkLabelOffset,
+                        Consts.WorkLabelWidth,
+                        Consts.LabelHeight
+                    );
                 Widgets.Label(rect, workLabel);
 
                 var horizLinePos = rect.center.x;
@@ -582,24 +561,26 @@ namespace AutoPriorities.Ui
 
             _pawnExcludeScrollPosCenter.x = _pawnExcludeScrollPosTop.x;
 
-            var checkboxesScrollRect = new Rect(
-                pawnsScrollRect.xMax,
-                workTypesScrollRect.yMax,
-                workTypesScrollRect.width,
-                inRect.height - Consts.DistFromBottomBorder - workTypesScrollRect.height
-            );
+            var checkboxesScrollRect =
+                new Rect(
+                    pawnsScrollRect.xMax,
+                    workTypesScrollRect.yMax,
+                    workTypesScrollRect.width,
+                    inRect.height - Consts.DistFromBottomBorder - workTypesScrollRect.height
+                );
 
             Widgets.BeginScrollView(checkboxesScrollRect, ref _pawnExcludeScrollPosCenter, new Rect(0, 0, tableSizeX, tableSizeY));
 
             Text.Anchor = TextAnchor.UpperLeft;
             foreach (var (pawn, rowi) in _pawnsData.CurrentMapPlayerPawns.Select((w, i) => (w, i)))
             {
-                var checkboxesRect = new Rect(
-                    0f,
-                    (Consts.LabelMargin + Consts.ButtonHeight) * rowi,
-                    Consts.WorkLabelWidth / 2 + Consts.WorkLabelHorizOffset * _pawnsData.WorkTypes.Count,
-                    Consts.LabelHeight + Consts.LabelMargin
-                );
+                var checkboxesRect =
+                    new Rect(
+                        0f,
+                        (Consts.LabelMargin + Consts.ButtonHeight) * rowi,
+                        Consts.WorkLabelWidth / 2 + Consts.WorkLabelHorizOffset * _pawnsData.WorkTypes.Count,
+                        Consts.LabelHeight + Consts.LabelMargin
+                    );
 
                 Widgets.DrawLine(
                     new Vector2(checkboxesRect.xMin, checkboxesRect.yMax),

@@ -37,7 +37,8 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Assembly-CSharp">
-            <HintPath>..\..\..\..\..\..\..\..\..\..\..\..\mnt\storage\dima\Doc\Documents\Особисте\Проєкти\Projects\RimWorld_Mod_AutoPriorities\Source\RimManaged\Assembly-CSharp.dll</HintPath>
+            <HintPath>..\..\RimManaged\Assembly-CSharp.dll</HintPath>
+            <Private>false</Private>
         </Reference>
         <Reference Include="BetterPawnControl">
             <HintPath>..\..\BetterPawnControl\Assemblies\BetterPawnControl.dll</HintPath>

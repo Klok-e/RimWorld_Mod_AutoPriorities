@@ -78,66 +78,69 @@ namespace AutoPriorities.Core
         {
             base.DefsLoaded();
             MaxPriority = Settings.GetHandle("maxPriority", "Max priority", "Sets max priority", 4);
-            UseOldAssignmentAlgorithm = Settings.GetHandle(
-                "useOldAssignmentAlgorithm",
-                "Use old assignment algorithm",
-                "Use the old greedy assignment algorithm; the new algorithm represents "
-                + "assignment problem as a linear programming optimization problem and uses an LP solver to get an optimal solution.",
-                false
-            );
+            UseOldAssignmentAlgorithm =
+                Settings.GetHandle(
+                    "useOldAssignmentAlgorithm",
+                    "Use old assignment algorithm",
+                    "Use the old greedy assignment algorithm; the new algorithm represents "
+                    + "assignment problem as a linear programming optimization problem and uses an LP solver to get an optimal solution.",
+                    false
+                );
 
-            DebugSaveTablesAndPawns = Settings.GetHandle(
-                "debugSaveTablesAndPawns",
-                "Debug save tables and pawns",
-                "Debug save tables and pawns",
-                false
-            );
+            DebugSaveTablesAndPawns =
+                Settings.GetHandle("debugSaveTablesAndPawns", "Debug save tables and pawns", "Debug save tables and pawns", false);
             DebugLogs = Settings.GetHandle("debugLogs", "Debug logs", "Debug logs", false);
             AnnonyingDebugLogs = Settings.GetHandle("annonyingDebugLogs", "Annoying debug logs", "Annoying debug logs", false);
-            OptimizationFeasibleSolutionTimeoutSeconds = Settings.GetHandle(
-                "optimizationFeasibleSolutionTimeoutSeconds",
-                "Optimization feasible solution timeout",
-                "For how long to wait before abandoning finding a solution which satisfies all restrictions (random search).",
-                10f,
-                x => float.TryParse(x, out var result) && result is >= 0f and <= 120
-            );
-            OptimizationImprovementSeconds = Settings.GetHandle(
-                "optimizationImprovementSeconds",
-                "Optimization improvement seconds",
-                "For how long to try to optimize the solution after finding a solution which satisfies all restrictions. "
-                + "Increase to increase likelihood of an optimal or a more consistent solution.",
-                1f,
-                x => float.TryParse(x, out var result) && result is >= 0f and <= 60
-            );
-            OptimizationMutationRate = Settings.GetHandle(
-                "optimizationMutationRate",
-                "Optimization mutation rate",
-                "The rate at which mutations occur during the optimization process. Parameter of random search.",
-                0.8f,
-                x => float.TryParse(x, out var result) && result is >= 0f and <= 1f
-            );
-            OptimizationPopulationSize = Settings.GetHandle(
-                "optimizationPopulationSize",
-                "Optimization population size",
-                "The population size used in the optimization algorithm. Reduce to reduce memory footprint.",
-                256,
-                x => int.TryParse(x, out var result) && result is >= 2 and <= 4096
-            );
-            OptimizationJobsPerPawnWeight = Settings.GetHandle(
-                "optimizationJobsPerPawnWeight",
-                "Optimization jobs per pawn weight",
-                "Controls spread of jobs over multiple pawns. Applies only for variables which weren't found with a continuous LP solver. Very minor impact.",
-                1f,
-                x => float.TryParse(x, out var result) && result >= 0
-            );
+            OptimizationFeasibleSolutionTimeoutSeconds =
+                Settings.GetHandle(
+                    "optimizationFeasibleSolutionTimeoutSeconds",
+                    "Optimization feasible solution timeout",
+                    "For how long to wait before abandoning finding a solution which satisfies all restrictions (random search).",
+                    10f,
+                    x => float.TryParse(x, out var result) && result is >= 0f and <= 120
+                );
+            OptimizationImprovementSeconds =
+                Settings.GetHandle(
+                    "optimizationImprovementSeconds",
+                    "Optimization improvement seconds",
+                    "For how long to try to optimize the solution after finding a solution which satisfies all restrictions. "
+                    + "Increase to increase likelihood of an optimal or a more consistent solution.",
+                    1f,
+                    x => float.TryParse(x, out var result) && result is >= 0f and <= 60
+                );
+            OptimizationMutationRate =
+                Settings.GetHandle(
+                    "optimizationMutationRate",
+                    "Optimization mutation rate",
+                    "The rate at which mutations occur during the optimization process. Parameter of random search.",
+                    0.8f,
+                    x => float.TryParse(x, out var result) && result is >= 0f and <= 1f
+                );
+            OptimizationPopulationSize =
+                Settings.GetHandle(
+                    "optimizationPopulationSize",
+                    "Optimization population size",
+                    "The population size used in the optimization algorithm. Reduce to reduce memory footprint.",
+                    256,
+                    x => int.TryParse(x, out var result) && result is >= 2 and <= 4096
+                );
+            OptimizationJobsPerPawnWeight =
+                Settings.GetHandle(
+                    "optimizationJobsPerPawnWeight",
+                    "Optimization jobs per pawn weight",
+                    "Controls spread of jobs over multiple pawns. Applies only for variables which weren't found with a continuous LP solver. Very minor impact.",
+                    1f,
+                    x => float.TryParse(x, out var result) && result >= 0
+                );
 
-            TimerTicks = Settings.GetHandle(
-                "timerTicks",
-                "Timer ticks",
-                "Used in a timer for setting priorities periodically. Default - 24 hours (60000 ticks).",
-                60000,
-                x => int.TryParse(x, out var result) && result > 0
-            );
+            TimerTicks =
+                Settings.GetHandle(
+                    "timerTicks",
+                    "Timer ticks",
+                    "Used in a timer for setting priorities periodically. Default - 24 hours (60000 ticks).",
+                    60000,
+                    x => int.TryParse(x, out var result) && result > 0
+                );
             TimerTicks.ValueChanged += _ => { SetupPrioritiesOnTimerIfNeeded(); };
         }
 
@@ -158,15 +161,13 @@ namespace AutoPriorities.Core
 
         public static void SetupPrioritiesOnTimerIfNeeded()
         {
-            HugsLibController.Instance.TickDelayScheduler.TryUnscheduleCallback(SetPriorities);
-
             if (_pawnData?.RunOnTimer != true)
                 return;
 
             if (DebugLogs)
                 logger?.Info($"Set up set priorities to run every {TimerTicks} ticks");
 
-            HugsLibController.Instance.TickDelayScheduler.ScheduleCallback(SetPriorities, TimerTicks, repeat: true);
+            HugsLibController.Instance.TickDelayScheduler.ScheduleCallback(SetPriorities, TimerTicks);
         }
 
         public override void Update()
@@ -188,6 +189,9 @@ namespace AutoPriorities.Core
                 logger?.Info("Auto running priorities on timer...");
 
             Dialog?.RunSetPriorities(() => SetPrioritiesOnTimerCallback?.Invoke());
+
+            if (_pawnData?.RunOnTimer == true)
+                HugsLibController.Instance.TickDelayScheduler.ScheduleCallback(SetPriorities, TimerTicks);
         }
 
         private void PatchMod(string packageId, string patchName)
