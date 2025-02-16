@@ -188,10 +188,10 @@ namespace AutoPriorities.Core
             if (DebugLogs)
                 logger?.Info("Auto running priorities on timer...");
 
-            Dialog?.RunSetPriorities(() => SetPrioritiesOnTimerCallback?.Invoke());
+            if (_pawnData?.RunOnTimer != true) return;
 
-            if (_pawnData?.RunOnTimer == true)
-                HugsLibController.Instance.TickDelayScheduler.ScheduleCallback(SetPriorities, TimerTicks);
+            Dialog?.RunSetPriorities(() => SetPrioritiesOnTimerCallback?.Invoke());
+            HugsLibController.Instance.TickDelayScheduler.ScheduleCallback(SetPriorities, TimerTicks);
         }
 
         private void PatchMod(string packageId, string patchName)
