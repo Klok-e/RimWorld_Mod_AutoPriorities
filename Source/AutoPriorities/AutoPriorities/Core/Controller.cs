@@ -161,6 +161,8 @@ namespace AutoPriorities.Core
 
         public static void SetupPrioritiesOnTimerIfNeeded()
         {
+            HugsLibController.Instance.TickDelayScheduler.TryUnscheduleCallback(SetPriorities);
+
             if (_pawnData?.RunOnTimer != true)
                 return;
 
