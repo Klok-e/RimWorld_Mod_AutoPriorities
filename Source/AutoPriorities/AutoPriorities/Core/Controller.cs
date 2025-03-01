@@ -61,6 +61,7 @@ namespace AutoPriorities.Core
 
             PatchMod("fluffy.worktab", "FluffyWorktabPatch.dll");
             PatchMod("arof.fluffy.worktab", "FluffyWorktabPatch.dll");
+            PatchMod("arof.fluffy.worktab.continued", "FluffyWorktabPatch.dll");
             PatchMod("voult.betterpawncontrol", "BetterPawnControlPatch.dll");
 
             HarmonyInst.PatchAll();
