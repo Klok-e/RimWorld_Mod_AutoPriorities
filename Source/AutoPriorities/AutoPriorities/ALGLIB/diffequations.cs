@@ -18,6 +18,7 @@ http://www.fsf.org/licensing/licenses
 >>> END OF LICENSE >>>
 *************************************************************************/
 
+#pragma warning disable CS8625
 #pragma warning disable 1691
 #pragma warning disable 162
 #pragma warning disable 164
@@ -541,7 +542,9 @@ public partial class alglib
                 gridpoint = true;
             }
             else
+            {
                 gridpoint = false;
+            }
 
             //
             // Update error scale maximums
@@ -748,7 +751,9 @@ public partial class alglib
                     ytbl[i, i_] = state.ytbl[i, i_];
             }
             else
+            {
                 rep.nfev = 0;
+            }
         }
 
 
@@ -839,7 +844,9 @@ public partial class alglib
             for (i_ = 0; i_ <= m - 1; i_++) state.xg[i_] = x[i_];
 
             if (x[1] > x[0])
+            {
                 state.xscale = 1;
+            }
             else
             {
                 state.xscale = -1;

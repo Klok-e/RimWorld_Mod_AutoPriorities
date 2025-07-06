@@ -18,6 +18,7 @@ http://www.fsf.org/licensing/licenses
 >>> END OF LICENSE >>>
 *************************************************************************/
 
+#pragma warning disable CS8625
 #pragma warning disable 1691
 #pragma warning disable 162
 #pragma warning disable 164
@@ -3034,7 +3035,9 @@ public partial class alglib
                     a[i].y = i * 0.125;
                 }
                 else
+                {
                     a[i] = 0;
+                }
         }
 
 
@@ -4681,7 +4684,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 18.03.2016 by Bochkanov Sergey
         *************************************************************************/
-        public static int kdtreetsqueryaknn(kdtree kdt, kdtreerequestbuffer buf, double[] x, int k, bool selfmatch, double eps, xparams _params)
+        public static int kdtreetsqueryaknn(kdtree kdt, kdtreerequestbuffer buf, double[] x, int k, bool selfmatch, double eps,
+            xparams _params)
         {
             var result = 0;
             var i = 0;
@@ -5472,7 +5476,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 20.06.2016 by Bochkanov Sergey
         *************************************************************************/
-        public static void kdtreeexploresplit(kdtree kdt, int node, ref int d, ref double s, ref int nodele, ref int nodege, xparams _params)
+        public static void kdtreeexploresplit(kdtree kdt, int node, ref int d, ref double s, ref int nodele, ref int nodege,
+            xparams _params)
         {
             d = 0;
             s = 0;
@@ -5723,7 +5728,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 18.03.2016 by Bochkanov Sergey
         *************************************************************************/
-        private static int tsqueryrnn(kdtree kdt, kdtreerequestbuffer buf, double[] x, double r, bool selfmatch, bool orderedbydist, xparams _params)
+        private static int tsqueryrnn(kdtree kdt, kdtreerequestbuffer buf, double[] x, double r, bool selfmatch, bool orderedbydist,
+            xparams _params)
         {
             var result = 0;
             var i = 0;
@@ -5867,7 +5873,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 28.02.2010 by Bochkanov Sergey
         *************************************************************************/
-        private static void kdtreegeneratetreerec(kdtree kdt, ref int nodesoffs, ref int splitsoffs, int i1, int i2, int maxleafsize, xparams _params)
+        private static void kdtreegeneratetreerec(kdtree kdt, ref int nodesoffs, ref int splitsoffs, int i1, int i2, int maxleafsize,
+            xparams _params)
         {
             var n = 0;
             var nx = 0;
@@ -6184,7 +6191,9 @@ public partial class alglib
                                     buf.r[0] = ptdist;
                                 }
                                 else
+                                {
                                     tsort.tagheapreplacetopi(ref buf.r, ref buf.idx, buf.kneeded, ptdist, i, _params);
+                                }
                             }
                         }
                     }
@@ -6260,7 +6269,8 @@ public partial class alglib
 
                             if (kdt.normtype == 1) buf.curdist = buf.curdist - Math.Max(v - t1, 0) + s - t1;
 
-                            if (kdt.normtype == 2) buf.curdist = buf.curdist - math.sqr(Math.Max(v - t1, 0)) + math.sqr(s - t1);
+                            if (kdt.normtype == 2)
+                                buf.curdist = buf.curdist - math.sqr(Math.Max(v - t1, 0)) + math.sqr(s - t1);
                         }
 
                         buf.curboxmin[d] = s;
@@ -6276,7 +6286,8 @@ public partial class alglib
 
                             if (kdt.normtype == 1) buf.curdist = buf.curdist - Math.Max(t1 - v, 0) + t1 - s;
 
-                            if (kdt.normtype == 2) buf.curdist = buf.curdist - math.sqr(Math.Max(t1 - v, 0)) + math.sqr(t1 - s);
+                            if (kdt.normtype == 2)
+                                buf.curdist = buf.curdist - math.sqr(Math.Max(t1 - v, 0)) + math.sqr(t1 - s);
                         }
 
                         buf.curboxmax[d] = s;
@@ -6286,24 +6297,22 @@ public partial class alglib
                     // Decide: to dive into cell or not to dive
                     //
                     if (buf.rneeded != 0 && buf.curdist > buf.rneeded)
+                    {
                         todive = false;
+                    }
                     else
                     {
                         if (buf.kcur < buf.kneeded || buf.kneeded == 0)
-                        {
                             //
                             // KCur<KNeeded (i.e. not all points are found)
                             //
                             todive = true;
-                        }
                         else
-                        {
                             //
                             // KCur=KNeeded, decide to dive or not to dive
                             // using point position relative to bounding box.
                             //
                             todive = buf.curdist <= buf.r[0] * buf.approxf;
-                        }
                     }
 
                     if (todive) kdtreequerynnrec(kdt, buf, childoffs, _params);
@@ -6348,14 +6357,12 @@ public partial class alglib
             // This check is performed once for Offs=0 (tree root).
             //
             if (offs == 0)
-            {
                 for (j = 0; j <= nx - 1; j++)
                 {
                     if (buf.boxmin[j] > buf.curboxmax[j]) return;
 
                     if (buf.boxmax[j] < buf.curboxmin[j]) return;
                 }
-            }
 
             //
             // Leaf node.
@@ -6450,7 +6457,6 @@ public partial class alglib
             //
             buf.curdist = 0;
             if (kdt.normtype == 0)
-            {
                 for (i = 0; i <= kdt.nx - 1; i++)
                 {
                     vx = x[i];
@@ -6460,16 +6466,16 @@ public partial class alglib
                     buf.curboxmin[i] = vmin;
                     buf.curboxmax[i] = vmax;
                     if (vx < vmin)
+                    {
                         buf.curdist = Math.Max(buf.curdist, vmin - vx);
+                    }
                     else
                     {
                         if (vx > vmax) buf.curdist = Math.Max(buf.curdist, vx - vmax);
                     }
                 }
-            }
 
             if (kdt.normtype == 1)
-            {
                 for (i = 0; i <= kdt.nx - 1; i++)
                 {
                     vx = x[i];
@@ -6479,16 +6485,16 @@ public partial class alglib
                     buf.curboxmin[i] = vmin;
                     buf.curboxmax[i] = vmax;
                     if (vx < vmin)
+                    {
                         buf.curdist = buf.curdist + vmin - vx;
+                    }
                     else
                     {
                         if (vx > vmax) buf.curdist = buf.curdist + vx - vmax;
                     }
                 }
-            }
 
             if (kdt.normtype == 2)
-            {
                 for (i = 0; i <= kdt.nx - 1; i++)
                 {
                     vx = x[i];
@@ -6498,13 +6504,14 @@ public partial class alglib
                     buf.curboxmin[i] = vmin;
                     buf.curboxmax[i] = vmax;
                     if (vx < vmin)
+                    {
                         buf.curdist = buf.curdist + math.sqr(vmin - vx);
+                    }
                     else
                     {
                         if (vx > vmax) buf.curdist = buf.curdist + math.sqr(vx - vmax);
                     }
                 }
-            }
         }
 
 
@@ -6558,7 +6565,10 @@ public partial class alglib
             ap.assert(ap.len(buf.x) >= kdt.nx, "KDTree: dimensions of kdtreerequestbuffer are inconsistent with kdtree structure");
             ap.assert(ap.len(buf.idx) >= kdt.n, "KDTree: dimensions of kdtreerequestbuffer are inconsistent with kdtree structure");
             ap.assert(ap.len(buf.r) >= kdt.n, "KDTree: dimensions of kdtreerequestbuffer are inconsistent with kdtree structure");
-            ap.assert(ap.len(buf.buf) >= Math.Max(kdt.n, kdt.nx), "KDTree: dimensions of kdtreerequestbuffer are inconsistent with kdtree structure");
+            ap.assert(
+                ap.len(buf.buf) >= Math.Max(kdt.n, kdt.nx),
+                "KDTree: dimensions of kdtreerequestbuffer are inconsistent with kdtree structure"
+            );
             ap.assert(ap.len(buf.curboxmin) >= kdt.nx, "KDTree: dimensions of kdtreerequestbuffer are inconsistent with kdtree structure");
             ap.assert(ap.len(buf.curboxmax) >= kdt.nx, "KDTree: dimensions of kdtreerequestbuffer are inconsistent with kdtree structure");
         }

@@ -62,7 +62,7 @@
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Lib.Harmony" Version="2.3.5"/>
+        <PackageReference Include="Lib.Harmony" Version="2.3.6"/>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

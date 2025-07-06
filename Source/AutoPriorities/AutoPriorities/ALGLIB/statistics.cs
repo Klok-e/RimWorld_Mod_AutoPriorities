@@ -18,6 +18,7 @@ http://www.fsf.org/licensing/licenses
 >>> END OF LICENSE >>>
 *************************************************************************/
 
+#pragma warning disable CS8625
 #pragma warning disable 1691
 #pragma warning disable 162
 #pragma warning disable 164
@@ -78,7 +79,8 @@ public partial class alglib
         basestat.samplemoments(x, n, ref mean, ref variance, ref skewness, ref kurtosis, null);
     }
 
-    public static void samplemoments(double[] x, out double mean, out double variance, out double skewness, out double kurtosis, xparams _params)
+    public static void samplemoments(double[] x, out double mean, out double variance, out double skewness, out double kurtosis,
+        xparams _params)
     {
         int n;
 
@@ -1379,7 +1381,8 @@ public partial class alglib
         variancetests.ftest(x, n, y, m, ref bothtails, ref lefttail, ref righttail, null);
     }
 
-    public static void ftest(double[] x, int n, double[] y, int m, out double bothtails, out double lefttail, out double righttail, xparams _params)
+    public static void ftest(double[] x, int n, double[] y, int m, out double bothtails, out double lefttail, out double righttail,
+        xparams _params)
     {
         bothtails = 0;
         lefttail = 0;
@@ -1421,7 +1424,8 @@ public partial class alglib
       -- ALGLIB --
          Copyright 19.09.2006 by Bochkanov Sergey
     *************************************************************************/
-    public static void onesamplevariancetest(double[] x, int n, double variance, out double bothtails, out double lefttail, out double righttail)
+    public static void onesamplevariancetest(double[] x, int n, double variance, out double bothtails, out double lefttail,
+        out double righttail)
     {
         bothtails = 0;
         lefttail = 0;
@@ -1429,8 +1433,8 @@ public partial class alglib
         variancetests.onesamplevariancetest(x, n, variance, ref bothtails, ref lefttail, ref righttail, null);
     }
 
-    public static void onesamplevariancetest(double[] x, int n, double variance, out double bothtails, out double lefttail, out double righttail,
-        xparams _params)
+    public static void onesamplevariancetest(double[] x, int n, double variance, out double bothtails, out double lefttail,
+        out double righttail, xparams _params)
     {
         bothtails = 0;
         lefttail = 0;
@@ -1578,7 +1582,8 @@ public partial class alglib
       -- ALGLIB --
          Copyright 09.04.2007 by Bochkanov Sergey
     *************************************************************************/
-    public static void mannwhitneyutest(double[] x, int n, double[] y, int m, out double bothtails, out double lefttail, out double righttail)
+    public static void mannwhitneyutest(double[] x, int n, double[] y, int m, out double bothtails, out double lefttail,
+        out double righttail)
     {
         bothtails = 0;
         lefttail = 0;
@@ -1586,8 +1591,8 @@ public partial class alglib
         mannwhitneyu.mannwhitneyutest(x, n, y, m, ref bothtails, ref lefttail, ref righttail, null);
     }
 
-    public static void mannwhitneyutest(double[] x, int n, double[] y, int m, out double bothtails, out double lefttail, out double righttail,
-        xparams _params)
+    public static void mannwhitneyutest(double[] x, int n, double[] y, int m, out double bothtails, out double lefttail,
+        out double righttail, xparams _params)
     {
         bothtails = 0;
         lefttail = 0;
@@ -1708,7 +1713,8 @@ public partial class alglib
         studentttests.studentttest1(x, n, mean, ref bothtails, ref lefttail, ref righttail, null);
     }
 
-    public static void studentttest1(double[] x, int n, double mean, out double bothtails, out double lefttail, out double righttail, xparams _params)
+    public static void studentttest1(double[] x, int n, double mean, out double bothtails, out double lefttail, out double righttail,
+        xparams _params)
     {
         bothtails = 0;
         lefttail = 0;
@@ -1817,7 +1823,8 @@ public partial class alglib
       -- ALGLIB --
          Copyright 18.09.2006 by Bochkanov Sergey
     *************************************************************************/
-    public static void unequalvariancettest(double[] x, int n, double[] y, int m, out double bothtails, out double lefttail, out double righttail)
+    public static void unequalvariancettest(double[] x, int n, double[] y, int m, out double bothtails, out double lefttail,
+        out double righttail)
     {
         bothtails = 0;
         lefttail = 0;
@@ -1825,8 +1832,8 @@ public partial class alglib
         studentttests.unequalvariancettest(x, n, y, m, ref bothtails, ref lefttail, ref righttail, null);
     }
 
-    public static void unequalvariancettest(double[] x, int n, double[] y, int m, out double bothtails, out double lefttail, out double righttail,
-        xparams _params)
+    public static void unequalvariancettest(double[] x, int n, double[] y, int m, out double bothtails, out double lefttail,
+        out double righttail, xparams _params)
     {
         bothtails = 0;
         lefttail = 0;
@@ -2831,19 +2838,17 @@ public partial class alglib
                 // Center/zero I-th variable
                 //
                 if (b)
-                {
                     //
                     // Zero
                     //
-                    for (j = 0; j <= n - 1; j++) xc[i, j] = 0.0;
-                }
+                    for (j = 0; j <= n - 1; j++)
+                        xc[i, j] = 0.0;
                 else
-                {
                     //
                     // Center
                     //
-                    for (j = 0; j <= n - 1; j++) xc[i, j] = xc[i, j] - v;
-                }
+                    for (j = 0; j <= n - 1; j++)
+                        xc[i, j] = xc[i, j] - v;
             }
 
             //
@@ -3350,14 +3355,12 @@ public partial class alglib
                     for (j = 0; j <= n - 1; j++)
                         xc[i, j] = 0.0;
                 else
-                {
                     for (j = 0; j <= n - 1; j++)
                     {
                         vv = xc[i, j];
                         xc[i, j] = vv - v;
                         v2 = v2 + (vv - v) * (vv - v);
                     }
-                }
 
                 sx[i] = Math.Sqrt(v2 / (n - 1));
             }
@@ -3380,14 +3383,12 @@ public partial class alglib
                     for (j = 0; j <= n - 1; j++)
                         yc[i, j] = 0.0;
                 else
-                {
                     for (j = 0; j <= n - 1; j++)
                     {
                         vv = yc[i, j];
                         yc[i, j] = vv - v;
                         v2 = v2 + (vv - v) * (vv - v);
                     }
-                }
 
                 sy[i] = Math.Sqrt(v2 / (n - 1));
             }
@@ -3633,8 +3634,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 18.04.2013 by Bochkanov Sergey
         *************************************************************************/
-        private static void rankdatarec(double[,] xy, int i0, int i1, int nfeatures, bool iscentered, smp.shared_pool pool, int basecasecost,
-            xparams _params)
+        private static void rankdatarec(double[,] xy, int i0, int i1, int nfeatures, bool iscentered, smp.shared_pool pool,
+            int basecasecost, xparams _params)
         {
             apserv.apbuffers buf0 = null;
             apserv.apbuffers buf1 = null;
@@ -3646,7 +3647,8 @@ public partial class alglib
             //
             // Try to activate parallelism
             //
-            if (i1 - i0 >= 4 && apserv.rmul3(i1 - i0, nfeatures, apserv.logbase2(nfeatures, _params), _params) >= apserv.smpactivationlevel(_params))
+            if (i1 - i0 >= 4
+                && apserv.rmul3(i1 - i0, nfeatures, apserv.logbase2(nfeatures, _params), _params) >= apserv.smpactivationlevel(_params))
                 if (_trypexec_rankdatarec(xy, i0, i1, nfeatures, iscentered, pool, basecasecost, _params))
                     return;
 
@@ -3676,8 +3678,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_rankdatarec(double[,] xy, int i0, int i1, int nfeatures, bool iscentered, smp.shared_pool pool, int basecasecost,
-            xparams _params)
+        public static bool _trypexec_rankdatarec(double[,] xy, int i0, int i1, int nfeatures, bool iscentered, smp.shared_pool pool,
+            int basecasecost, xparams _params)
         {
             return false;
         }
@@ -3863,8 +3865,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 09.04.2007 by Bochkanov Sergey
         *************************************************************************/
-        public static void spearmanrankcorrelationsignificance(double r, int n, ref double bothtails, ref double lefttail, ref double righttail,
-            xparams _params)
+        public static void spearmanrankcorrelationsignificance(double r, int n, ref double bothtails, ref double lefttail,
+            ref double righttail, xparams _params)
         {
             double t = 0;
             double p = 0;
@@ -3889,7 +3891,9 @@ public partial class alglib
             // General case
             //
             if (r >= 1)
+            {
                 t = 1.0E10;
+            }
             else
             {
                 if (r <= -1)
@@ -6720,8 +6724,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 19.09.2006 by Bochkanov Sergey
         *************************************************************************/
-        public static void onesamplevariancetest(double[] x, int n, double variance, ref double bothtails, ref double lefttail, ref double righttail,
-            xparams _params)
+        public static void onesamplevariancetest(double[] x, int n, double variance, ref double bothtails, ref double lefttail,
+            ref double righttail, xparams _params)
         {
             var i = 0;
             double xmean = 0;
@@ -6826,8 +6830,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 08.09.2006 by Bochkanov Sergey
         *************************************************************************/
-        public static void wilcoxonsignedranktest(double[] x, int n, double e, ref double bothtails, ref double lefttail, ref double righttail,
-            xparams _params)
+        public static void wilcoxonsignedranktest(double[] x, int n, double e, ref double bothtails, ref double lefttail,
+            ref double righttail, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -6900,7 +6904,9 @@ public partial class alglib
                     {
                         k = t / 2;
                         if (r[k - 1] >= r[t - 1])
+                        {
                             t = 1;
+                        }
                         else
                         {
                             tmp = r[k - 1];
@@ -6930,7 +6936,9 @@ public partial class alglib
                     {
                         k = 2 * t;
                         if (k > i)
+                        {
                             t = 0;
+                        }
                         else
                         {
                             if (k < i)
@@ -6938,7 +6946,9 @@ public partial class alglib
                                     k = k + 1;
 
                             if (r[t - 1] >= r[k - 1])
+                            {
                                 t = 0;
+                            }
                             else
                             {
                                 tmp = r[k - 1];
@@ -10411,8 +10421,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 09.04.2007 by Bochkanov Sergey
         *************************************************************************/
-        public static void mannwhitneyutest(double[] x, int n, double[] y, int m, ref double bothtails, ref double lefttail, ref double righttail,
-            xparams _params)
+        public static void mannwhitneyutest(double[] x, int n, double[] y, int m, ref double bothtails, ref double lefttail,
+            ref double righttail, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -10476,7 +10486,9 @@ public partial class alglib
                     {
                         k = t / 2;
                         if (r[k - 1] >= r[t - 1])
+                        {
                             t = 1;
+                        }
                         else
                         {
                             tmp = r[k - 1];
@@ -10506,7 +10518,9 @@ public partial class alglib
                     {
                         k = 2 * t;
                         if (k > i)
+                        {
                             t = 0;
+                        }
                         else
                         {
                             if (k < i)
@@ -10514,7 +10528,9 @@ public partial class alglib
                                     k = k + 1;
 
                             if (r[t - 1] >= r[k - 1])
+                            {
                                 t = 0;
+                            }
                             else
                             {
                                 tmp = r[k - 1];
@@ -14570,8 +14586,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 08.09.2006 by Bochkanov Sergey
         *************************************************************************/
-        public static void onesamplesigntest(double[] x, int n, double median, ref double bothtails, ref double lefttail, ref double righttail,
-            xparams _params)
+        public static void onesamplesigntest(double[] x, int n, double median, ref double bothtails, ref double lefttail,
+            ref double righttail, xparams _params)
         {
             var i = 0;
             var gtcnt = 0;
@@ -14802,8 +14818,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 18.09.2006 by Bochkanov Sergey
         *************************************************************************/
-        public static void studentttest2(double[] x, int n, double[] y, int m, ref double bothtails, ref double lefttail, ref double righttail,
-            xparams _params)
+        public static void studentttest2(double[] x, int n, double[] y, int m, ref double bothtails, ref double lefttail,
+            ref double righttail, xparams _params)
         {
             var i = 0;
             var samex = new bool();
@@ -14949,8 +14965,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 18.09.2006 by Bochkanov Sergey
         *************************************************************************/
-        public static void unequalvariancettest(double[] x, int n, double[] y, int m, ref double bothtails, ref double lefttail, ref double righttail,
-            xparams _params)
+        public static void unequalvariancettest(double[] x, int n, double[] y, int m, ref double bothtails, ref double lefttail,
+            ref double righttail, xparams _params)
         {
             var i = 0;
             var samex = new bool();

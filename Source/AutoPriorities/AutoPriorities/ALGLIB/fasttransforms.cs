@@ -18,6 +18,7 @@ http://www.fsf.org/licensing/licenses
 >>> END OF LICENSE >>>
 *************************************************************************/
 
+#pragma warning disable CS8625
 #pragma warning disable 1691
 #pragma warning disable 162
 #pragma warning disable 164
@@ -1434,7 +1435,8 @@ public partial class alglib
                 ap.assert(math.isfinite(f[i].x) && math.isfinite(f[i].y), "FFTR1DInv: F contains infinite or NAN values!");
 
             ap.assert(math.isfinite(f[(int)Math.Floor(n / (double)2)].x), "FFTR1DInv: F contains infinite or NAN values!");
-            if (n % 2 != 0) ap.assert(math.isfinite(f[(int)Math.Floor(n / (double)2)].y), "FFTR1DInv: F contains infinite or NAN values!");
+            if (n % 2 != 0)
+                ap.assert(math.isfinite(f[(int)Math.Floor(n / (double)2)].y), "FFTR1DInv: F contains infinite or NAN values!");
 
             fftr1dinvbuf(f, n, ref a, _params);
         }
@@ -1461,7 +1463,8 @@ public partial class alglib
                 ap.assert(math.isfinite(f[i].x) && math.isfinite(f[i].y), "FFTR1DInvBuf: F contains infinite or NAN values!");
 
             ap.assert(math.isfinite(f[(int)Math.Floor(n / (double)2)].x), "FFTR1DInvBuf: F contains infinite or NAN values!");
-            if (n % 2 != 0) ap.assert(math.isfinite(f[(int)Math.Floor(n / (double)2)].y), "FFTR1DInvBuf: F contains infinite or NAN values!");
+            if (n % 2 != 0)
+                ap.assert(math.isfinite(f[(int)Math.Floor(n / (double)2)].y), "FFTR1DInvBuf: F contains infinite or NAN values!");
 
             //
             // Special case: N=1, FFT is just identity transform.
@@ -1491,7 +1494,9 @@ public partial class alglib
             }
 
             if (n % 2 == 0)
+            {
                 h[(int)Math.Floor(n / (double)2)] = f[(int)Math.Floor(n / (double)2)].x;
+            }
             else
             {
                 h[(int)Math.Floor(n / (double)2)] = f[(int)Math.Floor(n / (double)2)].x - f[(int)Math.Floor(n / (double)2)].y;
@@ -3083,7 +3088,8 @@ public partial class alglib
                 while (ptotal <= m + n - 1)
                 {
                     p = ptotal - n + 1;
-                    flopcand = (int)Math.Ceiling(m / (double)p) * (2 * ftbase.ftbasegetflopestimate(ptotal / 2, _params) + 1 * (ptotal / 2));
+                    flopcand =
+                        (int)Math.Ceiling(m / (double)p) * (2 * ftbase.ftbasegetflopestimate(ptotal / 2, _params) + 1 * (ptotal / 2));
                     if (flopcand < flopbest)
                     {
                         flopbest = flopcand;

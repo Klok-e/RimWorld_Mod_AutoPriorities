@@ -18,6 +18,7 @@ http://www.fsf.org/licensing/licenses
 >>> END OF LICENSE >>>
 *************************************************************************/
 
+#pragma warning disable CS8625
 #pragma warning disable 1691
 #pragma warning disable 162
 #pragma warning disable 164
@@ -1202,7 +1203,8 @@ public partial class alglib
         jacobianelliptic.jacobianellipticfunctions(u, m, ref sn, ref cn, ref dn, ref ph, null);
     }
 
-    public static void jacobianellipticfunctions(double u, double m, out double sn, out double cn, out double dn, out double ph, xparams _params)
+    public static void jacobianellipticfunctions(double u, double m, out double sn, out double cn, out double dn, out double ph,
+        xparams _params)
     {
         sn = 0;
         cn = 0;
@@ -2588,7 +2590,9 @@ public partial class alglib
                     z = Math.PI / (z * gammastirf(q, _params));
                 }
                 else
+                {
                     z = gammastirf(x, _params);
+                }
 
                 result = sgngam * z;
                 return result;
@@ -2753,7 +2757,9 @@ public partial class alglib
                     z = -z;
                 }
                 else
+                {
                     sgngam = 1;
+                }
 
                 if (u == 2)
                 {
@@ -2790,7 +2796,9 @@ public partial class alglib
 
             p = 1 / (x * x);
             if (x >= 1000.0)
+            {
                 q = q + ((7.9365079365079365079365 * 0.0001 * p - 2.7777777777777777777778 * 0.001) * p + 0.0833333333333333333333) / x;
+            }
             else
             {
                 a = 8.11614167470508450300 * 0.0001;
@@ -2828,7 +2836,9 @@ public partial class alglib
                 y = v * (v / y);
             }
             else
+            {
                 y = Math.Pow(x, x - 0.5) / y;
+            }
 
             result = 2.50662827463100050242 * y * w;
             return result;
@@ -3364,8 +3374,9 @@ public partial class alglib
                 ta = rangeb;
                 tb = Math.Abs(x - s * y);
                 tc = (4 - s * x * y) / 8;
-                v0 = ta * (1 - tc * (tb * tb - ta * ta) / 3) * Math.Exp(-(tb * tb / (2 * ta * ta)))
-                     - tb * (1 - tc * tb * tb / 3) * Math.Sqrt(2 * Math.PI) * normalcdf(-(tb / ta), _params);
+                v0 =
+                    ta * (1 - tc * (tb * tb - ta * ta) / 3) * Math.Exp(-(tb * tb / (2 * ta * ta)))
+                    - tb * (1 - tc * tb * tb / 3) * Math.Sqrt(2 * Math.PI) * normalcdf(-(tb / ta), _params);
                 v0 = v0 * Math.Exp(-(s * x * y / 2)) / (2 * Math.PI);
 
                 //
@@ -3435,7 +3446,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 15.11.2019 by Bochkanov Sergey
         *************************************************************************/
-        private static double bvnintegrate6(double rangea, double rangeb, double x, double y, double s, double gw, double gx, xparams _params)
+        private static double bvnintegrate6(double rangea, double rangeb, double x, double y, double s, double gw, double gx,
+            xparams _params)
         {
             double result = 0;
             double r = 0;
@@ -3549,7 +3561,9 @@ public partial class alglib
                 x = w;
             }
             else
+            {
                 xc = w;
+            }
 
             if (flag == 1 && b * x <= 1.0 && x <= 0.95)
             {
@@ -3576,7 +3590,10 @@ public partial class alglib
                 t = t * Math.Pow(x, a);
                 t = t / a;
                 t = t * w;
-                t = t * (gammafunc.gammafunction(a + b, _params) / (gammafunc.gammafunction(a, _params) * gammafunc.gammafunction(b, _params)));
+                t =
+                    t
+                    * (gammafunc.gammafunction(a + b, _params)
+                       / (gammafunc.gammafunction(a, _params) * gammafunc.gammafunction(b, _params)));
                 if (flag == 1)
                 {
                     if (t <= math.machineepsilon)
@@ -3585,12 +3602,19 @@ public partial class alglib
                         result = 1.0 - t;
                 }
                 else
+                {
                     result = t;
+                }
 
                 return result;
             }
 
-            y = y + t + gammafunc.lngamma(a + b, ref sg, _params) - gammafunc.lngamma(a, ref sg, _params) - gammafunc.lngamma(b, ref sg, _params);
+            y =
+                y
+                + t
+                + gammafunc.lngamma(a + b, ref sg, _params)
+                - gammafunc.lngamma(a, ref sg, _params)
+                - gammafunc.lngamma(b, ref sg, _params);
             y = y + Math.Log(w / a);
             if (y < minlog)
                 t = 0.0;
@@ -3762,7 +3786,9 @@ public partial class alglib
 
                     lgm = (yp * yp - 3.0) / 6.0;
                     x = 2.0 / (1.0 / (2.0 * aaa - 1.0) + 1.0 / (2.0 * bbb - 1.0));
-                    d = yp * Math.Sqrt(x + lgm) / x - (1.0 / (2.0 * bbb - 1.0) - 1.0 / (2.0 * aaa - 1.0)) * (lgm + 5.0 / 6.0 - 2.0 / (3.0 * x));
+                    d =
+                        yp * Math.Sqrt(x + lgm) / x
+                        - (1.0 / (2.0 * bbb - 1.0) - 1.0 / (2.0 * aaa - 1.0)) * (lgm + 5.0 / 6.0 - 2.0 / (3.0 * x));
                     d = 2.0 * d;
                     if (d < Math.Log(math.minrealnumber))
                     {
@@ -3842,7 +3868,9 @@ public partial class alglib
                             else
                             {
                                 if (dir > 3)
+                                {
                                     di = 1.0 - (1.0 - di) * (1.0 - di);
+                                }
                                 else
                                 {
                                     if (dir > 1)
@@ -3898,7 +3926,9 @@ public partial class alglib
                             else
                             {
                                 if (dir < -3)
+                                {
                                     di = di * di;
+                                }
                                 else
                                 {
                                     if (dir < -1)
@@ -3949,9 +3979,10 @@ public partial class alglib
                     if (nflg != 0) break;
 
                     nflg = 1;
-                    lgm = gammafunc.lngamma(aaa + bbb, ref s, _params)
-                          - gammafunc.lngamma(aaa, ref s, _params)
-                          - gammafunc.lngamma(bbb, ref s, _params);
+                    lgm =
+                        gammafunc.lngamma(aaa + bbb, ref s, _params)
+                        - gammafunc.lngamma(aaa, ref s, _params)
+                        - gammafunc.lngamma(bbb, ref s, _params);
                     i = 0;
                     mainlooppos = newtcycle;
                     continue;
@@ -4141,7 +4172,9 @@ public partial class alglib
                     ans = r;
                 }
                 else
+                {
                     t = 1.0;
+                }
 
                 if (t < thresh) break;
 
@@ -4250,7 +4283,9 @@ public partial class alglib
                     ans = r;
                 }
                 else
+                {
                     t = 1.0;
+                }
 
                 if (t < thresh) break;
 
@@ -4333,7 +4368,8 @@ public partial class alglib
             }
             else
             {
-                t = gammafunc.lngamma(a + b, ref sg, _params)
+                t =
+                    gammafunc.lngamma(a + b, ref sg, _params)
                     - gammafunc.lngamma(a, ref sg, _params)
                     - gammafunc.lngamma(b, ref sg, _params)
                     + u
@@ -4872,7 +4908,9 @@ public partial class alglib
                     ans = r;
                 }
                 else
+                {
                     t = 1;
+                }
 
                 pkm2 = pkm1;
                 pkm1 = pk;
@@ -5255,7 +5293,9 @@ public partial class alglib
 
             dn = n - k;
             if (k == 0)
+            {
                 dk = Math.Pow(1.0 - p, dn);
+            }
             else
             {
                 dk = k + 1;
@@ -5755,7 +5795,9 @@ public partial class alglib
                     result = r;
                 }
                 else
+                {
                     t = 1;
+                }
 
                 pkm2 = pkm1;
                 pkm1 = pk;
@@ -5818,7 +5860,8 @@ public partial class alglib
         Cephes Math Library Release 2.8:  June, 2000
         Copyright 1984, 1987, 2000 by Stephen L. Moshier
         *************************************************************************/
-        public static void jacobianellipticfunctions(double u, double m, ref double sn, ref double cn, ref double dn, ref double ph, xparams _params)
+        public static void jacobianellipticfunctions(double u, double m, ref double sn, ref double cn, ref double dn, ref double ph,
+            xparams _params)
         {
             double ai = 0;
             double b = 0;
@@ -5970,7 +6013,9 @@ public partial class alglib
                 x = -x;
             }
             else
+            {
                 sg = 0;
+            }
 
             if (x == 0)
             {
@@ -6172,7 +6217,9 @@ public partial class alglib
                 x = -x;
             }
             else
+            {
                 sg = 0;
+            }
 
             if (x == 0)
             {
@@ -6469,11 +6516,14 @@ public partial class alglib
             for (i = 0; i <= n; i++) c[i] = 0;
 
             if (n == 0 || n == 1)
+            {
                 c[n] = 1;
+            }
             else
             {
                 c[n] = Math.Exp((n - 1) * Math.Log(2));
-                for (i = 0; i <= n / 2 - 1; i++) c[n - 2 * (i + 1)] = -(c[n - 2 * i] * (n - 2 * i) * (n - 2 * i - 1) / 4 / (i + 1) / (n - i - 1));
+                for (i = 0; i <= n / 2 - 1; i++)
+                    c[n - 2 * (i + 1)] = -(c[n - 2 * i] * (n - 2 * i) * (n - 2 * i - 1) / 4 / (i + 1) / (n - i - 1));
             }
         }
 
@@ -6513,7 +6563,9 @@ public partial class alglib
                     e = b[k];
                     b[k] = 0;
                     if (i <= 1 && k == i)
+                    {
                         b[k] = 1;
+                    }
                     else
                     {
                         if (i != 0) b[k] = 2 * d;
@@ -6962,7 +7014,9 @@ public partial class alglib
                     nz = Math.PI / Math.Tan(Math.PI * nz);
                 }
                 else
+                {
                     nz = 0.0;
+                }
 
                 x = 1.0 - x;
             }
@@ -7002,7 +7056,9 @@ public partial class alglib
                     y = z * polv;
                 }
                 else
+                {
                     y = 0.0;
+                }
 
                 y = Math.Log(s) - 0.5 / s - y - w;
             }
@@ -7584,7 +7640,8 @@ public partial class alglib
             for (i = 0; i <= n; i++) c[i] = 0;
 
             c[n] = Math.Exp(n * Math.Log(2));
-            for (i = 0; i <= n / 2 - 1; i++) c[n - 2 * (i + 1)] = -(c[n - 2 * i] * (n - 2 * i) * (n - 2 * i - 1) / 4 / (i + 1));
+            for (i = 0; i <= n / 2 - 1; i++)
+                c[n - 2 * (i + 1)] = -(c[n - 2 * i] * (n - 2 * i) * (n - 2 * i - 1) / 4 / (i + 1));
         }
     }
 
@@ -7688,7 +7745,8 @@ public partial class alglib
             c[n] = 1;
             for (i = 1; i <= n; i++) c[n] = c[n] * (n + i) / 2 / i;
 
-            for (i = 0; i <= n / 2 - 1; i++) c[n - 2 * (i + 1)] = -(c[n - 2 * i] * (n - 2 * i) * (n - 2 * i - 1) / 2 / (i + 1) / (2 * (n - i) - 1));
+            for (i = 0; i <= n / 2 - 1; i++)
+                c[n - 2 * (i + 1)] = -(c[n - 2 * i] * (n - 2 * i) * (n - 2 * i - 1) / 2 / (i + 1) / (2 * (n - i) - 1));
         }
     }
 
@@ -7884,7 +7942,9 @@ public partial class alglib
                     sg = -1;
             }
             else
+            {
                 sg = 1;
+            }
 
             if (x < 0)
             {
@@ -8606,7 +8666,9 @@ public partial class alglib
 
                     zmn = tox;
                     if (n == 1)
+                    {
                         ans = 1.0 / x;
+                    }
                     else
                     {
                         nk1f = fn / n;
@@ -9019,7 +9081,9 @@ public partial class alglib
             double q = 0;
 
             if (m1 <= math.machineepsilon)
+            {
                 result = 1.3862943611198906188E0 - 0.5 * Math.Log(m1);
+            }
             else
             {
                 p = 1.37982864606273237150E-4;
@@ -9124,7 +9188,9 @@ public partial class alglib
                 phi = phi - npio2 * pio2;
             }
             else
+            {
                 k = 0;
+            }
 
             if (phi < 0)
             {
@@ -9132,7 +9198,9 @@ public partial class alglib
                 s = -1;
             }
             else
+            {
                 s = 0;
+            }
 
             b = Math.Sqrt(a);
             t = Math.Tan(phi);
@@ -9309,7 +9377,9 @@ public partial class alglib
                 s = -1;
             }
             else
+            {
                 s = 1;
+            }
 
             a = 1.0 - m;
             ebig = ellipticintegrale(m, _params);

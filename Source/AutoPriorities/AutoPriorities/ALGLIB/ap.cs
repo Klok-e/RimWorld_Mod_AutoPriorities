@@ -98,11 +98,13 @@ public partial class alglib
         AE_CRITICAL_ASSERT(
             (flg_value & FLG_THREADING_MASK_WRK) == FLG_THREADING_SERIAL
             || (flg_value & FLG_THREADING_MASK_WRK) == FLG_THREADING_PARALLEL
-            || (flg_value & FLG_THREADING_MASK_WRK) == FLG_THREADING_DEFAULT);
+            || (flg_value & FLG_THREADING_MASK_WRK) == FLG_THREADING_DEFAULT
+        );
         AE_CRITICAL_ASSERT(
             (flg_value & FLG_THREADING_MASK_CBK) == FLG_THREADING_SERIAL_CALLBACKS
             || (flg_value & FLG_THREADING_MASK_CBK) == FLG_THREADING_PARALLEL_CALLBACKS
-            || (flg_value & FLG_THREADING_MASK_CBK) == FLG_THREADING_DEFAULT);
+            || (flg_value & FLG_THREADING_MASK_CBK) == FLG_THREADING_DEFAULT
+        );
         global_threading_flags = (byte)(flg_value >> FLG_THREADING_SHIFT);
     }
 
@@ -727,7 +729,7 @@ public partial class alglib
         ****************************************************************/
         public static string format(bool[] a)
         {
-            string[] result = new string[len(a)];
+            var result = new string[len(a)];
             int i;
             for (i = 0; i < len(a); i++)
                 if (a[i])
@@ -742,7 +744,7 @@ public partial class alglib
         ****************************************************************/
         public static string format(int[] a)
         {
-            string[] result = new string[len(a)];
+            var result = new string[len(a)];
             int i;
             for (i = 0; i < len(a); i++)
                 result[i] = a[i].ToString();
@@ -757,7 +759,7 @@ public partial class alglib
             var dps = Math.Abs(_dps);
             var sfmt = _dps >= 0 ? "F" : "E";
             var fmt = string.Format("{{0:" + sfmt + "{0}}}", dps);
-            string[] result = new string[len(a)];
+            var result = new string[len(a)];
             int i;
             for (i = 0; i < len(a); i++)
             {
@@ -777,7 +779,7 @@ public partial class alglib
             var fmt = _dps >= 0 ? "F" : "E";
             var fmtx = string.Format("{{0:" + fmt + "{0}}}", dps);
             var fmty = string.Format("{{0:" + fmt + "{0}}}", dps);
-            string[] result = new string[len(a)];
+            var result = new string[len(a)];
             int i;
             for (i = 0; i < len(a); i++)
             {
@@ -797,7 +799,7 @@ public partial class alglib
             n = cols(a);
             m = rows(a);
             var line = new bool[n];
-            string[] result = new string[m];
+            var result = new string[m];
             for (i = 0; i < m; i++)
             {
                 for (j = 0; j < n; j++)
@@ -817,7 +819,7 @@ public partial class alglib
             n = cols(a);
             m = rows(a);
             var line = new int[n];
-            string[] result = new string[m];
+            var result = new string[m];
             for (i = 0; i < m; i++)
             {
                 for (j = 0; j < n; j++)
@@ -837,7 +839,7 @@ public partial class alglib
             n = cols(a);
             m = rows(a);
             var line = new double[n];
-            string[] result = new string[m];
+            var result = new string[m];
             for (i = 0; i < m; i++)
             {
                 for (j = 0; j < n; j++)
@@ -857,7 +859,7 @@ public partial class alglib
             n = cols(a);
             m = rows(a);
             var line = new complex[n];
-            string[] result = new string[m];
+            var result = new string[m];
             for (i = 0; i < m; i++)
             {
                 for (j = 0; j < n; j++)
@@ -916,7 +918,7 @@ public partial class alglib
         private enum TRACE_MODE
         {
             NONE,
-            FILE,
+            FILE
         }
 
         /********************************************************************
@@ -1007,7 +1009,7 @@ public partial class alglib
                 capacity = new_capacity;
 
                 /* allocate new memory, copy data */
-                apobject[] new_arr = new apobject[new_capacity];
+                var new_arr = new apobject[new_capacity];
                 for (i = 0; i < cnt; i++)
                     new_arr[i] = arr[i];
                 arr = new_arr;
@@ -1437,7 +1439,7 @@ public partial class alglib
                 if (nstored == capacity)
                 {
                     var new_capacity = 2 * capacity + 5;
-                    object[] old_storage = storage;
+                    var old_storage = storage;
                     storage = new object[new_capacity];
                     for (var i = 0; i < capacity; i++)
                         storage[i] = old_storage[i];
@@ -1678,12 +1680,13 @@ public partial class alglib
 
         If v is negative or greater than 63, this function returns '?'.
         ************************************************************************/
-        private static readonly char[] _sixbits2char_tbl = new char[64]
-        {
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
-            'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-            's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '-', '_',
-        };
+        private static readonly char[] _sixbits2char_tbl =
+            new char[64]
+            {
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+                'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+                'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '-', '_'
+            };
 
         /************************************************************************
         This function converts character to six-bit value (from 0 to 63).
@@ -1691,23 +1694,26 @@ public partial class alglib
         This function is inverse of ae_sixbits2char()
         If c is not correct character, this function returns -1.
         ************************************************************************/
-        private static readonly int[] _char2sixbits_tbl = new int[128]
-        {
-            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -1, -1, -1, -1, -1, -1, 10, 11, 12, 13,
-            14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, 63, -1, 36, 37, 38, 39, 40,
-            41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1,
-        };
+        private static readonly int[] _char2sixbits_tbl =
+            new int[128]
+            {
+                -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+                -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -1, -1, -1,
+                -1, -1, -1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1,
+                -1, -1, -1, 63, -1, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+                61, -1, -1, -1, -1, -1
+            };
+
+        private readonly byte[] entry_buf_byte;
+
+        // local temporaries
+        private readonly char[] entry_buf_char;
 
         private int bytes_asked;
         private int bytes_read;
         private int bytes_written;
         private int entries_needed;
         private int entries_saved;
-        private readonly byte[] entry_buf_byte;
-
-        // local temporaries
-        private readonly char[] entry_buf_char;
         private char[] in_str;
         private Stream io_stream;
 
@@ -1862,7 +1868,9 @@ public partial class alglib
                 cnt_out = 0;
             }
             else
+            {
                 throw new alglibexception("ALGLIB: internal error during serialization");
+            }
 
             // serialize
             if (val_idx == 0)
@@ -1890,7 +1898,9 @@ public partial class alglib
 
             // post-process
             if (mode == SMODE.TO_STRING)
+            {
                 bytes_written = cnt_out;
+            }
             else if (mode == SMODE.TO_STREAM)
             {
                 for (var k = 0; k < cnt_out; k++)
@@ -1898,7 +1908,9 @@ public partial class alglib
                 io_stream.Write(entry_buf_byte, 0, cnt_out);
             }
             else
+            {
                 throw new alglibexception("ALGLIB: internal error during serialization");
+            }
         }
 
         private void unstream_entry_char()
@@ -2057,7 +2069,6 @@ public partial class alglib
             }
 
             if (mode == SMODE.FROM_STRING)
-            {
                 //
                 // because input string may be from pre-3.11 serializer,
                 // which does not include trailing dot, we do not test
@@ -2065,7 +2076,6 @@ public partial class alglib
                 // is not stream, we do not have to read ALL trailing symbols.
                 //
                 return;
-            }
 
             if (mode == SMODE.TO_STREAM)
             {
@@ -2611,7 +2621,7 @@ public partial class alglib
             TO_STRING,
             FROM_STRING,
             TO_STREAM,
-            FROM_STREAM,
+            FROM_STREAM
         }
     }
 
@@ -5702,7 +5712,8 @@ public partial class alglib
                     {
                         Intrinsics.Vector256<double> simd_dot = Intrinsics.Vector256<double>.Zero;
                         for(j = 0; j<head; j += 4)
-                            simd_dot = Avx2.Add(Avx2.Multiply(Avx2.LoadVector256(a_row+j), Avx2.LoadVector256(x+j)), simd_dot);
+                            simd_dot =
+ Avx2.Add(Avx2.Multiply(Avx2.LoadVector256(a_row+j), Avx2.LoadVector256(x+j)), simd_dot);
                         Avx2.Store(vdot, simd_dot);
                         for(j = head; j<n; j++)
                             vdot[0] += a_row[j]*x[j];
@@ -5838,7 +5849,6 @@ public partial class alglib
             }
 
             if (opa == 1)
-            {
                 //
                 // y += A^T*x
                 //
@@ -5847,7 +5857,6 @@ public partial class alglib
                     v = alpha * x[i];
                     for (j = 0; j <= m - 1; j++) y[j] = y[j] + v * a[i, j];
                 }
-            }
         }
 
         /*************************************************************************
@@ -5895,8 +5904,8 @@ public partial class alglib
              01.09.2021
              Bochkanov Sergey
         *************************************************************************/
-        public static void rgemvx(int m, int n, double alpha, double[,] a, int ia, int ja, int opa, double[] x, int ix, double beta, double[] y,
-            int iy, xparams _params)
+        public static void rgemvx(int m, int n, double alpha, double[,] a, int ia, int ja, int opa, double[] x, int ix, double beta,
+            double[] y, int iy, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -5953,7 +5962,6 @@ public partial class alglib
             }
 
             if (opa == 1)
-            {
                 //
                 // y += A^T*x
                 //
@@ -5962,7 +5970,6 @@ public partial class alglib
                     v = alpha * x[ix + i];
                     for (j = 0; j <= m - 1; j++) y[iy + j] = y[iy + j] + v * a[ia + i, ja + j];
                 }
-            }
         }
 
 
@@ -6033,7 +6040,8 @@ public partial class alglib
           -- ALGLIB routine --
              (c) 07.09.2021 Bochkanov Sergey
         *************************************************************************/
-        public static void rtrsvx(int n, double[,] a, int ia, int ja, bool isupper, bool isunit, int optype, double[] x, int ix, xparams _params)
+        public static void rtrsvx(int n, double[,] a, int ia, int ja, bool isupper, bool isunit, int optype, double[] x, int ix,
+            xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -6224,8 +6232,10 @@ public partial class alglib
                      */
                     for(i = 0; i<len4; i += 4)
                     {
-                        Intrinsics.Vector128<double> s0 = Sse2.LoadVector128(srci),         s1 = Sse2.LoadVector128(srci+src_stride);
-                        Intrinsics.Vector128<double> s2 = Sse2.LoadVector128(srci+stride2), s3 = Sse2.LoadVector128(srci+stride3);
+                        Intrinsics.Vector128<double> s0 = Sse2.LoadVector128(srci),         s1 =
+ Sse2.LoadVector128(srci+src_stride);
+                        Intrinsics.Vector128<double> s2 = Sse2.LoadVector128(srci+stride2), s3 =
+ Sse2.LoadVector128(srci+stride3);
                         Sse2.Store(dst+i,    Sse2.UnpackLow( s0,s1));
                         Sse2.Store(dst1+i,   Sse2.UnpackHigh(s0,s1));
                         Sse2.Store(dst+i+2,  Sse2.UnpackLow( s2,s3));
@@ -6247,8 +6257,10 @@ public partial class alglib
                     Intrinsics.Vector128<double> vz = Intrinsics.Vector128<double>.Zero;
                     for(i = 0; i<len4; i += 4)
                     {
-                        Intrinsics.Vector128<double> s0 = Sse2.LoadVector128(srci), s1 = Sse2.LoadVector128(srci+src_stride);
-                        Intrinsics.Vector128<double> s2 = Sse2.LoadVector128(srci+stride2), s3 = Sse2.LoadVector128(srci+stride3);
+                        Intrinsics.Vector128<double> s0 = Sse2.LoadVector128(srci), s1 =
+ Sse2.LoadVector128(srci+src_stride);
+                        Intrinsics.Vector128<double> s2 = Sse2.LoadVector128(srci+stride2), s3 =
+ Sse2.LoadVector128(srci+stride3);
                         Sse2.Store(dst+i,    Sse2.UnpackLow(s0,s1));
                         Sse2.Store(dst+i+2,  Sse2.UnpackLow(s2,s3));
                         Sse2.Store(dst1+i,   vz);
@@ -6489,8 +6501,8 @@ public partial class alglib
         }
 #endif
 
-        private static bool rgemm32basecase(int m, int n, int k, double alpha, double[,] _a, int ia, int ja, int optypea, double[,] _b, int ib,
-            int jb, int optypeb, double beta, double[,] _c, int ic, int jc, xparams _params)
+        private static bool rgemm32basecase(int m, int n, int k, double alpha, double[,] _a, int ia, int ja, int optypea, double[,] _b,
+            int ib, int jb, int optypeb, double beta, double[,] _c, int ic, int jc, xparams _params)
         {
 #if !ALGLIB_USE_SIMD
             return false;
@@ -6533,9 +6545,12 @@ public partial class alglib
                             double*      _blka = stackalloc double[block_size*micro_size+alignment_doubles];
                             double* _blkb_long = stackalloc double[block_size*block_size+alignment_doubles];
                             double*      _blkc = stackalloc double[micro_size*block_size+alignment_doubles];
-                            double* blka = (double*)(((((ulong)_blka)+alignment_bytes-1)/alignment_bytes)*alignment_bytes);
-                            double* storageb_long = (double*)(((((ulong)_blkb_long)+alignment_bytes-1)/alignment_bytes)*alignment_bytes);
-                            double* blkc = (double*)(((((ulong)_blkc)+alignment_bytes-1)/alignment_bytes)*alignment_bytes);
+                            double* blka =
+ (double*)(((((ulong)_blka)+alignment_bytes-1)/alignment_bytes)*alignment_bytes);
+                            double* storageb_long =
+ (double*)(((((ulong)_blkb_long)+alignment_bytes-1)/alignment_bytes)*alignment_bytes);
+                            double* blkc =
+ (double*)(((((ulong)_blkc)+alignment_bytes-1)/alignment_bytes)*alignment_bytes);
                             
                             /*
                              * Pack transform(B) into precomputed block form
@@ -6629,8 +6644,8 @@ public partial class alglib
              08.09.2021
              Bochkanov Sergey
         *************************************************************************/
-        private static void propagatefwd(double[] x, int cols0, int blocksize, int[] superrowidx, int rbase, int offdiagsize, double[] rowstorage,
-            int offss, int sstride, double[] simdbuf, int simdwidth, xparams _params)
+        private static void propagatefwd(double[] x, int cols0, int blocksize, int[] superrowidx, int rbase, int offdiagsize,
+            double[] rowstorage, int offss, int sstride, double[] simdbuf, int simdwidth, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -7091,7 +7106,6 @@ public partial class alglib
             // Run update
             //
             if (urank == 1)
-            {
                 for (k = 0; k <= uheight - 1; k++)
                 {
                     targetrow = offss + raw2smap[superrowidx[urbase + k]] * 4;
@@ -7102,10 +7116,8 @@ public partial class alglib
                     rowstorage[targetrow + 2] = rowstorage[targetrow + 2] - u20 * uk0;
                     rowstorage[targetrow + 3] = rowstorage[targetrow + 3] - u30 * uk0;
                 }
-            }
 
             if (urank == 2)
-            {
                 for (k = 0; k <= uheight - 1; k++)
                 {
                     targetrow = offss + raw2smap[superrowidx[urbase + k]] * 4;
@@ -7117,10 +7129,8 @@ public partial class alglib
                     rowstorage[targetrow + 2] = rowstorage[targetrow + 2] - u20 * uk0 - u21 * uk1;
                     rowstorage[targetrow + 3] = rowstorage[targetrow + 3] - u30 * uk0 - u31 * uk1;
                 }
-            }
 
             if (urank == 3)
-            {
                 for (k = 0; k <= uheight - 1; k++)
                 {
                     targetrow = offss + raw2smap[superrowidx[urbase + k]] * 4;
@@ -7133,10 +7143,8 @@ public partial class alglib
                     rowstorage[targetrow + 2] = rowstorage[targetrow + 2] - u20 * uk0 - u21 * uk1 - u22 * uk2;
                     rowstorage[targetrow + 3] = rowstorage[targetrow + 3] - u30 * uk0 - u31 * uk1 - u32 * uk2;
                 }
-            }
 
             if (urank == 4)
-            {
                 for (k = 0; k <= uheight - 1; k++)
                 {
                     targetrow = offss + raw2smap[superrowidx[urbase + k]] * 4;
@@ -7150,7 +7158,6 @@ public partial class alglib
                     rowstorage[targetrow + 2] = rowstorage[targetrow + 2] - u20 * uk0 - u21 * uk1 - u22 * uk2 - u23 * uk3;
                     rowstorage[targetrow + 3] = rowstorage[targetrow + 3] - u30 * uk0 - u31 * uk1 - u32 * uk2 - u33 * uk3;
                 }
-            }
 
             result = true;
             return result;
@@ -7304,10 +7311,14 @@ public partial class alglib
                         offsk = offsu+k*4;
                         
                         target = Avx2.LoadVector256(rowstorage+targetrow);
-                        target = Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+0),v_w0),target);
-                        target = Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+1),v_w1),target);
-                        target = Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+2),v_w2),target);
-                        target = Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+3),v_w3),target);
+                        target =
+ Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+0),v_w0),target);
+                        target =
+ Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+1),v_w1),target);
+                        target =
+ Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+2),v_w2),target);
+                        target =
+ Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+3),v_w3),target);
                         Avx2.Store(rowstorage+targetrow, target);
                     }
                 }
@@ -7324,10 +7335,14 @@ public partial class alglib
                         offsk = offsu+k*4;
                         
                         target = Avx2.LoadVector256(rowstorage+targetrow);
-                        target = Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+0),v_w0),target);
-                        target = Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+1),v_w1),target);
-                        target = Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+2),v_w2),target);
-                        target = Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+3),v_w3),target);
+                        target =
+ Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+0),v_w0),target);
+                        target =
+ Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+1),v_w1),target);
+                        target =
+ Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+2),v_w2),target);
+                        target =
+ Avx2.Add(Avx2.Multiply(Avx2.BroadcastScalarToVector256(rowstorage+offsk+3),v_w3),target);
                         Avx2.Store(rowstorage+targetrow, target);
                     }
                 }
@@ -7514,15 +7529,19 @@ public partial class alglib
                 Intrinsics.Vector256<double> v_r2 = Intrinsics.Vector256.Create(r2);
                 Intrinsics.Vector256<double> v_f = Intrinsics.Vector256<double>.Zero;
                 Intrinsics.Vector256<double> v_invr = Intrinsics.Vector256.Create(invr);
-                Intrinsics.Vector256<double> v_powsinthetaj = Intrinsics.Vector256.Create(1.0, sintheta, powsintheta2, powsintheta3);
+                Intrinsics.Vector256<double> v_powsinthetaj =
+ Intrinsics.Vector256.Create(1.0, sintheta, powsintheta2, powsintheta3);
                 Intrinsics.Vector256<double> v_powsintheta4 = Intrinsics.Vector256.Create(powsintheta4);
-                Intrinsics.Vector256<double> v_expijphix = Intrinsics.Vector256.Create(1.0, expiphi.x, expiphi2.x, expiphi3.x);
-                Intrinsics.Vector256<double> v_expijphiy = Intrinsics.Vector256.Create(0.0, expiphi.y, expiphi2.y, expiphi3.y);
+                Intrinsics.Vector256<double> v_expijphix =
+ Intrinsics.Vector256.Create(1.0, expiphi.x, expiphi2.x, expiphi3.x);
+                Intrinsics.Vector256<double> v_expijphiy =
+ Intrinsics.Vector256.Create(0.0, expiphi.y, expiphi2.y, expiphi3.y);
                 Intrinsics.Vector256<double> v_expi4phix = Intrinsics.Vector256.Create(expiphi4.x);
                 Intrinsics.Vector256<double> v_expi4phiy = Intrinsics.Vector256.Create(expiphi4.y);
                 for(jj = 0; jj<4; jj++)
                 {
-                    Intrinsics.Vector256<double> pnm_cur = Intrinsics.Vector256<double>.Zero, pnm_prev = Intrinsics.Vector256<double>.Zero, pnm_new;
+                    Intrinsics.Vector256<double> pnm_cur = Intrinsics.Vector256<double>.Zero, pnm_prev =
+ Intrinsics.Vector256<double>.Zero, pnm_new;
                     Intrinsics.Vector256<double> v_powrminusj1 = Intrinsics.Vector256.Create(invr);
                     for(n = 0; n<jj*4; n++)
                         v_powrminusj1 = Avx2.Multiply(v_powrminusj1, v_invr);
@@ -7533,7 +7552,8 @@ public partial class alglib
                         
                         
                         pnm_new = Avx2.Multiply(v_powsinthetaj, Avx2.LoadVector256(pmmcdiag+n*16+j0));
-                        pnm_new = Avx2.Add(pnm_new, Avx2.Multiply(v_costheta,Avx2.Multiply(pnm_cur,Avx2.LoadVector256(pnma+n*16+j0))));
+                        pnm_new =
+ Avx2.Add(pnm_new, Avx2.Multiply(v_costheta,Avx2.Multiply(pnm_cur,Avx2.LoadVector256(pnma+n*16+j0))));
                         pnm_new = Avx2.Add(pnm_new, Avx2.Multiply(pnm_prev,Avx2.LoadVector256(pnmb+n*16+j0)));
                         pnm_prev = pnm_cur;
                         pnm_cur = pnm_new;
@@ -7547,7 +7567,8 @@ public partial class alglib
                         Intrinsics.Vector256<double> v_summny =
  Avx2.Add(Avx2.Multiply(v_r2,Avx2.LoadVector256(tblrmodmn+n*64+j0+48)),Avx2.LoadVector256(tblrmodmn+n*64+j0+16));
                         
-                        Intrinsics.Vector256<double> v_z = Avx2.Subtract(Avx2.Multiply(v_sphericalx,v_summnx),Avx2.Multiply(v_sphericaly,v_summny));
+                        Intrinsics.Vector256<double> v_z =
+ Avx2.Subtract(Avx2.Multiply(v_sphericalx,v_summnx),Avx2.Multiply(v_sphericaly,v_summny));
                         
                         v_f = Avx2.Add(v_f, Avx2.Multiply(v_powrminusj1, v_z));
                         v_powrminusj1 = Avx2.Multiply(v_powrminusj1, v_invr);
@@ -7578,13 +7599,14 @@ public partial class alglib
             return false;
         }
 #endif
-        private static bool bhpaneleval1fastkernel(double d0, double d1, double d2, int panelp, double[] pnma, double[] pnmb, double[] pmmcdiag,
-            double[] ynma, double[] tblrmodmn, ref double f, ref double invpowrpplus1, xparams _params)
+        private static bool bhpaneleval1fastkernel(double d0, double d1, double d2, int panelp, double[] pnma, double[] pnmb,
+            double[] pmmcdiag, double[] ynma, double[] tblrmodmn, ref double f, ref double invpowrpplus1, xparams _params)
         {
 #if ALGLIB_USE_SIMD
             unsafe
             {
-                fixed(double* p_pnma = pnma, p_pnmb = pnmb, p_pmmcdiag = pmmcdiag, p_ynma = ynma, p_tblrmodmn = tblrmodmn)
+                fixed(double* p_pnma = pnma, p_pnmb = pnmb, p_pmmcdiag = pmmcdiag, p_ynma = ynma, p_tblrmodmn =
+ tblrmodmn)
                 {
                     if( try_bhpaneleval1fastkernel(d0, d1, d2, panelp, p_pnma, p_pnmb,p_pmmcdiag, p_ynma, p_tblrmodmn, out f, out invpowrpplus1) )
                         return true;
@@ -7695,15 +7717,19 @@ public partial class alglib
                 Intrinsics.Vector256<double> v_costheta = Intrinsics.Vector256.Create(costheta);
                 Intrinsics.Vector256<double> v_r2 = Intrinsics.Vector256.Create(r2);
                 Intrinsics.Vector256<double> v_invr = Intrinsics.Vector256.Create(invr);
-                Intrinsics.Vector256<double> v_powsinthetaj = Intrinsics.Vector256.Create(1.0, sintheta, powsintheta2, powsintheta3);
+                Intrinsics.Vector256<double> v_powsinthetaj =
+ Intrinsics.Vector256.Create(1.0, sintheta, powsintheta2, powsintheta3);
                 Intrinsics.Vector256<double> v_powsintheta4 = Intrinsics.Vector256.Create(powsintheta4);
-                Intrinsics.Vector256<double> v_expijphix = Intrinsics.Vector256.Create(1.0, expiphi.x, expiphi2.x, expiphi3.x);
-                Intrinsics.Vector256<double> v_expijphiy = Intrinsics.Vector256.Create(0.0, expiphi.y, expiphi2.y, expiphi3.y);
+                Intrinsics.Vector256<double> v_expijphix =
+ Intrinsics.Vector256.Create(1.0, expiphi.x, expiphi2.x, expiphi3.x);
+                Intrinsics.Vector256<double> v_expijphiy =
+ Intrinsics.Vector256.Create(0.0, expiphi.y, expiphi2.y, expiphi3.y);
                 Intrinsics.Vector256<double> v_expi4phix = Intrinsics.Vector256.Create(expiphi4.x);
                 Intrinsics.Vector256<double> v_expi4phiy = Intrinsics.Vector256.Create(expiphi4.y);
                 for(jj = 0; jj<4; jj++)
                 {
-                    Intrinsics.Vector256<double> pnm_cur = Intrinsics.Vector256<double>.Zero, pnm_prev = Intrinsics.Vector256<double>.Zero, pnm_new;
+                    Intrinsics.Vector256<double> pnm_cur = Intrinsics.Vector256<double>.Zero, pnm_prev =
+ Intrinsics.Vector256<double>.Zero, pnm_new;
                     Intrinsics.Vector256<double> v_powrminusj1 = Intrinsics.Vector256.Create(invr);
                     for(n = 0; n<jj*4; n++)
                         v_powrminusj1 = Avx2.Multiply(v_powrminusj1, v_invr);
@@ -7714,7 +7740,8 @@ public partial class alglib
                         
                         
                         pnm_new = Avx2.Multiply(v_powsinthetaj, Avx2.LoadVector256(pmmcdiag+n*16+j0));
-                        pnm_new = Avx2.Add(pnm_new, Avx2.Multiply(v_costheta,Avx2.Multiply(pnm_cur,Avx2.LoadVector256(pnma+n*16+j0))));
+                        pnm_new =
+ Avx2.Add(pnm_new, Avx2.Multiply(v_costheta,Avx2.Multiply(pnm_cur,Avx2.LoadVector256(pnma+n*16+j0))));
                         pnm_new = Avx2.Add(pnm_new, Avx2.Multiply(pnm_prev,Avx2.LoadVector256(pnmb+n*16+j0)));
                         pnm_prev = pnm_cur;
                         pnm_cur = pnm_new;
@@ -7772,7 +7799,8 @@ public partial class alglib
 #if ALGLIB_USE_SIMD
             unsafe
             {
-                fixed(double* p_pnma = pnma, p_pnmb = pnmb, p_pmmcdiag = pmmcdiag, p_ynma = ynma, p_tblrmodmn = tblrmodmn, p_f = f)
+                fixed(double* p_pnma = pnma, p_pnmb = pnmb, p_pmmcdiag = pmmcdiag, p_ynma = ynma, p_tblrmodmn =
+ tblrmodmn, p_f = f)
                 {
                     if( try_bhpanelevalfastkernel(d0, d1, d2, ny, panelp, p_pnma, p_pnmb,p_pmmcdiag, p_ynma, p_tblrmodmn, p_f, out invpowrpplus1) )
                         return true;
@@ -7991,8 +8019,8 @@ public partial class alglib
 #if _ALGLIB_HPC
         unsafe
 #endif
-        internal static void process_v2request_1(rcommv2_request request, int query_idx, rcommv2_callbacks callbacks, rcommv2_buffers buffers,
-            sparsematrix dst_jacobian)
+        internal static void process_v2request_1(rcommv2_request request, int query_idx, rcommv2_callbacks callbacks,
+            rcommv2_buffers buffers, sparsematrix dst_jacobian)
         {
             //
             // Query and reply offsets
@@ -8006,10 +8034,8 @@ public partial class alglib
             for (var i = 0; i < request.vars; i++)
                 buffers.tmpX[i] = request.query_data[query_data_offs + i];
             if (request.dim > 0)
-            {
                 for (var i = 0; i < request.dim; i++)
                     buffers.tmpC[i] = request.query_data[query_data_offs + request.vars + i];
-            }
 
             sparsecreatecrsemptybuf(request.vars, buffers.tmpS, xdefault);
 
@@ -8040,7 +8066,8 @@ public partial class alglib
 #if _ALGLIB_HPC
         unsafe
 #endif
-        internal static void process_v2request_2(rcommv2_request request, int query_idx, rcommv2_callbacks callbacks, rcommv2_buffers buffers)
+        internal static void process_v2request_2(rcommv2_request request, int query_idx, rcommv2_callbacks callbacks,
+            rcommv2_buffers buffers)
         {
             //
             // Query and reply offsets
@@ -8055,10 +8082,8 @@ public partial class alglib
             for (var i = 0; i < request.vars; i++)
                 buffers.tmpX[i] = request.query_data[query_data_offs + i];
             if (request.dim > 0)
-            {
                 for (var i = 0; i < request.dim; i++)
                     buffers.tmpC[i] = request.query_data[query_data_offs + request.vars + i];
-            }
 
             //
             // Callback
@@ -8121,7 +8146,8 @@ public partial class alglib
 #if _ALGLIB_HPC
         unsafe
 #endif
-        internal static void process_v2request_3phase0(rcommv2_request request, int job_idx, rcommv2_callbacks callbacks, rcommv2_buffers buffers)
+        internal static void process_v2request_3phase0(rcommv2_request request, int job_idx, rcommv2_callbacks callbacks,
+            rcommv2_buffers buffers)
         {
             //
             // Phase 0: compute target at the origin and compute parts of the numerical differentiation formula that do NOT depend
@@ -8150,10 +8176,8 @@ public partial class alglib
                 for (var i = 0; i < request.vars; i++)
                     buffers.tmpX[i] = request.query_data[query_data_offs + i];
                 if (request.dim > 0)
-                {
                     for (var i = 0; i < request.dim; i++)
                         buffers.tmpC[i] = request.query_data[query_data_offs + request.vars + i];
-                }
 
                 //
                 // compute gradient using numerical differentiation formula provided by the optimizer
@@ -8163,7 +8187,8 @@ public partial class alglib
                     request.reply_dj[reply_dj_offs + t * n + var_idx] = 0;
                 for (var idx = 0; idx < fs; idx++)
                 {
-                    double xx = request.query_data[formula_data_offs + idx * 2 + 0], coeff = request.query_data[formula_data_offs + idx * 2 + 1];
+                    double xx = request.query_data[formula_data_offs + idx * 2 + 0],
+                        coeff = request.query_data[formula_data_offs + idx * 2 + 1];
                     if (coeff == 0)
                         continue;
                     if (xx
@@ -8196,7 +8221,12 @@ public partial class alglib
                         callbacks.fvec_p(buffers.tmpX, buffers.tmpC, buffers.tmpF, request.obj);
                     }
                     else
-                        assert(false, "ALGLIB: integrity check in '" + request.subpackage + "' subpackage failed; no callback for optimizer request");
+                    {
+                        assert(
+                            false,
+                            "ALGLIB: integrity check in '" + request.subpackage + "' subpackage failed; no callback for optimizer request"
+                        );
+                    }
 
                     buffers.tmpX[var_idx] = xprev;
                     for (var t = 0; t < m; t++)
@@ -8219,10 +8249,8 @@ public partial class alglib
                 for (var i = 0; i < request.vars; i++)
                     buffers.tmpX[i] = request.query_data[query_data_offs + i];
                 if (request.dim > 0)
-                {
                     for (var i = 0; i < request.dim; i++)
                         buffers.tmpC[i] = request.query_data[query_data_offs + request.vars + i];
-                }
 
                 //
                 // Callback
@@ -8252,7 +8280,12 @@ public partial class alglib
                     callbacks.fvec_p(buffers.tmpX, buffers.tmpC, buffers.tmpF, request.obj);
                 }
                 else
-                    assert(false, "ALGLIB: integrity check in '" + request.subpackage + "' subpackage failed; no callback for optimizer request");
+                {
+                    assert(
+                        false,
+                        "ALGLIB: integrity check in '" + request.subpackage + "' subpackage failed; no callback for optimizer request"
+                    );
+                }
 
                 for (var t = 0; t < m; t++)
                     request.reply_fi[reply_fi_offs + t] = buffers.tmpF[t];
@@ -8285,7 +8318,8 @@ public partial class alglib
                 var reply_dj_offs = query_idx * n * m;
                 for (var idx = 0; idx < fs; idx++)
                 {
-                    double xx = request.query_data[formula_data_offs + idx * 2 + 0], coeff = request.query_data[formula_data_offs + idx * 2 + 1];
+                    double xx = request.query_data[formula_data_offs + idx * 2 + 0],
+                        coeff = request.query_data[formula_data_offs + idx * 2 + 1];
                     if (coeff == 0 || xx != request.query_data[query_data_offs + var_idx])
                         continue;
                     for (var t = 0; t < m; t++)
@@ -8297,7 +8331,8 @@ public partial class alglib
 #if _ALGLIB_HPC
         unsafe
 #endif
-        internal static void process_v2request_5phase0(rcommv2_request request, int job_idx, rcommv2_callbacks callbacks, rcommv2_buffers buffers)
+        internal static void process_v2request_5phase0(rcommv2_request request, int job_idx, rcommv2_callbacks callbacks,
+            rcommv2_buffers buffers)
         {
             //
             // Phase 0: compute target at the origin and compute parts of the numerical differentiation formula that do NOT depend
@@ -8326,10 +8361,8 @@ public partial class alglib
                 for (var i = 0; i < request.vars; i++)
                     buffers.tmpX[i] = request.query_data[query_data_offs + i];
                 if (request.dim > 0)
-                {
                     for (var i = 0; i < request.dim; i++)
                         buffers.tmpC[i] = request.query_data[query_data_offs + request.vars + i];
-                }
 
                 //
                 // compute gradient using numerical differentiation formula provided by the optimizer
@@ -8382,7 +8415,10 @@ public partial class alglib
                         {
                             assert(
                                 false,
-                                "ALGLIB: integrity check in '" + request.subpackage + "' subpackage failed; no callback for optimizer request");
+                                "ALGLIB: integrity check in '"
+                                + request.subpackage
+                                + "' subpackage failed; no callback for optimizer request"
+                            );
                         }
 
                         buffers.tmpX[var_idx] = xprev;
@@ -8430,7 +8466,10 @@ public partial class alglib
                         {
                             assert(
                                 false,
-                                "ALGLIB: integrity check in '" + request.subpackage + "' subpackage failed; no callback for optimizer request");
+                                "ALGLIB: integrity check in '"
+                                + request.subpackage
+                                + "' subpackage failed; no callback for optimizer request"
+                            );
                         }
 
                         buffers.tmpX[var_idx] = xprev;
@@ -8469,10 +8508,8 @@ public partial class alglib
                 for (var i = 0; i < request.vars; i++)
                     buffers.tmpX[i] = request.query_data[query_data_offs + i];
                 if (request.dim > 0)
-                {
                     for (var i = 0; i < request.dim; i++)
                         buffers.tmpC[i] = request.query_data[query_data_offs + request.vars + i];
-                }
 
                 //
                 // Callback
@@ -8502,7 +8539,12 @@ public partial class alglib
                     callbacks.fvec_p(buffers.tmpX, buffers.tmpC, buffers.tmpF, request.obj);
                 }
                 else
-                    assert(false, "ALGLIB: integrity check in '" + request.subpackage + "' subpackage failed; no callback for optimizer request");
+                {
+                    assert(
+                        false,
+                        "ALGLIB: integrity check in '" + request.subpackage + "' subpackage failed; no callback for optimizer request"
+                    );
+                }
 
                 for (var t = 0; t < m; t++)
                     request.reply_fi[reply_fi_offs + t] = buffers.tmpF[t];
@@ -8571,7 +8613,8 @@ public partial class alglib
 #if _ALGLIB_HPC
         unsafe
 #endif
-        internal static void process_v2request_4(rcommv2_request request, int query_idx, rcommv2_callbacks callbacks, rcommv2_buffers buffers)
+        internal static void process_v2request_4(rcommv2_request request, int query_idx, rcommv2_callbacks callbacks,
+            rcommv2_buffers buffers)
         {
             //
             // Query and reply offsets
@@ -8585,10 +8628,8 @@ public partial class alglib
             for (var i = 0; i < request.vars; i++)
                 buffers.tmpX[i] = request.query_data[query_data_offs + i];
             if (request.dim > 0)
-            {
                 for (var i = 0; i < request.dim; i++)
                     buffers.tmpC[i] = request.query_data[query_data_offs + request.vars + i];
-            }
 
             //
             // Callback

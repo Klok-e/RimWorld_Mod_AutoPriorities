@@ -18,6 +18,7 @@ http://www.fsf.org/licensing/licenses
 >>> END OF LICENSE >>>
 *************************************************************************/
 
+#pragma warning disable CS8625
 #pragma warning disable 1691
 #pragma warning disable 162
 #pragma warning disable 164
@@ -402,7 +403,8 @@ public partial class alglib
         directdensesolvers.rmatrixsolvem(a, n, b, m, rfs, ref x, rep.innerobj, null);
     }
 
-    public static void rmatrixsolvem(double[,] a, int n, double[,] b, int m, bool rfs, out double[,] x, out densesolverreport rep, xparams _params)
+    public static void rmatrixsolvem(double[,] a, int n, double[,] b, int m, bool rfs, out double[,] x, out densesolverreport rep,
+        xparams _params)
     {
         x = new double[0, 0];
         rep = new densesolverreport();
@@ -770,7 +772,8 @@ public partial class alglib
         directdensesolvers.rmatrixlusolvem(lua, p, n, b, m, ref x, rep.innerobj, null);
     }
 
-    public static void rmatrixlusolvem(double[,] lua, int[] p, int n, double[,] b, int m, out double[,] x, out densesolverreport rep, xparams _params)
+    public static void rmatrixlusolvem(double[,] lua, int[] p, int n, double[,] b, int m, out double[,] x, out densesolverreport rep,
+        xparams _params)
     {
         x = new double[0, 0];
         rep = new densesolverreport();
@@ -960,7 +963,8 @@ public partial class alglib
         directdensesolvers.rmatrixmixedsolve(a, lua, p, n, b, ref x, rep.innerobj, null);
     }
 
-    public static void rmatrixmixedsolve(double[,] a, double[,] lua, int[] p, double[] b, out double[] x, out densesolverreport rep, xparams _params)
+    public static void rmatrixmixedsolve(double[,] a, double[,] lua, int[] p, double[] b, out double[] x, out densesolverreport rep,
+        xparams _params)
     {
         int n;
         if (ap.rows(a) != ap.cols(a)
@@ -1008,15 +1012,16 @@ public partial class alglib
       -- ALGLIB --
          Copyright 27.01.2010 by Bochkanov Sergey
     *************************************************************************/
-    public static void rmatrixmixedsolvem(double[,] a, double[,] lua, int[] p, int n, double[,] b, int m, out double[,] x, out densesolverreport rep)
+    public static void rmatrixmixedsolvem(double[,] a, double[,] lua, int[] p, int n, double[,] b, int m, out double[,] x,
+        out densesolverreport rep)
     {
         x = new double[0, 0];
         rep = new densesolverreport();
         directdensesolvers.rmatrixmixedsolvem(a, lua, p, n, b, m, ref x, rep.innerobj, null);
     }
 
-    public static void rmatrixmixedsolvem(double[,] a, double[,] lua, int[] p, int n, double[,] b, int m, out double[,] x, out densesolverreport rep,
-        xparams _params)
+    public static void rmatrixmixedsolvem(double[,] a, double[,] lua, int[] p, int n, double[,] b, int m, out double[,] x,
+        out densesolverreport rep, xparams _params)
     {
         x = new double[0, 0];
         rep = new densesolverreport();
@@ -1141,7 +1146,8 @@ public partial class alglib
         directdensesolvers.cmatrixsolvem(a, n, b, m, rfs, ref x, rep.innerobj, null);
     }
 
-    public static void cmatrixsolvem(complex[,] a, int n, complex[,] b, int m, bool rfs, out complex[,] x, out densesolverreport rep, xparams _params)
+    public static void cmatrixsolvem(complex[,] a, int n, complex[,] b, int m, bool rfs, out complex[,] x, out densesolverreport rep,
+        xparams _params)
     {
         x = new complex[0, 0];
         rep = new densesolverreport();
@@ -1710,7 +1716,8 @@ public partial class alglib
         directdensesolvers.cmatrixlusolve(lua, p, n, b, ref x, rep.innerobj, null);
     }
 
-    public static void cmatrixlusolve(complex[,] lua, int[] p, int n, complex[] b, out complex[] x, out densesolverreport rep, xparams _params)
+    public static void cmatrixlusolve(complex[,] lua, int[] p, int n, complex[] b, out complex[] x, out densesolverreport rep,
+        xparams _params)
     {
         x = new complex[0];
         rep = new densesolverreport();
@@ -1913,15 +1920,16 @@ public partial class alglib
       -- ALGLIB --
          Copyright 27.01.2010 by Bochkanov Sergey
     *************************************************************************/
-    public static void cmatrixmixedsolve(complex[,] a, complex[,] lua, int[] p, int n, complex[] b, out complex[] x, out densesolverreport rep)
+    public static void cmatrixmixedsolve(complex[,] a, complex[,] lua, int[] p, int n, complex[] b, out complex[] x,
+        out densesolverreport rep)
     {
         x = new complex[0];
         rep = new densesolverreport();
         directdensesolvers.cmatrixmixedsolve(a, lua, p, n, b, ref x, rep.innerobj, null);
     }
 
-    public static void cmatrixmixedsolve(complex[,] a, complex[,] lua, int[] p, int n, complex[] b, out complex[] x, out densesolverreport rep,
-        xparams _params)
+    public static void cmatrixmixedsolve(complex[,] a, complex[,] lua, int[] p, int n, complex[] b, out complex[] x,
+        out densesolverreport rep, xparams _params)
     {
         x = new complex[0];
         rep = new densesolverreport();
@@ -2245,7 +2253,8 @@ public partial class alglib
         directdensesolvers.spdmatrixsolve(a, n, isupper, b, ref x, rep.innerobj, null);
     }
 
-    public static void spdmatrixsolve(double[,] a, int n, bool isupper, double[] b, out double[] x, out densesolverreport rep, xparams _params)
+    public static void spdmatrixsolve(double[,] a, int n, bool isupper, double[] b, out double[] x, out densesolverreport rep,
+        xparams _params)
     {
         x = new double[0];
         rep = new densesolverreport();
@@ -2414,15 +2423,16 @@ public partial class alglib
       -- ALGLIB --
          Copyright 27.01.2010 by Bochkanov Sergey
     *************************************************************************/
-    public static void spdmatrixcholeskysolvem(double[,] cha, int n, bool isupper, double[,] b, int m, out double[,] x, out densesolverreport rep)
+    public static void spdmatrixcholeskysolvem(double[,] cha, int n, bool isupper, double[,] b, int m, out double[,] x,
+        out densesolverreport rep)
     {
         x = new double[0, 0];
         rep = new densesolverreport();
         directdensesolvers.spdmatrixcholeskysolvem(cha, n, isupper, b, m, ref x, rep.innerobj, null);
     }
 
-    public static void spdmatrixcholeskysolvem(double[,] cha, int n, bool isupper, double[,] b, int m, out double[,] x, out densesolverreport rep,
-        xparams _params)
+    public static void spdmatrixcholeskysolvem(double[,] cha, int n, bool isupper, double[,] b, int m, out double[,] x,
+        out densesolverreport rep, xparams _params)
     {
         x = new double[0, 0];
         rep = new densesolverreport();
@@ -2442,7 +2452,8 @@ public partial class alglib
         directdensesolvers.spdmatrixcholeskysolvem(cha, n, isupper, b, m, ref x, rep.innerobj, null);
     }
 
-    public static void spdmatrixcholeskysolvem(double[,] cha, bool isupper, double[,] b, out double[,] x, out densesolverreport rep, xparams _params)
+    public static void spdmatrixcholeskysolvem(double[,] cha, bool isupper, double[,] b, out double[,] x, out densesolverreport rep,
+        xparams _params)
     {
         int n;
         int m;
@@ -2601,7 +2612,8 @@ public partial class alglib
         directdensesolvers.spdmatrixcholeskysolve(cha, n, isupper, b, ref x, rep.innerobj, null);
     }
 
-    public static void spdmatrixcholeskysolve(double[,] cha, bool isupper, double[] b, out double[] x, out densesolverreport rep, xparams _params)
+    public static void spdmatrixcholeskysolve(double[,] cha, bool isupper, double[] b, out double[] x, out densesolverreport rep,
+        xparams _params)
     {
         int n;
         if (ap.rows(cha) != ap.cols(cha) || ap.rows(cha) != ap.len(b))
@@ -2771,7 +2783,8 @@ public partial class alglib
         directdensesolvers.hpdmatrixsolvem(a, n, isupper, b, m, ref x, rep.innerobj, null);
     }
 
-    public static void hpdmatrixsolvem(complex[,] a, bool isupper, complex[,] b, out complex[,] x, out densesolverreport rep, xparams _params)
+    public static void hpdmatrixsolvem(complex[,] a, bool isupper, complex[,] b, out complex[,] x, out densesolverreport rep,
+        xparams _params)
     {
         int n;
         int m;
@@ -2949,7 +2962,8 @@ public partial class alglib
         directdensesolvers.hpdmatrixsolve(a, n, isupper, b, ref x, rep.innerobj, null);
     }
 
-    public static void hpdmatrixsolve(complex[,] a, int n, bool isupper, complex[] b, out complex[] x, out densesolverreport rep, xparams _params)
+    public static void hpdmatrixsolve(complex[,] a, int n, bool isupper, complex[] b, out complex[] x, out densesolverreport rep,
+        xparams _params)
     {
         x = new complex[0];
         rep = new densesolverreport();
@@ -3119,15 +3133,16 @@ public partial class alglib
       -- ALGLIB --
          Copyright 27.01.2010 by Bochkanov Sergey
     *************************************************************************/
-    public static void hpdmatrixcholeskysolvem(complex[,] cha, int n, bool isupper, complex[,] b, int m, out complex[,] x, out densesolverreport rep)
+    public static void hpdmatrixcholeskysolvem(complex[,] cha, int n, bool isupper, complex[,] b, int m, out complex[,] x,
+        out densesolverreport rep)
     {
         x = new complex[0, 0];
         rep = new densesolverreport();
         directdensesolvers.hpdmatrixcholeskysolvem(cha, n, isupper, b, m, ref x, rep.innerobj, null);
     }
 
-    public static void hpdmatrixcholeskysolvem(complex[,] cha, int n, bool isupper, complex[,] b, int m, out complex[,] x, out densesolverreport rep,
-        xparams _params)
+    public static void hpdmatrixcholeskysolvem(complex[,] cha, int n, bool isupper, complex[,] b, int m, out complex[,] x,
+        out densesolverreport rep, xparams _params)
     {
         x = new complex[0, 0];
         rep = new densesolverreport();
@@ -3306,7 +3321,8 @@ public partial class alglib
         directdensesolvers.hpdmatrixcholeskysolve(cha, n, isupper, b, ref x, rep.innerobj, null);
     }
 
-    public static void hpdmatrixcholeskysolve(complex[,] cha, bool isupper, complex[] b, out complex[] x, out densesolverreport rep, xparams _params)
+    public static void hpdmatrixcholeskysolve(complex[,] cha, bool isupper, complex[] b, out complex[] x, out densesolverreport rep,
+        xparams _params)
     {
         int n;
         if (ap.rows(cha) != ap.cols(cha) || ap.rows(cha) != ap.len(b))
@@ -3448,15 +3464,16 @@ public partial class alglib
       -- ALGLIB --
          Copyright 24.08.2009 by Bochkanov Sergey
     *************************************************************************/
-    public static void rmatrixsolvels(double[,] a, int nrows, int ncols, double[] b, double threshold, out double[] x, out densesolverlsreport rep)
+    public static void rmatrixsolvels(double[,] a, int nrows, int ncols, double[] b, double threshold, out double[] x,
+        out densesolverlsreport rep)
     {
         x = new double[0];
         rep = new densesolverlsreport();
         directdensesolvers.rmatrixsolvels(a, nrows, ncols, b, threshold, ref x, rep.innerobj, null);
     }
 
-    public static void rmatrixsolvels(double[,] a, int nrows, int ncols, double[] b, double threshold, out double[] x, out densesolverlsreport rep,
-        xparams _params)
+    public static void rmatrixsolvels(double[,] a, int nrows, int ncols, double[] b, double threshold, out double[] x,
+        out densesolverlsreport rep, xparams _params)
     {
         x = new double[0];
         rep = new densesolverlsreport();
@@ -3476,7 +3493,8 @@ public partial class alglib
         directdensesolvers.rmatrixsolvels(a, nrows, ncols, b, threshold, ref x, rep.innerobj, null);
     }
 
-    public static void rmatrixsolvels(double[,] a, double[] b, double threshold, out double[] x, out densesolverlsreport rep, xparams _params)
+    public static void rmatrixsolvels(double[,] a, double[] b, double threshold, out double[] x, out densesolverlsreport rep,
+        xparams _params)
     {
         int nrows;
         int ncols;
@@ -3726,15 +3744,16 @@ public partial class alglib
       -- ALGLIB --
          Copyright 25.09.2021 by Bochkanov Sergey
     *************************************************************************/
-    public static void sparsesolvegmres(sparsematrix a, double[] b, int k, double epsf, int maxits, out double[] x, out sparsesolverreport rep)
+    public static void sparsesolvegmres(sparsematrix a, double[] b, int k, double epsf, int maxits, out double[] x,
+        out sparsesolverreport rep)
     {
         x = new double[0];
         rep = new sparsesolverreport();
         iterativesparse.sparsesolvegmres(a.innerobj, b, k, epsf, maxits, ref x, rep.innerobj, null);
     }
 
-    public static void sparsesolvegmres(sparsematrix a, double[] b, int k, double epsf, int maxits, out double[] x, out sparsesolverreport rep,
-        xparams _params)
+    public static void sparsesolvegmres(sparsematrix a, double[] b, int k, double epsf, int maxits, out double[] x,
+        out sparsesolverreport rep, xparams _params)
     {
         x = new double[0];
         rep = new sparsesolverreport();
@@ -5275,7 +5294,8 @@ public partial class alglib
         directsparsesolvers.sparsespdsolvesks(a.innerobj, isupper, b, ref x, rep.innerobj, null);
     }
 
-    public static void sparsespdsolvesks(sparsematrix a, bool isupper, double[] b, out double[] x, out sparsesolverreport rep, xparams _params)
+    public static void sparsespdsolvesks(sparsematrix a, bool isupper, double[] b, out double[] x, out sparsesolverreport rep,
+        xparams _params)
     {
         x = new double[0];
         rep = new sparsesolverreport();
@@ -5356,7 +5376,8 @@ public partial class alglib
         directsparsesolvers.sparsespdcholeskysolve(a.innerobj, isupper, b, ref x, rep.innerobj, null);
     }
 
-    public static void sparsespdcholeskysolve(sparsematrix a, bool isupper, double[] b, out double[] x, out sparsesolverreport rep, xparams _params)
+    public static void sparsespdcholeskysolve(sparsematrix a, bool isupper, double[] b, out double[] x, out sparsesolverreport rep,
+        xparams _params)
     {
         x = new double[0];
         rep = new sparsesolverreport();
@@ -5560,7 +5581,8 @@ public partial class alglib
         directsparsesolvers.sparselusolve(a.innerobj, p, q, b, ref x, rep.innerobj, null);
     }
 
-    public static void sparselusolve(sparsematrix a, int[] p, int[] q, double[] b, out double[] x, out sparsesolverreport rep, xparams _params)
+    public static void sparselusolve(sparsematrix a, int[] p, int[] q, double[] b, out double[] x, out sparsesolverreport rep,
+        xparams _params)
     {
         x = new double[0];
         rep = new sparsesolverreport();
@@ -5787,7 +5809,8 @@ public partial class alglib
         nleqsolve(state, func, jac, rep, obj, null);
     }
 
-    public static void nleqsolve(nleqstate state, ndimensional_func func, ndimensional_jac jac, ndimensional_rep rep, object obj, xparams _params)
+    public static void nleqsolve(nleqstate state, ndimensional_func func, ndimensional_jac jac, ndimensional_rep rep, object obj,
+        xparams _params)
     {
         if (func == null)
             throw new alglibexception("ALGLIB: error in 'nleqsolve()' (func is null)");
@@ -6439,7 +6462,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 27.01.2010 by Bochkanov Sergey
         *************************************************************************/
-        public static void rmatrixsolvem(double[,] a, int n, double[,] b, int m, bool rfs, ref double[,] x, densesolverreport rep, xparams _params)
+        public static void rmatrixsolvem(double[,] a, int n, double[,] b, int m, bool rfs, ref double[,] x, densesolverreport rep,
+            xparams _params)
         {
             var da = new double[0, 0];
             var emptya = new double[0, 0];
@@ -6574,14 +6598,12 @@ public partial class alglib
             //
             for (i = 0; i <= n - 1; i++)
                 if (p[i] != i)
-                {
                     for (j = 0; j <= m - 1; j++)
                     {
                         v = b[i, j];
                         b[i, j] = b[p[i], j];
                         b[p[i], j] = v;
                     }
-                }
 
             ablas.rmatrixlefttrsm(n, m, a, 0, 0, false, true, 0, b, 0, 0, _params);
             ablas.rmatrixlefttrsm(n, m, a, 0, 0, true, false, 0, b, 0, 0, _params);
@@ -6655,7 +6677,8 @@ public partial class alglib
             ap.assert(ap.len(b) >= n, "RMatrixLUSolve: length(B)<N");
             ap.assert(apserv.apservisfinitematrix(lua, n, n, _params), "RMatrixLUSolve: LUA contains infinite or NaN values!");
             ap.assert(apserv.isfinitevector(b, n, _params), "RMatrixLUSolve: B contains infinite or NaN values!");
-            for (i = 0; i <= n - 1; i++) ap.assert(p[i] >= 0 && p[i] < n, "RMatrixLUSolve: P contains values outside of [0,N)");
+            for (i = 0; i <= n - 1; i++)
+                ap.assert(p[i] >= 0 && p[i] < n, "RMatrixLUSolve: P contains values outside of [0,N)");
 
             bm = new double[n, 1];
             ablasf.rcopyvc(n, b, bm, 0, _params);
@@ -6709,7 +6732,8 @@ public partial class alglib
             ap.assert(ap.len(b) >= n, "RMatrixLUSolveFast: length(B)<N");
             ap.assert(apserv.apservisfinitematrix(lua, n, n, _params), "RMatrixLUSolveFast: LUA contains infinite or NaN values!");
             ap.assert(apserv.isfinitevector(b, n, _params), "RMatrixLUSolveFast: B contains infinite or NaN values!");
-            for (i = 0; i <= n - 1; i++) ap.assert(p[i] >= 0 && p[i] < n, "RMatrixLUSolve: P contains values outside of [0,N)");
+            for (i = 0; i <= n - 1; i++)
+                ap.assert(p[i] >= 0 && p[i] < n, "RMatrixLUSolve: P contains values outside of [0,N)");
 
             for (i = 0; i <= n - 1; i++)
                 if (lua[i, i] == 0)
@@ -6802,7 +6826,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 27.01.2010 by Bochkanov Sergey
         *************************************************************************/
-        public static void rmatrixlusolvem(double[,] lua, int[] p, int n, double[,] b, int m, ref double[,] x, densesolverreport rep, xparams _params)
+        public static void rmatrixlusolvem(double[,] lua, int[] p, int n, double[,] b, int m, ref double[,] x, densesolverreport rep,
+            xparams _params)
         {
             var emptya = new double[0, 0];
             var i = 0;
@@ -6818,7 +6843,8 @@ public partial class alglib
             ap.assert(ap.cols(b) >= m, "RMatrixLUSolveM: cols(B)<M");
             ap.assert(apserv.apservisfinitematrix(lua, n, n, _params), "RMatrixLUSolveM: LUA contains infinite or NaN values!");
             ap.assert(apserv.apservisfinitematrix(b, n, m, _params), "RMatrixLUSolveM: LUA contains infinite or NaN values!");
-            for (i = 0; i <= n - 1; i++) ap.assert(p[i] >= 0 && p[i] < n, "RMatrixLUSolve: P contains values outside of [0,N)");
+            for (i = 0; i <= n - 1; i++)
+                ap.assert(p[i] >= 0 && p[i] < n, "RMatrixLUSolve: P contains values outside of [0,N)");
 
             rmatrixlusolveinternal(lua, p, n, emptya, false, b, m, ref x, rep, _params);
         }
@@ -6901,7 +6927,8 @@ public partial class alglib
             ap.assert(ap.cols(b) >= m, "RMatrixLUSolveMFast: cols(B)<M");
             ap.assert(apserv.apservisfinitematrix(lua, n, n, _params), "RMatrixLUSolveMFast: LUA contains infinite or NaN values!");
             ap.assert(apserv.apservisfinitematrix(b, n, m, _params), "RMatrixLUSolveMFast: LUA contains infinite or NaN values!");
-            for (i = 0; i <= n - 1; i++) ap.assert(p[i] >= 0 && p[i] < n, "RMatrixLUSolve: P contains values outside of [0,N)");
+            for (i = 0; i <= n - 1; i++)
+                ap.assert(p[i] >= 0 && p[i] < n, "RMatrixLUSolve: P contains values outside of [0,N)");
 
             for (i = 0; i <= n - 1; i++)
                 if (lua[i, i] == 0)
@@ -6921,14 +6948,12 @@ public partial class alglib
             //
             for (i = 0; i <= n - 1; i++)
                 if (p[i] != i)
-                {
                     for (j = 0; j <= m - 1; j++)
                     {
                         v = b[i, j];
                         b[i, j] = b[p[i], j];
                         b[p[i], j] = v;
                     }
-                }
 
             ablas.rmatrixlefttrsm(n, m, lua, 0, 0, false, true, 0, b, 0, 0, _params);
             ablas.rmatrixlefttrsm(n, m, lua, 0, 0, true, false, 0, b, 0, 0, _params);
@@ -6988,7 +7013,8 @@ public partial class alglib
             ap.assert(apserv.apservisfinitematrix(a, n, n, _params), "RMatrixMixedSolve: A contains infinite or NaN values!");
             ap.assert(apserv.apservisfinitematrix(lua, n, n, _params), "RMatrixMixedSolve: LUA contains infinite or NaN values!");
             ap.assert(apserv.isfinitevector(b, n, _params), "RMatrixMixedSolve: B contains infinite or NaN values!");
-            for (i = 0; i <= n - 1; i++) ap.assert(p[i] >= 0 && p[i] < n, "RMatrixLUSolve: P contains values outside of [0,N)");
+            for (i = 0; i <= n - 1; i++)
+                ap.assert(p[i] >= 0 && p[i] < n, "RMatrixLUSolve: P contains values outside of [0,N)");
 
             bm = new double[n, 1];
             ablasf.rcopyvc(n, b, bm, 0, _params);
@@ -7031,8 +7057,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 27.01.2010 by Bochkanov Sergey
         *************************************************************************/
-        public static void rmatrixmixedsolvem(double[,] a, double[,] lua, int[] p, int n, double[,] b, int m, ref double[,] x, densesolverreport rep,
-            xparams _params)
+        public static void rmatrixmixedsolvem(double[,] a, double[,] lua, int[] p, int n, double[,] b, int m, ref double[,] x,
+            densesolverreport rep, xparams _params)
         {
             var i = 0;
 
@@ -7050,7 +7076,8 @@ public partial class alglib
             ap.assert(apserv.apservisfinitematrix(a, n, n, _params), "RMatrixMixedSolve: A contains infinite or NaN values!");
             ap.assert(apserv.apservisfinitematrix(lua, n, n, _params), "RMatrixMixedSolve: LUA contains infinite or NaN values!");
             ap.assert(apserv.apservisfinitematrix(b, n, m, _params), "RMatrixMixedSolve: B contains infinite or NaN values!");
-            for (i = 0; i <= n - 1; i++) ap.assert(p[i] >= 0 && p[i] < n, "RMatrixLUSolve: P contains values outside of [0,N)");
+            for (i = 0; i <= n - 1; i++)
+                ap.assert(p[i] >= 0 && p[i] < n, "RMatrixLUSolve: P contains values outside of [0,N)");
 
             rmatrixlusolveinternal(lua, p, n, a, true, b, m, ref x, rep, _params);
         }
@@ -7132,7 +7159,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 27.01.2010 by Bochkanov Sergey
         *************************************************************************/
-        public static void cmatrixsolvem(complex[,] a, int n, complex[,] b, int m, bool rfs, ref complex[,] x, densesolverreport rep, xparams _params)
+        public static void cmatrixsolvem(complex[,] a, int n, complex[,] b, int m, bool rfs, ref complex[,] x, densesolverreport rep,
+            xparams _params)
         {
             var da = new complex[0, 0];
             var emptya = new complex[0, 0];
@@ -7261,14 +7289,12 @@ public partial class alglib
             //
             for (i = 0; i <= n - 1; i++)
                 if (p[i] != i)
-                {
                     for (j = 0; j <= m - 1; j++)
                     {
                         v = b[i, j];
                         b[i, j] = b[p[i], j];
                         b[p[i], j] = v;
                     }
-                }
 
             ablas.cmatrixlefttrsm(n, m, a, 0, 0, false, true, 0, b, 0, 0, _params);
             ablas.cmatrixlefttrsm(n, m, a, 0, 0, true, false, 0, b, 0, 0, _params);
@@ -7536,7 +7562,8 @@ public partial class alglib
             ap.assert(ap.cols(b) >= m, "CMatrixLUSolveM: cols(B)<M");
             ap.assert(apserv.isfinitecmatrix(lua, n, n, _params), "CMatrixLUSolveM: LUA contains infinite or NaN values!");
             ap.assert(apserv.isfinitecmatrix(b, n, m, _params), "CMatrixLUSolveM: LUA contains infinite or NaN values!");
-            for (i = 0; i <= n - 1; i++) ap.assert(p[i] >= 0 && p[i] < n, "CMatrixLUSolveM: P contains values outside of [0,N)");
+            for (i = 0; i <= n - 1; i++)
+                ap.assert(p[i] >= 0 && p[i] < n, "CMatrixLUSolveM: P contains values outside of [0,N)");
 
             cmatrixlusolveinternal(lua, p, n, emptya, false, b, m, ref x, rep, _params);
         }
@@ -7611,7 +7638,8 @@ public partial class alglib
             ap.assert(ap.cols(b) >= m, "CMatrixLUSolveMFast: cols(B)<M");
             ap.assert(apserv.isfinitecmatrix(lua, n, n, _params), "CMatrixLUSolveMFast: LUA contains infinite or NaN values!");
             ap.assert(apserv.isfinitecmatrix(b, n, m, _params), "CMatrixLUSolveMFast: LUA contains infinite or NaN values!");
-            for (i = 0; i <= n - 1; i++) ap.assert(p[i] >= 0 && p[i] < n, "RMatrixLUSolve: P contains values outside of [0,N)");
+            for (i = 0; i <= n - 1; i++)
+                ap.assert(p[i] >= 0 && p[i] < n, "RMatrixLUSolve: P contains values outside of [0,N)");
 
             //
             // Check for exact degeneracy
@@ -7634,14 +7662,12 @@ public partial class alglib
             //
             for (i = 0; i <= n - 1; i++)
                 if (p[i] != i)
-                {
                     for (j = 0; j <= m - 1; j++)
                     {
                         v = b[i, j];
                         b[i, j] = b[p[i], j];
                         b[p[i], j] = v;
                     }
-                }
 
             ablas.cmatrixlefttrsm(n, m, lua, 0, 0, false, true, 0, b, 0, 0, _params);
             ablas.cmatrixlefttrsm(n, m, lua, 0, 0, true, false, 0, b, 0, 0, _params);
@@ -7698,7 +7724,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 27.01.2010 by Bochkanov Sergey
         *************************************************************************/
-        public static void cmatrixlusolve(complex[,] lua, int[] p, int n, complex[] b, ref complex[] x, densesolverreport rep, xparams _params)
+        public static void cmatrixlusolve(complex[,] lua, int[] p, int n, complex[] b, ref complex[] x, densesolverreport rep,
+            xparams _params)
         {
             var bm = new complex[0, 0];
             var xm = new complex[0, 0];
@@ -7714,7 +7741,8 @@ public partial class alglib
             ap.assert(ap.len(b) >= n, "CMatrixLUSolve: length(B)<N");
             ap.assert(apserv.isfinitecmatrix(lua, n, n, _params), "CMatrixLUSolve: LUA contains infinite or NaN values!");
             ap.assert(apserv.isfinitecvector(b, n, _params), "CMatrixLUSolve: B contains infinite or NaN values!");
-            for (i = 0; i <= n - 1; i++) ap.assert(p[i] >= 0 && p[i] < n, "CMatrixLUSolve: P contains values outside of [0,N)");
+            for (i = 0; i <= n - 1; i++)
+                ap.assert(p[i] >= 0 && p[i] < n, "CMatrixLUSolve: P contains values outside of [0,N)");
 
             bm = new complex[n, 1];
             for (i_ = 0; i_ <= n - 1; i_++) bm[i_, 0] = b[i_];
@@ -7768,7 +7796,8 @@ public partial class alglib
             ap.assert(ap.len(b) >= n, "CMatrixLUSolveFast: length(B)<N");
             ap.assert(apserv.isfinitecmatrix(lua, n, n, _params), "CMatrixLUSolveFast: LUA contains infinite or NaN values!");
             ap.assert(apserv.isfinitecvector(b, n, _params), "CMatrixLUSolveFast: B contains infinite or NaN values!");
-            for (i = 0; i <= n - 1; i++) ap.assert(p[i] >= 0 && p[i] < n, "CMatrixLUSolveFast: P contains values outside of [0,N)");
+            for (i = 0; i <= n - 1; i++)
+                ap.assert(p[i] >= 0 && p[i] < n, "CMatrixLUSolveFast: P contains values outside of [0,N)");
 
             for (i = 0; i <= n - 1; i++)
                 if (lua[i, i] == 0)
@@ -7834,7 +7863,8 @@ public partial class alglib
             ap.assert(apserv.isfinitecmatrix(a, n, n, _params), "CMatrixMixedSolveM: A contains infinite or NaN values!");
             ap.assert(apserv.isfinitecmatrix(lua, n, n, _params), "CMatrixMixedSolveM: LUA contains infinite or NaN values!");
             ap.assert(apserv.isfinitecmatrix(b, n, m, _params), "CMatrixMixedSolveM: B contains infinite or NaN values!");
-            for (i = 0; i <= n - 1; i++) ap.assert(p[i] >= 0 && p[i] < n, "CMatrixMixedSolveM: P contains values outside of [0,N)");
+            for (i = 0; i <= n - 1; i++)
+                ap.assert(p[i] >= 0 && p[i] < n, "CMatrixMixedSolveM: P contains values outside of [0,N)");
 
             cmatrixlusolveinternal(lua, p, n, a, true, b, m, ref x, rep, _params);
         }
@@ -7869,8 +7899,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 27.01.2010 by Bochkanov Sergey
         *************************************************************************/
-        public static void cmatrixmixedsolve(complex[,] a, complex[,] lua, int[] p, int n, complex[] b, ref complex[] x, densesolverreport rep,
-            xparams _params)
+        public static void cmatrixmixedsolve(complex[,] a, complex[,] lua, int[] p, int n, complex[] b, ref complex[] x,
+            densesolverreport rep, xparams _params)
         {
             var bm = new complex[0, 0];
             var xm = new complex[0, 0];
@@ -7889,7 +7919,8 @@ public partial class alglib
             ap.assert(apserv.isfinitecmatrix(a, n, n, _params), "CMatrixMixedSolve: A contains infinite or NaN values!");
             ap.assert(apserv.isfinitecmatrix(lua, n, n, _params), "CMatrixMixedSolve: LUA contains infinite or NaN values!");
             ap.assert(apserv.isfinitecvector(b, n, _params), "CMatrixMixedSolve: B contains infinite or NaN values!");
-            for (i = 0; i <= n - 1; i++) ap.assert(p[i] >= 0 && p[i] < n, "CMatrixMixedSolve: P contains values outside of [0,N)");
+            for (i = 0; i <= n - 1; i++)
+                ap.assert(p[i] >= 0 && p[i] < n, "CMatrixMixedSolve: P contains values outside of [0,N)");
 
             bm = new complex[n, 1];
             for (i_ = 0; i_ <= n - 1; i_++) bm[i_, 0] = b[i_];
@@ -8201,7 +8232,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 27.01.2010 by Bochkanov Sergey
         *************************************************************************/
-        public static void spdmatrixsolve(double[,] a, int n, bool isupper, double[] b, ref double[] x, densesolverreport rep, xparams _params)
+        public static void spdmatrixsolve(double[,] a, int n, bool isupper, double[] b, ref double[] x, densesolverreport rep,
+            xparams _params)
         {
             var bm = new double[0, 0];
             var xm = new double[0, 0];
@@ -8357,8 +8389,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 27.01.2010 by Bochkanov Sergey
         *************************************************************************/
-        public static void spdmatrixcholeskysolvem(double[,] cha, int n, bool isupper, double[,] b, int m, ref double[,] x, densesolverreport rep,
-            xparams _params)
+        public static void spdmatrixcholeskysolvem(double[,] cha, int n, bool isupper, double[,] b, int m, ref double[,] x,
+            densesolverreport rep, xparams _params)
         {
             var emptya = new double[0, 0];
 
@@ -8420,7 +8452,10 @@ public partial class alglib
             ap.assert(ap.cols(cha) >= n, "SPDMatrixCholeskySolveMFast: cols(CHA)<N");
             ap.assert(ap.rows(b) >= n, "SPDMatrixCholeskySolveMFast: rows(B)<N");
             ap.assert(ap.cols(b) >= m, "SPDMatrixCholeskySolveMFast: cols(B)<M");
-            ap.assert(apserv.isfinitertrmatrix(cha, n, isupper, _params), "SPDMatrixCholeskySolveMFast: LUA contains infinite or NaN values!");
+            ap.assert(
+                apserv.isfinitertrmatrix(cha, n, isupper, _params),
+                "SPDMatrixCholeskySolveMFast: LUA contains infinite or NaN values!"
+            );
             ap.assert(apserv.apservisfinitematrix(b, n, m, _params), "SPDMatrixCholeskySolveMFast: LUA contains infinite or NaN values!");
             result = true;
             for (k = 0; k <= n - 1; k++)
@@ -8563,7 +8598,10 @@ public partial class alglib
             ap.assert(ap.rows(cha) >= n, "SPDMatrixCholeskySolveFast: rows(CHA)<N");
             ap.assert(ap.cols(cha) >= n, "SPDMatrixCholeskySolveFast: cols(CHA)<N");
             ap.assert(ap.len(b) >= n, "SPDMatrixCholeskySolveFast: length(B)<N");
-            ap.assert(apserv.isfinitertrmatrix(cha, n, isupper, _params), "SPDMatrixCholeskySolveFast: LUA contains infinite or NaN values!");
+            ap.assert(
+                apserv.isfinitertrmatrix(cha, n, isupper, _params),
+                "SPDMatrixCholeskySolveFast: LUA contains infinite or NaN values!"
+            );
             ap.assert(apserv.isfinitevector(b, n, _params), "SPDMatrixCholeskySolveFast: B contains infinite or NaN values!");
             result = true;
             for (k = 0; k <= n - 1; k++)
@@ -8868,7 +8906,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 27.01.2010 by Bochkanov Sergey
         *************************************************************************/
-        public static void hpdmatrixsolve(complex[,] a, int n, bool isupper, complex[] b, ref complex[] x, densesolverreport rep, xparams _params)
+        public static void hpdmatrixsolve(complex[,] a, int n, bool isupper, complex[] b, ref complex[] x, densesolverreport rep,
+            xparams _params)
         {
             var bm = new complex[0, 0];
             var xm = new complex[0, 0];
@@ -9025,8 +9064,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 27.01.2010 by Bochkanov Sergey
         *************************************************************************/
-        public static void hpdmatrixcholeskysolvem(complex[,] cha, int n, bool isupper, complex[,] b, int m, ref complex[,] x, densesolverreport rep,
-            xparams _params)
+        public static void hpdmatrixcholeskysolvem(complex[,] cha, int n, bool isupper, complex[,] b, int m, ref complex[,] x,
+            densesolverreport rep, xparams _params)
         {
             var emptya = new complex[0, 0];
 
@@ -9087,7 +9126,10 @@ public partial class alglib
             ap.assert(ap.cols(cha) >= n, "HPDMatrixCholeskySolveMFast: cols(CHA)<N");
             ap.assert(ap.rows(b) >= n, "HPDMatrixCholeskySolveMFast: rows(B)<N");
             ap.assert(ap.cols(b) >= m, "HPDMatrixCholeskySolveMFast: cols(B)<M");
-            ap.assert(apserv.isfinitectrmatrix(cha, n, isupper, _params), "HPDMatrixCholeskySolveMFast: LUA contains infinite or NaN values!");
+            ap.assert(
+                apserv.isfinitectrmatrix(cha, n, isupper, _params),
+                "HPDMatrixCholeskySolveMFast: LUA contains infinite or NaN values!"
+            );
             ap.assert(apserv.isfinitecmatrix(b, n, m, _params), "HPDMatrixCholeskySolveMFast: LUA contains infinite or NaN values!");
             result = true;
             for (k = 0; k <= n - 1; k++)
@@ -9230,7 +9272,10 @@ public partial class alglib
             ap.assert(ap.rows(cha) >= n, "HPDMatrixCholeskySolveFast: rows(CHA)<N");
             ap.assert(ap.cols(cha) >= n, "HPDMatrixCholeskySolveFast: cols(CHA)<N");
             ap.assert(ap.len(b) >= n, "HPDMatrixCholeskySolveFast: length(B)<N");
-            ap.assert(apserv.isfinitectrmatrix(cha, n, isupper, _params), "HPDMatrixCholeskySolveFast: LUA contains infinite or NaN values!");
+            ap.assert(
+                apserv.isfinitectrmatrix(cha, n, isupper, _params),
+                "HPDMatrixCholeskySolveFast: LUA contains infinite or NaN values!"
+            );
             ap.assert(apserv.isfinitecvector(b, n, _params), "HPDMatrixCholeskySolveFast: B contains infinite or NaN values!");
             result = true;
             for (k = 0; k <= n - 1; k++)
@@ -9315,8 +9360,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 24.08.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void rmatrixsolvels(double[,] a, int nrows, int ncols, double[] b, double threshold, ref double[] x, densesolverlsreport rep,
-            xparams _params)
+        public static void rmatrixsolvels(double[,] a, int nrows, int ncols, double[] b, double threshold, ref double[] x,
+            densesolverlsreport rep, xparams _params)
         {
             var sv = new double[0];
             var u = new double[0, 0];
@@ -9434,8 +9479,10 @@ public partial class alglib
                 // calculate right part
                 //
                 if (rfs == 0)
+                {
                     for (i_ = 0; i_ <= nrows - 1; i_++)
                         rp[i_] = b[i_];
+                }
                 else
                 {
                     smallerr = true;
@@ -9505,8 +9552,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 27.01.2010 by Bochkanov Sergey
         *************************************************************************/
-        private static void rmatrixlusolveinternal(double[,] lua, int[] p, int n, double[,] a, bool havea, double[,] b, int m, ref double[,] x,
-            densesolverreport rep, xparams _params)
+        private static void rmatrixlusolveinternal(double[,] lua, int[] p, int n, double[,] a, bool havea, double[,] b, int m,
+            ref double[,] x, densesolverreport rep, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -9533,7 +9580,8 @@ public partial class alglib
             // prepare: check inputs, allocate space...
             //
             ap.assert(n > 0 && m > 0, "RMatrixLUSolveInternal: integrity check 7656 failed");
-            for (i = 0; i <= n - 1; i++) ap.assert(p[i] <= n - 1 && p[i] >= i, "RMatrixLUSolveInternal: incorrect pivot, P[i]<i or P[i]>=N");
+            for (i = 0; i <= n - 1; i++)
+                ap.assert(p[i] <= n - 1 && p[i] >= i, "RMatrixLUSolveInternal: incorrect pivot, P[i]<i or P[i]>=N");
 
             x = new double[n, m];
             y = new double[n];
@@ -9575,14 +9623,12 @@ public partial class alglib
 
             for (i = 0; i <= n - 1; i++)
                 if (p[i] != i)
-                {
                     for (j = 0; j <= m - 1; j++)
                     {
                         v = x[i, j];
                         x[i, j] = x[p[i], j];
                         x[p[i], j] = v;
                     }
-                }
 
             ablas.rmatrixlefttrsm(n, m, lua, 0, 0, false, true, 0, x, 0, 0, _params);
             ablas.rmatrixlefttrsm(n, m, lua, 0, 0, true, false, 0, x, 0, 0, _params);
@@ -9591,7 +9637,6 @@ public partial class alglib
             // Second stage: iterative refinement
             //
             if (havea)
-            {
                 for (k = 0; k <= m - 1; k++)
                 {
                     nrfs = densesolverrfsmax(n, rep.r1, rep.rinf, _params);
@@ -9626,7 +9671,6 @@ public partial class alglib
                         for (i_ = 0; i_ <= n - 1; i_++) x[i_, k] = x[i_, k] + y[i_];
                     }
                 }
-            }
         }
 
 
@@ -9695,8 +9739,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 27.01.2010 by Bochkanov Sergey
         *************************************************************************/
-        private static void cmatrixlusolveinternal(complex[,] lua, int[] p, int n, complex[,] a, bool havea, complex[,] b, int m, ref complex[,] x,
-            densesolverreport rep, xparams _params)
+        private static void cmatrixlusolveinternal(complex[,] lua, int[] p, int n, complex[,] a, bool havea, complex[,] b, int m,
+            ref complex[,] x, densesolverreport rep, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -9723,7 +9767,8 @@ public partial class alglib
             // prepare: check inputs, allocate space...
             //
             ap.assert(n > 0 && m > 0, "CMatrixLUSolveInternal: integrity check 9302 failed");
-            for (i = 0; i <= n - 1; i++) ap.assert(p[i] <= n - 1 && p[i] >= i, "CMatrixLUSolveInternal: incorrect pivot P[i]<i or P[I]>=N");
+            for (i = 0; i <= n - 1; i++)
+                ap.assert(p[i] <= n - 1 && p[i] >= i, "CMatrixLUSolveInternal: incorrect pivot P[i]<i or P[I]>=N");
 
             x = new complex[n, m];
             y = new complex[n];
@@ -9761,14 +9806,12 @@ public partial class alglib
 
             for (i = 0; i <= n - 1; i++)
                 if (p[i] != i)
-                {
                     for (j = 0; j <= m - 1; j++)
                     {
                         v = x[i, j];
                         x[i, j] = x[p[i], j];
                         x[p[i], j] = v;
                     }
-                }
 
             ablas.cmatrixlefttrsm(n, m, lua, 0, 0, false, true, 0, x, 0, 0, _params);
             ablas.cmatrixlefttrsm(n, m, lua, 0, 0, true, false, 0, x, 0, 0, _params);
@@ -9842,8 +9885,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 27.01.2010 by Bochkanov Sergey
         *************************************************************************/
-        private static void hpdmatrixcholeskysolveinternal(complex[,] cha, int n, bool isupper, complex[,] a, bool havea, complex[,] b, int m,
-            ref complex[,] x, densesolverreport rep, xparams _params)
+        private static void hpdmatrixcholeskysolveinternal(complex[,] cha, int n, bool isupper, complex[,] a, bool havea, complex[,] b,
+            int m, ref complex[,] x, densesolverreport rep, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -10314,8 +10357,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 25.09.2021 by Bochkanov Sergey
         *************************************************************************/
-        public static void sparsesolvesymmetricgmres(sparse.sparsematrix a, bool isupper, double[] b, int k, double epsf, int maxits, ref double[] x,
-            sparsesolverreport rep, xparams _params)
+        public static void sparsesolvesymmetricgmres(sparse.sparsematrix a, bool isupper, double[] b, int k, double epsf, int maxits,
+            ref double[] x, sparsesolverreport rep, xparams _params)
         {
             var n = 0;
             var convbuf = new sparse.sparsematrix();
@@ -10407,8 +10450,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 25.09.2021 by Bochkanov Sergey
         *************************************************************************/
-        public static void sparsesolvegmres(sparse.sparsematrix a, double[] b, int k, double epsf, int maxits, ref double[] x, sparsesolverreport rep,
-            xparams _params)
+        public static void sparsesolvegmres(sparse.sparsematrix a, double[] b, int k, double epsf, int maxits, ref double[] x,
+            sparsesolverreport rep, xparams _params)
         {
             var n = 0;
             var convbuf = new sparse.sparsematrix();
@@ -10658,7 +10701,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 25.09.2021 by Bochkanov Sergey
         *************************************************************************/
-        public static void sparsesolversolvesymmetric(sparsesolverstate state, sparse.sparsematrix a, bool isupper, double[] b, xparams _params)
+        public static void sparsesolversolvesymmetric(sparsesolverstate state, sparse.sparsematrix a, bool isupper, double[] b,
+            xparams _params)
         {
             var n = 0;
 
@@ -10689,12 +10733,10 @@ public partial class alglib
             while (sparsesolverooccontinue(state, _params))
             {
                 if (state.requesttype == -1)
-                {
                     //
                     // Skip location reports
                     //
                     continue;
-                }
 
                 ap.assert(state.requesttype == 0, "SparseSolverSolveSymmetric: integrity check 7372 failed");
                 sparse.sparsesmv(a, isupper, state.x, ref state.ax, _params);
@@ -10760,12 +10802,10 @@ public partial class alglib
             while (sparsesolverooccontinue(state, _params))
             {
                 if (state.requesttype == -1)
-                {
                     //
                     // Skip location reports
                     //
                     continue;
-                }
 
                 ap.assert(state.requesttype == 0, "SparseSolverSolve: integrity check 7372 failed");
                 sparse.sparsemv(a, state.x, ref state.ax, _params);
@@ -11610,7 +11650,10 @@ public partial class alglib
         {
             var i_ = 0;
 
-            ap.assert(!state.running, "LinCGSetStartingPoint: you can not change starting point because LinCGIteration() function is running");
+            ap.assert(
+                !state.running,
+                "LinCGSetStartingPoint: you can not change starting point because LinCGIteration() function is running"
+            );
             ap.assert(state.n <= ap.len(x), "LinCGSetStartingPoint: Length(X)<N");
             ap.assert(apserv.isfinitevector(x, state.n, _params), "LinCGSetStartingPoint: X contains infinite or NaN values!");
             for (i_ = 0; i_ <= state.n - 1; i_++) state.startx[i_] = x[i_];
@@ -12104,8 +12147,10 @@ public partial class alglib
                 for (i = 0; i <= state.n - 1; i++) state.p[i] = state.cz[i] + state.beta * state.p[i];
             }
             else
+            {
                 for (i_ = 0; i_ <= state.n - 1; i_++)
                     state.p[i_] = state.cz[i_];
+            }
 
             //
             //prepere data for next iteration
@@ -12185,7 +12230,6 @@ public partial class alglib
             // Compute diagonal scaling matrix D
             //
             if (state.prectype == 0)
-            {
                 //
                 // Default preconditioner - inverse of matrix diagonal
                 //
@@ -12197,14 +12241,12 @@ public partial class alglib
                     else
                         state.tmpd[i] = 1;
                 }
-            }
             else
-            {
                 //
                 // No diagonal scaling
                 //
-                for (i = 0; i <= n - 1; i++) state.tmpd[i] = 1;
-            }
+                for (i = 0; i <= n - 1; i++)
+                    state.tmpd[i] = 1;
 
             //
             // Solve
@@ -12663,7 +12705,10 @@ public partial class alglib
         *************************************************************************/
         public static void linlsqrsetprecunit(linlsqrstate state, xparams _params)
         {
-            ap.assert(!state.running, "LinLSQRSetPrecUnit: you can not change preconditioner, because function LinLSQRIteration is running!");
+            ap.assert(
+                !state.running,
+                "LinLSQRSetPrecUnit: you can not change preconditioner, because function LinLSQRIteration is running!"
+            );
             state.prectype = -1;
         }
 
@@ -13104,7 +13149,8 @@ public partial class alglib
             //
             // Update omega
             //
-            for (i = 0; i <= state.n - 1; i++) state.omegaip1[i] = state.vip1[i] - state.theta / state.rhoi * state.omegai[i];
+            for (i = 0; i <= state.n - 1; i++)
+                state.omegaip1[i] = state.vip1[i] - state.theta / state.rhoi * state.omegai[i];
 
             //
             // Prepare for the next iteration - rename variables:
@@ -13195,7 +13241,8 @@ public partial class alglib
 
                 t0 = 0;
                 t1 = 0;
-                while (sparse.sparseenumerate(a, ref t0, ref t1, ref i, ref j, ref v, _params)) state.tmpd[j] = state.tmpd[j] + math.sqr(v);
+                while (sparse.sparseenumerate(a, ref t0, ref t1, ref i, ref j, ref v, _params))
+                    state.tmpd[j] = state.tmpd[j] + math.sqr(v);
 
                 for (i = 0; i <= n - 1; i++)
                     if (state.tmpd[i] > 0)
@@ -13633,8 +13680,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 26.12.2017 by Bochkanov Sergey
         *************************************************************************/
-        public static void sparsespdsolvesks(sparse.sparsematrix a, bool isupper, double[] b, ref double[] x, iterativesparse.sparsesolverreport rep,
-            xparams _params)
+        public static void sparsespdsolvesks(sparse.sparsematrix a, bool isupper, double[] b, ref double[] x,
+            iterativesparse.sparsesolverreport rep, xparams _params)
         {
             var i = 0;
             var a2 = new sparse.sparsematrix();
@@ -13704,8 +13751,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 26.12.2017 by Bochkanov Sergey
         *************************************************************************/
-        public static void sparsespdsolve(sparse.sparsematrix a, bool isupper, double[] b, ref double[] x, iterativesparse.sparsesolverreport rep,
-            xparams _params)
+        public static void sparsespdsolve(sparse.sparsematrix a, bool isupper, double[] b, ref double[] x,
+            iterativesparse.sparsesolverreport rep, xparams _params)
         {
             var a2 = new sparse.sparsematrix();
             var a3 = new sparse.sparsematrix();
@@ -13742,7 +13789,9 @@ public partial class alglib
                     flg = spchol.spsymmanalyze(a3, idummy, 0.0, 0, 0, 0, donotreusemem, analysis, _params);
                 }
                 else
+                {
                     flg = spchol.spsymmanalyze(a2, idummy, 0.0, 0, 0, 0, donotreusemem, analysis, _params);
+                }
             }
             else
             {
@@ -13755,7 +13804,9 @@ public partial class alglib
                     flg = spchol.spsymmanalyze(a2, idummy, 0.0, 0, 0, 0, donotreusemem, analysis, _params);
                 }
                 else
+                {
                     flg = spchol.spsymmanalyze(a, idummy, 0.0, 0, 0, 0, donotreusemem, analysis, _params);
+                }
             }
 
             if (!flg)
@@ -13821,7 +13872,10 @@ public partial class alglib
             ap.assert(n > 0, "SparseSPDCholeskySolve: N<=0");
             ap.assert(sparse.sparsegetnrows(a, _params) == n, "SparseSPDCholeskySolve: rows(A)!=N");
             ap.assert(sparse.sparsegetncols(a, _params) == n, "SparseSPDCholeskySolve: cols(A)!=N");
-            ap.assert(sparse.sparseissks(a, _params) || sparse.sparseiscrs(a, _params), "SparseSPDCholeskySolve: A is not an SKS/CRS matrix");
+            ap.assert(
+                sparse.sparseissks(a, _params) || sparse.sparseiscrs(a, _params),
+                "SparseSPDCholeskySolve: A is not an SKS/CRS matrix"
+            );
             ap.assert(ap.len(b) >= n, "SparseSPDCholeskySolve: length(B)<N");
             ap.assert(apserv.isfinitevector(b, n, _params), "SparseSPDCholeskySolve: B contains infinities or NANs");
             iterativesparse.initsparsesolverreport(rep, _params);
@@ -13896,8 +13950,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 18.11.2023 by Bochkanov Sergey
         *************************************************************************/
-        public static void sparsesolve(sparse.sparsematrix a, double[] b, int solvertype, ref double[] x, iterativesparse.sparsesolverreport rep,
-            xparams _params)
+        public static void sparsesolve(sparse.sparsematrix a, double[] b, int solvertype, ref double[] x,
+            iterativesparse.sparsesolverreport rep, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -13920,7 +13974,8 @@ public partial class alglib
             ap.assert(n > 0, "SparseSolve: N<=0");
             ap.assert(
                 solvertype == 0 || solvertype == -19 || solvertype == 10 || solvertype == 11 || solvertype == 20,
-                "SparseSolve: unexpected SolverType");
+                "SparseSolve: unexpected SolverType"
+            );
             ap.assert(sparse.sparsegetnrows(a, _params) == n, "SparseSolve: rows(A)!=N");
             ap.assert(sparse.sparsegetncols(a, _params) == n, "SparseSolve: cols(A)!=N");
             ap.assert(ap.len(b) >= n, "SparseSolve: length(B)<N");
@@ -14184,8 +14239,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 26.12.2017 by Bochkanov Sergey
         *************************************************************************/
-        public static void sparselusolve(sparse.sparsematrix a, int[] p, int[] q, double[] b, ref double[] x, iterativesparse.sparsesolverreport rep,
-            xparams _params)
+        public static void sparselusolve(sparse.sparsematrix a, int[] p, int[] q, double[] b, ref double[] x,
+            iterativesparse.sparsesolverreport rep, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -14285,8 +14340,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 26.12.2017 by Bochkanov Sergey
         *************************************************************************/
-        private static void sparsesolveaug(sparse.sparsematrix a, double[] b, double reg1f, double reg2f, double reg1r, double reg2r, int gmresk,
-            int maxits, double[] x, iterativesparse.sparsesolverreport rep, xparams _params)
+        private static void sparsesolveaug(sparse.sparsematrix a, double[] b, double reg1f, double reg2f, double reg1r, double reg2r,
+            int gmresk, int maxits, double[] x, iterativesparse.sparsesolverreport rep, xparams _params)
         {
             var i = 0;
             var k = 0;

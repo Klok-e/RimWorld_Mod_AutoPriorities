@@ -204,7 +204,7 @@ namespace AutoPriorities.Core
 
             logger?.Info($"Patching for: {packageId}");
 
-            var asm = Assembly.LoadFile(Path.Combine(ModContentPack.RootDir, Path.Combine("ConditionalAssemblies/1.5/", patchName)));
+            var asm = Assembly.LoadFile(Path.Combine(ModContentPack.RootDir, Path.Combine("ConditionalAssemblies/1.6/", patchName)));
             HarmonyInst.PatchAll(asm);
 
             var methods = asm.GetMethodsWithHelpAttribute<PatchInitializeAttribute>();

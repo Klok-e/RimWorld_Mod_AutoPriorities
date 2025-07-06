@@ -18,6 +18,7 @@ http://www.fsf.org/licensing/licenses
 >>> END OF LICENSE >>>
 *************************************************************************/
 
+#pragma warning disable CS8625
 #pragma warning disable 1691
 #pragma warning disable 162
 #pragma warning disable 164
@@ -220,7 +221,8 @@ public partial class alglib
         ablas.rmatrixger(m, n, a, ia, ja, alpha, u, iu, v, iv, null);
     }
 
-    public static void rmatrixger(int m, int n, double[,] a, int ia, int ja, double alpha, double[] u, int iu, double[] v, int iv, xparams _params)
+    public static void rmatrixger(int m, int n, double[,] a, int ia, int ja, double alpha, double[] u, int iu, double[] v, int iv,
+        xparams _params)
     {
         ablas.rmatrixger(m, n, a, ia, ja, alpha, u, iu, v, iv, _params);
     }
@@ -279,14 +281,14 @@ public partial class alglib
     /*************************************************************************
 
     *************************************************************************/
-    public static void rmatrixgemv(int m, int n, double alpha, double[,] a, int ia, int ja, int opa, double[] x, int ix, double beta, double[] y,
-        int iy)
+    public static void rmatrixgemv(int m, int n, double alpha, double[,] a, int ia, int ja, int opa, double[] x, int ix, double beta,
+        double[] y, int iy)
     {
         ablas.rmatrixgemv(m, n, alpha, a, ia, ja, opa, x, ix, beta, y, iy, null);
     }
 
-    public static void rmatrixgemv(int m, int n, double alpha, double[,] a, int ia, int ja, int opa, double[] x, int ix, double beta, double[] y,
-        int iy, xparams _params)
+    public static void rmatrixgemv(int m, int n, double alpha, double[,] a, int ia, int ja, int opa, double[] x, int ix, double beta,
+        double[] y, int iy, xparams _params)
     {
         ablas.rmatrixgemv(m, n, alpha, a, ia, ja, opa, x, ix, beta, y, iy, _params);
     }
@@ -328,7 +330,8 @@ public partial class alglib
         ablas.cmatrixmv(m, n, a, ia, ja, opa, x, ix, y, iy, null);
     }
 
-    public static void cmatrixmv(int m, int n, complex[,] a, int ia, int ja, int opa, complex[] x, int ix, complex[] y, int iy, xparams _params)
+    public static void cmatrixmv(int m, int n, complex[,] a, int ia, int ja, int opa, complex[] x, int ix, complex[] y, int iy,
+        xparams _params)
     {
         ablas.cmatrixmv(m, n, a, ia, ja, opa, x, ix, y, iy, _params);
     }
@@ -370,7 +373,8 @@ public partial class alglib
         ablas.rmatrixmv(m, n, a, ia, ja, opa, x, ix, y, iy, null);
     }
 
-    public static void rmatrixmv(int m, int n, double[,] a, int ia, int ja, int opa, double[] x, int ix, double[] y, int iy, xparams _params)
+    public static void rmatrixmv(int m, int n, double[,] a, int ia, int ja, int opa, double[] x, int ix, double[] y, int iy,
+        xparams _params)
     {
         ablas.rmatrixmv(m, n, a, ia, ja, opa, x, ix, y, iy, _params);
     }
@@ -378,14 +382,14 @@ public partial class alglib
     /*************************************************************************
 
     *************************************************************************/
-    public static void rmatrixsymv(int n, double alpha, double[,] a, int ia, int ja, bool isupper, double[] x, int ix, double beta, double[] y,
-        int iy)
+    public static void rmatrixsymv(int n, double alpha, double[,] a, int ia, int ja, bool isupper, double[] x, int ix, double beta,
+        double[] y, int iy)
     {
         ablas.rmatrixsymv(n, alpha, a, ia, ja, isupper, x, ix, beta, y, iy, null);
     }
 
-    public static void rmatrixsymv(int n, double alpha, double[,] a, int ia, int ja, bool isupper, double[] x, int ix, double beta, double[] y,
-        int iy, xparams _params)
+    public static void rmatrixsymv(int n, double alpha, double[,] a, int ia, int ja, bool isupper, double[] x, int ix, double beta,
+        double[] y, int iy, xparams _params)
     {
         ablas.rmatrixsymv(n, alpha, a, ia, ja, isupper, x, ix, beta, y, iy, _params);
     }
@@ -442,7 +446,8 @@ public partial class alglib
         ablas.rmatrixtrsv(n, a, ia, ja, isupper, isunit, optype, x, ix, null);
     }
 
-    public static void rmatrixtrsv(int n, double[,] a, int ia, int ja, bool isupper, bool isunit, int optype, double[] x, int ix, xparams _params)
+    public static void rmatrixtrsv(int n, double[,] a, int ia, int ja, bool isupper, bool isunit, int optype, double[] x, int ix,
+        xparams _params)
     {
         ablas.rmatrixtrsv(n, a, ia, ja, isupper, isunit, optype, x, ix, _params);
     }
@@ -498,14 +503,14 @@ public partial class alglib
          20.01.2018
          Bochkanov Sergey
     *************************************************************************/
-    public static void cmatrixrighttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x, int i2,
-        int j2)
+    public static void cmatrixrighttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x,
+        int i2, int j2)
     {
         ablas.cmatrixrighttrsm(m, n, a, i1, j1, isupper, isunit, optype, x, i2, j2, null);
     }
 
-    public static void cmatrixrighttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x, int i2,
-        int j2, xparams _params)
+    public static void cmatrixrighttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x,
+        int i2, int j2, xparams _params)
     {
         ablas.cmatrixrighttrsm(m, n, a, i1, j1, isupper, isunit, optype, x, i2, j2, _params);
     }
@@ -561,14 +566,14 @@ public partial class alglib
          15.12.2009-22.01.2018
          Bochkanov Sergey
     *************************************************************************/
-    public static void cmatrixlefttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x, int i2,
-        int j2)
+    public static void cmatrixlefttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x,
+        int i2, int j2)
     {
         ablas.cmatrixlefttrsm(m, n, a, i1, j1, isupper, isunit, optype, x, i2, j2, null);
     }
 
-    public static void cmatrixlefttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x, int i2,
-        int j2, xparams _params)
+    public static void cmatrixlefttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x,
+        int i2, int j2, xparams _params)
     {
         ablas.cmatrixlefttrsm(m, n, a, i1, j1, isupper, isunit, optype, x, i2, j2, _params);
     }
@@ -623,13 +628,14 @@ public partial class alglib
          15.12.2009-22.01.2018
          Bochkanov Sergey
     *************************************************************************/
-    public static void rmatrixrighttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x, int i2, int j2)
+    public static void rmatrixrighttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x,
+        int i2, int j2)
     {
         ablas.rmatrixrighttrsm(m, n, a, i1, j1, isupper, isunit, optype, x, i2, j2, null);
     }
 
-    public static void rmatrixrighttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x, int i2, int j2,
-        xparams _params)
+    public static void rmatrixrighttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x,
+        int i2, int j2, xparams _params)
     {
         ablas.rmatrixrighttrsm(m, n, a, i1, j1, isupper, isunit, optype, x, i2, j2, _params);
     }
@@ -684,13 +690,14 @@ public partial class alglib
          15.12.2009-22.01.2018
          Bochkanov Sergey
     *************************************************************************/
-    public static void rmatrixlefttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x, int i2, int j2)
+    public static void rmatrixlefttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x,
+        int i2, int j2)
     {
         ablas.rmatrixlefttrsm(m, n, a, i1, j1, isupper, isunit, optype, x, i2, j2, null);
     }
 
-    public static void rmatrixlefttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x, int i2, int j2,
-        xparams _params)
+    public static void rmatrixlefttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x,
+        int i2, int j2, xparams _params)
     {
         ablas.rmatrixlefttrsm(m, n, a, i1, j1, isupper, isunit, optype, x, i2, j2, _params);
     }
@@ -753,14 +760,14 @@ public partial class alglib
          16.12.2009-22.01.2018
          Bochkanov Sergey
     *************************************************************************/
-    public static void cmatrixherk(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta, complex[,] c, int ic, int jc,
-        bool isupper)
+    public static void cmatrixherk(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta, complex[,] c, int ic,
+        int jc, bool isupper)
     {
         ablas.cmatrixherk(n, k, alpha, a, ia, ja, optypea, beta, c, ic, jc, isupper, null);
     }
 
-    public static void cmatrixherk(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta, complex[,] c, int ic, int jc,
-        bool isupper, xparams _params)
+    public static void cmatrixherk(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta, complex[,] c, int ic,
+        int jc, bool isupper, xparams _params)
     {
         ablas.cmatrixherk(n, k, alpha, a, ia, ja, optypea, beta, c, ic, jc, isupper, _params);
     }
@@ -821,14 +828,14 @@ public partial class alglib
          16.12.2009-22.01.2018
          Bochkanov Sergey
     *************************************************************************/
-    public static void rmatrixsyrk(int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double beta, double[,] c, int ic, int jc,
-        bool isupper)
+    public static void rmatrixsyrk(int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double beta, double[,] c, int ic,
+        int jc, bool isupper)
     {
         ablas.rmatrixsyrk(n, k, alpha, a, ia, ja, optypea, beta, c, ic, jc, isupper, null);
     }
 
-    public static void rmatrixsyrk(int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double beta, double[,] c, int ic, int jc,
-        bool isupper, xparams _params)
+    public static void rmatrixsyrk(int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double beta, double[,] c, int ic,
+        int jc, bool isupper, xparams _params)
     {
         ablas.rmatrixsyrk(n, k, alpha, a, ia, ja, optypea, beta, c, ic, jc, isupper, _params);
     }
@@ -905,14 +912,14 @@ public partial class alglib
          2009-2019
          Bochkanov Sergey
     *************************************************************************/
-    public static void cmatrixgemm(int m, int n, int k, complex alpha, complex[,] a, int ia, int ja, int optypea, complex[,] b, int ib, int jb,
-        int optypeb, complex beta, complex[,] c, int ic, int jc)
+    public static void cmatrixgemm(int m, int n, int k, complex alpha, complex[,] a, int ia, int ja, int optypea, complex[,] b, int ib,
+        int jb, int optypeb, complex beta, complex[,] c, int ic, int jc)
     {
         ablas.cmatrixgemm(m, n, k, alpha, a, ia, ja, optypea, b, ib, jb, optypeb, beta, c, ic, jc, null);
     }
 
-    public static void cmatrixgemm(int m, int n, int k, complex alpha, complex[,] a, int ia, int ja, int optypea, complex[,] b, int ib, int jb,
-        int optypeb, complex beta, complex[,] c, int ic, int jc, xparams _params)
+    public static void cmatrixgemm(int m, int n, int k, complex alpha, complex[,] a, int ia, int ja, int optypea, complex[,] b, int ib,
+        int jb, int optypeb, complex beta, complex[,] c, int ic, int jc, xparams _params)
     {
         ablas.cmatrixgemm(m, n, k, alpha, a, ia, ja, optypea, b, ib, jb, optypeb, beta, c, ic, jc, _params);
     }
@@ -1008,14 +1015,14 @@ public partial class alglib
          16.12.2009
          Bochkanov Sergey
     *************************************************************************/
-    public static void cmatrixsyrk(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta, complex[,] c, int ic, int jc,
-        bool isupper)
+    public static void cmatrixsyrk(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta, complex[,] c, int ic,
+        int jc, bool isupper)
     {
         ablas.cmatrixsyrk(n, k, alpha, a, ia, ja, optypea, beta, c, ic, jc, isupper, null);
     }
 
-    public static void cmatrixsyrk(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta, complex[,] c, int ic, int jc,
-        bool isupper, xparams _params)
+    public static void cmatrixsyrk(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta, complex[,] c, int ic,
+        int jc, bool isupper, xparams _params)
     {
         ablas.cmatrixsyrk(n, k, alpha, a, ia, ja, optypea, beta, c, ic, jc, isupper, _params);
     }
@@ -1790,14 +1797,14 @@ public partial class alglib
          2005-2010
          Bochkanov Sergey
     *************************************************************************/
-    public static void rmatrixbdmultiplybyq(double[,] qp, int m, int n, double[] tauq, double[,] z, int zrows, int zcolumns, bool fromtheright,
-        bool dotranspose)
+    public static void rmatrixbdmultiplybyq(double[,] qp, int m, int n, double[] tauq, double[,] z, int zrows, int zcolumns,
+        bool fromtheright, bool dotranspose)
     {
         ortfac.rmatrixbdmultiplybyq(qp, m, n, tauq, z, zrows, zcolumns, fromtheright, dotranspose, null);
     }
 
-    public static void rmatrixbdmultiplybyq(double[,] qp, int m, int n, double[] tauq, double[,] z, int zrows, int zcolumns, bool fromtheright,
-        bool dotranspose, xparams _params)
+    public static void rmatrixbdmultiplybyq(double[,] qp, int m, int n, double[] tauq, double[,] z, int zrows, int zcolumns,
+        bool fromtheright, bool dotranspose, xparams _params)
     {
         ortfac.rmatrixbdmultiplybyq(qp, m, n, tauq, z, zrows, zcolumns, fromtheright, dotranspose, _params);
     }
@@ -1866,14 +1873,14 @@ public partial class alglib
          2005-2010
          Bochkanov Sergey
     *************************************************************************/
-    public static void rmatrixbdmultiplybyp(double[,] qp, int m, int n, double[] taup, double[,] z, int zrows, int zcolumns, bool fromtheright,
-        bool dotranspose)
+    public static void rmatrixbdmultiplybyp(double[,] qp, int m, int n, double[] taup, double[,] z, int zrows, int zcolumns,
+        bool fromtheright, bool dotranspose)
     {
         ortfac.rmatrixbdmultiplybyp(qp, m, n, taup, z, zrows, zcolumns, fromtheright, dotranspose, null);
     }
 
-    public static void rmatrixbdmultiplybyp(double[,] qp, int m, int n, double[] taup, double[,] z, int zrows, int zcolumns, bool fromtheright,
-        bool dotranspose, xparams _params)
+    public static void rmatrixbdmultiplybyp(double[,] qp, int m, int n, double[] taup, double[,] z, int zrows, int zcolumns,
+        bool fromtheright, bool dotranspose, xparams _params)
     {
         ortfac.rmatrixbdmultiplybyp(qp, m, n, taup, z, zrows, zcolumns, fromtheright, dotranspose, _params);
     }
@@ -1909,7 +1916,8 @@ public partial class alglib
         ortfac.rmatrixbdunpackdiagonals(b, m, n, ref isupper, ref d, ref e, null);
     }
 
-    public static void rmatrixbdunpackdiagonals(double[,] b, int m, int n, out bool isupper, out double[] d, out double[] e, xparams _params)
+    public static void rmatrixbdunpackdiagonals(double[,] b, int m, int n, out bool isupper, out double[] d, out double[] e,
+        xparams _params)
     {
         isupper = false;
         d = new double[0];
@@ -3769,7 +3777,8 @@ public partial class alglib
         sparse.sparsegemv(s.innerobj, alpha, ops, x, ix, beta, y, iy, null);
     }
 
-    public static void sparsegemv(sparsematrix s, double alpha, int ops, double[] x, int ix, double beta, double[] y, int iy, xparams _params)
+    public static void sparsegemv(sparsematrix s, double alpha, int ops, double[] x, int ix, double beta, double[] y, int iy,
+        xparams _params)
     {
         sparse.sparsegemv(s.innerobj, alpha, ops, x, ix, beta, y, iy, _params);
     }
@@ -5394,15 +5403,16 @@ public partial class alglib
       -- ALGLIB PROJECT --
          Copyright 12.11.2023 by Bochkanov Sergey
     *************************************************************************/
-    public static void sparsescale(sparsematrix s, int scltype, bool scalerows, bool scalecols, bool colsfirst, out double[] r, out double[] c)
+    public static void sparsescale(sparsematrix s, int scltype, bool scalerows, bool scalecols, bool colsfirst, out double[] r,
+        out double[] c)
     {
         r = new double[0];
         c = new double[0];
         sparse.sparsescale(s.innerobj, scltype, scalerows, scalecols, colsfirst, ref r, ref c, null);
     }
 
-    public static void sparsescale(sparsematrix s, int scltype, bool scalerows, bool scalecols, bool colsfirst, out double[] r, out double[] c,
-        xparams _params)
+    public static void sparsescale(sparsematrix s, int scltype, bool scalerows, bool scalecols, bool colsfirst, out double[] r,
+        out double[] c, xparams _params)
     {
         r = new double[0];
         c = new double[0];
@@ -5917,7 +5927,8 @@ public partial class alglib
         evd.eigsubspaceoocstop(state.innerobj, ref w, ref z, rep.innerobj, null);
     }
 
-    public static void eigsubspaceoocstop(eigsubspacestate state, out double[] w, out double[,] z, out eigsubspacereport rep, xparams _params)
+    public static void eigsubspaceoocstop(eigsubspacestate state, out double[] w, out double[,] z, out eigsubspacereport rep,
+        xparams _params)
     {
         w = new double[0];
         z = new double[0, 0];
@@ -6143,7 +6154,8 @@ public partial class alglib
       -- ALGLIB --
          Copyright 07.01.2006 by Bochkanov Sergey
     *************************************************************************/
-    public static bool smatrixevdr(double[,] a, int n, int zneeded, bool isupper, double b1, double b2, out int m, out double[] w, out double[,] z)
+    public static bool smatrixevdr(double[,] a, int n, int zneeded, bool isupper, double b1, double b2, out int m, out double[] w,
+        out double[,] z)
     {
         m = 0;
         w = new double[0];
@@ -6151,8 +6163,8 @@ public partial class alglib
         return evd.smatrixevdr(a, n, zneeded, isupper, b1, b2, ref m, ref w, ref z, null);
     }
 
-    public static bool smatrixevdr(double[,] a, int n, int zneeded, bool isupper, double b1, double b2, out int m, out double[] w, out double[,] z,
-        xparams _params)
+    public static bool smatrixevdr(double[,] a, int n, int zneeded, bool isupper, double b1, double b2, out int m, out double[] w,
+        out double[,] z, xparams _params)
     {
         m = 0;
         w = new double[0];
@@ -6204,7 +6216,8 @@ public partial class alglib
         return evd.smatrixevdi(a, n, zneeded, isupper, i1, i2, ref w, ref z, null);
     }
 
-    public static bool smatrixevdi(double[,] a, int n, int zneeded, bool isupper, int i1, int i2, out double[] w, out double[,] z, xparams _params)
+    public static bool smatrixevdi(double[,] a, int n, int zneeded, bool isupper, int i1, int i2, out double[] w, out double[,] z,
+        xparams _params)
     {
         w = new double[0];
         z = new double[0, 0];
@@ -6319,7 +6332,8 @@ public partial class alglib
       -- ALGLIB --
          Copyright 07.01.2006, 24.03.2007 by Bochkanov Sergey.
     *************************************************************************/
-    public static bool hmatrixevdr(complex[,] a, int n, int zneeded, bool isupper, double b1, double b2, out int m, out double[] w, out complex[,] z)
+    public static bool hmatrixevdr(complex[,] a, int n, int zneeded, bool isupper, double b1, double b2, out int m, out double[] w,
+        out complex[,] z)
     {
         m = 0;
         w = new double[0];
@@ -6327,8 +6341,8 @@ public partial class alglib
         return evd.hmatrixevdr(a, n, zneeded, isupper, b1, b2, ref m, ref w, ref z, null);
     }
 
-    public static bool hmatrixevdr(complex[,] a, int n, int zneeded, bool isupper, double b1, double b2, out int m, out double[] w, out complex[,] z,
-        xparams _params)
+    public static bool hmatrixevdr(complex[,] a, int n, int zneeded, bool isupper, double b1, double b2, out int m, out double[] w,
+        out complex[,] z, xparams _params)
     {
         m = 0;
         w = new double[0];
@@ -6386,7 +6400,8 @@ public partial class alglib
         return evd.hmatrixevdi(a, n, zneeded, isupper, i1, i2, ref w, ref z, null);
     }
 
-    public static bool hmatrixevdi(complex[,] a, int n, int zneeded, bool isupper, int i1, int i2, out double[] w, out complex[,] z, xparams _params)
+    public static bool hmatrixevdi(complex[,] a, int n, int zneeded, bool isupper, int i1, int i2, out double[] w, out complex[,] z,
+        xparams _params)
     {
         w = new double[0];
         z = new complex[0, 0];
@@ -6523,7 +6538,8 @@ public partial class alglib
         return evd.smatrixtdevdr(ref d, e, n, zneeded, a, b, ref m, ref z, null);
     }
 
-    public static bool smatrixtdevdr(ref double[] d, double[] e, int n, int zneeded, double a, double b, out int m, ref double[,] z, xparams _params)
+    public static bool smatrixtdevdr(ref double[] d, double[] e, int n, int zneeded, double a, double b, out int m, ref double[,] z,
+        xparams _params)
     {
         m = 0;
         return evd.smatrixtdevdr(ref d, e, n, zneeded, a, b, ref m, ref z, _params);
@@ -7675,14 +7691,15 @@ public partial class alglib
          20.09.2020
          Bochkanov Sergey
     *************************************************************************/
-    public static bool sparsecholeskyanalyze(sparsematrix a, bool isupper, int facttype, int permtype, out sparsedecompositionanalysis analysis)
+    public static bool sparsecholeskyanalyze(sparsematrix a, bool isupper, int facttype, int permtype,
+        out sparsedecompositionanalysis analysis)
     {
         analysis = new sparsedecompositionanalysis();
         return trfac.sparsecholeskyanalyze(a.innerobj, isupper, facttype, permtype, analysis.innerobj, null);
     }
 
-    public static bool sparsecholeskyanalyze(sparsematrix a, bool isupper, int facttype, int permtype, out sparsedecompositionanalysis analysis,
-        xparams _params)
+    public static bool sparsecholeskyanalyze(sparsematrix a, bool isupper, int facttype, int permtype,
+        out sparsedecompositionanalysis analysis, xparams _params)
     {
         analysis = new sparsedecompositionanalysis();
         return trfac.sparsecholeskyanalyze(a.innerobj, isupper, facttype, permtype, analysis.innerobj, _params);
@@ -7760,7 +7777,8 @@ public partial class alglib
          20.09.2020
          Bochkanov Sergey
     *************************************************************************/
-    public static bool sparsecholeskyfactorize(sparsedecompositionanalysis analysis, bool needupper, out sparsematrix a, out double[] d, out int[] p)
+    public static bool sparsecholeskyfactorize(sparsedecompositionanalysis analysis, bool needupper, out sparsematrix a, out double[] d,
+        out int[] p)
     {
         a = new sparsematrix();
         d = new double[0];
@@ -7768,8 +7786,8 @@ public partial class alglib
         return trfac.sparsecholeskyfactorize(analysis.innerobj, needupper, a.innerobj, ref d, ref p, null);
     }
 
-    public static bool sparsecholeskyfactorize(sparsedecompositionanalysis analysis, bool needupper, out sparsematrix a, out double[] d, out int[] p,
-        xparams _params)
+    public static bool sparsecholeskyfactorize(sparsedecompositionanalysis analysis, bool needupper, out sparsematrix a, out double[] d,
+        out int[] p, xparams _params)
     {
         a = new sparsematrix();
         d = new double[0];
@@ -7977,14 +7995,14 @@ public partial class alglib
          Courant Institute, Argonne National Lab, and Rice University
          October 31, 1999.
     *************************************************************************/
-    public static bool rmatrixbdsvd(double[] d, double[] e, int n, bool isupper, bool isfractionalaccuracyrequired, double[,] u, int nru, double[,] c,
-        int ncc, double[,] vt, int ncvt)
+    public static bool rmatrixbdsvd(double[] d, double[] e, int n, bool isupper, bool isfractionalaccuracyrequired, double[,] u, int nru,
+        double[,] c, int ncc, double[,] vt, int ncvt)
     {
         return bdsvd.rmatrixbdsvd(d, e, n, isupper, isfractionalaccuracyrequired, u, nru, c, ncc, vt, ncvt, null);
     }
 
-    public static bool rmatrixbdsvd(double[] d, double[] e, int n, bool isupper, bool isfractionalaccuracyrequired, double[,] u, int nru, double[,] c,
-        int ncc, double[,] vt, int ncvt, xparams _params)
+    public static bool rmatrixbdsvd(double[] d, double[] e, int n, bool isupper, bool isfractionalaccuracyrequired, double[,] u, int nru,
+        double[,] c, int ncc, double[,] vt, int ncvt, xparams _params)
     {
         return bdsvd.rmatrixbdsvd(d, e, n, isupper, isfractionalaccuracyrequired, u, nru, c, ncc, vt, ncvt, _params);
     }
@@ -8056,8 +8074,8 @@ public partial class alglib
       -- ALGLIB --
          Copyright 2005 by Bochkanov Sergey
     *************************************************************************/
-    public static bool rmatrixsvd(double[,] a, int m, int n, int uneeded, int vtneeded, int additionalmemory, out double[] w, out double[,] u,
-        out double[,] vt)
+    public static bool rmatrixsvd(double[,] a, int m, int n, int uneeded, int vtneeded, int additionalmemory, out double[] w,
+        out double[,] u, out double[,] vt)
     {
         w = new double[0];
         u = new double[0, 0];
@@ -8065,8 +8083,8 @@ public partial class alglib
         return svd.rmatrixsvd(a, m, n, uneeded, vtneeded, additionalmemory, ref w, ref u, ref vt, null);
     }
 
-    public static bool rmatrixsvd(double[,] a, int m, int n, int uneeded, int vtneeded, int additionalmemory, out double[] w, out double[,] u,
-        out double[,] vt, xparams _params)
+    public static bool rmatrixsvd(double[,] a, int m, int n, int uneeded, int vtneeded, int additionalmemory, out double[] w,
+        out double[,] u, out double[,] vt, xparams _params)
     {
         w = new double[0];
         u = new double[0, 0];
@@ -10104,16 +10122,16 @@ public partial class alglib
       -- ALGLIB --
          Copyright 1.28.2006 by Bochkanov Sergey
     *************************************************************************/
-    public static bool smatrixgevd(double[,] a, int n, bool isuppera, double[,] b, bool isupperb, int zneeded, int problemtype, out double[] d,
-        out double[,] z)
+    public static bool smatrixgevd(double[,] a, int n, bool isuppera, double[,] b, bool isupperb, int zneeded, int problemtype,
+        out double[] d, out double[,] z)
     {
         d = new double[0];
         z = new double[0, 0];
         return spdgevd.smatrixgevd(a, n, isuppera, b, isupperb, zneeded, problemtype, ref d, ref z, null);
     }
 
-    public static bool smatrixgevd(double[,] a, int n, bool isuppera, double[,] b, bool isupperb, int zneeded, int problemtype, out double[] d,
-        out double[,] z, xparams _params)
+    public static bool smatrixgevd(double[,] a, int n, bool isuppera, double[,] b, bool isupperb, int zneeded, int problemtype,
+        out double[] d, out double[,] z, xparams _params)
     {
         d = new double[0];
         z = new double[0, 0];
@@ -10800,8 +10818,8 @@ public partial class alglib
              Courant Institute, Argonne National Lab, and Rice University
              September 30, 1994
         *************************************************************************/
-        public static void applyreflectionfromtheleft(double[,] c, double tau, double[] v, int m1, int m2, int n1, int n2, ref double[] work,
-            xparams _params)
+        public static void applyreflectionfromtheleft(double[,] c, double tau, double[] v, int m1, int m2, int n1, int n2,
+            ref double[] work, xparams _params)
         {
             if (tau == 0 || n1 > n2 || m1 > m2) return;
 
@@ -10839,8 +10857,8 @@ public partial class alglib
              Courant Institute, Argonne National Lab, and Rice University
              September 30, 1994
         *************************************************************************/
-        public static void applyreflectionfromtheright(double[,] c, double tau, double[] v, int m1, int m2, int n1, int n2, ref double[] work,
-            xparams _params)
+        public static void applyreflectionfromtheright(double[,] c, double tau, double[] v, int m1, int m2, int n1, int n2,
+            ref double[] work, xparams _params)
         {
             if (tau == 0 || n1 > n2 || m1 > m2) return;
 
@@ -10972,17 +10990,13 @@ public partial class alglib
             var j = 0;
 
             if (isupper)
-            {
                 for (i = 0; i <= n - 1; i++)
                 for (j = i + 1; j <= n - 1; j++)
                     a[j, i] = a[i, j];
-            }
             else
-            {
                 for (i = 0; i <= n - 1; i++)
                 for (j = i + 1; j <= n - 1; j++)
                     a[i, j] = a[j, i];
-            }
         }
 
 
@@ -11182,12 +11196,11 @@ public partial class alglib
             // * internal kernel
             //
             if (m > blas2minvendorkernelsize && n > blas2minvendorkernelsize)
-            {
                 //
                 // Try MKL kernel first
                 //
-                if (ablasmkl.rmatrixgermkl(m, n, a, ia, ja, alpha, u, iu, v, iv, _params)) return;
-            }
+                if (ablasmkl.rmatrixgermkl(m, n, a, ia, ja, alpha, u, iu, v, iv, _params))
+                    return;
 
             if (ablasf.rmatrixgerf(m, n, a, ia, ja, alpha, u, iu, v, iv, _params)) return;
 
@@ -11217,7 +11230,8 @@ public partial class alglib
             V   -   vector #2
             IV  -   subvector offset
         *************************************************************************/
-        public static void cmatrixrank1(int m, int n, complex[,] a, int ia, int ja, complex[] u, int iu, complex[] v, int iv, xparams _params)
+        public static void cmatrixrank1(int m, int n, complex[,] a, int ia, int ja, complex[] u, int iu, complex[] v, int iv,
+            xparams _params)
         {
             var i = 0;
             complex s = 0;
@@ -11236,12 +11250,11 @@ public partial class alglib
             // * internal kernel
             //
             if (m > blas2minvendorkernelsize && n > blas2minvendorkernelsize)
-            {
                 //
                 // Try MKL kernel first
                 //
-                if (ablasmkl.cmatrixrank1mkl(m, n, a, ia, ja, u, iu, v, iv, _params)) return;
-            }
+                if (ablasmkl.cmatrixrank1mkl(m, n, a, ia, ja, u, iu, v, iv, _params))
+                    return;
 
             if (ablasf.cmatrixrank1f(m, n, a, ia, ja, u, iu, v, iv, _params)) return;
 
@@ -11293,12 +11306,11 @@ public partial class alglib
             // * internal kernel
             //
             if (m > blas2minvendorkernelsize && n > blas2minvendorkernelsize)
-            {
                 //
                 // Try MKL kernel first
                 //
-                if (ablasmkl.rmatrixrank1mkl(m, n, a, ia, ja, u, iu, v, iv, _params)) return;
-            }
+                if (ablasmkl.rmatrixrank1mkl(m, n, a, ia, ja, u, iu, v, iv, _params))
+                    return;
 
             if (ablasf.rmatrixrank1f(m, n, a, ia, ja, u, iu, v, iv, _params)) return;
 
@@ -11314,8 +11326,8 @@ public partial class alglib
         }
 
 
-        public static void rmatrixgemv(int m, int n, double alpha, double[,] a, int ia, int ja, int opa, double[] x, int ix, double beta, double[] y,
-            int iy, xparams _params)
+        public static void rmatrixgemv(int m, int n, double alpha, double[,] a, int ia, int ja, int opa, double[] x, int ix, double beta,
+            double[] y, int iy, xparams _params)
         {
             //
             // Quick exit for M=0, N=0 or Alpha=0.
@@ -11338,12 +11350,11 @@ public partial class alglib
             // Try fast kernels
             //
             if (m > blas2minvendorkernelsize && n > blas2minvendorkernelsize)
-            {
                 //
                 // Try MKL kernel
                 //
-                if (ablasmkl.rmatrixgemvmkl(m, n, alpha, a, ia, ja, opa, x, ix, beta, y, iy, _params)) return;
-            }
+                if (ablasmkl.rmatrixgemvmkl(m, n, alpha, a, ia, ja, opa, x, ix, beta, y, iy, _params))
+                    return;
 
             if (ia + ja + ix + iy == 0)
                 ablasf.rgemv(m, n, alpha, a, opa, x, beta, y, _params);
@@ -11384,7 +11395,8 @@ public partial class alglib
              28.01.2010
              Bochkanov Sergey
         *************************************************************************/
-        public static void cmatrixmv(int m, int n, complex[,] a, int ia, int ja, int opa, complex[] x, int ix, complex[] y, int iy, xparams _params)
+        public static void cmatrixmv(int m, int n, complex[,] a, int ia, int ja, int opa, complex[] x, int ix, complex[] y, int iy,
+            xparams _params)
         {
             var i = 0;
             complex v = 0;
@@ -11408,12 +11420,11 @@ public partial class alglib
             // Try fast kernels
             //
             if (m > blas2minvendorkernelsize && n > blas2minvendorkernelsize)
-            {
                 //
                 // Try MKL kernel
                 //
-                if (ablasmkl.cmatrixmvmkl(m, n, a, ia, ja, opa, x, ix, y, iy, _params)) return;
-            }
+                if (ablasmkl.cmatrixmvmkl(m, n, a, ia, ja, opa, x, ix, y, iy, _params))
+                    return;
 
             //
             // Generic code
@@ -11501,7 +11512,8 @@ public partial class alglib
              28.01.2010
              Bochkanov Sergey
         *************************************************************************/
-        public static void rmatrixmv(int m, int n, double[,] a, int ia, int ja, int opa, double[] x, int ix, double[] y, int iy, xparams _params)
+        public static void rmatrixmv(int m, int n, double[,] a, int ia, int ja, int opa, double[] x, int ix, double[] y, int iy,
+            xparams _params)
         {
             var i = 0;
             double v = 0;
@@ -11525,12 +11537,11 @@ public partial class alglib
             // Try fast kernels
             //
             if (m > blas2minvendorkernelsize && n > blas2minvendorkernelsize)
-            {
                 //
                 // Try MKL kernel
                 //
-                if (ablasmkl.rmatrixmvmkl(m, n, a, ia, ja, opa, x, ix, y, iy, _params)) return;
-            }
+                if (ablasmkl.rmatrixmvmkl(m, n, a, ia, ja, opa, x, ix, y, iy, _params))
+                    return;
 
             //
             // Generic code
@@ -11569,8 +11580,8 @@ public partial class alglib
         }
 
 
-        public static void rmatrixsymv(int n, double alpha, double[,] a, int ia, int ja, bool isupper, double[] x, int ix, double beta, double[] y,
-            int iy, xparams _params)
+        public static void rmatrixsymv(int n, double alpha, double[,] a, int ia, int ja, bool isupper, double[] x, int ix, double beta,
+            double[] y, int iy, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -11602,12 +11613,11 @@ public partial class alglib
             // Try fast kernels
             //
             if (n > blas2minvendorkernelsize)
-            {
                 //
                 // Try MKL kernel
                 //
-                if (ablasmkl.rmatrixsymvmkl(n, alpha, a, ia, ja, isupper, x, ix, beta, y, iy, _params)) return;
-            }
+                if (ablasmkl.rmatrixsymvmkl(n, alpha, a, ia, ja, isupper, x, ix, beta, y, iy, _params))
+                    return;
 
             //
             // Generic code
@@ -11620,7 +11630,6 @@ public partial class alglib
                     y[iy + i] = 0.0;
 
             if (isupper)
-            {
                 //
                 // Upper triangle of A is stored
                 //
@@ -11646,9 +11655,7 @@ public partial class alglib
 
                     y[iy + i] = y[iy + i] + vr;
                 }
-            }
             else
-            {
                 //
                 // Lower triangle of A is stored
                 //
@@ -11674,11 +11681,11 @@ public partial class alglib
 
                     y[iy + i] = y[iy + i] + vr;
                 }
-            }
         }
 
 
-        public static double rmatrixsyvmv(int n, double[,] a, int ia, int ja, bool isupper, double[] x, int ix, double[] tmp, xparams _params)
+        public static double rmatrixsyvmv(int n, double[,] a, int ia, int ja, bool isupper, double[] x, int ix, double[] tmp,
+            xparams _params)
         {
             double result = 0;
             var i = 0;
@@ -11738,7 +11745,8 @@ public partial class alglib
              Reference BLAS is a software package provided by Univ. of Tennessee,
              Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd.
         *************************************************************************/
-        public static void rmatrixtrsv(int n, double[,] a, int ia, int ja, bool isupper, bool isunit, int optype, double[] x, int ix, xparams _params)
+        public static void rmatrixtrsv(int n, double[,] a, int ia, int ja, bool isupper, bool isunit, int optype, double[] x, int ix,
+            xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -11754,12 +11762,11 @@ public partial class alglib
             // Try fast kernels
             //
             if (n > blas2minvendorkernelsize)
-            {
                 //
                 // Try MKL kernel
                 //
-                if (ablasmkl.rmatrixtrsvmkl(n, a, ia, ja, isupper, isunit, optype, x, ix, _params)) return;
-            }
+                if (ablasmkl.rmatrixtrsvmkl(n, a, ia, ja, isupper, isunit, optype, x, ix, _params))
+                    return;
 
             //
             // Generic code
@@ -11881,8 +11888,8 @@ public partial class alglib
              20.01.2018
              Bochkanov Sergey
         *************************************************************************/
-        public static void cmatrixrighttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x, int i2,
-            int j2, xparams _params)
+        public static void cmatrixrighttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x,
+            int i2, int j2, xparams _params)
         {
             var s1 = 0;
             var s2 = 0;
@@ -12008,8 +12015,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_cmatrixrighttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x,
-            int i2, int j2, xparams _params)
+        public static bool _trypexec_cmatrixrighttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype,
+            complex[,] x, int i2, int j2, xparams _params)
         {
             return false;
         }
@@ -12066,8 +12073,8 @@ public partial class alglib
              15.12.2009-22.01.2018
              Bochkanov Sergey
         *************************************************************************/
-        public static void cmatrixlefttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x, int i2,
-            int j2, xparams _params)
+        public static void cmatrixlefttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x,
+            int i2, int j2, xparams _params)
         {
             var s1 = 0;
             var s2 = 0;
@@ -12184,8 +12191,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_cmatrixlefttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x,
-            int i2, int j2, xparams _params)
+        public static bool _trypexec_cmatrixlefttrsm(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype,
+            complex[,] x, int i2, int j2, xparams _params)
         {
             return false;
         }
@@ -12241,8 +12248,8 @@ public partial class alglib
              15.12.2009-22.01.2018
              Bochkanov Sergey
         *************************************************************************/
-        public static void rmatrixrighttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x, int i2,
-            int j2, xparams _params)
+        public static void rmatrixrighttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x,
+            int i2, int j2, xparams _params)
         {
             var s1 = 0;
             var s2 = 0;
@@ -12368,8 +12375,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_rmatrixrighttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x,
-            int i2, int j2, xparams _params)
+        public static bool _trypexec_rmatrixrighttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype,
+            double[,] x, int i2, int j2, xparams _params)
         {
             return false;
         }
@@ -12425,8 +12432,8 @@ public partial class alglib
              15.12.2009-22.01.2018
              Bochkanov Sergey
         *************************************************************************/
-        public static void rmatrixlefttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x, int i2,
-            int j2, xparams _params)
+        public static void rmatrixlefttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x,
+            int i2, int j2, xparams _params)
         {
             var s1 = 0;
             var s2 = 0;
@@ -12543,8 +12550,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_rmatrixlefttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x,
-            int i2, int j2, xparams _params)
+        public static bool _trypexec_rmatrixlefttrsm(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype,
+            double[,] x, int i2, int j2, xparams _params)
         {
             return false;
         }
@@ -12608,8 +12615,8 @@ public partial class alglib
              16.12.2009-22.01.2018
              Bochkanov Sergey
         *************************************************************************/
-        public static void cmatrixherk(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta, complex[,] c, int ic,
-            int jc, bool isupper, xparams _params)
+        public static void cmatrixherk(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta, complex[,] c,
+            int ic, int jc, bool isupper, xparams _params)
         {
             var s1 = 0;
             var s2 = 0;
@@ -12704,8 +12711,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_cmatrixherk(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta, complex[,] c,
-            int ic, int jc, bool isupper, xparams _params)
+        public static bool _trypexec_cmatrixherk(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta,
+            complex[,] c, int ic, int jc, bool isupper, xparams _params)
         {
             return false;
         }
@@ -12767,8 +12774,8 @@ public partial class alglib
              16.12.2009-22.01.2018
              Bochkanov Sergey
         *************************************************************************/
-        public static void rmatrixsyrk(int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double beta, double[,] c, int ic, int jc,
-            bool isupper, xparams _params)
+        public static void rmatrixsyrk(int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double beta, double[,] c,
+            int ic, int jc, bool isupper, xparams _params)
         {
             var s1 = 0;
             var s2 = 0;
@@ -12863,8 +12870,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_rmatrixsyrk(int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double beta, double[,] c,
-            int ic, int jc, bool isupper, xparams _params)
+        public static bool _trypexec_rmatrixsyrk(int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double beta,
+            double[,] c, int ic, int jc, bool isupper, xparams _params)
         {
             return false;
         }
@@ -12942,8 +12949,8 @@ public partial class alglib
              2009-2019
              Bochkanov Sergey
         *************************************************************************/
-        public static void cmatrixgemm(int m, int n, int k, complex alpha, complex[,] a, int ia, int ja, int optypea, complex[,] b, int ib, int jb,
-            int optypeb, complex beta, complex[,] c, int ic, int jc, xparams _params)
+        public static void cmatrixgemm(int m, int n, int k, complex alpha, complex[,] a, int ia, int ja, int optypea, complex[,] b, int ib,
+            int jb, int optypeb, complex beta, complex[,] c, int ic, int jc, xparams _params)
         {
             var ts = 0;
 
@@ -12974,8 +12981,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_cmatrixgemm(int m, int n, int k, complex alpha, complex[,] a, int ia, int ja, int optypea, complex[,] b, int ib,
-            int jb, int optypeb, complex beta, complex[,] c, int ic, int jc, xparams _params)
+        public static bool _trypexec_cmatrixgemm(int m, int n, int k, complex alpha, complex[,] a, int ia, int ja, int optypea,
+            complex[,] b, int ib, int jb, int optypeb, complex beta, complex[,] c, int ic, int jc, xparams _params)
         {
             return false;
         }
@@ -13051,8 +13058,8 @@ public partial class alglib
              2009-2019
              Bochkanov Sergey
         *************************************************************************/
-        public static void rmatrixgemm(int m, int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double[,] b, int ib, int jb,
-            int optypeb, double beta, double[,] c, int ic, int jc, xparams _params)
+        public static void rmatrixgemm(int m, int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double[,] b, int ib,
+            int jb, int optypeb, double beta, double[,] c, int ic, int jc, xparams _params)
         {
             var ts = 0;
 
@@ -13083,8 +13090,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_rmatrixgemm(int m, int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double[,] b, int ib,
-            int jb, int optypeb, double beta, double[,] c, int ic, int jc, xparams _params)
+        public static bool _trypexec_rmatrixgemm(int m, int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double[,] b,
+            int ib, int jb, int optypeb, double beta, double[,] c, int ic, int jc, xparams _params)
         {
             return false;
         }
@@ -13099,8 +13106,8 @@ public partial class alglib
              16.12.2009
              Bochkanov Sergey
         *************************************************************************/
-        public static void cmatrixsyrk(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta, complex[,] c, int ic,
-            int jc, bool isupper, xparams _params)
+        public static void cmatrixsyrk(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta, complex[,] c,
+            int ic, int jc, bool isupper, xparams _params)
         {
             cmatrixherk(n, k, alpha, a, ia, ja, optypea, beta, c, ic, jc, isupper, _params);
         }
@@ -13200,8 +13207,8 @@ public partial class alglib
         /*************************************************************************
         Level 2 variant of CMatrixRightTRSM
         *************************************************************************/
-        private static void cmatrixrighttrsm2(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x, int i2,
-            int j2, xparams _params)
+        private static void cmatrixrighttrsm2(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype,
+            complex[,] x, int i2, int j2, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -13247,7 +13254,8 @@ public partial class alglib
                         {
                             vc = x[i2 + i, j2 + j];
                             i1_ = j1 + j + 1 - (j2 + j + 1);
-                            for (i_ = j2 + j + 1; i_ <= j2 + n - 1; i_++) x[i2 + i, i_] = x[i2 + i, i_] - vc * a[i1 + j, i_ + i1_];
+                            for (i_ = j2 + j + 1; i_ <= j2 + n - 1; i_++)
+                                x[i2 + i, i_] = x[i2 + i, i_] - vc * a[i1 + j, i_ + i1_];
                         }
                     }
 
@@ -13280,7 +13288,6 @@ public partial class alglib
                 }
 
                 if (optype == 2)
-                {
                     //
                     // X*A^(-H)
                     //
@@ -13293,14 +13300,14 @@ public partial class alglib
                         {
                             i1_ = j1 + j + 1 - (j2 + j + 1);
                             vc = 0.0;
-                            for (i_ = j2 + j + 1; i_ <= j2 + n - 1; i_++) vc += x[i2 + i, i_] * math.conj(a[i1 + j, i_ + i1_]);
+                            for (i_ = j2 + j + 1; i_ <= j2 + n - 1; i_++)
+                                vc += x[i2 + i, i_] * math.conj(a[i1 + j, i_ + i1_]);
                         }
 
                         if (!isunit) vd = math.conj(a[i1 + j, j1 + j]);
 
                         x[i2 + i, j2 + j] = (x[i2 + i, j2 + j] - vc) / vd;
                     }
-                }
             }
             else
             {
@@ -13325,7 +13332,8 @@ public partial class alglib
                         {
                             vc = x[i2 + i, j2 + j];
                             i1_ = j1 - j2;
-                            for (i_ = j2; i_ <= j2 + j - 1; i_++) x[i2 + i, i_] = x[i2 + i, i_] - vc * a[i1 + j, i_ + i1_];
+                            for (i_ = j2; i_ <= j2 + j - 1; i_++)
+                                x[i2 + i, i_] = x[i2 + i, i_] - vc * a[i1 + j, i_ + i1_];
                         }
                     }
 
@@ -13358,7 +13366,6 @@ public partial class alglib
                 }
 
                 if (optype == 2)
-                {
                     //
                     // X*A^(-H)
                     //
@@ -13378,7 +13385,6 @@ public partial class alglib
 
                         x[i2 + i, j2 + j] = (x[i2 + i, j2 + j] - vc) / vd;
                     }
-                }
             }
         }
 
@@ -13386,8 +13392,8 @@ public partial class alglib
         /*************************************************************************
         Level-2 subroutine
         *************************************************************************/
-        private static void cmatrixlefttrsm2(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype, complex[,] x, int i2,
-            int j2, xparams _params)
+        private static void cmatrixlefttrsm2(int m, int n, complex[,] a, int i1, int j1, bool isupper, bool isunit, int optype,
+            complex[,] x, int i2, int j2, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -13462,7 +13468,6 @@ public partial class alglib
                 }
 
                 if (optype == 2)
-                {
                     //
                     // A^(-H)*X
                     //
@@ -13481,7 +13486,6 @@ public partial class alglib
                             for (i_ = j2; i_ <= j2 + n - 1; i_++) x[i2 + j, i_] = x[i2 + j, i_] - vc * x[i2 + i, i_];
                         }
                     }
-                }
             }
             else
             {
@@ -13537,7 +13541,6 @@ public partial class alglib
                 }
 
                 if (optype == 2)
-                {
                     //
                     // A^(-H)*X
                     //
@@ -13556,7 +13559,6 @@ public partial class alglib
                             for (i_ = j2; i_ <= j2 + n - 1; i_++) x[i2 + j, i_] = x[i2 + j, i_] - vc * x[i2 + i, i_];
                         }
                     }
-                }
             }
         }
 
@@ -13568,8 +13570,8 @@ public partial class alglib
              15.12.2009
              Bochkanov Sergey
         *************************************************************************/
-        private static void rmatrixrighttrsm2(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x, int i2,
-            int j2, xparams _params)
+        private static void rmatrixrighttrsm2(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x,
+            int i2, int j2, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -13615,7 +13617,8 @@ public partial class alglib
                         {
                             vr = x[i2 + i, j2 + j];
                             i1_ = j1 + j + 1 - (j2 + j + 1);
-                            for (i_ = j2 + j + 1; i_ <= j2 + n - 1; i_++) x[i2 + i, i_] = x[i2 + i, i_] - vr * a[i1 + j, i_ + i1_];
+                            for (i_ = j2 + j + 1; i_ <= j2 + n - 1; i_++)
+                                x[i2 + i, i_] = x[i2 + i, i_] - vr * a[i1 + j, i_ + i1_];
                         }
                     }
 
@@ -13623,7 +13626,6 @@ public partial class alglib
                 }
 
                 if (optype == 1)
-                {
                     //
                     // X*A^(-T)
                     //
@@ -13643,7 +13645,6 @@ public partial class alglib
 
                         x[i2 + i, j2 + j] = (x[i2 + i, j2 + j] - vr) / vd;
                     }
-                }
             }
             else
             {
@@ -13668,7 +13669,8 @@ public partial class alglib
                         {
                             vr = x[i2 + i, j2 + j];
                             i1_ = j1 - j2;
-                            for (i_ = j2; i_ <= j2 + j - 1; i_++) x[i2 + i, i_] = x[i2 + i, i_] - vr * a[i1 + j, i_ + i1_];
+                            for (i_ = j2; i_ <= j2 + j - 1; i_++)
+                                x[i2 + i, i_] = x[i2 + i, i_] - vr * a[i1 + j, i_ + i1_];
                         }
                     }
 
@@ -13676,7 +13678,6 @@ public partial class alglib
                 }
 
                 if (optype == 1)
-                {
                     //
                     // X*A^(-T)
                     //
@@ -13696,7 +13697,6 @@ public partial class alglib
 
                         x[i2 + i, j2 + j] = (x[i2 + i, j2 + j] - vr) / vd;
                     }
-                }
             }
         }
 
@@ -13704,8 +13704,8 @@ public partial class alglib
         /*************************************************************************
         Level 2 subroutine
         *************************************************************************/
-        private static void rmatrixlefttrsm2(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x, int i2,
-            int j2, xparams _params)
+        private static void rmatrixlefttrsm2(int m, int n, double[,] a, int i1, int j1, bool isupper, bool isunit, int optype, double[,] x,
+            int i2, int j2, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -13756,7 +13756,6 @@ public partial class alglib
                 }
 
                 if (optype == 1)
-                {
                     //
                     // A^(-T)*X
                     //
@@ -13775,7 +13774,6 @@ public partial class alglib
                             for (i_ = j2; i_ <= j2 + n - 1; i_++) x[i2 + j, i_] = x[i2 + j, i_] - vr * x[i2 + i, i_];
                         }
                     }
-                }
             }
             else
             {
@@ -13807,7 +13805,6 @@ public partial class alglib
                 }
 
                 if (optype == 1)
-                {
                     //
                     // A^(-T)*X
                     //
@@ -13826,7 +13823,6 @@ public partial class alglib
                             for (i_ = j2; i_ <= j2 + n - 1; i_++) x[i2 + j, i_] = x[i2 + j, i_] - vr * x[i2 + i, i_];
                         }
                     }
-                }
             }
         }
 
@@ -13834,8 +13830,8 @@ public partial class alglib
         /*************************************************************************
         Level 2 subroutine
         *************************************************************************/
-        private static void cmatrixherk2(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta, complex[,] c, int ic,
-            int jc, bool isupper, xparams _params)
+        private static void cmatrixherk2(int n, int k, double alpha, complex[,] a, int ia, int ja, int optypea, double beta, complex[,] c,
+            int ic, int jc, bool isupper, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -13885,7 +13881,9 @@ public partial class alglib
                             for (i_ = ja; i_ <= ja + k - 1; i_++) v += a[ia + i, i_] * math.conj(a[ia + j, i_]);
                         }
                         else
+                        {
                             v = 0;
+                        }
 
                         if (beta == 0)
                             c[ic + i, jc + j] = alpha * v;
@@ -13921,7 +13919,6 @@ public partial class alglib
                 }
 
                 if (alpha != 0 && k > 0)
-                {
                     for (i = 0; i <= k - 1; i++)
                     for (j = 0; j <= n - 1; j++)
                     {
@@ -13940,7 +13937,6 @@ public partial class alglib
                         i1_ = ja + j1 - (jc + j1);
                         for (i_ = jc + j1; i_ <= jc + j2; i_++) c[ic + j, i_] = c[ic + j, i_] + v * a[ia + i, i_ + i1_];
                     }
-                }
             }
         }
 
@@ -13948,8 +13944,8 @@ public partial class alglib
         /*************************************************************************
         Level 2 subrotuine
         *************************************************************************/
-        private static void rmatrixsyrk2(int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double beta, double[,] c, int ic,
-            int jc, bool isupper, xparams _params)
+        private static void rmatrixsyrk2(int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double beta, double[,] c,
+            int ic, int jc, bool isupper, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -13999,7 +13995,9 @@ public partial class alglib
                             for (i_ = ja; i_ <= ja + k - 1; i_++) v += a[ia + i, i_] * a[ia + j, i_];
                         }
                         else
+                        {
                             v = 0;
+                        }
 
                         if (beta == 0)
                             c[ic + i, jc + j] = alpha * v;
@@ -14035,7 +14033,6 @@ public partial class alglib
                 }
 
                 if (alpha != 0 && k > 0)
-                {
                     for (i = 0; i <= k - 1; i++)
                     for (j = 0; j <= n - 1; j++)
                     {
@@ -14054,7 +14051,6 @@ public partial class alglib
                         i1_ = ja + j1 - (jc + j1);
                         for (i_ = jc + j1; i_ <= jc + j2; i_++) c[ic + j, i_] = c[ic + j, i_] + v * a[ia + i, i_ + i1_];
                     }
-                }
             }
         }
 
@@ -14069,8 +14065,8 @@ public partial class alglib
              10.01.2019
              Bochkanov Sergey
         *************************************************************************/
-        private static void cmatrixgemmrec(int m, int n, int k, complex alpha, complex[,] a, int ia, int ja, int optypea, complex[,] b, int ib,
-            int jb, int optypeb, complex beta, complex[,] c, int ic, int jc, xparams _params)
+        private static void cmatrixgemmrec(int m, int n, int k, complex alpha, complex[,] a, int ia, int ja, int optypea, complex[,] b,
+            int ib, int jb, int optypeb, complex beta, complex[,] c, int ic, int jc, xparams _params)
         {
             var s1 = 0;
             var s2 = 0;
@@ -14177,8 +14173,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_cmatrixgemmrec(int m, int n, int k, complex alpha, complex[,] a, int ia, int ja, int optypea, complex[,] b,
-            int ib, int jb, int optypeb, complex beta, complex[,] c, int ic, int jc, xparams _params)
+        public static bool _trypexec_cmatrixgemmrec(int m, int n, int k, complex alpha, complex[,] a, int ia, int ja, int optypea,
+            complex[,] b, int ib, int jb, int optypeb, complex beta, complex[,] c, int ic, int jc, xparams _params)
         {
             return false;
         }
@@ -14194,8 +14190,8 @@ public partial class alglib
              10.01.2019
              Bochkanov Sergey
         *************************************************************************/
-        private static void rmatrixgemmrec(int m, int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double[,] b, int ib, int jb,
-            int optypeb, double beta, double[,] c, int ic, int jc, xparams _params)
+        private static void rmatrixgemmrec(int m, int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double[,] b, int ib,
+            int jb, int optypeb, double beta, double[,] c, int ic, int jc, xparams _params)
         {
             var s1 = 0;
             var s2 = 0;
@@ -14303,8 +14299,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_rmatrixgemmrec(int m, int n, int k, double alpha, double[,] a, int ia, int ja, int optypea, double[,] b, int ib,
-            int jb, int optypeb, double beta, double[,] c, int ic, int jc, xparams _params)
+        public static bool _trypexec_rmatrixgemmrec(int m, int n, int k, double alpha, double[,] a, int ia, int ja, int optypea,
+            double[,] b, int ib, int jb, int optypeb, double beta, double[,] c, int ic, int jc, xparams _params)
         {
             return false;
         }
@@ -14467,7 +14463,8 @@ public partial class alglib
                             tmpr,
                             0,
                             0,
-                            _params);
+                            _params
+                        );
                         ablas.rmatrixgemm(
                             blocksize,
                             n - blockstart - blocksize,
@@ -14485,7 +14482,8 @@ public partial class alglib
                             tmpr,
                             blocksize,
                             0,
-                            _params);
+                            _params
+                        );
                         ablas.rmatrixgemm(
                             rowscount,
                             n - blockstart - blocksize,
@@ -14503,7 +14501,8 @@ public partial class alglib
                             a,
                             blockstart,
                             blockstart + blocksize,
-                            _params);
+                            _params
+                        );
                     }
                     else
                     {
@@ -14525,7 +14524,8 @@ public partial class alglib
                                 blockstart + blocksize,
                                 n - 1,
                                 ref work,
-                                _params);
+                                _params
+                            );
                         }
                     }
                 }
@@ -14692,7 +14692,8 @@ public partial class alglib
                             tmpr,
                             0,
                             0,
-                            _params);
+                            _params
+                        );
                         ablas.rmatrixgemm(
                             m - blockstart - blocksize,
                             blocksize,
@@ -14710,7 +14711,8 @@ public partial class alglib
                             tmpr,
                             0,
                             blocksize,
-                            _params);
+                            _params
+                        );
                         ablas.rmatrixgemm(
                             m - blockstart - blocksize,
                             columnscount,
@@ -14728,7 +14730,8 @@ public partial class alglib
                             a,
                             blockstart + blocksize,
                             blockstart,
-                            _params);
+                            _params
+                        );
                     }
                     else
                     {
@@ -14750,7 +14753,8 @@ public partial class alglib
                                 blockstart + i,
                                 n - 1,
                                 ref work,
-                                _params);
+                                _params
+                            );
                         }
                     }
                 }
@@ -14904,7 +14908,8 @@ public partial class alglib
                             tmpr,
                             0,
                             0,
-                            _params);
+                            _params
+                        );
                         ablas.cmatrixgemm(
                             blocksize,
                             n - blockstart - blocksize,
@@ -14922,7 +14927,8 @@ public partial class alglib
                             tmpr,
                             blocksize,
                             0,
-                            _params);
+                            _params
+                        );
                         ablas.cmatrixgemm(
                             rowscount,
                             n - blockstart - blocksize,
@@ -14940,7 +14946,8 @@ public partial class alglib
                             a,
                             blockstart,
                             blockstart + blocksize,
-                            _params);
+                            _params
+                        );
                     }
                     else
                     {
@@ -14962,7 +14969,8 @@ public partial class alglib
                                 blockstart + blocksize,
                                 n - 1,
                                 ref work,
-                                _params);
+                                _params
+                            );
                         }
                     }
                 }
@@ -15115,7 +15123,8 @@ public partial class alglib
                             tmpr,
                             0,
                             0,
-                            _params);
+                            _params
+                        );
                         ablas.cmatrixgemm(
                             m - blockstart - blocksize,
                             blocksize,
@@ -15133,7 +15142,8 @@ public partial class alglib
                             tmpr,
                             0,
                             blocksize,
-                            _params);
+                            _params
+                        );
                         ablas.cmatrixgemm(
                             m - blockstart - blocksize,
                             columnscount,
@@ -15151,7 +15161,8 @@ public partial class alglib
                             a,
                             blockstart + blocksize,
                             blockstart,
-                            _params);
+                            _params
+                        );
                     }
                     else
                     {
@@ -15173,7 +15184,8 @@ public partial class alglib
                                 blockstart + i,
                                 n - 1,
                                 ref work,
-                                _params);
+                                _params
+                            );
                         }
                     }
                 }
@@ -15312,9 +15324,63 @@ public partial class alglib
                         //
                         // Q  = E + Y*T*Y'  = E + TmpA*TmpT*TmpA'
                         //
-                        ablas.rmatrixgemm(blocksize, qcolumns, rowscount, 1.0, tmpa, 0, 0, 1, q, blockstart, 0, 0, 0.0, tmpr, 0, 0, _params);
-                        ablas.rmatrixgemm(blocksize, qcolumns, blocksize, 1.0, tmpt, 0, 0, 0, tmpr, 0, 0, 0, 0.0, tmpr, blocksize, 0, _params);
-                        ablas.rmatrixgemm(rowscount, qcolumns, blocksize, 1.0, tmpa, 0, 0, 0, tmpr, blocksize, 0, 0, 1.0, q, blockstart, 0, _params);
+                        ablas.rmatrixgemm(
+                            blocksize,
+                            qcolumns,
+                            rowscount,
+                            1.0,
+                            tmpa,
+                            0,
+                            0,
+                            1,
+                            q,
+                            blockstart,
+                            0,
+                            0,
+                            0.0,
+                            tmpr,
+                            0,
+                            0,
+                            _params
+                        );
+                        ablas.rmatrixgemm(
+                            blocksize,
+                            qcolumns,
+                            blocksize,
+                            1.0,
+                            tmpt,
+                            0,
+                            0,
+                            0,
+                            tmpr,
+                            0,
+                            0,
+                            0,
+                            0.0,
+                            tmpr,
+                            blocksize,
+                            0,
+                            _params
+                        );
+                        ablas.rmatrixgemm(
+                            rowscount,
+                            qcolumns,
+                            blocksize,
+                            1.0,
+                            tmpa,
+                            0,
+                            0,
+                            0,
+                            tmpr,
+                            blocksize,
+                            0,
+                            0,
+                            1.0,
+                            q,
+                            blockstart,
+                            0,
+                            _params
+                        );
                     }
                     else
                     {
@@ -15506,9 +15572,45 @@ public partial class alglib
                         //
                         // Q'  = E + Y*T'*Y'  = E + TmpA'*TmpT'*TmpA
                         //
-                        ablas.rmatrixgemm(qrows, blocksize, columnscount, 1.0, q, 0, blockstart, 0, tmpa, 0, 0, 1, 0.0, tmpr, 0, 0, _params);
+                        ablas.rmatrixgemm(
+                            qrows,
+                            blocksize,
+                            columnscount,
+                            1.0,
+                            q,
+                            0,
+                            blockstart,
+                            0,
+                            tmpa,
+                            0,
+                            0,
+                            1,
+                            0.0,
+                            tmpr,
+                            0,
+                            0,
+                            _params
+                        );
                         ablas.rmatrixgemm(qrows, blocksize, blocksize, 1.0, tmpr, 0, 0, 0, tmpt, 0, 0, 1, 0.0, tmpr, 0, blocksize, _params);
-                        ablas.rmatrixgemm(qrows, columnscount, blocksize, 1.0, tmpr, 0, blocksize, 0, tmpa, 0, 0, 0, 1.0, q, 0, blockstart, _params);
+                        ablas.rmatrixgemm(
+                            qrows,
+                            columnscount,
+                            blocksize,
+                            1.0,
+                            tmpr,
+                            0,
+                            blocksize,
+                            0,
+                            tmpa,
+                            0,
+                            0,
+                            0,
+                            1.0,
+                            q,
+                            0,
+                            blockstart,
+                            _params
+                        );
                     }
                     else
                     {
@@ -15704,9 +15806,63 @@ public partial class alglib
                         //
                         // Q  = E + Y*T*Y'  = E + TmpA*TmpT*TmpA'
                         //
-                        ablas.cmatrixgemm(blocksize, qcolumns, rowscount, 1.0, tmpa, 0, 0, 2, q, blockstart, 0, 0, 0.0, tmpr, 0, 0, _params);
-                        ablas.cmatrixgemm(blocksize, qcolumns, blocksize, 1.0, tmpt, 0, 0, 0, tmpr, 0, 0, 0, 0.0, tmpr, blocksize, 0, _params);
-                        ablas.cmatrixgemm(rowscount, qcolumns, blocksize, 1.0, tmpa, 0, 0, 0, tmpr, blocksize, 0, 0, 1.0, q, blockstart, 0, _params);
+                        ablas.cmatrixgemm(
+                            blocksize,
+                            qcolumns,
+                            rowscount,
+                            1.0,
+                            tmpa,
+                            0,
+                            0,
+                            2,
+                            q,
+                            blockstart,
+                            0,
+                            0,
+                            0.0,
+                            tmpr,
+                            0,
+                            0,
+                            _params
+                        );
+                        ablas.cmatrixgemm(
+                            blocksize,
+                            qcolumns,
+                            blocksize,
+                            1.0,
+                            tmpt,
+                            0,
+                            0,
+                            0,
+                            tmpr,
+                            0,
+                            0,
+                            0,
+                            0.0,
+                            tmpr,
+                            blocksize,
+                            0,
+                            _params
+                        );
+                        ablas.cmatrixgemm(
+                            rowscount,
+                            qcolumns,
+                            blocksize,
+                            1.0,
+                            tmpa,
+                            0,
+                            0,
+                            0,
+                            tmpr,
+                            blocksize,
+                            0,
+                            0,
+                            1.0,
+                            q,
+                            blockstart,
+                            0,
+                            _params
+                        );
                     }
                     else
                     {
@@ -15728,7 +15884,8 @@ public partial class alglib
                                 0,
                                 qcolumns - 1,
                                 ref work,
-                                _params);
+                                _params
+                            );
                         }
                     }
                 }
@@ -15909,9 +16066,45 @@ public partial class alglib
                         //
                         // Q'  = E + Y*T'*Y'  = E + TmpA'*TmpT'*TmpA
                         //
-                        ablas.cmatrixgemm(qrows, blocksize, columnscount, 1.0, q, 0, blockstart, 0, tmpa, 0, 0, 2, 0.0, tmpr, 0, 0, _params);
+                        ablas.cmatrixgemm(
+                            qrows,
+                            blocksize,
+                            columnscount,
+                            1.0,
+                            q,
+                            0,
+                            blockstart,
+                            0,
+                            tmpa,
+                            0,
+                            0,
+                            2,
+                            0.0,
+                            tmpr,
+                            0,
+                            0,
+                            _params
+                        );
                         ablas.cmatrixgemm(qrows, blocksize, blocksize, 1.0, tmpr, 0, 0, 0, tmpt, 0, 0, 2, 0.0, tmpr, 0, blocksize, _params);
-                        ablas.cmatrixgemm(qrows, columnscount, blocksize, 1.0, tmpr, 0, blocksize, 0, tmpa, 0, 0, 0, 1.0, q, 0, blockstart, _params);
+                        ablas.cmatrixgemm(
+                            qrows,
+                            columnscount,
+                            blocksize,
+                            1.0,
+                            tmpr,
+                            0,
+                            blocksize,
+                            0,
+                            tmpa,
+                            0,
+                            0,
+                            0,
+                            1.0,
+                            q,
+                            0,
+                            blockstart,
+                            _params
+                        );
                     }
                     else
                     {
@@ -15933,7 +16126,8 @@ public partial class alglib
                                 blockstart + i,
                                 n - 1,
                                 ref work,
-                                _params);
+                                _params
+                            );
                         }
                     }
                 }
@@ -15998,7 +16192,8 @@ public partial class alglib
              Sergey Bochkanov, ALGLIB project, translation from FORTRAN to
              pseudocode, 2007-2010.
         *************************************************************************/
-        public static void rmatrixqrbasecase(ref double[,] a, int m, int n, ref double[] work, ref double[] t, ref double[] tau, xparams _params)
+        public static void rmatrixqrbasecase(ref double[,] a, int m, int n, ref double[] work, ref double[] t, ref double[] tau,
+            xparams _params)
         {
             var i = 0;
             var k = 0;
@@ -16028,12 +16223,10 @@ public partial class alglib
 
                 t[1] = 1;
                 if (i < n)
-                {
                     //
                     // Apply H(i) to A(i:m-1,i+1:n-1) from the left
                     //
                     ablas.applyreflectionfromtheleft(a, tau[i], t, i, m - 1, i + 1, n - 1, ref work, _params);
-                }
             }
         }
 
@@ -16048,7 +16241,8 @@ public partial class alglib
              Sergey Bochkanov, ALGLIB project, translation from FORTRAN to
              pseudocode, 2007-2010.
         *************************************************************************/
-        public static void rmatrixlqbasecase(ref double[,] a, int m, int n, ref double[] work, ref double[] t, ref double[] tau, xparams _params)
+        public static void rmatrixlqbasecase(ref double[,] a, int m, int n, ref double[] work, ref double[] t, ref double[] tau,
+            xparams _params)
         {
             var i = 0;
             var k = 0;
@@ -16072,12 +16266,10 @@ public partial class alglib
 
                 t[1] = 1;
                 if (i < n)
-                {
                     //
                     // Apply H(i) to A(i+1:m,i:n) from the right
                     //
                     ablas.applyreflectionfromtheright(a, tau[i], t, i + 1, m - 1, i, n - 1, ref work, _params);
-                }
             }
         }
 
@@ -16206,7 +16398,6 @@ public partial class alglib
             // ALGLIB code
             //
             if (m >= n)
-            {
                 //
                 // Reduce to upper bidiagonal form
                 //
@@ -16251,11 +16442,11 @@ public partial class alglib
                         ablas.applyreflectionfromtheright(a, ltau, t, i + 1, m - 1, i + 1, n - 1, ref work, _params);
                     }
                     else
+                    {
                         taup[i] = 0;
+                    }
                 }
-            }
             else
-            {
                 //
                 // Reduce to lower bidiagonal form
                 //
@@ -16300,9 +16491,10 @@ public partial class alglib
                         ablas.applyreflectionfromtheleft(a, ltau, t, i + 1, m - 1, i + 1, n - 1, ref work, _params);
                     }
                     else
+                    {
                         tauq[i] = 0;
+                    }
                 }
-            }
         }
 
 
@@ -16411,8 +16603,8 @@ public partial class alglib
              2005-2010
              Bochkanov Sergey
         *************************************************************************/
-        public static void rmatrixbdmultiplybyq(double[,] qp, int m, int n, double[] tauq, double[,] z, int zrows, int zcolumns, bool fromtheright,
-            bool dotranspose, xparams _params)
+        public static void rmatrixbdmultiplybyq(double[,] qp, int m, int n, double[] tauq, double[,] z, int zrows, int zcolumns,
+            bool fromtheright, bool dotranspose, xparams _params)
         {
             var i = 0;
             var i1 = 0;
@@ -16432,7 +16624,20 @@ public partial class alglib
             //
             // Try to use MKL code
             //
-            if (ablasmkl.rmatrixbdmultiplybymkl(qp, m, n, tauq, dummy, z, zrows, zcolumns, true, fromtheright, dotranspose, _params)) return;
+            if (ablasmkl.rmatrixbdmultiplybymkl(
+                    qp,
+                    m,
+                    n,
+                    tauq,
+                    dummy,
+                    z,
+                    zrows,
+                    zcolumns,
+                    true,
+                    fromtheright,
+                    dotranspose,
+                    _params
+                )) return;
 
             //
             // init
@@ -16617,8 +16822,8 @@ public partial class alglib
              2005-2010
              Bochkanov Sergey
         *************************************************************************/
-        public static void rmatrixbdmultiplybyp(double[,] qp, int m, int n, double[] taup, double[,] z, int zrows, int zcolumns, bool fromtheright,
-            bool dotranspose, xparams _params)
+        public static void rmatrixbdmultiplybyp(double[,] qp, int m, int n, double[] taup, double[,] z, int zrows, int zcolumns,
+            bool fromtheright, bool dotranspose, xparams _params)
         {
             var i = 0;
             var v = new double[0];
@@ -16760,7 +16965,8 @@ public partial class alglib
              2005-2010
              Bochkanov Sergey
         *************************************************************************/
-        public static void rmatrixbdunpackdiagonals(double[,] b, int m, int n, ref bool isupper, ref double[] d, ref double[] e, xparams _params)
+        public static void rmatrixbdunpackdiagonals(double[,] b, int m, int n, ref bool isupper, ref double[] d, ref double[] e,
+            xparams _params)
         {
             var i = 0;
 
@@ -17340,7 +17546,6 @@ public partial class alglib
             // ALGLIB version: unpack Q
             //
             if (isupper)
-            {
                 for (i = 0; i <= n - 2; i++)
                 {
                     //
@@ -17352,9 +17557,7 @@ public partial class alglib
                     v[i + 1] = 1;
                     ablas.applyreflectionfromtheleft(q, tau[i], v, 0, i, 0, n - 1, ref work, _params);
                 }
-            }
             else
-            {
                 for (i = n - 2; i >= 0; i--)
                 {
                     //
@@ -17366,7 +17569,6 @@ public partial class alglib
                     v[1] = 1;
                     ablas.applyreflectionfromtheleft(q, tau[i], v, i + 1, n - 1, 0, n - 1, ref work, _params);
                 }
-            }
         }
 
 
@@ -17561,7 +17763,9 @@ public partial class alglib
                         hblas.hermitianrank2update(a, isupper, 0, i, t, t3, ref t2, -1, _params);
                     }
                     else
+                    {
                         a[i, i] = a[i, i].x;
+                    }
 
                     a[i, i + 1] = e[i];
                     d[i + 1] = a[i + 1, i + 1].x;
@@ -17630,7 +17834,9 @@ public partial class alglib
                         hblas.hermitianrank2update(a, isupper, i + 1, n - 1, t, t2, ref t3, -1, _params);
                     }
                     else
+                    {
                         a[i + 1, i + 1] = a[i + 1, i + 1].x;
+                    }
 
                     a[i + 1, i] = e[i];
                     d[i] = a[i, i].x;
@@ -17707,7 +17913,6 @@ public partial class alglib
                     q[i, j] = 0;
 
             if (isupper)
-            {
                 for (i = 0; i <= n - 2; i++)
                 {
                     //
@@ -17719,9 +17924,7 @@ public partial class alglib
                     v[i + 1] = 1;
                     creflections.complexapplyreflectionfromtheleft(q, tau[i], v, 0, i, 0, n - 1, ref work, _params);
                 }
-            }
             else
-            {
                 for (i = n - 2; i >= 0; i--)
                 {
                     //
@@ -17733,7 +17936,6 @@ public partial class alglib
                     v[1] = 1;
                     creflections.complexapplyreflectionfromtheleft(q, tau[i], v, i + 1, n - 1, 0, n - 1, ref work, _params);
                 }
-            }
         }
 
 
@@ -17747,7 +17949,8 @@ public partial class alglib
              Sergey Bochkanov, ALGLIB project, translation from FORTRAN to
              pseudocode, 2007-2010.
         *************************************************************************/
-        private static void cmatrixqrbasecase(ref complex[,] a, int m, int n, ref complex[] work, ref complex[] t, ref complex[] tau, xparams _params)
+        private static void cmatrixqrbasecase(ref complex[,] a, int m, int n, ref complex[] work, ref complex[] t, ref complex[] tau,
+            xparams _params)
         {
             var i = 0;
             var k = 0;
@@ -17780,12 +17983,10 @@ public partial class alglib
 
                 t[1] = 1;
                 if (i < n - 1)
-                {
                     //
                     // Apply H'(i) to A(i:m,i+1:n) from the left
                     //
                     creflections.complexapplyreflectionfromtheleft(a, math.conj(tau[i]), t, i, m - 1, i + 1, n - 1, ref work, _params);
-                }
             }
         }
 
@@ -17800,7 +18001,8 @@ public partial class alglib
              Sergey Bochkanov, ALGLIB project, translation from FORTRAN to
              pseudocode, 2007-2010.
         *************************************************************************/
-        private static void cmatrixlqbasecase(ref complex[,] a, int m, int n, ref complex[] work, ref complex[] t, ref complex[] tau, xparams _params)
+        private static void cmatrixlqbasecase(ref complex[,] a, int m, int n, ref complex[] work, ref complex[] t, ref complex[] tau,
+            xparams _params)
         {
             var i = 0;
             var minmn = 0;
@@ -17834,12 +18036,10 @@ public partial class alglib
 
                 t[1] = 1;
                 if (i < m - 1)
-                {
                     //
                     // Apply H'(i)
                     //
                     creflections.complexapplyreflectionfromtheright(a, tau[i], t, i + 1, m - 1, i, n - 1, ref work, _params);
-                }
             }
         }
 
@@ -17867,8 +18067,8 @@ public partial class alglib
              17.02.2010
              Bochkanov Sergey
         *************************************************************************/
-        private static void rmatrixblockreflector(ref double[,] a, ref double[] tau, bool columnwisea, int lengtha, int blocksize, ref double[,] t,
-            ref double[] work, xparams _params)
+        private static void rmatrixblockreflector(ref double[,] a, ref double[] tau, bool columnwisea, int lengtha, int blocksize,
+            ref double[,] t, ref double[] work, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -17962,8 +18162,8 @@ public partial class alglib
              17.02.2010
              Bochkanov Sergey
         *************************************************************************/
-        private static void cmatrixblockreflector(ref complex[,] a, ref complex[] tau, bool columnwisea, int lengtha, int blocksize, ref complex[,] t,
-            ref complex[] work, xparams _params)
+        private static void cmatrixblockreflector(ref complex[,] a, ref complex[] tau, bool columnwisea, int lengtha, int blocksize,
+            ref complex[,] t, ref complex[] work, xparams _params)
         {
             var i = 0;
             var k = 0;
@@ -20004,13 +20204,16 @@ public partial class alglib
             {
                 ap.assert(
                     s.ridx[i] <= s.ninitialized,
-                    "SparseSet: too few initialized elements at some row (you have promised more when called SparceCreateCRS)");
+                    "SparseSet: too few initialized elements at some row (you have promised more when called SparceCreateCRS)"
+                );
                 ap.assert(
                     s.ridx[i + 1] > s.ninitialized,
-                    "SparseSet: too many initialized elements at some row (you have promised less when called SparceCreateCRS)");
+                    "SparseSet: too many initialized elements at some row (you have promised less when called SparceCreateCRS)"
+                );
                 ap.assert(
                     s.ninitialized == s.ridx[i] || s.idx[s.ninitialized - 1] < j,
-                    "SparseSet: incorrect column order (you must fill every row from left to right)");
+                    "SparseSet: incorrect column order (you must fill every row from left to right)"
+                );
                 s.vals[s.ninitialized] = v;
                 s.idx[s.ninitialized] = j;
                 s.ninitialized = s.ninitialized + 1;
@@ -20095,7 +20298,8 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[s.m],
-                    "SparseGet: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseGet: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
                 k0 = s.ridx[i];
                 k1 = s.ridx[i + 1] - 1;
                 result = 0;
@@ -20222,7 +20426,8 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[s.m],
-                    "SparseExists: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseExists: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
                 k0 = s.ridx[i];
                 k1 = s.ridx[i + 1] - 1;
                 while (k0 <= k1)
@@ -20391,7 +20596,8 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[s.m],
-                    "SparseMV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseMV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
 
                 //
                 // Try vendor kernels
@@ -20507,7 +20713,8 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[m],
-                    "SparseMTV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseMTV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
 
                 //
                 // Try vendor kernels
@@ -20623,7 +20830,8 @@ public partial class alglib
           -- ALGLIB PROJECT --
              Copyright 10.12.2019 by Bochkanov Sergey
         *************************************************************************/
-        public static void sparsegemv(sparsematrix s, double alpha, int ops, double[] x, int ix, double beta, double[] y, int iy, xparams _params)
+        public static void sparsegemv(sparsematrix s, double alpha, int ops, double[] x, int ix, double beta, double[] y, int iy,
+            xparams _params)
         {
             var opm = 0;
             var opn = 0;
@@ -20696,7 +20904,8 @@ public partial class alglib
                     //
                     ap.assert(
                         s.ninitialized == s.ridx[s.m],
-                        "SparseGEMV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                        "SparseGEMV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                    );
 
                     //
                     // Try vendor kernels
@@ -20766,7 +20975,8 @@ public partial class alglib
                     //
                     ap.assert(
                         s.ninitialized == s.ridx[s.m],
-                        "SparseGEMV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                        "SparseGEMV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                    );
 
                     //
                     // Try vendor kernels
@@ -20904,7 +21114,8 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[s.m],
-                    "SparseMV2: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseMV2: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
                 for (i = 0; i <= s.m - 1; i++)
                 {
                     tval = 0;
@@ -20926,7 +21137,6 @@ public partial class alglib
             }
 
             if (s.matrixtype == 2)
-            {
                 //
                 // SKS format
                 //
@@ -20975,7 +21185,6 @@ public partial class alglib
                     y0[i] = vd0;
                     y1[i] = vd1;
                 }
-            }
         }
 
 
@@ -21045,7 +21254,8 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[s.m],
-                    "SparseSMV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseSMV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
                 for (i = 0; i <= n - 1; i++)
                 {
                     if (s.didx[i] != s.uidx[i]) y[i] = y[i] + s.vals[s.didx[i]] * x[s.idx[s.didx[i]]];
@@ -21088,7 +21298,6 @@ public partial class alglib
             }
 
             if (s.matrixtype == 2)
-            {
                 //
                 // SKS format
                 //
@@ -21135,7 +21344,6 @@ public partial class alglib
 
                     y[i] = vd;
                 }
-            }
         }
 
 
@@ -21168,7 +21376,8 @@ public partial class alglib
             ap.assert(ap.len(x) >= s.n, "SparseMultiplyColsBy: length(X)<N");
             ap.assert(
                 s.ninitialized == s.ridx[s.m],
-                "SparseMultiplyColsBy: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                "SparseMultiplyColsBy: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+            );
             for (i = 0; i <= s.m - 1; i++)
             {
                 j0 = s.ridx[i];
@@ -21207,7 +21416,8 @@ public partial class alglib
             ap.assert(ap.len(x) >= s.m, "SparseMultiplyColsBy: length(X)<M");
             ap.assert(
                 s.ninitialized == s.ridx[s.m],
-                "SparseMultiplyColsBy: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                "SparseMultiplyColsBy: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+            );
             for (i = 0; i <= s.m - 1; i++)
             {
                 j0 = s.ridx[i];
@@ -21275,7 +21485,8 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[s.m],
-                    "SparseVSMV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseVSMV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
                 for (i = 0; i <= n - 1; i++)
                 {
                     if (s.didx[i] != s.uidx[i])
@@ -21417,9 +21628,9 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[m],
-                    "SparseMM: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseMM: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
                 if (k < linalgswitch)
-                {
                     for (i = 0; i <= m - 1; i++)
                     for (j = 0; j <= k - 1; j++)
                     {
@@ -21430,9 +21641,7 @@ public partial class alglib
 
                         b[i, j] = tval;
                     }
-                }
                 else
-                {
                     for (i = 0; i <= m - 1; i++)
                     {
                         lt = s.ridx[i];
@@ -21444,7 +21653,6 @@ public partial class alglib
                             for (i_ = 0; i_ <= k - 1; i_++) b[i, i_] = b[i, i_] + v * a[id, i_];
                         }
                     }
-                }
 
                 return;
             }
@@ -21470,19 +21678,17 @@ public partial class alglib
                         {
                             v = s.vals[lt + (j - lt1)];
                             if (k < linalgswitch)
-                            {
                                 //
                                 // Use loop
                                 //
-                                for (k0 = 0; k0 <= k1; k0++) b[i, k0] = b[i, k0] + v * a[j, k0];
-                            }
+                                for (k0 = 0; k0 <= k1; k0++)
+                                    b[i, k0] = b[i, k0] + v * a[j, k0];
                             else
-                            {
                                 //
                                 // Use vector operation
                                 //
-                                for (i_ = 0; i_ <= k - 1; i_++) b[i, i_] = b[i, i_] + v * a[j, i_];
-                            }
+                                for (i_ = 0; i_ <= k - 1; i_++)
+                                    b[i, i_] = b[i, i_] + v * a[j, i_];
                         }
                     }
 
@@ -21495,19 +21701,17 @@ public partial class alglib
                         {
                             v = s.vals[lt + (j - lt1)];
                             if (k < linalgswitch)
-                            {
                                 //
                                 // Use loop
                                 //
-                                for (k0 = 0; k0 <= k1; k0++) b[j, k0] = b[j, k0] + v * a[i, k0];
-                            }
+                                for (k0 = 0; k0 <= k1; k0++)
+                                    b[j, k0] = b[j, k0] + v * a[i, k0];
                             else
-                            {
                                 //
                                 // Use vector operation
                                 //
-                                for (i_ = 0; i_ <= k - 1; i_++) b[j, i_] = b[j, i_] + v * a[i, i_];
-                            }
+                                for (i_ = 0; i_ <= k - 1; i_++)
+                                    b[j, i_] = b[j, i_] + v * a[i, i_];
                         }
                     }
 
@@ -21580,9 +21784,9 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[m],
-                    "SparseMTM: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseMTM: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
                 if (k < linalgswitch)
-                {
                     for (i = 0; i <= m - 1; i++)
                     {
                         lt = s.ridx[i];
@@ -21594,9 +21798,7 @@ public partial class alglib
                             for (j = 0; j <= k - 1; j++) b[ct, j] = b[ct, j] + v * a[i, j];
                         }
                     }
-                }
                 else
-                {
                     for (i = 0; i <= m - 1; i++)
                     {
                         lt = s.ridx[i];
@@ -21608,7 +21810,6 @@ public partial class alglib
                             for (i_ = 0; i_ <= k - 1; i_++) b[ct, i_] = b[ct, i_] + v * a[i, i_];
                         }
                     }
-                }
 
                 return;
             }
@@ -21634,19 +21835,17 @@ public partial class alglib
                         {
                             v = s.vals[lt + (j - lt1)];
                             if (k < linalgswitch)
-                            {
                                 //
                                 // Use loop
                                 //
-                                for (k0 = 0; k0 <= k1; k0++) b[j, k0] = b[j, k0] + v * a[i, k0];
-                            }
+                                for (k0 = 0; k0 <= k1; k0++)
+                                    b[j, k0] = b[j, k0] + v * a[i, k0];
                             else
-                            {
                                 //
                                 // Use vector operation
                                 //
-                                for (i_ = 0; i_ <= k - 1; i_++) b[j, i_] = b[j, i_] + v * a[i, i_];
-                            }
+                                for (i_ = 0; i_ <= k - 1; i_++)
+                                    b[j, i_] = b[j, i_] + v * a[i, i_];
                         }
                     }
 
@@ -21659,19 +21858,17 @@ public partial class alglib
                         {
                             v = s.vals[lt + (j - lt1)];
                             if (k < linalgswitch)
-                            {
                                 //
                                 // Use loop
                                 //
-                                for (k0 = 0; k0 <= k1; k0++) b[i, k0] = b[i, k0] + v * a[j, k0];
-                            }
+                                for (k0 = 0; k0 <= k1; k0++)
+                                    b[i, k0] = b[i, k0] + v * a[j, k0];
                             else
-                            {
                                 //
                                 // Use vector operation
                                 //
-                                for (i_ = 0; i_ <= k - 1; i_++) b[i, i_] = b[i, i_] + v * a[j, i_];
-                            }
+                                for (i_ = 0; i_ <= k - 1; i_++)
+                                    b[i, i_] = b[i, i_] + v * a[j, i_];
                         }
                     }
 
@@ -21754,9 +21951,9 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[s.m],
-                    "SparseMM2: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseMM2: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
                 if (k < linalgswitch)
-                {
                     for (i = 0; i <= n - 1; i++)
                     for (j = 0; j <= k - 1; j++)
                     {
@@ -21773,9 +21970,7 @@ public partial class alglib
 
                         b0[i, j] = tval;
                     }
-                }
                 else
-                {
                     for (i = 0; i <= n - 1; i++)
                     {
                         lt = s.ridx[i];
@@ -21789,7 +21984,6 @@ public partial class alglib
                             for (i_ = 0; i_ <= k - 1; i_++) b1[ct, i_] = b1[ct, i_] + v * a[i, i_];
                         }
                     }
-                }
 
                 return;
             }
@@ -21946,9 +22140,9 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[s.m],
-                    "SparseSMM: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseSMM: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
                 if (k > linalgswitch)
-                {
                     for (i = 0; i <= n - 1; i++)
                     for (j = 0; j <= k - 1; j++)
                     {
@@ -21991,9 +22185,7 @@ public partial class alglib
                             b[i, j] = b[i, j] + vb;
                         }
                     }
-                }
                 else
-                {
                     for (i = 0; i <= n - 1; i++)
                     {
                         if (s.didx[i] != s.uidx[i])
@@ -22030,7 +22222,6 @@ public partial class alglib
                             }
                         }
                     }
-                }
 
                 return;
             }
@@ -22182,19 +22373,17 @@ public partial class alglib
             n = s.n;
             apserv.rvectorsetlengthatleast(ref y, n, _params);
             if (isunit)
-            {
                 //
                 // Set initial value of y to x
                 //
-                for (i = 0; i <= n - 1; i++) y[i] = x[i];
-            }
+                for (i = 0; i <= n - 1; i++)
+                    y[i] = x[i];
             else
-            {
                 //
                 // Set initial value of y to 0
                 //
-                for (i = 0; i <= n - 1; i++) y[i] = 0;
-            }
+                for (i = 0; i <= n - 1; i++)
+                    y[i] = 0;
 
             if (s.matrixtype == 1)
             {
@@ -22203,7 +22392,8 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[s.m],
-                    "SparseTRMV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseTRMV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
                 for (i = 0; i <= n - 1; i++)
                 {
                     //
@@ -22390,7 +22580,8 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[s.m],
-                    "SparseTRSV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseTRSV: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
                 if (optype == 0)
                 {
                     //
@@ -22443,7 +22634,9 @@ public partial class alglib
                                 vd = s.vals[s.didx[i]];
                         }
                         else
+                        {
                             vd = 1.0;
+                        }
 
                         v = (x[i] - v) / vd;
                         x[i] = v;
@@ -22498,7 +22691,9 @@ public partial class alglib
                                     vd = s.vals[s.didx[i]];
                             }
                             else
+                            {
                                 vd = 1.0;
+                            }
 
                             v = v / vd;
                             x[i] = v;
@@ -22910,7 +23105,8 @@ public partial class alglib
             //
             // Finalize matrix
             //
-            for (i = 0; i <= n - 1; i++) tsort.tagsortmiddleir(ref b.idx, ref b.vals, b.ridx[i], b.ridx[i + 1] - b.ridx[i], _params);
+            for (i = 0; i <= n - 1; i++)
+                tsort.tagsortmiddleir(ref b.idx, ref b.vals, b.ridx[i], b.ridx[i + 1] - b.ridx[i], _params);
 
             sparseinitduidx(b, _params);
         }
@@ -23086,7 +23282,8 @@ public partial class alglib
             //
             // Finalize matrix
             //
-            for (i = 0; i <= n - 1; i++) tsort.tagsortmiddleir(ref b.idx, ref b.vals, b.ridx[i], b.ridx[i + 1] - b.ridx[i], _params);
+            for (i = 0; i <= n - 1; i++)
+                tsort.tagsortmiddleir(ref b.idx, ref b.vals, b.ridx[i], b.ridx[i + 1] - b.ridx[i], _params);
 
             sparseinitduidx(b, _params);
         }
@@ -23168,7 +23365,9 @@ public partial class alglib
                 {
                     k = s.idx[j];
                     if (k == i)
+                    {
                         s.didx[i] = j;
+                    }
                     else
                     {
                         if (k > i && s.uidx[i] == -1)
@@ -23336,7 +23535,8 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[s.m],
-                    "SparseEnumerate: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseEnumerate: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
                 if (t0 >= s.ninitialized)
                 {
                     t0 = 0;
@@ -23472,7 +23672,8 @@ public partial class alglib
             {
                 ap.assert(
                     s.ninitialized == s.ridx[s.m],
-                    "SparseRewriteExisting: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseRewriteExisting: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
                 k0 = s.ridx[i];
                 k1 = s.ridx[i + 1] - 1;
                 while (k0 <= k1)
@@ -23657,7 +23858,8 @@ public partial class alglib
           -- ALGLIB PROJECT --
              Copyright 10.12.2014 by Bochkanov Sergey
         *************************************************************************/
-        public static void sparsegetcompressedrow(sparsematrix s, int i, ref int[] colidx, ref double[] vals, ref int nzcnt, xparams _params)
+        public static void sparsegetcompressedrow(sparsematrix s, int i, ref int[] colidx, ref double[] vals, ref int nzcnt,
+            xparams _params)
         {
             var k = 0;
             var k0 = 0;
@@ -23811,7 +24013,9 @@ public partial class alglib
                     s.vals[offsdst] = s.vals[offs + i];
                 }
                 else
+                {
                     s.vals[offsdst] = s.vals[offsdst] + s.vals[offs + i];
+                }
 
             nz = offsdst - offs + 1;
             uidx = -1;
@@ -23820,7 +24024,9 @@ public partial class alglib
             {
                 k = s.idx[j];
                 if (k == m)
+                {
                     didx = j;
+                }
                 else
                 {
                     if (k > m && uidx == -1)
@@ -23905,7 +24111,8 @@ public partial class alglib
             ap.assert(k >= 0 && k < s.n, "SparseAppendElement: K is outside of [0,N) range");
             ap.assert(
                 s.ridx[s.m] == s.ridx[s.m - 1] || k > s.idx[s.ridx[s.m] - 1],
-                "SparseAppendElement: elements must be added from left to right (column indexes must increase)");
+                "SparseAppendElement: elements must be added from left to right (column indexes must increase)"
+            );
             ap.assert(math.isfinite(v), "SparseAppendElement: V is not a finite number");
             m = s.m;
             offs = s.ridx[m];
@@ -24503,12 +24710,10 @@ public partial class alglib
 
             ap.assert(s.matrixtype == 0 || s.matrixtype == 1 || s.matrixtype == 2, "SparseConvertToHash: invalid matrix type");
             if (s.matrixtype == 0)
-            {
                 //
                 // Already in Hash mode
                 //
                 return;
-            }
 
             if (s.matrixtype == 1)
             {
@@ -24636,7 +24841,8 @@ public partial class alglib
                 t0 = 0;
                 t1 = 0;
                 sparsecreatebuf(s0.m, s0.n, s0.ridx[s0.m], s1, _params);
-                while (sparseenumerate(s0, ref t0, ref t1, ref i, ref j, ref val, _params)) sparseset(s1, i, j, val, _params);
+                while (sparseenumerate(s0, ref t0, ref t1, ref i, ref j, ref val, _params))
+                    sparseset(s1, i, j, val, _params);
 
                 return;
             }
@@ -24649,7 +24855,8 @@ public partial class alglib
                 t0 = 0;
                 t1 = 0;
                 sparsecreatebuf(s0.m, s0.n, s0.ridx[s0.m], s1, _params);
-                while (sparseenumerate(s0, ref t0, ref t1, ref i, ref j, ref val, _params)) sparseset(s1, i, j, val, _params);
+                while (sparseenumerate(s0, ref t0, ref t1, ref i, ref j, ref val, _params))
+                    sparseset(s1, i, j, val, _params);
 
                 return;
             }
@@ -24745,7 +24952,8 @@ public partial class alglib
                         temp[tidx[2 * i]] = temp[tidx[2 * i]] + 1;
                     }
 
-                for (i = 0; i <= s.m - 1; i++) tsort.tagsortmiddleir(ref s.idx, ref s.vals, s.ridx[i], s.ridx[i + 1] - s.ridx[i], _params);
+                for (i = 0; i <= s.m - 1; i++)
+                    tsort.tagsortmiddleir(ref s.idx, ref s.vals, s.ridx[i], s.ridx[i + 1] - s.ridx[i], _params);
 
                 //
                 // Initialization 'S.UIdx' and 'S.DIdx'
@@ -24755,12 +24963,10 @@ public partial class alglib
             }
 
             if (s.matrixtype == 1)
-            {
                 //
                 // Already CRS
                 //
                 return;
-            }
 
             if (s.matrixtype == 2)
             {
@@ -24961,7 +25167,8 @@ public partial class alglib
                 //
                 // Sorting of elements
                 //
-                for (i = 0; i <= s1.m - 1; i++) tsort.tagsortmiddleir(ref s1.idx, ref s1.vals, s1.ridx[i], s1.ridx[i + 1] - s1.ridx[i], _params);
+                for (i = 0; i <= s1.m - 1; i++)
+                    tsort.tagsortmiddleir(ref s1.idx, ref s1.vals, s1.ridx[i], s1.ridx[i + 1] - s1.ridx[i], _params);
 
                 //
                 // Initialization 'S.UIdx' and 'S.DIdx'
@@ -25103,12 +25310,10 @@ public partial class alglib
             ap.assert(s.m == s.n, "SparseConvertToSKS: rectangular matrices are not supported");
             n = s.n;
             if (s.matrixtype == 2)
-            {
                 //
                 // Already in SKS mode
                 //
                 return;
-            }
 
             //
             // Generate internal copy of SKS matrix
@@ -25345,7 +25550,8 @@ public partial class alglib
             ap.assert(s.m > 0, "SparseCreateCRSInplace: integrity check failed");
             ap.assert(s.n > 0, "SparseCreateCRSInplace: integrity check failed");
             ap.assert(ap.len(s.ridx) >= m + 1, "SparseCreateCRSInplace: integrity check failed");
-            for (i = 0; i <= m - 1; i++) ap.assert(s.ridx[i] >= 0 && s.ridx[i] <= s.ridx[i + 1], "SparseCreateCRSInplace: integrity check failed");
+            for (i = 0; i <= m - 1; i++)
+                ap.assert(s.ridx[i] >= 0 && s.ridx[i] <= s.ridx[i + 1], "SparseCreateCRSInplace: integrity check failed");
 
             ap.assert(s.ridx[m] <= ap.len(s.idx), "SparseCreateCRSInplace: integrity check failed");
             ap.assert(s.ridx[m] <= ap.len(s.vals), "SparseCreateCRSInplace: integrity check failed");
@@ -25369,7 +25575,8 @@ public partial class alglib
                         break;
                     }
 
-                if (j1 > j0) ap.assert(s.idx[j0] >= 0 && s.idx[j1 - 1] < n, "SparseCreateCRSInplace: integrity check 655132 failed");
+                if (j1 > j0)
+                    ap.assert(s.idx[j0] >= 0 && s.idx[j1 - 1] < n, "SparseCreateCRSInplace: integrity check 655132 failed");
             }
 
             sparseinitduidx(s, _params);
@@ -25401,7 +25608,8 @@ public partial class alglib
 
             ap.assert(
                 s.matrixtype == 0 || s.matrixtype == 1 || s.matrixtype == 2 || s.matrixtype == -10081 || s.matrixtype == -10082,
-                "SparseGetMatrixType: invalid matrix type");
+                "SparseGetMatrixType: invalid matrix type"
+            );
             result = s.matrixtype;
             return result;
         }
@@ -25427,7 +25635,8 @@ public partial class alglib
 
             ap.assert(
                 s.matrixtype == 0 || s.matrixtype == 1 || s.matrixtype == 2 || s.matrixtype == -10081 || s.matrixtype == -10082,
-                "SparseIsHash: invalid matrix type");
+                "SparseIsHash: invalid matrix type"
+            );
             result = s.matrixtype == 0;
             return result;
         }
@@ -25453,7 +25662,8 @@ public partial class alglib
 
             ap.assert(
                 s.matrixtype == 0 || s.matrixtype == 1 || s.matrixtype == 2 || s.matrixtype == -10081 || s.matrixtype == -10082,
-                "SparseIsCRS: invalid matrix type");
+                "SparseIsCRS: invalid matrix type"
+            );
             result = s.matrixtype == 1;
             return result;
         }
@@ -25479,7 +25689,8 @@ public partial class alglib
 
             ap.assert(
                 s.matrixtype == 0 || s.matrixtype == 1 || s.matrixtype == 2 || s.matrixtype == -10081 || s.matrixtype == -10082,
-                "SparseIsSKS: invalid matrix type");
+                "SparseIsSKS: invalid matrix type"
+            );
             result = s.matrixtype == 2;
             return result;
         }
@@ -25587,7 +25798,8 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[s.m],
-                    "SparseGetUpperCount: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseGetUpperCount: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
                 result = 0;
                 sz = s.m;
                 for (i = 0; i <= sz - 1; i++) result = result + (s.ridx[i + 1] - s.uidx[i]);
@@ -25660,7 +25872,8 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ninitialized == s.ridx[s.m],
-                    "SparseGetUpperCount: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)");
+                    "SparseGetUpperCount: some rows/elements of the CRS matrix were not initialized (you must initialize everything you promised to SparseCreateCRS)"
+                );
                 result = 0;
                 sz = s.m;
                 for (i = 0; i <= sz - 1; i++) result = result + (s.didx[i] - s.ridx[i]);
@@ -25725,8 +25938,8 @@ public partial class alglib
           -- ALGLIB PROJECT --
              Copyright 12.11.2023 by Bochkanov Sergey
         *************************************************************************/
-        public static void sparsescale(sparsematrix s, int scltype, bool scalerows, bool scalecols, bool colsfirst, ref double[] r, ref double[] c,
-            xparams _params)
+        public static void sparsescale(sparsematrix s, int scltype, bool scalerows, bool scalecols, bool colsfirst, ref double[] r,
+            ref double[] c, xparams _params)
         {
             var n = 0;
             var m = 0;
@@ -25760,7 +25973,6 @@ public partial class alglib
             // Equilibration scaling
             //
             if (scltype == 1)
-            {
                 for (axis = 0; axis <= 1; axis++)
                     if ((colsfirst && axis == 0) || (!colsfirst && axis == 1))
                     {
@@ -25804,7 +26016,6 @@ public partial class alglib
                         // Scale rows
                         //
                         if (scalerows)
-                        {
                             for (i = 0; i <= m - 1; i++)
                             {
                                 j0 = s.ridx[i];
@@ -25818,9 +26029,7 @@ public partial class alglib
                                 v = 1 / v;
                                 for (jj = j0; jj <= j1; jj++) s.vals[jj] = v * s.vals[jj];
                             }
-                        }
                     }
-            }
         }
 
 
@@ -26264,11 +26473,9 @@ public partial class alglib
             }
 
             if (tneeded != 0)
-            {
                 for (i = 0; i <= n - 1; i++)
                 for (j = 0; j <= n - 1; j++)
                     h[i, j] = h1[1 + i, 1 + j];
-            }
 
             if (zneeded != 0)
             {
@@ -26483,7 +26690,8 @@ public partial class alglib
                     ref workc1,
                     ref works1,
                     ref info,
-                    _params);
+                    _params
+                );
 
                 //
                 // fill entries under diagonal blocks of T with zeros
@@ -26595,12 +26803,10 @@ public partial class alglib
 
                     l = k;
                     if (l > 1)
-                    {
                         //
                         // H(L,L-1) is negligible.
                         //
                         h[l, l - 1] = 0;
-                    }
 
                     //
                     // Exit from loop if a submatrix of order <= MAXB has split off.
@@ -26650,7 +26856,8 @@ public partial class alglib
                             ref workc1,
                             ref works1,
                             ref ierr,
-                            _params);
+                            _params
+                        );
                         for (p1 = 1; p1 <= ns; p1++)
                         {
                             wr[i - ns + p1] = tmpwr[p1];
@@ -26658,7 +26865,6 @@ public partial class alglib
                         }
 
                         if (ierr > 0)
-                        {
                             //
                             // If DLAHQR failed to compute all NS eigenvalues, use the
                             // unconverged diagonal elements as the remaining shifts.
@@ -26668,7 +26874,6 @@ public partial class alglib
                                 wr[i - ns + ii] = s[ii, ii];
                                 wi[i - ns + ii] = 0;
                             }
-                        }
                     }
 
                     //
@@ -26692,7 +26897,23 @@ public partial class alglib
                                 p1 = nv + 1;
                                 for (i_ = 1; i_ <= p1; i_++) vv[i_] = v[i_];
 
-                                blas.matrixvectormultiply(h, l, l + nv, l, l + nv - 1, false, vv, 1, nv, 1.0, ref v, 1, nv + 1, -wr[j], _params);
+                                blas.matrixvectormultiply(
+                                    h,
+                                    l,
+                                    l + nv,
+                                    l,
+                                    l + nv - 1,
+                                    false,
+                                    vv,
+                                    1,
+                                    nv,
+                                    1.0,
+                                    ref v,
+                                    1,
+                                    nv + 1,
+                                    -wr[j],
+                                    _params
+                                );
                                 nv = nv + 1;
                             }
                             else
@@ -26720,7 +26941,8 @@ public partial class alglib
                                         1,
                                         nv + 1,
                                         -(2 * wr[j]),
-                                        _params);
+                                        _params
+                                    );
                                     itemp = blas.vectoridxabsmax(vv, 1, nv + 1, _params);
                                     temp = 1 / Math.Max(Math.Abs(vv[itemp]), smlnum);
                                     p1 = nv + 1;
@@ -26743,7 +26965,8 @@ public partial class alglib
                                         1,
                                         nv + 2,
                                         temp,
-                                        _params);
+                                        _params
+                                    );
                                     nv = nv + 2;
                                 }
                             }
@@ -26814,12 +27037,10 @@ public partial class alglib
                         //
                         ablas.applyreflectionfromtheright(h, tau, v, i1, Math.Min(k + nr, i), k, k + nr - 1, ref work, _params);
                         if (wantz)
-                        {
                             //
                             // Accumulate transformations in the matrix Z
                             //
                             ablas.applyreflectionfromtheright(z, tau, v, 1, n, k, k + nr - 1, ref work, _params);
-                        }
                     }
                 }
 
@@ -26853,7 +27074,8 @@ public partial class alglib
                     ref workc1,
                     ref works1,
                     ref info,
-                    _params);
+                    _params
+                );
                 if (info > 0) return;
 
                 //
@@ -26882,9 +27104,9 @@ public partial class alglib
         /*************************************************************************
         Translation of DLAHQR from LAPACK.
         *************************************************************************/
-        private static void internalauxschur(bool wantt, bool wantz, int n, int ilo, int ihi, ref double[,] h, ref double[] wr, ref double[] wi,
-            int iloz, int ihiz, ref double[,] z, ref double[] work, ref double[] workv3, ref double[] workc1, ref double[] works1, ref int info,
-            xparams _params)
+        private static void internalauxschur(bool wantt, bool wantz, int n, int ilo, int ihi, ref double[,] h, ref double[] wr,
+            ref double[] wi, int iloz, int ihiz, ref double[,] z, ref double[] work, ref double[] workv3, ref double[] workc1,
+            ref double[] works1, ref int info, xparams _params)
         {
             double safmin = 0;
             double tst = 0;
@@ -27056,12 +27278,10 @@ public partial class alglib
 
                     l = k;
                     if (l > ilo)
-                    {
                         //
                         // H(L,L-1) is negligible
                         //
                         h[l, l - 1] = 0;
-                    }
 
                     //
                     // Exit from loop if a submatrix of order 1 or 2 has split off.
@@ -27231,7 +27451,6 @@ public partial class alglib
                         else
                         {
                             if (m > l)
-                            {
                                 //
                                 // ==== Use the following instead of
                                 // H( K, K-1 ) = -H( K, K-1 ) to
@@ -27239,7 +27458,6 @@ public partial class alglib
                                 // underflow. ====
                                 //
                                 h[k, k - 1] = h[k, k - 1] * (1 - t1);
-                            }
                         }
 
                         v2 = workv3[2];
@@ -27274,7 +27492,6 @@ public partial class alglib
                             }
 
                             if (wantz)
-                            {
                                 //
                                 // Accumulate transformations in the matrix Z
                                 //
@@ -27285,7 +27502,6 @@ public partial class alglib
                                     z[j, k + 1] = z[j, k + 1] - sum * t2;
                                     z[j, k + 2] = z[j, k + 2] - sum * t3;
                                 }
-                            }
                         }
                         else
                         {
@@ -27314,7 +27530,6 @@ public partial class alglib
                                 }
 
                                 if (wantz)
-                                {
                                     //
                                     // Accumulate transformations in the matrix Z
                                     //
@@ -27324,7 +27539,6 @@ public partial class alglib
                                         z[j, k] = z[j, k] - sum * t1;
                                         z[j, k + 1] = z[j, k + 1] - sum * t2;
                                     }
-                                }
                             }
                         }
                     }
@@ -27364,7 +27578,19 @@ public partial class alglib
                         him1i = h[i - 1, i];
                         hiim1 = h[i, i - 1];
                         hii = h[i, i];
-                        aux2x2schur(ref him1im1, ref him1i, ref hiim1, ref hii, ref wrim1, ref wiim1, ref wri, ref wii, ref cs, ref sn, _params);
+                        aux2x2schur(
+                            ref him1im1,
+                            ref him1i,
+                            ref hiim1,
+                            ref hii,
+                            ref wrim1,
+                            ref wiim1,
+                            ref wri,
+                            ref wii,
+                            ref cs,
+                            ref sn,
+                            _params
+                        );
                         wr[i - 1] = wrim1;
                         wi[i - 1] = wiim1;
                         wr[i] = wri;
@@ -27410,8 +27636,8 @@ public partial class alglib
         }
 
 
-        private static void aux2x2schur(ref double a, ref double b, ref double c, ref double d, ref double rt1r, ref double rt1i, ref double rt2r,
-            ref double rt2i, ref double cs, ref double sn, xparams _params)
+        private static void aux2x2schur(ref double a, ref double b, ref double c, ref double d, ref double rt1r, ref double rt1i,
+            ref double rt2r, ref double rt2i, ref double cs, ref double sn, xparams _params)
         {
             double multpl = 0;
             double aa = 0;
@@ -28024,7 +28250,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 16.01.2017 by Bochkanov Sergey
         *************************************************************************/
-        public static void eigsubspaceoocstop(eigsubspacestate state, ref double[] w, ref double[,] z, eigsubspacereport rep, xparams _params)
+        public static void eigsubspaceoocstop(eigsubspacestate state, ref double[] w, ref double[,] z, eigsubspacereport rep,
+            xparams _params)
         {
             var n = 0;
             var k = 0;
@@ -28188,8 +28415,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 16.01.2017 by Bochkanov Sergey
         *************************************************************************/
-        public static void eigsubspacesolvesparses(eigsubspacestate state, sparse.sparsematrix a, bool isupper, ref double[] w, ref double[,] z,
-            eigsubspacereport rep, xparams _params)
+        public static void eigsubspacesolvesparses(eigsubspacestate state, sparse.sparsematrix a, bool isupper, ref double[] w,
+            ref double[,] z, eigsubspacereport rep, xparams _params)
         {
             var n = 0;
             var i = 0;
@@ -28375,7 +28602,8 @@ public partial class alglib
             //
             convcnt = 0;
             lbl_5:
-            if (!((state.maxits == 0 || state.repiterationscount < state.maxits) && convcnt < stepswithintol)) goto lbl_6;
+            if (!((state.maxits == 0 || state.repiterationscount < state.maxits) && convcnt < stepswithintol))
+                goto lbl_6;
 
             //
             // Update QCur := QNew
@@ -29215,12 +29443,10 @@ public partial class alglib
             }
 
             if (zneeded == 3)
-            {
                 //
                 // Allocate memory
                 //
                 apserv.rmatrixsetlengthatleast(ref z, 1, n, _params);
-            }
 
             //
             // Try to solve problem with MKL
@@ -29410,24 +29636,26 @@ public partial class alglib
             //
             if (zneeded == 0)
             {
-                result = internalbisectioneigenvalues(
-                    d1,
-                    e1,
-                    n,
-                    2,
-                    1,
-                    a,
-                    b,
-                    0,
-                    0,
-                    -1,
-                    ref w,
-                    ref m,
-                    ref nsplit,
-                    ref iblock,
-                    ref isplit,
-                    ref errorcode,
-                    _params);
+                result =
+                    internalbisectioneigenvalues(
+                        d1,
+                        e1,
+                        n,
+                        2,
+                        1,
+                        a,
+                        b,
+                        0,
+                        0,
+                        -1,
+                        ref w,
+                        ref m,
+                        ref nsplit,
+                        ref iblock,
+                        ref isplit,
+                        ref errorcode,
+                        _params
+                    );
                 if (!result || m == 0)
                 {
                     m = 0;
@@ -29449,24 +29677,26 @@ public partial class alglib
                 //
                 // Find eigen pairs
                 //
-                result = internalbisectioneigenvalues(
-                    d1,
-                    e1,
-                    n,
-                    2,
-                    2,
-                    a,
-                    b,
-                    0,
-                    0,
-                    -1,
-                    ref w,
-                    ref m,
-                    ref nsplit,
-                    ref iblock,
-                    ref isplit,
-                    ref errorcode,
-                    _params);
+                result =
+                    internalbisectioneigenvalues(
+                        d1,
+                        e1,
+                        n,
+                        2,
+                        2,
+                        a,
+                        b,
+                        0,
+                        0,
+                        -1,
+                        ref w,
+                        ref m,
+                        ref nsplit,
+                        ref iblock,
+                        ref isplit,
+                        ref errorcode,
+                        _params
+                    );
                 if (!result || m == 0)
                 {
                     m = 0;
@@ -29544,24 +29774,26 @@ public partial class alglib
                 //
                 // Find eigen pairs
                 //
-                result = internalbisectioneigenvalues(
-                    d1,
-                    e1,
-                    n,
-                    2,
-                    2,
-                    a,
-                    b,
-                    0,
-                    0,
-                    -1,
-                    ref w,
-                    ref m,
-                    ref nsplit,
-                    ref iblock,
-                    ref isplit,
-                    ref errorcode,
-                    _params);
+                result =
+                    internalbisectioneigenvalues(
+                        d1,
+                        e1,
+                        n,
+                        2,
+                        2,
+                        a,
+                        b,
+                        0,
+                        0,
+                        -1,
+                        ref w,
+                        ref m,
+                        ref nsplit,
+                        ref iblock,
+                        ref isplit,
+                        ref errorcode,
+                        _params
+                    );
                 if (!result || m == 0)
                 {
                     m = 0;
@@ -29714,24 +29946,26 @@ public partial class alglib
             //
             if (zneeded == 0)
             {
-                result = internalbisectioneigenvalues(
-                    d1,
-                    e1,
-                    n,
-                    3,
-                    1,
-                    0,
-                    0,
-                    i1 + 1,
-                    i2 + 1,
-                    -1,
-                    ref w,
-                    ref m,
-                    ref nsplit,
-                    ref iblock,
-                    ref isplit,
-                    ref errorcode,
-                    _params);
+                result =
+                    internalbisectioneigenvalues(
+                        d1,
+                        e1,
+                        n,
+                        3,
+                        1,
+                        0,
+                        0,
+                        i1 + 1,
+                        i2 + 1,
+                        -1,
+                        ref w,
+                        ref m,
+                        ref nsplit,
+                        ref iblock,
+                        ref isplit,
+                        ref errorcode,
+                        _params
+                    );
                 if (!result) return result;
 
                 if (m != i2 - i1 + 1)
@@ -29754,24 +29988,26 @@ public partial class alglib
                 //
                 // Find eigen pairs
                 //
-                result = internalbisectioneigenvalues(
-                    d1,
-                    e1,
-                    n,
-                    3,
-                    2,
-                    0,
-                    0,
-                    i1 + 1,
-                    i2 + 1,
-                    -1,
-                    ref w,
-                    ref m,
-                    ref nsplit,
-                    ref iblock,
-                    ref isplit,
-                    ref errorcode,
-                    _params);
+                result =
+                    internalbisectioneigenvalues(
+                        d1,
+                        e1,
+                        n,
+                        3,
+                        2,
+                        0,
+                        0,
+                        i1 + 1,
+                        i2 + 1,
+                        -1,
+                        ref w,
+                        ref m,
+                        ref nsplit,
+                        ref iblock,
+                        ref isplit,
+                        ref errorcode,
+                        _params
+                    );
                 if (!result) return result;
 
                 if (m != i2 - i1 + 1)
@@ -29850,24 +30086,26 @@ public partial class alglib
                 //
                 // Find eigen pairs
                 //
-                result = internalbisectioneigenvalues(
-                    d1,
-                    e1,
-                    n,
-                    3,
-                    2,
-                    0,
-                    0,
-                    i1 + 1,
-                    i2 + 1,
-                    -1,
-                    ref w,
-                    ref m,
-                    ref nsplit,
-                    ref iblock,
-                    ref isplit,
-                    ref errorcode,
-                    _params);
+                result =
+                    internalbisectioneigenvalues(
+                        d1,
+                        e1,
+                        n,
+                        3,
+                        2,
+                        0,
+                        0,
+                        i1 + 1,
+                        i2 + 1,
+                        -1,
+                        ref w,
+                        ref m,
+                        ref nsplit,
+                        ref iblock,
+                        ref isplit,
+                        ref errorcode,
+                        _params
+                    );
                 if (!result) return result;
 
                 if (m != i2 - i1 + 1)
@@ -30247,7 +30485,6 @@ public partial class alglib
                 gotoflag = false;
                 m = l1;
                 if (l1 <= nm1)
-                {
                     for (m = l1; m <= nm1; m++)
                     {
                         tst = Math.Abs(e[m]);
@@ -30264,7 +30501,6 @@ public partial class alglib
                             break;
                         }
                     }
-                }
 
                 if (!gotoflag) m = n;
 
@@ -30282,11 +30518,14 @@ public partial class alglib
                 // Scale submatrix in rows and columns L to LEND
                 //
                 if (l == lend)
+                {
                     anorm = Math.Abs(d[l]);
+                }
                 else
                 {
                     anorm = Math.Max(Math.Abs(d[l]) + Math.Abs(e[l]), Math.Abs(e[lend - 1]) + Math.Abs(d[lend]));
-                    for (i = l + 1; i <= lend - 1; i++) anorm = Math.Max(anorm, Math.Abs(d[i]) + Math.Abs(e[i]) + Math.Abs(e[i - 1]));
+                    for (i = l + 1; i <= lend - 1; i++)
+                        anorm = Math.Max(anorm, Math.Abs(d[i]) + Math.Abs(e[i]) + Math.Abs(e[i - 1]));
                 }
 
                 iscale = 0;
@@ -30322,7 +30561,6 @@ public partial class alglib
                 }
 
                 if (lend > l)
-                {
                     //
                     // QL Iteration
                     //
@@ -30371,7 +30609,9 @@ public partial class alglib
                                         rotations.applyrotationsfromtheleft(false, l, l + 1, 1, zrows, workc, works, z, wtemp, _params);
                                 }
                                 else
+                                {
                                     tdevde2(d[l], e[l], d[l + 1], ref rt1, ref rt2, _params);
+                                }
 
                                 d[l] = rt1;
                                 d[l + 1] = rt2;
@@ -30386,12 +30626,10 @@ public partial class alglib
                             }
 
                             if (jtot == nmaxit)
-                            {
                                 //
                                 // GOTO 140
                                 //
                                 break;
-                            }
 
                             jtot = jtot + 1;
 
@@ -30463,9 +30701,7 @@ public partial class alglib
 
                         break;
                     }
-                }
                 else
-                {
                     //
                     // QR Iteration
                     //
@@ -30514,7 +30750,9 @@ public partial class alglib
                                         rotations.applyrotationsfromtheleft(true, l - 1, l, 1, zrows, workc, works, z, wtemp, _params);
                                 }
                                 else
+                                {
                                     tdevde2(d[l - 1], e[l - 1], d[l], ref rt1, ref rt2, _params);
+                                }
 
                                 d[l - 1] = rt1;
                                 d[l] = rt2;
@@ -30597,7 +30835,6 @@ public partial class alglib
 
                         break;
                     }
-                }
 
                 //
                 // Undo scaling if necessary
@@ -30663,7 +30900,9 @@ public partial class alglib
                     {
                         k = t / 2;
                         if (d[k] >= d[t])
+                        {
                             t = 1;
+                        }
                         else
                         {
                             tmp = d[k];
@@ -30687,7 +30926,9 @@ public partial class alglib
                     {
                         k = 2 * t;
                         if (k > i)
+                        {
                             t = 0;
+                        }
                         else
                         {
                             if (k < i)
@@ -30695,7 +30936,9 @@ public partial class alglib
                                     k = k + 1;
 
                             if (d[t] >= d[k])
+                            {
                                 t = 0;
+                            }
                             else
                             {
                                 tmp = d[k];
@@ -30799,18 +31042,18 @@ public partial class alglib
             }
 
             if (adf > ab)
+            {
                 rt = adf * Math.Sqrt(1 + math.sqr(ab / adf));
+            }
             else
             {
                 if (adf < ab)
                     rt = ab * Math.Sqrt(1 + math.sqr(adf / ab));
                 else
-                {
                     //
                     // Includes case AB=ADF=0
                     //
                     rt = ab * Math.Sqrt(2);
-                }
             }
 
             if (sm < 0)
@@ -30868,7 +31111,8 @@ public partial class alglib
              Courant Institute, Argonne National Lab, and Rice University
              October 31, 1992
         *************************************************************************/
-        private static void tdevdev2(double a, double b, double c, ref double rt1, ref double rt2, ref double cs1, ref double sn1, xparams _params)
+        private static void tdevdev2(double a, double b, double c, ref double rt1, ref double rt2, ref double cs1, ref double sn1,
+            xparams _params)
         {
             var sgn1 = 0;
             var sgn2 = 0;
@@ -30911,18 +31155,18 @@ public partial class alglib
             }
 
             if (adf > ab)
+            {
                 rt = adf * Math.Sqrt(1 + math.sqr(ab / adf));
+            }
             else
             {
                 if (adf < ab)
                     rt = ab * Math.Sqrt(1 + math.sqr(adf / ab));
                 else
-                {
                     //
                     // Includes case AB=ADF=0
                     //
                     rt = ab * Math.Sqrt(2);
-                }
             }
 
             if (sm < 0)
@@ -31039,8 +31283,9 @@ public partial class alglib
         }
 
 
-        private static bool internalbisectioneigenvalues(double[] d, double[] e, int n, int irange, int iorder, double vl, double vu, int il, int iu,
-            double abstol, ref double[] w, ref int m, ref int nsplit, ref int[] iblock, ref int[] isplit, ref int errorcode, xparams _params)
+        private static bool internalbisectioneigenvalues(double[] d, double[] e, int n, int irange, int iorder, double vl, double vu,
+            int il, int iu, double abstol, ref double[] w, ref int m, ref int nsplit, ref int[] iblock, ref int[] isplit, ref int errorcode,
+            xparams _params)
         {
             var result = new bool();
             double fudge = 0;
@@ -31197,7 +31442,9 @@ public partial class alglib
                 nsplit = 1;
                 isplit[1] = 1;
                 if (irange == 2 && (vl >= d[1] || vu < d[1]))
+                {
                     m = 0;
+                }
                 else
                 {
                     w[1] = d[1];
@@ -31350,7 +31597,8 @@ public partial class alglib
                     ref w,
                     ref iblock,
                     ref iinfo,
-                    _params);
+                    _params
+                );
                 iwork[5] = ia1s2[1];
                 iwork[6] = ia1s2[2];
                 work[n + 5] = ra1s2[1];
@@ -31395,7 +31643,8 @@ public partial class alglib
                 // RANGE='A' or 'V' -- Set ATOLI
                 //
                 tnorm = Math.Max(Math.Abs(d[1]) + Math.Abs(e[1]), Math.Abs(d[n]) + Math.Abs(e[n - 1]));
-                for (j = 2; j <= n - 1; j++) tnorm = Math.Max(tnorm, Math.Abs(d[j]) + Math.Abs(e[j - 1]) + Math.Abs(e[j]));
+                for (j = 2; j <= n - 1; j++)
+                    tnorm = Math.Max(tnorm, Math.Abs(d[j]) + Math.Abs(e[j - 1]) + Math.Abs(e[j]));
 
                 if (abstol <= 0)
                     atoli = ulp * tnorm;
@@ -31542,7 +31791,8 @@ public partial class alglib
                         ref rworkspace,
                         ref iworkspace,
                         ref iinfo,
-                        _params);
+                        _params
+                    );
                     for (tmpi = 1; tmpi <= iin; tmpi++)
                     {
                         work[n + tmpi] = ra1siinx2[tmpi, 1];
@@ -31606,7 +31856,8 @@ public partial class alglib
                         ref rworkspace,
                         ref iworkspace,
                         ref iinfo,
-                        _params);
+                        _params
+                    );
                     for (tmpi = 1; tmpi <= iin; tmpi++)
                     {
                         work[n + tmpi] = ra1siinx2[tmpi, 1];
@@ -31635,7 +31886,9 @@ public partial class alglib
                             ib = -jb;
                         }
                         else
+                        {
                             ib = jb;
+                        }
 
                         for (je = iwork[j] + 1 + iwoff; je <= iwork[j + iin] + iwoff; je++)
                         {
@@ -31661,11 +31914,15 @@ public partial class alglib
                 {
                     for (je = 1; je <= m; je++)
                         if (w[je] <= wlu && idiscl > 0)
+                        {
                             idiscl = idiscl - 1;
+                        }
                         else
                         {
                             if (w[je] >= wul && idiscu > 0)
+                            {
                                 idiscu = idiscu - 1;
+                            }
                             else
                             {
                                 im = im + 1;
@@ -31745,7 +32002,6 @@ public partial class alglib
             // If ORDER='E', sort the eigenvalues from smallest to largest
             //
             if (iorder == 1 && nsplit > 1)
-            {
                 for (je = 1; je <= m - 1; je++)
                 {
                     ie = 0;
@@ -31766,7 +32022,6 @@ public partial class alglib
                         iblock[je] = itmp1;
                     }
                 }
-            }
 
             for (j = 1; j <= m; j++) w[j] = w[j] * scalefactor;
 
@@ -31943,7 +32198,8 @@ public partial class alglib
                     gpind = b1;
                     onenrm = Math.Abs(d[b1]) + Math.Abs(e[b1]);
                     onenrm = Math.Max(onenrm, Math.Abs(d[bn]) + Math.Abs(e[bn - 1]));
-                    for (i = b1 + 1; i <= bn - 1; i++) onenrm = Math.Max(onenrm, Math.Abs(d[i]) + Math.Abs(e[i - 1]) + Math.Abs(e[i]));
+                    for (i = b1 + 1; i <= bn - 1; i++)
+                        onenrm = Math.Max(onenrm, Math.Abs(d[i]) + Math.Abs(e[i - 1]) + Math.Abs(e[i]));
 
                     ortol = 0.001 * onenrm;
                     dtpcrt = Math.Sqrt(0.1 / blksiz);
@@ -32050,7 +32306,6 @@ public partial class alglib
                                 if (Math.Abs(xj - xjm) > ortol) gpind = j;
 
                                 if (gpind != j)
-                                {
                                     for (i = gpind; i <= j - 1; i++)
                                     {
                                         i1 = b1;
@@ -32064,7 +32319,6 @@ public partial class alglib
 
                                         apserv.touchint(ref i2, _params);
                                     }
-                                }
                             }
 
                             //
@@ -32079,7 +32333,9 @@ public partial class alglib
                             //
                             tmpcriterion = false;
                             if (nrm < dtpcrt)
+                            {
                                 tmpcriterion = true;
+                            }
                             else
                             {
                                 nrmchk = nrmchk + 1;
@@ -32111,8 +32367,8 @@ public partial class alglib
         }
 
 
-        private static void tdininternaldlagtf(int n, ref double[] a, double lambdav, ref double[] b, ref double[] c, double tol, ref double[] d,
-            ref int[] iin, ref int info, xparams _params)
+        private static void tdininternaldlagtf(int n, ref double[] a, double lambdav, ref double[] b, ref double[] c, double tol,
+            ref double[] d, ref int[] iin, ref int info, xparams _params)
         {
             var k = 0;
             double eps = 0;
@@ -32201,8 +32457,8 @@ public partial class alglib
         }
 
 
-        private static void tdininternaldlagts(int n, double[] a, double[] b, double[] c, double[] d, int[] iin, ref double[] y, ref double tol,
-            ref int info, xparams _params)
+        private static void tdininternaldlagts(int n, double[] a, double[] b, double[] c, double[] d, int[] iin, ref double[] y,
+            ref double tol, ref int info, xparams _params)
         {
             var k = 0;
             double absak = 0;
@@ -32232,7 +32488,8 @@ public partial class alglib
                 tol = Math.Abs(a[1]);
                 if (n > 1) tol = Math.Max(tol, Math.Max(Math.Abs(a[2]), Math.Abs(b[1])));
 
-                for (k = 3; k <= n; k++) tol = Math.Max(tol, Math.Max(Math.Abs(a[k]), Math.Max(Math.Abs(b[k - 1]), Math.Abs(d[k - 2]))));
+                for (k = 3; k <= n; k++)
+                    tol = Math.Max(tol, Math.Max(Math.Abs(a[k]), Math.Max(Math.Abs(b[k - 1]), Math.Abs(d[k - 2]))));
 
                 tol = tol * eps;
                 if (tol == 0) tol = eps;
@@ -32240,7 +32497,9 @@ public partial class alglib
 
             for (k = 2; k <= n; k++)
                 if (iin[k - 1] == 0)
+                {
                     y[k] = y[k] - c[k - 1] * y[k - 1];
+                }
                 else
                 {
                     temp = y[k - 1];
@@ -32251,7 +32510,9 @@ public partial class alglib
             for (k = n; k >= 1; k--)
             {
                 if (k <= n - 2)
+                {
                     temp = y[k] - b[k] * y[k + 1] - d[k] * y[k + 2];
+                }
                 else
                 {
                     if (k == n - 1)
@@ -32300,9 +32561,9 @@ public partial class alglib
         }
 
 
-        private static void internaldlaebz(int ijob, int nitmax, int n, int mmax, int minp, double abstol, double reltol, double pivmin, double[] d,
-            double[] e, double[] e2, ref int[] nval, ref double[,] ab, ref double[] c, ref int mout, ref int[,] nab, ref double[] work,
-            ref int[] iwork, ref int info, xparams _params)
+        private static void internaldlaebz(int ijob, int nitmax, int n, int mmax, int minp, double abstol, double reltol, double pivmin,
+            double[] d, double[] e, double[] e2, ref int[] nval, ref double[,] ab, ref double[] c, ref int mout, ref int[,] nab,
+            ref double[] work, ref int[] iwork, ref int info, xparams _params)
         {
             var itmp1 = 0;
             var itmp2 = 0;
@@ -32580,8 +32841,8 @@ public partial class alglib
              Courant Institute, Argonne National Lab, and Rice University
              June 30, 1999
         *************************************************************************/
-        private static void rmatrixinternaltrevc(double[,] t, int n, int side, int howmny, bool[] vselect, ref double[,] vl, ref double[,] vr,
-            ref int m, ref int info, xparams _params)
+        private static void rmatrixinternaltrevc(double[,] t, int n, int side, int howmny, bool[] vselect, ref double[,] vl,
+            ref double[,] vr, ref int m, ref int info, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -32667,8 +32928,8 @@ public partial class alglib
              Courant Institute, Argonne National Lab, and Rice University
              June 30, 1999
         *************************************************************************/
-        private static void internaltrevc(double[,] t, int n, int side, int howmny, bool[] vselect, ref double[,] vl, ref double[,] vr, ref int m,
-            ref int info, xparams _params)
+        private static void internaltrevc(double[,] t, int n, int side, int howmny, bool[] vselect, ref double[,] vl, ref double[,] vr,
+            ref int m, ref int info, xparams _params)
         {
             var allv = new bool();
             var bothv = new bool();
@@ -32820,7 +33081,9 @@ public partial class alglib
                     }
             }
             else
+            {
                 m = n;
+            }
 
             //
             // Quick return if possible.
@@ -32864,7 +33127,9 @@ public partial class alglib
                 {
                     skipflag = false;
                     if (ip == 1)
+                    {
                         skipflag = true;
+                    }
                     else
                     {
                         if (ki != 1)
@@ -32919,13 +33184,11 @@ public partial class alglib
                                 j2 = j;
                                 jnxt = j - 1;
                                 if (j > 1)
-                                {
                                     if (t[j, j - 1] != 0)
                                     {
                                         j1 = j - 1;
                                         jnxt = j - 2;
                                     }
-                                }
 
                                 if (j1 == j2)
                                 {
@@ -32955,20 +33218,19 @@ public partial class alglib
                                         ref scl,
                                         ref xnorm,
                                         ref ierr,
-                                        _params);
+                                        _params
+                                    );
 
                                     //
                                     // Scale X(1,1) to avoid overflow when updating
                                     // the right-hand side.
                                     //
                                     if (xnorm > 1)
-                                    {
                                         if (work[j] > bignum / xnorm)
                                         {
                                             x[1, 1] = x[1, 1] / xnorm;
                                             scl = scl / xnorm;
                                         }
-                                    }
 
                                     //
                                     // Scale if necessary
@@ -33024,7 +33286,8 @@ public partial class alglib
                                         ref scl,
                                         ref xnorm,
                                         ref ierr,
-                                        _params);
+                                        _params
+                                    );
 
                                     //
                                     // Scale X(1,1) and X(2,1) to avoid overflow when
@@ -33108,7 +33371,8 @@ public partial class alglib
                                         1,
                                         n,
                                         work[ki + n],
-                                        _params);
+                                        _params
+                                    );
                                     for (i_ = 1; i_ <= n; i_++) vr[i_, ki] = temp[i_];
                                 }
 
@@ -33162,13 +33426,11 @@ public partial class alglib
                                 j2 = j;
                                 jnxt = j - 1;
                                 if (j > 1)
-                                {
                                     if (t[j, j - 1] != 0)
                                     {
                                         j1 = j - 1;
                                         jnxt = j - 2;
                                     }
-                                }
 
                                 if (j1 == j2)
                                 {
@@ -33199,21 +33461,20 @@ public partial class alglib
                                         ref scl,
                                         ref xnorm,
                                         ref ierr,
-                                        _params);
+                                        _params
+                                    );
 
                                     //
                                     // Scale X(1,1) and X(1,2) to avoid overflow when
                                     // updating the right-hand side.
                                     //
                                     if (xnorm > 1)
-                                    {
                                         if (work[j] > bignum / xnorm)
                                         {
                                             x[1, 1] = x[1, 1] / xnorm;
                                             x[1, 2] = x[1, 2] / xnorm;
                                             scl = scl / xnorm;
                                         }
-                                    }
 
                                     //
                                     // Scale if necessary
@@ -33285,7 +33546,8 @@ public partial class alglib
                                         ref scl,
                                         ref xnorm,
                                         ref ierr,
-                                        _params);
+                                        _params
+                                    );
 
                                     //
                                     // Scale X to avoid overflow when updating
@@ -33325,7 +33587,8 @@ public partial class alglib
                                     //
                                     vt = -x[1, 1];
                                     i1_ = 1 - (n + 1);
-                                    for (i_ = n + 1; i_ <= n + j - 2; i_++) work[i_] = work[i_] + vt * t[i_ + i1_, j - 1];
+                                    for (i_ = n + 1; i_ <= n + j - 2; i_++)
+                                        work[i_] = work[i_] + vt * t[i_ + i1_, j - 1];
 
                                     vt = -x[2, 1];
                                     i1_ = 1 - (n + 1);
@@ -33333,7 +33596,8 @@ public partial class alglib
 
                                     vt = -x[1, 2];
                                     i1_ = 1 - (n2 + 1);
-                                    for (i_ = n2 + 1; i_ <= n2 + j - 2; i_++) work[i_] = work[i_] + vt * t[i_ + i1_, j - 1];
+                                    for (i_ = n2 + 1; i_ <= n2 + j - 2; i_++)
+                                        work[i_] = work[i_] + vt * t[i_ + i1_, j - 1];
 
                                     vt = -x[2, 2];
                                     i1_ = 1 - (n2 + 1);
@@ -33353,7 +33617,8 @@ public partial class alglib
                                 for (i_ = 1; i_ <= ki; i_++) vr[i_, iis] = work[i_ + i1_];
 
                                 emax = 0;
-                                for (k = 1; k <= ki; k++) emax = Math.Max(emax, Math.Abs(vr[k, iis - 1]) + Math.Abs(vr[k, iis]));
+                                for (k = 1; k <= ki; k++)
+                                    emax = Math.Max(emax, Math.Abs(vr[k, iis - 1]) + Math.Abs(vr[k, iis]));
 
                                 remax = 1 / emax;
                                 for (i_ = 1; i_ <= ki; i_++) vr[i_, iis - 1] = remax * vr[i_, iis - 1];
@@ -33387,7 +33652,8 @@ public partial class alglib
                                         1,
                                         n,
                                         work[ki - 1 + n],
-                                        _params);
+                                        _params
+                                    );
                                     for (i_ = 1; i_ <= n; i_++) vr[i_, ki - 1] = temp[i_];
 
                                     for (i_ = 1; i_ <= n; i_++) temp[i_] = vr[i_, ki];
@@ -33407,7 +33673,8 @@ public partial class alglib
                                         1,
                                         n,
                                         work[ki + n2],
-                                        _params);
+                                        _params
+                                    );
                                     for (i_ = 1; i_ <= n; i_++) vr[i_, ki] = temp[i_];
                                 }
                                 else
@@ -33420,7 +33687,8 @@ public partial class alglib
                                 }
 
                                 emax = 0;
-                                for (k = 1; k <= n; k++) emax = Math.Max(emax, Math.Abs(vr[k, ki - 1]) + Math.Abs(vr[k, ki]));
+                                for (k = 1; k <= n; k++)
+                                    emax = Math.Max(emax, Math.Abs(vr[k, ki - 1]) + Math.Abs(vr[k, ki]));
 
                                 remax = 1 / emax;
                                 for (i_ = 1; i_ <= n; i_++) vr[i_, ki - 1] = remax * vr[i_, ki - 1];
@@ -33450,7 +33718,9 @@ public partial class alglib
                 {
                     skipflag = false;
                     if (ip == -1)
+                    {
                         skipflag = true;
+                    }
                     else
                     {
                         if (ki != n)
@@ -33499,13 +33769,11 @@ public partial class alglib
                                 j2 = j;
                                 jnxt = j + 1;
                                 if (j < n)
-                                {
                                     if (t[j + 1, j] != 0)
                                     {
                                         j2 = j + 1;
                                         jnxt = j + 2;
                                     }
-                                }
 
                                 if (j1 == j2)
                                 {
@@ -33556,7 +33824,8 @@ public partial class alglib
                                         ref scl,
                                         ref xnorm,
                                         ref ierr,
-                                        _params);
+                                        _params
+                                    );
 
                                     //
                                     // Scale if necessary
@@ -33630,7 +33899,8 @@ public partial class alglib
                                         ref scl,
                                         ref xnorm,
                                         ref ierr,
-                                        _params);
+                                        _params
+                                    );
 
                                     //
                                     // Scale if necessary
@@ -33681,7 +33951,8 @@ public partial class alglib
                                         1,
                                         n,
                                         work[ki + n],
-                                        _params);
+                                        _params
+                                    );
                                     for (i_ = 1; i_ <= n; i_++) vl[i_, ki] = temp[i_];
                                 }
 
@@ -33737,13 +34008,11 @@ public partial class alglib
                                 j2 = j;
                                 jnxt = j + 1;
                                 if (j < n)
-                                {
                                     if (t[j + 1, j] != 0)
                                     {
                                         j2 = j + 1;
                                         jnxt = j + 2;
                                     }
-                                }
 
                                 if (j1 == j2)
                                 {
@@ -33802,7 +34071,8 @@ public partial class alglib
                                         ref scl,
                                         ref xnorm,
                                         ref ierr,
-                                        _params);
+                                        _params
+                                    );
 
                                     //
                                     // Scale if necessary
@@ -33894,7 +34164,8 @@ public partial class alglib
                                         ref scl,
                                         ref xnorm,
                                         ref ierr,
-                                        _params);
+                                        _params
+                                    );
 
                                     //
                                     // Scale if necessary
@@ -33930,7 +34201,8 @@ public partial class alglib
                                 for (i_ = ki; i_ <= n; i_++) vl[i_, iis + 1] = work[i_ + i1_];
 
                                 emax = 0;
-                                for (k = ki; k <= n; k++) emax = Math.Max(emax, Math.Abs(vl[k, iis]) + Math.Abs(vl[k, iis + 1]));
+                                for (k = ki; k <= n; k++)
+                                    emax = Math.Max(emax, Math.Abs(vl[k, iis]) + Math.Abs(vl[k, iis + 1]));
 
                                 remax = 1 / emax;
                                 for (i_ = ki; i_ <= n; i_++) vl[i_, iis] = remax * vl[i_, iis];
@@ -33964,7 +34236,8 @@ public partial class alglib
                                         1,
                                         n,
                                         work[ki + n],
-                                        _params);
+                                        _params
+                                    );
                                     for (i_ = 1; i_ <= n; i_++) vl[i_, ki] = temp[i_];
 
                                     for (i_ = 1; i_ <= n; i_++) temp[i_] = vl[i_, ki + 1];
@@ -33984,7 +34257,8 @@ public partial class alglib
                                         1,
                                         n,
                                         work[ki + 1 + n2],
-                                        _params);
+                                        _params
+                                    );
                                     for (i_ = 1; i_ <= n; i_++) vl[i_, ki + 1] = temp[i_];
                                 }
                                 else
@@ -33997,7 +34271,8 @@ public partial class alglib
                                 }
 
                                 emax = 0;
-                                for (k = 1; k <= n; k++) emax = Math.Max(emax, Math.Abs(vl[k, ki]) + Math.Abs(vl[k, ki + 1]));
+                                for (k = 1; k <= n; k++)
+                                    emax = Math.Max(emax, Math.Abs(vl[k, ki]) + Math.Abs(vl[k, ki + 1]));
 
                                 remax = 1 / emax;
                                 for (i_ = 1; i_ <= n; i_++) vl[i_, ki] = remax * vl[i_, ki];
@@ -34055,9 +34330,9 @@ public partial class alglib
              Courant Institute, Argonne National Lab, and Rice University
              October 31, 1992
         *************************************************************************/
-        private static void internalhsevdlaln2(bool ltrans, int na, int nw, double smin, double ca, double[,] a, double d1, double d2, double[,] b,
-            double wr, double wi, ref bool[] rswap4, ref bool[] zswap4, ref int[,] ipivot44, ref double[] civ4, ref double[] crv4, ref double[,] x,
-            ref double scl, ref double xnorm, ref int info, xparams _params)
+        private static void internalhsevdlaln2(bool ltrans, int na, int nw, double smin, double ca, double[,] a, double d1, double d2,
+            double[,] b, double wr, double wi, ref bool[] rswap4, ref bool[] zswap4, ref int[,] ipivot44, ref double[] civ4,
+            ref double[] crv4, ref double[,] x, ref double scl, ref double xnorm, ref int info, xparams _params)
         {
             var icmax = 0;
             var j = 0;
@@ -34328,7 +34603,6 @@ public partial class alglib
                     // Further scaling if  norm(A) norm(X) > overflow
                     //
                     if (xnorm > 1 && cmax > 1)
-                    {
                         if (xnorm > bignum / cmax)
                         {
                             temp = cmax / bignum;
@@ -34337,7 +34611,6 @@ public partial class alglib
                             xnorm = temp * xnorm;
                             scl = temp * scl;
                         }
-                    }
                 }
                 else
                 {
@@ -34459,9 +34732,12 @@ public partial class alglib
 
                     br2 = br2 - lr21 * br1 + li21 * bi1;
                     bi2 = bi2 - li21 * br1 - lr21 * bi1;
-                    bbnd = Math.Max((Math.Abs(br1) + Math.Abs(bi1)) * (u22abs * (Math.Abs(ur11r) + Math.Abs(ui11r))), Math.Abs(br2) + Math.Abs(bi2));
+                    bbnd =
+                        Math.Max(
+                            (Math.Abs(br1) + Math.Abs(bi1)) * (u22abs * (Math.Abs(ur11r) + Math.Abs(ui11r))),
+                            Math.Abs(br2) + Math.Abs(bi2)
+                        );
                     if (bbnd > 1 && u22abs < 1)
-                    {
                         if (bbnd >= bignum * u22abs)
                         {
                             scl = 1 / bbnd;
@@ -34470,7 +34746,6 @@ public partial class alglib
                             br2 = scl * br2;
                             bi2 = scl * bi2;
                         }
-                    }
 
                     internalhsevdladiv(br2, bi2, ur22, ui22, ref xr2, ref xi2, _params);
                     xr1 = ur11r * br1 - ui11r * bi1 - ur12s * xr2 + ui12s * xi2;
@@ -34496,7 +34771,6 @@ public partial class alglib
                     // Further scaling if  norm(A) norm(X) > overflow
                     //
                     if (xnorm > 1 && cmax > 1)
-                    {
                         if (xnorm > bignum / cmax)
                         {
                             temp = cmax / bignum;
@@ -34507,7 +34781,6 @@ public partial class alglib
                             xnorm = temp * xnorm;
                             scl = temp * scl;
                         }
-                    }
                 }
             }
         }
@@ -34752,7 +35025,25 @@ public partial class alglib
                     }
 
                 ablas.cmatrixrighttrsm(m2, m1, a, offs, offs, true, true, 0, a, offs + m1, offs, _params);
-                ablas.cmatrixgemm(m - m1, n - m1, m1, -1.0, a, offs + m1, offs, 0, a, offs, offs + m1, 0, 1.0, a, offs + m1, offs + m1, _params);
+                ablas.cmatrixgemm(
+                    m - m1,
+                    n - m1,
+                    m1,
+                    -1.0,
+                    a,
+                    offs + m1,
+                    offs,
+                    0,
+                    a,
+                    offs,
+                    offs + m1,
+                    0,
+                    1.0,
+                    a,
+                    offs + m1,
+                    offs + m1,
+                    _params
+                );
                 cmatrixluprec(ref a, offs + m1, m - m1, n - m1, ref pivots, ref tmp, _params);
                 for (i = 0; i <= m2 - 1; i++)
                     if (offs + m1 + i != pivots[offs + m1 + i])
@@ -34827,7 +35118,25 @@ public partial class alglib
                     }
 
                 ablas.rmatrixrighttrsm(m2, m1, a, offs, offs, true, true, 0, a, offs + m1, offs, _params);
-                ablas.rmatrixgemm(m - m1, n - m1, m1, -1.0, a, offs + m1, offs, 0, a, offs, offs + m1, 0, 1.0, a, offs + m1, offs + m1, _params);
+                ablas.rmatrixgemm(
+                    m - m1,
+                    n - m1,
+                    m1,
+                    -1.0,
+                    a,
+                    offs + m1,
+                    offs,
+                    0,
+                    a,
+                    offs,
+                    offs + m1,
+                    0,
+                    1.0,
+                    a,
+                    offs + m1,
+                    offs + m1,
+                    _params
+                );
                 rmatrixluprec(ref a, offs + m1, m - m1, n - m1, ref pivots, ref tmp, _params);
                 for (i = 0; i <= m2 - 1; i++)
                     if (offs + m1 + i != pivots[offs + m1 + i])
@@ -34894,7 +35203,9 @@ public partial class alglib
                 n2 = n - n1;
             }
             else
+            {
                 apserv.tiledsplit(n, tsa, ref n1, ref n2, _params);
+            }
 
             cmatrixplurec(a, offs, m, n1, ref pivots, ref tmp, _params);
             if (n2 > 0)
@@ -34912,7 +35223,25 @@ public partial class alglib
                     }
 
                 ablas.cmatrixlefttrsm(n1, n2, a, offs, offs, false, true, 0, a, offs, offs + n1, _params);
-                ablas.cmatrixgemm(m - n1, n - n1, n1, -1.0, a, offs + n1, offs, 0, a, offs, offs + n1, 0, 1.0, a, offs + n1, offs + n1, _params);
+                ablas.cmatrixgemm(
+                    m - n1,
+                    n - n1,
+                    n1,
+                    -1.0,
+                    a,
+                    offs + n1,
+                    offs,
+                    0,
+                    a,
+                    offs,
+                    offs + n1,
+                    0,
+                    1.0,
+                    a,
+                    offs + n1,
+                    offs + n1,
+                    _params
+                );
                 cmatrixplurec(a, offs + n1, m - n1, n - n1, ref pivots, ref tmp, _params);
                 for (i = 0; i <= n2 - 1; i++)
                     if (offs + n1 + i != pivots[offs + n1 + i])
@@ -34983,7 +35312,9 @@ public partial class alglib
                 n2 = n - n1;
             }
             else
+            {
                 apserv.tiledsplit(n, tsa, ref n1, ref n2, _params);
+            }
 
             rmatrixplurec(a, offs, m, n1, ref pivots, ref tmp, _params);
             if (n2 > 0)
@@ -35001,7 +35332,25 @@ public partial class alglib
                     }
 
                 ablas.rmatrixlefttrsm(n1, n2, a, offs, offs, false, true, 0, a, offs, offs + n1, _params);
-                ablas.rmatrixgemm(m - n1, n - n1, n1, -1.0, a, offs + n1, offs, 0, a, offs, offs + n1, 0, 1.0, a, offs + n1, offs + n1, _params);
+                ablas.rmatrixgemm(
+                    m - n1,
+                    n - n1,
+                    n1,
+                    -1.0,
+                    a,
+                    offs + n1,
+                    offs,
+                    0,
+                    a,
+                    offs,
+                    offs + n1,
+                    0,
+                    1.0,
+                    a,
+                    offs + n1,
+                    offs + n1,
+                    _params
+                );
                 rmatrixplurec(a, offs + n1, m - n1, n - n1, ref pivots, ref tmp, _params);
                 for (i = 0; i <= n2 - 1; i++)
                     if (offs + n1 + i != pivots[offs + n1 + i])
@@ -35162,14 +35511,12 @@ public partial class alglib
                 if (a[offs + jp, offs + j] != 0)
                 {
                     if (jp != j)
-                    {
                         for (i = 0; i <= n - 1; i++)
                         {
                             s = a[offs + j, offs + i];
                             a[offs + j, offs + i] = a[offs + jp, offs + i];
                             a[offs + jp, offs + i] = s;
                         }
-                    }
 
                     if (j + 1 <= m - 1)
                     {
@@ -35222,14 +35569,12 @@ public partial class alglib
                 if (a[offs + jp, offs + j] != 0)
                 {
                     if (jp != j)
-                    {
                         for (i = 0; i <= n - 1; i++)
                         {
                             s = a[offs + j, offs + i];
                             a[offs + j, offs + i] = a[offs + jp, offs + i];
                             a[offs + jp, offs + i] = s;
                         }
-                    }
 
                     if (j + 1 <= m - 1)
                     {
@@ -35380,11 +35725,9 @@ public partial class alglib
             densetrailinit(buf.dtrail, n, _params);
             densifyabove = (int)Math.Round(densebnd * n) + 1;
             if (densificationsupported)
-            {
                 for (i = 0; i <= n - 1; i++)
                     if (buf.strail.nzc[i] > densifyabove)
                         sparsetraildensify(buf.strail, i, buf.bupper, buf.dtrail, _params);
-            }
 
             //
             // Process sparse part
@@ -35464,7 +35807,8 @@ public partial class alglib
                         {
                             i0 = buf.v0i[i];
                             v0 = buf.v0r[i];
-                            for (j = 0; j <= tmpndense - 1; j++) buf.dtrail.d[i0, j] = buf.dtrail.d[i0, j] - v0 * buf.dtrail.d[k, j];
+                            for (j = 0; j <= tmpndense - 1; j++)
+                                buf.dtrail.d[i0, j] = buf.dtrail.d[i0, j] - v0 * buf.dtrail.d[k, j];
                         }
                     }
 
@@ -35482,7 +35826,8 @@ public partial class alglib
                         buf.bupper,
                         buf.dtrail,
                         densificationsupported,
-                        _params);
+                        _params
+                    );
                 }
             }
 
@@ -35599,7 +35944,16 @@ public partial class alglib
                 apserv.rvectorgrowto(ref buf.sparsel.vals, buf.sparsel.ridx[n - tmpndense] + n * tmpndense, _params);
                 for (i = 0; i <= tmpndense - 1; i++)
                 {
-                    sluv2list1appendsequencetomatrix(buf.bleft, i + (n - tmpndense), false, 0.0, n, buf.sparsel, i + (n - tmpndense), _params);
+                    sluv2list1appendsequencetomatrix(
+                        buf.bleft,
+                        i + (n - tmpndense),
+                        false,
+                        0.0,
+                        n,
+                        buf.sparsel,
+                        i + (n - tmpndense),
+                        _params
+                    );
                     offs = buf.sparsel.ridx[i + (n - tmpndense) + 1];
                     for (j = 0; j <= i - 1; j++)
                     {
@@ -36746,7 +37100,8 @@ public partial class alglib
                 //
                 // Densify column if needed
                 //
-                if (densificationsupported && nnz > densifyabove && !a.isdensified[i1]) sparsetraildensify(a, i1, bupper, dtrail, _params);
+                if (densificationsupported && nnz > densifyabove && !a.isdensified[i1])
+                    sparsetraildensify(a, i1, bupper, dtrail, _params);
             }
         }
 
@@ -37024,7 +37379,8 @@ public partial class alglib
           -- ALGLIB PROJECT --
              Copyright 05.10.2020 by Bochkanov Sergey.
         *************************************************************************/
-        public static void generateamdpermutation(sparse.sparsematrix a, int n, ref int[] perm, ref int[] invperm, amdbuffer buf, xparams _params)
+        public static void generateamdpermutation(sparse.sparsematrix a, int n, ref int[] perm, ref int[] invperm, amdbuffer buf,
+            xparams _params)
         {
             var r = 0;
             var dummy = new bool[0];
@@ -37110,7 +37466,8 @@ public partial class alglib
             ap.assert(amdtype == 0 || amdtype == 1, "GenerateAMDPermutationX: unexpected ordering type");
             ap.assert(
                 amdtype == 0 || (math.isfinite(promoteabove) && promoteabove >= 0),
-                "GenerateAMDPermutationX: unexpected PromoteAbove - infinite or negative");
+                "GenerateAMDPermutationX: unexpected PromoteAbove - infinite or negative"
+            );
             setprealloc = 3;
             inithashbucketsize = 16;
             extendeddebug = ap.istraceenabled("DEBUG.SLOW", _params) && n <= 100;
@@ -37229,7 +37586,8 @@ public partial class alglib
                             buf.dbga,
                             k + i,
                             k + i,
-                            _params);
+                            _params
+                        );
 
                     cnt0 = apstruct.niscount(buf.lp, _params);
                     cnt1 = 0;
@@ -37240,16 +37598,21 @@ public partial class alglib
                     ap.assert(cnt0 + nodesize - 1 == cnt1, "AMD: integrity check 7344 failed");
                     ap.assert(
                         vtxgetapprox(buf.vertexdegrees, p, _params) >= vtxgetexact(buf.vertexdegrees, p, _params),
-                        "AMD: integrity check for ApproxD failed");
+                        "AMD: integrity check for ApproxD failed"
+                    );
                     ap.assert(vtxgetexact(buf.vertexdegrees, p, _params) == cnt0, "AMD: integrity check for ExactD failed");
                 }
 
-                ap.assert(vtxgetapprox(buf.vertexdegrees, p, _params) >= apstruct.niscount(buf.lp, _params), "AMD: integrity check 7956 failed");
+                ap.assert(
+                    vtxgetapprox(buf.vertexdegrees, p, _params) >= apstruct.niscount(buf.lp, _params),
+                    "AMD: integrity check 7956 failed"
+                );
                 ap.assert(
                     knscountkth(buf.sete, p, _params) > 2
                     || apstruct.niscount(buf.setq, _params) > 0
                     || vtxgetapprox(buf.vertexdegrees, p, _params) == apstruct.niscount(buf.lp, _params),
-                    "AMD: integrity check 7295 failed");
+                    "AMD: integrity check 7295 failed"
+                );
                 knsstartenumeration(buf.sete, p, _params);
                 while (knsenumerate(buf.sete, ref j, _params)) mtxclearcolumn(buf.mtxl, j, _params);
 
@@ -37688,7 +38051,9 @@ public partial class alglib
                 result = true;
             }
             else
+            {
                 result = false;
+            }
 
             return result;
         }
@@ -37782,7 +38147,9 @@ public partial class alglib
                     cnt = cnt - 1;
                 }
                 else
+                {
                     idxbegin = idxbegin + 1;
+                }
             }
 
             sa.vcnt[i] = cnt;
@@ -38646,8 +39013,10 @@ public partial class alglib
             }
 
             ap.assert(
-                vtxgetapprox(buf.vertexdegrees, p, _params) >= 0 && (!buf.checkexactdegrees || vtxgetexact(buf.vertexdegrees, p, _params) >= 0),
-                "AMD: integrity check RDFD failed");
+                vtxgetapprox(buf.vertexdegrees, p, _params) >= 0
+                && (!buf.checkexactdegrees || vtxgetexact(buf.vertexdegrees, p, _params) >= 0),
+                "AMD: integrity check RDFD failed"
+            );
         }
 
 
@@ -38784,11 +39153,13 @@ public partial class alglib
                     {
                         ap.assert(
                             knscountnotkth(buf.seta, lpi, buf.setsuper, lpi, _params) == knscountkth(buf.seta, lpi, _params),
-                            "AMD: integrity check 454F failed");
+                            "AMD: integrity check 454F failed"
+                        );
                         ap.assert(knscountandkth(buf.seta, lpi, buf.setsuper, lpi, _params) == 0, "AMD: integrity check kl5nv failed");
                         ap.assert(
                             nscountandkth(buf.lp, buf.setsuper, lpi, _params) == knscountkth(buf.setsuper, lpi, _params),
-                            "AMD: integrity check 8463 failed");
+                            "AMD: integrity check 8463 failed"
+                        );
                     }
 
                     cntq = apstruct.niscount(buf.setq, _params);
@@ -38831,21 +39202,25 @@ public partial class alglib
                     {
                         apstruct.nisclear(buf.exactdegreetmp0, _params);
                         knsstartenumeration(buf.sete, lpi, _params);
-                        while (knsenumerate(buf.sete, ref j, _params)) mtxaddcolumnto(buf.mtxl, j, buf.exactdegreetmp0, _params);
+                        while (knsenumerate(buf.sete, ref j, _params))
+                            mtxaddcolumnto(buf.mtxl, j, buf.exactdegreetmp0, _params);
 
                         vtxupdateexactdegree(
                             buf.vertexdegrees,
                             lpi,
                             cntainoti + nscountnotkth(buf.exactdegreetmp0, buf.setsuper, lpi, _params),
-                            _params);
+                            _params
+                        );
                         ap.assert(
                             knscountkth(buf.sete, lpi, _params) > 2
                             || cntq > 0
                             || vtxgetapprox(buf.vertexdegrees, lpi, _params) == vtxgetexact(buf.vertexdegrees, lpi, _params),
-                            "AMD: integrity check 7206 failed");
+                            "AMD: integrity check 7206 failed"
+                        );
                         ap.assert(
                             vtxgetapprox(buf.vertexdegrees, lpi, _params) >= vtxgetexact(buf.vertexdegrees, lpi, _params),
-                            "AMD: integrity check 8206 failed");
+                            "AMD: integrity check 8206 failed"
+                        );
                     }
                 }
 
@@ -38936,12 +39311,17 @@ public partial class alglib
                                 ap.assert(
                                     vtxgetapprox(buf.vertexdegrees, lpi, _params) >= 1
                                     && (!buf.checkexactdegrees || vtxgetexact(buf.vertexdegrees, lpi, _params) >= 1),
-                                    "AMD: integrity check &GBFF1 failed");
+                                    "AMD: integrity check &GBFF1 failed"
+                                );
                                 ap.assert(
                                     vtxgetapprox(buf.vertexdegrees, lpj, _params) >= 1
                                     && (!buf.checkexactdegrees || vtxgetexact(buf.vertexdegrees, lpj, _params) >= 1),
-                                    "AMD: integrity check &GBFF2 failed");
-                                ap.assert(knscountandkth(buf.setsuper, lpi, buf.setsuper, lpj, _params) == 0, "AMD: integrity check &GBFF3 failed");
+                                    "AMD: integrity check &GBFF2 failed"
+                                );
+                                ap.assert(
+                                    knscountandkth(buf.setsuper, lpi, buf.setsuper, lpj, _params) == 0,
+                                    "AMD: integrity check &GBFF3 failed"
+                                );
                             }
 
                             nj = knscountkth(buf.setsuper, lpj, _params);
@@ -39714,8 +40094,8 @@ public partial class alglib
              20.09.2020
              Bochkanov Sergey
         *************************************************************************/
-        public static bool spsymmanalyze(sparse.sparsematrix a, int[] priorities, double promoteabove, int promoteto, int facttype, int permtype,
-            int memreuse, spcholanalysis analysis, xparams _params)
+        public static bool spsymmanalyze(sparse.sparsematrix a, int[] priorities, double promoteabove, int promoteto, int facttype,
+            int permtype, int memreuse, spcholanalysis analysis, xparams _params)
         {
             var result = new bool();
             var n = 0;
@@ -39732,11 +40112,13 @@ public partial class alglib
             ap.assert(facttype == 0 || facttype == 1, "SPSymmAnalyze: unexpected FactType");
             ap.assert(
                 permtype == 0 || permtype == 1 || permtype == 2 || permtype == 3 || permtype == -1 || permtype == -2 || permtype == -3,
-                "SPSymmAnalyze: unexpected PermType");
+                "SPSymmAnalyze: unexpected PermType"
+            );
             ap.assert(memreuse == -1 || memreuse == 1, "SPSymmAnalyze: unexpected MemType");
             ap.assert(
                 (permtype != 3 && permtype != -3) || (math.isfinite(promoteabove) && promoteabove >= 0),
-                "SPSymmAnalyze: unexpected PromoteAbove - infinite or negative");
+                "SPSymmAnalyze: unexpected PromoteAbove - infinite or negative"
+            );
             result = true;
             n = sparse.sparsegetnrows(a, _params);
             if (permtype == -3 || permtype == 3)
@@ -39862,7 +40244,8 @@ public partial class alglib
                     analysis.tmp1,
                     analysis.tmp2,
                     analysis.flagarray,
-                    _params);
+                    _params
+                );
                 apserv.ivectorsetlengthatleast(ref analysis.fillinperm, n, _params);
                 apserv.ivectorsetlengthatleast(ref analysis.invfillinperm, n, _params);
                 apserv.ivectorsetlengthatleast(ref analysis.effectiveperm, n, _params);
@@ -39895,12 +40278,22 @@ public partial class alglib
                     analysis.tmp3,
                     analysis.tmp4,
                     analysis.flagarray,
-                    _params);
+                    _params
+                );
 
                 //
                 // Having fully initialized supernodal structure, analyze dependencies
                 //
-                analyzesupernodaldependencies(analysis, a, analysis.node2supernode, n, analysis.tmp0, analysis.tmp1, analysis.flagarray, _params);
+                analyzesupernodaldependencies(
+                    analysis,
+                    a,
+                    analysis.node2supernode,
+                    n,
+                    analysis.tmp0,
+                    analysis.tmp1,
+                    analysis.flagarray,
+                    _params
+                );
             }
             else
             {
@@ -39936,7 +40329,8 @@ public partial class alglib
                         memreuse > 0,
                         ref analysis.fillinperm,
                         ref analysis.invfillinperm,
-                        _params);
+                        _params
+                    );
                     permready = true;
                 }
 
@@ -39958,7 +40352,8 @@ public partial class alglib
                     analysis.tmp1,
                     analysis.tmp2,
                     analysis.flagarray,
-                    _params);
+                    _params
+                );
                 apserv.ivectorsetlengthatleast(ref analysis.effectiveperm, n, _params);
                 apserv.ivectorsetlengthatleast(ref analysis.inveffectiveperm, n, _params);
                 for (i = 0; i <= n - 1; i++)
@@ -39987,7 +40382,8 @@ public partial class alglib
                     analysis.tmp3,
                     analysis.tmp4,
                     analysis.flagarray,
-                    _params);
+                    _params
+                );
 
                 //
                 // Having fully initialized supernodal structure, analyze dependencies
@@ -40000,7 +40396,8 @@ public partial class alglib
                     analysis.tmp0,
                     analysis.tmp1,
                     analysis.flagarray,
-                    _params);
+                    _params
+                );
             }
 
             //
@@ -40051,8 +40448,8 @@ public partial class alglib
              20.09.2020
              Bochkanov Sergey
         *************************************************************************/
-        public static void spsymmsetmodificationstrategy(spcholanalysis analysis, int modstrategy, double p0, double p1, double p2, double p3,
-            xparams _params)
+        public static void spsymmsetmodificationstrategy(spcholanalysis analysis, int modstrategy, double p0, double p1, double p2,
+            double p3, xparams _params)
         {
             ap.assert(modstrategy == 0 || modstrategy == 1 || modstrategy == 2, "SPSymmSetModificationStrategy: unexpected ModStrategy");
             ap.assert(math.isfinite(p0) && p0 >= 0, "SPSymmSetModificationStrategy: bad P0");
@@ -40296,7 +40693,8 @@ public partial class alglib
                     analysis.curladjrowbegin[sidx],
                     analysis.ladj.rowend[sidx],
                     analysis.diagd,
-                    _params);
+                    _params
+                );
                 analysis.curladjrowbegin[sidx] = analysis.ladj.rowend[sidx];
 
                 //
@@ -40369,7 +40767,8 @@ public partial class alglib
                 ref d,
                 ref p,
                 analysis.tmp0,
-                _params);
+                _params
+            );
         }
 
 
@@ -40463,7 +40862,8 @@ public partial class alglib
                         {
                             baseoffs = offss + (i - cols0) * sstride + -cols0;
                             v = analysis.tmpx[i];
-                            for (j = cols0; j <= i - 1; j++) v = v - analysis.outputstorage[baseoffs + j] * analysis.tmpx[j];
+                            for (j = cols0; j <= i - 1; j++)
+                                v = v - analysis.outputstorage[baseoffs + j] * analysis.tmpx[j];
 
                             analysis.tmpx[i] = v / analysis.outputstorage[baseoffs + i];
                         }
@@ -40483,7 +40883,8 @@ public partial class alglib
                             {
                                 baseoffs = offss + (i - cols0) * sstride + -cols0;
                                 v = analysis.tmpx[i];
-                                for (j = cols0; j <= i - 1; j++) v = v - analysis.outputstorage[baseoffs + j] * analysis.tmpx[j];
+                                for (j = cols0; j <= i - 1; j++)
+                                    v = v - analysis.outputstorage[baseoffs + j] * analysis.tmpx[j];
 
                                 analysis.tmpx[i] = v / analysis.outputstorage[baseoffs + i];
                             }
@@ -40504,7 +40905,8 @@ public partial class alglib
                                 {
                                     baseoffs = offss + (i - cols0) * sstride + -cols0;
                                     v = analysis.tmpx[i];
-                                    for (j = cols0; j <= i - 1; j++) v = v - analysis.outputstorage[baseoffs + j] * analysis.tmpx[j];
+                                    for (j = cols0; j <= i - 1; j++)
+                                        v = v - analysis.outputstorage[baseoffs + j] * analysis.tmpx[j];
 
                                     analysis.tmpx[i] = v / analysis.outputstorage[baseoffs + i];
                                 }
@@ -40523,7 +40925,8 @@ public partial class alglib
                                 {
                                     baseoffs = offss + (i - cols0) * sstride + -cols0;
                                     v = analysis.tmpx[i];
-                                    for (j = cols0; j <= i - 1; j++) v = v - analysis.outputstorage[baseoffs + j] * analysis.tmpx[j];
+                                    for (j = cols0; j <= i - 1; j++)
+                                        v = v - analysis.outputstorage[baseoffs + j] * analysis.tmpx[j];
 
                                     analysis.tmpx[i] = v / analysis.outputstorage[baseoffs + i];
                                 }
@@ -40559,7 +40962,8 @@ public partial class alglib
                         for (k = 0; k <= offdiagsize - 1; k++)
                         {
                             i = analysis.superrowidx[rbase + k];
-                            analysis.tmpx[i] = analysis.tmpx[i] - analysis.outputstorage[baseoffs] * x0 - analysis.outputstorage[baseoffs + 1] * x1;
+                            analysis.tmpx[i] =
+                                analysis.tmpx[i] - analysis.outputstorage[baseoffs] * x0 - analysis.outputstorage[baseoffs + 1] * x1;
                             baseoffs = baseoffs + 2;
                         }
                     }
@@ -40574,10 +40978,11 @@ public partial class alglib
                             for (k = 0; k <= offdiagsize - 1; k++)
                             {
                                 i = analysis.superrowidx[rbase + k];
-                                analysis.tmpx[i] = analysis.tmpx[i]
-                                                   - analysis.outputstorage[baseoffs] * x0
-                                                   - analysis.outputstorage[baseoffs + 1] * x1
-                                                   - analysis.outputstorage[baseoffs + 2] * x2;
+                                analysis.tmpx[i] =
+                                    analysis.tmpx[i]
+                                    - analysis.outputstorage[baseoffs] * x0
+                                    - analysis.outputstorage[baseoffs + 1] * x1
+                                    - analysis.outputstorage[baseoffs + 2] * x2;
                                 baseoffs = baseoffs + 4;
                             }
                         }
@@ -40592,11 +40997,12 @@ public partial class alglib
                                 for (k = 0; k <= offdiagsize - 1; k++)
                                 {
                                     i = analysis.superrowidx[rbase + k];
-                                    analysis.tmpx[i] = analysis.tmpx[i]
-                                                       - analysis.outputstorage[baseoffs] * x0
-                                                       - analysis.outputstorage[baseoffs + 1] * x1
-                                                       - analysis.outputstorage[baseoffs + 2] * x2
-                                                       - analysis.outputstorage[baseoffs + 3] * x3;
+                                    analysis.tmpx[i] =
+                                        analysis.tmpx[i]
+                                        - analysis.outputstorage[baseoffs] * x0
+                                        - analysis.outputstorage[baseoffs + 1] * x1
+                                        - analysis.outputstorage[baseoffs + 2] * x2
+                                        - analysis.outputstorage[baseoffs + 3] * x3;
                                     baseoffs = baseoffs + 4;
                                 }
                             }
@@ -40610,7 +41016,8 @@ public partial class alglib
                                     i = analysis.superrowidx[rbase + k];
                                     baseoffs = offss + (k + blocksize) * sstride;
                                     v = analysis.tmpx[i];
-                                    for (j = 0; j <= blocksize - 1; j++) v = v - analysis.outputstorage[baseoffs + j] * analysis.tmpx[cols0 + j];
+                                    for (j = 0; j <= blocksize - 1; j++)
+                                        v = v - analysis.outputstorage[baseoffs + j] * analysis.tmpx[cols0 + j];
 
                                     analysis.tmpx[i] = v;
                                 }
@@ -40757,7 +41164,8 @@ public partial class alglib
                 {
                     baseoffs = offss + i * sstride;
                     v = analysis.tmpx[cols0 + i] / analysis.outputstorage[baseoffs + i];
-                    for (j = 0; j <= i - 1; j++) analysis.tmpx[cols0 + j] = analysis.tmpx[cols0 + j] - v * analysis.outputstorage[baseoffs + j];
+                    for (j = 0; j <= i - 1; j++)
+                        analysis.tmpx[cols0 + j] = analysis.tmpx[cols0 + j] - v * analysis.outputstorage[baseoffs + j];
 
                     analysis.tmpx[cols0 + i] = v;
                 }
@@ -41257,8 +41665,9 @@ public partial class alglib
           -- ALGLIB PROJECT --
              Copyright 05.10.2020 by Bochkanov Sergey.
         *************************************************************************/
-        private static void createsupernodalstructure(sparse.sparsematrix at, int[] parent, int n, spcholanalysis analysis, ref int[] node2supernode,
-            int[] tchildrenr, int[] tchildreni, int[] tparentnodeofsupernode, int[] tfakenonzeros, int[] ttmp0, bool[] tflagarray, xparams _params)
+        private static void createsupernodalstructure(sparse.sparsematrix at, int[] parent, int n, spcholanalysis analysis,
+            ref int[] node2supernode, int[] tchildrenr, int[] tchildreni, int[] tparentnodeofsupernode, int[] tfakenonzeros, int[] ttmp0,
+            bool[] tflagarray, xparams _params)
         {
             var nsuper = 0;
             var i = 0;
@@ -41286,7 +41695,10 @@ public partial class alglib
             ap.assert(ap.len(ttmp0) >= n + 1, "CreateSupernodalStructure: input buffer tTmp0 is too short");
             ap.assert(ap.len(tchildrenr) >= n + 1, "CreateSupernodalStructure: input buffer ChildrenR is too short");
             ap.assert(ap.len(tchildreni) >= n + 1, "CreateSupernodalStructure: input buffer ChildrenI is too short");
-            ap.assert(ap.len(tparentnodeofsupernode) >= n + 1, "CreateSupernodalStructure: input buffer tParentNodeOfSupernode is too short");
+            ap.assert(
+                ap.len(tparentnodeofsupernode) >= n + 1,
+                "CreateSupernodalStructure: input buffer tParentNodeOfSupernode is too short"
+            );
             ap.assert(ap.len(tfakenonzeros) >= n + 1, "CreateSupernodalStructure: input buffer tFakeNonzeros is too short");
             ap.assert(ap.len(tflagarray) >= n + 1, "CreateSupernodalStructure: input buffer tFlagArray is too short");
 
@@ -41326,19 +41738,21 @@ public partial class alglib
                 // and no fake nonzeros.
                 //
                 rfirst = analysis.superrowridx[nsuper];
-                rlast = computenonzeropattern(
-                    at,
-                    columnidx,
-                    n,
-                    analysis.superrowridx,
-                    ref analysis.superrowidx,
-                    nsuper,
-                    tchildrenr,
-                    tchildreni,
-                    node2supernode,
-                    tflagarray,
-                    ttmp0,
-                    _params);
+                rlast =
+                    computenonzeropattern(
+                        at,
+                        columnidx,
+                        n,
+                        analysis.superrowridx,
+                        ref analysis.superrowidx,
+                        nsuper,
+                        tchildrenr,
+                        tchildreni,
+                        node2supernode,
+                        tflagarray,
+                        ttmp0,
+                        _params
+                    );
                 analysis.supercolrange[nsuper + 1] = columnidx + 1;
                 analysis.superrowridx[nsuper + 1] = rlast;
                 node2supernode[columnidx] = nsuper;
@@ -41376,11 +41790,11 @@ public partial class alglib
                     {
                         i = colcount + childcolcount;
                         k = i * (i + 1) / 2 + offdiagcnt * i;
-                        fakezerosinnewsupernode = tfakenonzeros[nsuper - 2]
-                                                  + tfakenonzeros[nsuper - 1]
-                                                  + (offdiagcnt - (childoffdiagcnt - 1)) * childcolcount;
+                        fakezerosinnewsupernode =
+                            tfakenonzeros[nsuper - 2] + tfakenonzeros[nsuper - 1] + (offdiagcnt - (childoffdiagcnt - 1)) * childcolcount;
                         mergeinefficiency = fakezerosinnewsupernode / (double)k;
-                        if (colcount + childcolcount == 2 && fakezerosinnewsupernode <= smallfakestolerance) createsupernode = true;
+                        if (colcount + childcolcount == 2 && fakezerosinnewsupernode <= smallfakestolerance)
+                            createsupernode = true;
 
                         if (mergeinefficiency <= maxmergeinefficiency) createsupernode = true;
                     }
@@ -41416,7 +41830,8 @@ public partial class alglib
                     if (analysis.dotracesupernodalstructure)
                     {
                         ap.trace(string.Format("> merged with supernode S{0,0:d}", nsuper - 1));
-                        if (mergeinefficiency != 0) ap.trace(string.Format(" ({0,2:F0}% inefficiency)", mergeinefficiency * 100));
+                        if (mergeinefficiency != 0)
+                            ap.trace(string.Format(" ({0,2:F0}% inefficiency)", mergeinefficiency * 100));
 
                         ap.trace("\n*\n");
                     }
@@ -41426,7 +41841,8 @@ public partial class alglib
                     //
                     // Trace
                     //
-                    if (analysis.dotracesupernodalstructure) ap.trace(string.Format("> standalone node S{0,0:d} created\n*\n", nsuper - 1));
+                    if (analysis.dotracesupernodalstructure)
+                        ap.trace(string.Format("> standalone node S{0,0:d} created\n*\n", nsuper - 1));
                 }
             }
 
@@ -41447,7 +41863,14 @@ public partial class alglib
 
             ablasf.iallocv(nsuper + 2, ref analysis.childsupernodesridx, _params);
             ablasf.iallocv(nsuper + 1, ref analysis.childsupernodesidx, _params);
-            fromparenttochildren(analysis.parentsupernode, nsuper, analysis.childsupernodesridx, analysis.childsupernodesidx, ttmp0, _params);
+            fromparenttochildren(
+                analysis.parentsupernode,
+                nsuper,
+                analysis.childsupernodesridx,
+                analysis.childsupernodesidx,
+                ttmp0,
+                _params
+            );
             i = analysis.childsupernodesridx[nsuper];
             for (sidx = 0; sidx <= nsuper - 1; sidx++)
             {
@@ -41490,7 +41913,8 @@ public partial class alglib
                 rfirst = analysis.superrowridx[sidx];
                 rlast = analysis.superrowridx[sidx + 1];
                 blocksize = cols1 - cols0;
-                for (j = cols0; j <= cols1 - 1; j++) analysis.outrowcounts[j] = analysis.outrowcounts[j] + (j - cols0) + 1;
+                for (j = cols0; j <= cols1 - 1; j++)
+                    analysis.outrowcounts[j] = analysis.outrowcounts[j] + (j - cols0) + 1;
 
                 for (ii = rfirst; ii <= rlast - 1; ii++)
                 {
@@ -41531,8 +41955,8 @@ public partial class alglib
           -- ALGLIB PROJECT --
              Copyright 05.10.2020 by Bochkanov Sergey.
         *************************************************************************/
-        private static void analyzesupernodaldependencies(spcholanalysis analysis, sparse.sparsematrix rawa, int[] node2supernode, int n, int[] ttmp0,
-            int[] ttmp1, bool[] tflagarray, xparams _params)
+        private static void analyzesupernodaldependencies(spcholanalysis analysis, sparse.sparsematrix rawa, int[] node2supernode, int n,
+            int[] ttmp0, int[] ttmp1, bool[] tflagarray, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -41651,7 +42075,8 @@ public partial class alglib
                     wrkrow = ttmp0[j];
                     offdiagrow = wrkrow;
                     lastrow = analysis.superrowridx[j + 1];
-                    while (offdiagrow < lastrow && analysis.superrowidx[offdiagrow] < analysis.supercolrange[sidx + 1]) offdiagrow = offdiagrow + 1;
+                    while (offdiagrow < lastrow && analysis.superrowidx[offdiagrow] < analysis.supercolrange[sidx + 1])
+                        offdiagrow = offdiagrow + 1;
 
                     uflop = (offdiagrow - wrkrow) * (lastrow - wrkrow) * (analysis.supercolrange[j + 1] - analysis.supercolrange[j]);
                     analysis.ladj.urow0[i] = wrkrow;
@@ -41671,7 +42096,8 @@ public partial class alglib
                 longestpath = Math.Max(longestpath, criticalpath[sidx]);
                 totalflop = totalflop + sflop;
                 j = analysis.parentsupernode[sidx];
-                if (analysis.dotrace && j >= 0) dbgfastestpath[j] = Math.Max(dbgfastestpath[j], sflop + dbgfastestpath[sidx]);
+                if (analysis.dotrace && j >= 0)
+                    dbgfastestpath[j] = Math.Max(dbgfastestpath[j], sflop + dbgfastestpath[sidx]);
 
                 //
                 // Finalize
@@ -41682,7 +42108,8 @@ public partial class alglib
                 ladjcnt = rlast;
             }
 
-            analysis.useparallelism = totalflop > apserv.smpactivationlevel(_params) && totalflop / (longestpath + 1) > apserv.minspeedup(_params);
+            analysis.useparallelism =
+                totalflop > apserv.smpactivationlevel(_params) && totalflop / (longestpath + 1) > apserv.minspeedup(_params);
             ablasf.rcopyallocv(analysis.nsuper, analysis.ladj.nflop, ref analysis.ladj.sflop, _params);
             for (sidx = 0; sidx <= analysis.nsuper - 1; sidx++)
             {
@@ -41722,15 +42149,20 @@ public partial class alglib
                     //
                     // Node sizes
                     //
-                    if (analysis.supercolrange[sidx + 1] - analysis.supercolrange[sidx] == 1) apserv.inc(ref dbgrank1nodes, _params);
+                    if (analysis.supercolrange[sidx + 1] - analysis.supercolrange[sidx] == 1)
+                        apserv.inc(ref dbgrank1nodes, _params);
 
-                    if (analysis.supercolrange[sidx + 1] - analysis.supercolrange[sidx] == 2) apserv.inc(ref dbgrank2nodes, _params);
+                    if (analysis.supercolrange[sidx + 1] - analysis.supercolrange[sidx] == 2)
+                        apserv.inc(ref dbgrank2nodes, _params);
 
-                    if (analysis.supercolrange[sidx + 1] - analysis.supercolrange[sidx] == 3) apserv.inc(ref dbgrank3nodes, _params);
+                    if (analysis.supercolrange[sidx + 1] - analysis.supercolrange[sidx] == 3)
+                        apserv.inc(ref dbgrank3nodes, _params);
 
-                    if (analysis.supercolrange[sidx + 1] - analysis.supercolrange[sidx] == 4) apserv.inc(ref dbgrank4nodes, _params);
+                    if (analysis.supercolrange[sidx + 1] - analysis.supercolrange[sidx] == 4)
+                        apserv.inc(ref dbgrank4nodes, _params);
 
-                    if (analysis.supercolrange[sidx + 1] - analysis.supercolrange[sidx] > 4) apserv.inc(ref dbgbignodes, _params);
+                    if (analysis.supercolrange[sidx + 1] - analysis.supercolrange[sidx] > 4)
+                        apserv.inc(ref dbgbignodes, _params);
 
                     //
                     // Nonzeros and FLOP counts
@@ -41793,13 +42225,21 @@ public partial class alglib
                 ap.trace(
                     string.Format(
                         "etree        = {0,6:F1}x (elimination tree parallelism, no internal parallelism)\n",
-                        dbgtotalflop / ablasf.rmaxv(analysis.nsuper, dbgfastestpath, _params)));
+                        dbgtotalflop / ablasf.rmaxv(analysis.nsuper, dbgfastestpath, _params)
+                    )
+                );
                 ap.trace(
-                    string.Format("supernodal   = {0,6:F1}x (parallel supernodal algo, no threading overhead)\n", totalflop / (1 + longestpath)));
+                    string.Format(
+                        "supernodal   = {0,6:F1}x (parallel supernodal algo, no threading overhead)\n",
+                        totalflop / (1 + longestpath)
+                    )
+                );
                 ap.trace(
                     string.Format(
                         "supernodal.c = {0,6:F1}x (parallel supernodal algo, corrected for threading overhead)\n",
-                        totalflop / (1 + longestpath + apserv.smpactivationlevel(_params))));
+                        totalflop / (1 + longestpath + apserv.smpactivationlevel(_params))
+                    )
+                );
                 ap.trace("> Parallelism: ");
                 if (analysis.useparallelism)
                     ap.trace("YES\n");
@@ -41807,16 +42247,25 @@ public partial class alglib
                     ap.trace("no\n");
 
                 ap.trace("> FLOP counts for updates:\n");
-                ap.trace(string.Format("no-sctr      = {0,9:F1} MFLOP    (no row scatter, no col scatter, best case)\n", 1.0E-6 * dbgnoscatterflop));
+                ap.trace(
+                    string.Format(
+                        "no-sctr      = {0,9:F1} MFLOP    (no row scatter, no col scatter, best case)\n",
+                        1.0E-6 * dbgnoscatterflop
+                    )
+                );
                 ap.trace(string.Format("M4*44->N4    = {0,9:F1} MFLOP    (no col scatter, big blocks, good case)\n", 1.0E-6 * dbg444flop));
                 ap.trace(
                     string.Format(
                         "no-row-sctr  = {0,9:F1} MFLOP    (no row scatter, good case for col-wise storage)\n",
-                        1.0E-6 * dbgnorowscatterflop));
+                        1.0E-6 * dbgnorowscatterflop
+                    )
+                );
                 ap.trace(
                     string.Format(
                         "no-col-sctr  = {0,9:F1} MFLOP    (no col scatter, good case for row-wise storage)\n",
-                        1.0E-6 * dbgnocolscatterflop));
+                        1.0E-6 * dbgnocolscatterflop
+                    )
+                );
                 ap.trace(string.Format("XX*XX->N4    = {0,9:F1} MFLOP\n", 1.0E-6 * dbgxx4flop));
                 ap.trace(string.Format("rank1        = {0,9:F1} MFLOP\n", 1.0E-6 * dbgrank1flop));
                 ap.trace(string.Format("rank4+       = {0,9:F1} MFLOP\n", 1.0E-6 * dbgrank4plusflop));
@@ -41896,7 +42345,8 @@ public partial class alglib
                 {
                     i0 = at.ridx[j];
                     i1 = at.ridx[j + 1] - 1;
-                    for (ii = i0; ii <= i1; ii++) analysis.inputstorage[offss + analysis.raw2smap[at.idx[ii]] * sstride + (j - cols0)] = at.vals[ii];
+                    for (ii = i0; ii <= i1; ii++)
+                        analysis.inputstorage[offss + analysis.raw2smap[at.idx[ii]] * sstride + (j - cols0)] = at.vals[ii];
                 }
             }
         }
@@ -41965,7 +42415,8 @@ public partial class alglib
             {
                 ap.assert(
                     analysis.istopologicalordering,
-                    "ExtractMatrix: critical integrity check failed (attempt to merge in nontopological permutation)");
+                    "ExtractMatrix: critical integrity check failed (attempt to merge in nontopological permutation)"
+                );
 
                 //
                 // Output matrix is topologically permuted, so we return A=L*L' instead of A=P*L*L'*P'.
@@ -41974,7 +42425,8 @@ public partial class alglib
                 apserv.ivectorsetlengthatleast(ref a.ridx, n + 1, _params);
                 apserv.ivectorsetlengthatleast(ref a.didx, n, _params);
                 a.ridx[0] = 0;
-                for (i = 0; i <= n - 1; i++) a.ridx[i + 1] = a.ridx[i] + analysis.outrowcounts[analysis.effectiveperm[i]];
+                for (i = 0; i <= n - 1; i++)
+                    a.ridx[i + 1] = a.ridx[i] + analysis.outrowcounts[analysis.effectiveperm[i]];
 
                 for (i = 0; i <= n - 1; i++) a.didx[i] = a.ridx[i];
 
@@ -42813,8 +43265,8 @@ public partial class alglib
              20.09.2020
              Bochkanov Sergey
         *************************************************************************/
-        private static void updatesupernode(spcholanalysis analysis, int sidx, int cols0, int cols1, int offss, int[] raw2smap, int ladjidx0,
-            int ladjidx1, double[] diagd, xparams _params)
+        private static void updatesupernode(spcholanalysis analysis, int sidx, int cols0, int cols1, int offss, int[] raw2smap,
+            int ladjidx0, int ladjidx1, double[] diagd, xparams _params)
         {
             var i = 0;
             var uidx = 0;
@@ -42875,7 +43327,6 @@ public partial class alglib
                     // Target is stride-4 column, try several kernels that may work with tWidth=3 and tWidth=4
                     //
                     if (uwidth == 4 && twidth == 4 && urank == 4 && urowstride == 4)
-                    {
                         if (updatekernel4444(
                                 analysis.outputstorage,
                                 offss,
@@ -42887,9 +43338,9 @@ public partial class alglib
                                 raw2smap,
                                 analysis.superrowidx,
                                 wrkrow,
-                                _params))
+                                _params
+                            ))
                             continue;
-                    }
 
                     if (updatekernelabc4(
                             analysis.outputstorage,
@@ -42905,12 +43356,12 @@ public partial class alglib
                             raw2smap,
                             analysis.superrowidx,
                             wrkrow,
-                            _params))
+                            _params
+                        ))
                         continue;
                 }
 
                 if (urank == 1 && urowstride == 1)
-                {
                     if (updatekernelrank1(
                             analysis.outputstorage,
                             offss,
@@ -42924,12 +43375,11 @@ public partial class alglib
                             raw2smap,
                             analysis.superrowidx,
                             wrkrow,
-                            _params))
+                            _params
+                        ))
                         continue;
-                }
 
                 if (urank == 2 && urowstride == 2)
-                {
                     if (updatekernelrank2(
                             analysis.outputstorage,
                             offss,
@@ -42943,9 +43393,9 @@ public partial class alglib
                             raw2smap,
                             analysis.superrowidx,
                             wrkrow,
-                            _params))
+                            _params
+                        ))
                         continue;
-                }
 
                 //
                 // Handle general update with no specialized kernel
@@ -42962,8 +43412,8 @@ public partial class alglib
              20.09.2020
              Bochkanov Sergey
         *************************************************************************/
-        private static void updatesupernodegeneric(spcholanalysis analysis, int sidx, int cols0, int cols1, int offss, int[] raw2smap, int ladjidx,
-            double[] diagd, xparams _params)
+        private static void updatesupernodegeneric(spcholanalysis analysis, int sidx, int cols0, int cols1, int offss, int[] raw2smap,
+            int ladjidx, double[] diagd, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -43016,7 +43466,6 @@ public partial class alglib
             for (i = 0; i <= uheight - 1; i++) u2smap[i] = raw2smap[analysis.superrowidx[wrkrow + i]];
 
             if (analysis.unitd)
-            {
                 //
                 // Unit D, vanilla Cholesky
                 //
@@ -43030,14 +43479,13 @@ public partial class alglib
                         offsk = offsu + k * urowstride;
                         offs0 = targetrow + targetcol;
                         v = analysis.outputstorage[offs0];
-                        for (i = 0; i <= urank - 1; i++) v = v - analysis.outputstorage[offsj + i] * analysis.outputstorage[offsk + i];
+                        for (i = 0; i <= urank - 1; i++)
+                            v = v - analysis.outputstorage[offsj + i] * analysis.outputstorage[offsk + i];
 
                         analysis.outputstorage[offs0] = v;
                     }
                 }
-            }
             else
-            {
                 //
                 // Non-unit D, LDLT decomposition
                 //
@@ -43057,7 +43505,6 @@ public partial class alglib
                         analysis.outputstorage[offs0] = v;
                     }
                 }
-            }
 
             analysis.n1integerpool.recycle(ref u2smap);
         }
@@ -43101,7 +43548,6 @@ public partial class alglib
             controloverflow = (analysis.modtype == 1 || analysis.modtype == 2) && analysis.modparam1 > 0;
             controlsign = analysis.modtype == 3;
             if (analysis.unitd)
-            {
                 //
                 // Classic Cholesky
                 //
@@ -43163,9 +43609,7 @@ public partial class alglib
                             analysis.outputstorage[offss + k * sstride + j] = v * analysis.outputstorage[offss + k * sstride + j];
                     }
                 }
-            }
             else
-            {
                 //
                 // LDLT with diagonal D
                 //
@@ -43179,7 +43623,8 @@ public partial class alglib
                     {
                         v = analysis.outputstorage[offss + k * sstride + j];
                         for (i = 0; i <= j - 1; i++)
-                            v = v
+                            v =
+                                v
                                 - analysis.outputstorage[offss + k * sstride + i]
                                 * analysis.diagd[cols0 + i]
                                 * analysis.outputstorage[offss + j * sstride + i];
@@ -43203,7 +43648,6 @@ public partial class alglib
                     possignvraw = apserv.possign(analysis.inputstorage[offss + j * sstride + j], _params);
                     v = analysis.outputstorage[offss + j * sstride + j];
                     if (controlsign)
-                    {
                         //
                         // Perform sign control
                         //
@@ -43215,7 +43659,6 @@ public partial class alglib
                             result = false;
                             return result;
                         }
-                    }
 
                     if (controlpivot && v / possignvraw <= analysis.modparam0)
                     {
@@ -43239,7 +43682,8 @@ public partial class alglib
                         //
                         analysis.diagd[cols0 + j] = 1.0E50;
                         analysis.outputstorage[offss + j * sstride + j] = 1.0;
-                        for (k = j + 1; k <= blocksize + offdiagsize - 1; k++) analysis.outputstorage[offss + k * sstride + j] = 0.0;
+                        for (k = j + 1; k <= blocksize + offdiagsize - 1; k++)
+                            analysis.outputstorage[offss + k * sstride + j] = 0.0;
 
                         continue;
                     }
@@ -43258,7 +43702,6 @@ public partial class alglib
                     for (k = j; k <= blocksize + offdiagsize - 1; k++)
                         analysis.outputstorage[offss + k * sstride + j] = v * analysis.outputstorage[offss + k * sstride + j];
                 }
-            }
 
             result = true;
             return result;
@@ -43743,8 +44186,8 @@ public partial class alglib
              20.09.2020
              Bochkanov Sergey
         *************************************************************************/
-        private static bool updatekernelrank1(double[] rowstorage, int offss, int twidth, int trowstride, int offsu, int uheight, int uwidth,
-            double[] diagd, int offsd, int[] raw2smap, int[] superrowidx, int urbase, xparams _params)
+        private static bool updatekernelrank1(double[] rowstorage, int offss, int twidth, int trowstride, int offsu, int uheight,
+            int uwidth, double[] diagd, int offsd, int[] raw2smap, int[] superrowidx, int urbase, xparams _params)
         {
             var result = new bool();
             var k = 0;
@@ -43809,17 +44252,14 @@ public partial class alglib
             // Run update
             //
             if (uwidth == 1)
-            {
                 for (k = 0; k <= uheight - 1; k++)
                 {
                     targetrow = offss + raw2smap[superrowidx[urbase + k]] * trowstride;
                     uk = rowstorage[offsu + k];
                     rowstorage[targetrow + col0] = rowstorage[targetrow + col0] - u00 * uk;
                 }
-            }
 
             if (uwidth == 2)
-            {
                 for (k = 0; k <= uheight - 1; k++)
                 {
                     targetrow = offss + raw2smap[superrowidx[urbase + k]] * trowstride;
@@ -43827,10 +44267,8 @@ public partial class alglib
                     rowstorage[targetrow + col0] = rowstorage[targetrow + col0] - u00 * uk;
                     rowstorage[targetrow + col1] = rowstorage[targetrow + col1] - u10 * uk;
                 }
-            }
 
             if (uwidth == 3)
-            {
                 for (k = 0; k <= uheight - 1; k++)
                 {
                     targetrow = offss + raw2smap[superrowidx[urbase + k]] * trowstride;
@@ -43839,10 +44277,8 @@ public partial class alglib
                     rowstorage[targetrow + col1] = rowstorage[targetrow + col1] - u10 * uk;
                     rowstorage[targetrow + col2] = rowstorage[targetrow + col2] - u20 * uk;
                 }
-            }
 
             if (uwidth == 4)
-            {
                 for (k = 0; k <= uheight - 1; k++)
                 {
                     targetrow = offss + raw2smap[superrowidx[urbase + k]] * trowstride;
@@ -43852,7 +44288,6 @@ public partial class alglib
                     rowstorage[targetrow + col2] = rowstorage[targetrow + col2] - u20 * uk;
                     rowstorage[targetrow + col3] = rowstorage[targetrow + col3] - u30 * uk;
                 }
-            }
 
             result = true;
             return result;
@@ -43884,8 +44319,8 @@ public partial class alglib
              20.09.2020
              Bochkanov Sergey
         *************************************************************************/
-        private static bool updatekernelrank2(double[] rowstorage, int offss, int twidth, int trowstride, int offsu, int uheight, int uwidth,
-            double[] diagd, int offsd, int[] raw2smap, int[] superrowidx, int urbase, xparams _params)
+        private static bool updatekernelrank2(double[] rowstorage, int offss, int twidth, int trowstride, int offsu, int uheight,
+            int uwidth, double[] diagd, int offsd, int[] raw2smap, int[] superrowidx, int urbase, xparams _params)
         {
             var result = new bool();
             var k = 0;
@@ -43965,7 +44400,6 @@ public partial class alglib
             // Run update
             //
             if (uwidth == 1)
-            {
                 for (k = 0; k <= uheight - 1; k++)
                 {
                     targetrow = offss + raw2smap[superrowidx[urbase + k]] * trowstride;
@@ -43973,10 +44407,8 @@ public partial class alglib
                     uk1 = rowstorage[offsu + 2 * k + 1];
                     rowstorage[targetrow + col0] = rowstorage[targetrow + col0] - u00 * uk0 - u01 * uk1;
                 }
-            }
 
             if (uwidth == 2)
-            {
                 for (k = 0; k <= uheight - 1; k++)
                 {
                     targetrow = offss + raw2smap[superrowidx[urbase + k]] * trowstride;
@@ -43985,10 +44417,8 @@ public partial class alglib
                     rowstorage[targetrow + col0] = rowstorage[targetrow + col0] - u00 * uk0 - u01 * uk1;
                     rowstorage[targetrow + col1] = rowstorage[targetrow + col1] - u10 * uk0 - u11 * uk1;
                 }
-            }
 
             if (uwidth == 3)
-            {
                 for (k = 0; k <= uheight - 1; k++)
                 {
                     targetrow = offss + raw2smap[superrowidx[urbase + k]] * trowstride;
@@ -43998,10 +44428,8 @@ public partial class alglib
                     rowstorage[targetrow + col1] = rowstorage[targetrow + col1] - u10 * uk0 - u11 * uk1;
                     rowstorage[targetrow + col2] = rowstorage[targetrow + col2] - u20 * uk0 - u21 * uk1;
                 }
-            }
 
             if (uwidth == 4)
-            {
                 for (k = 0; k <= uheight - 1; k++)
                 {
                     targetrow = offss + raw2smap[superrowidx[urbase + k]] * trowstride;
@@ -44012,7 +44440,6 @@ public partial class alglib
                     rowstorage[targetrow + col2] = rowstorage[targetrow + col2] - u20 * uk0 - u21 * uk1;
                     rowstorage[targetrow + col3] = rowstorage[targetrow + col3] - u30 * uk0 - u31 * uk1;
                 }
-            }
 
             result = true;
             return result;
@@ -44048,9 +44475,9 @@ public partial class alglib
              17.11.2023
              Bochkanov Sergey
         *************************************************************************/
-        private static void generatepriorityamdpermutation(sparse.sparsematrix wrka, int[] wrkpriorities, double promoteabove, int promoteto,
-            bool debugordering, bool dotrace, ap.nxpool n1bpool, ap.nxpool n1ipool, priorityamdbuffers buf, bool userbuffers, ref int[] fillinperm,
-            ref int[] invfillinperm, xparams _params)
+        private static void generatepriorityamdpermutation(sparse.sparsematrix wrka, int[] wrkpriorities, double promoteabove,
+            int promoteto, bool debugordering, bool dotrace, ap.nxpool n1bpool, ap.nxpool n1ipool, priorityamdbuffers buf, bool userbuffers,
+            ref int[] fillinperm, ref int[] invfillinperm, xparams _params)
         {
             var localbuf = new priorityamdbuffers();
             var i = 0;
@@ -44089,7 +44516,8 @@ public partial class alglib
                     true,
                     ref fillinperm,
                     ref invfillinperm,
-                    _params);
+                    _params
+                );
                 return;
             }
 
@@ -44151,7 +44579,6 @@ public partial class alglib
                 }
 
                 if (dotrace)
-                {
                     ap.trace(
                         string.Format(
                             "> multiround AMD, column_range=[{0,7:d},{1,7:d}] ({2,7:d} out of {3,7:d}), {4,5:F1}% eligible",
@@ -44159,27 +44586,28 @@ public partial class alglib
                             range1,
                             range1 - range0,
                             n,
-                            100 * eligiblecnt / (double)m));
-                }
+                            100 * eligiblecnt / (double)m
+                        )
+                    );
 
-                newrange0 = range0
-                            + amdordering.generateamdpermutationx(
-                                wrka,
-                                eligible,
-                                range1 - range0,
-                                promoteabove,
-                                ref buf.tmpperm,
-                                ref buf.invtmpperm,
-                                1,
-                                buf.amdtmp,
-                                _params);
+                newrange0 =
+                    range0
+                    + amdordering.generateamdpermutationx(
+                        wrka,
+                        eligible,
+                        range1 - range0,
+                        promoteabove,
+                        ref buf.tmpperm,
+                        ref buf.invtmpperm,
+                        1,
+                        buf.amdtmp,
+                        _params
+                    );
                 if (debugordering)
-                {
                     //
                     // Special debug ordering in order to test correctness of multiple AMD rounds
                     //
                     newrange0 = Math.Min(newrange0, range0 + m / 2 + 1);
-                }
 
                 for (i = 0; i <= n - 1; i++) wrkpriorities[i] = wrkpriorities[i] - 1;
 
@@ -44200,13 +44628,13 @@ public partial class alglib
                 if (dotrace)
                 {
                     if (npostponed > 0)
-                    {
                         ap.trace(
                             string.Format(
                                 ", {0,5:F1}% postponed (promoted to elimination group {1,0:d})",
                                 100 * npostponed / (double)m,
-                                promoteoffset + promoteto));
-                    }
+                                promoteoffset + promoteto
+                            )
+                        );
 
                     ap.trace("\n");
                 }
@@ -44242,7 +44670,8 @@ public partial class alglib
                             buf.tmpupdatet,
                             buf.tmpupdate,
                             buf.tmpnewtailt,
-                            _params);
+                            _params
+                        );
                     }
 
                     range0 = newrange0;
@@ -44254,7 +44683,10 @@ public partial class alglib
                 //
                 if (m > 0)
                 {
-                    ap.assert(wrka.m == m && wrka.n == m && wrka.ninitialized == wrka.ridx[m], "SPSymmAnalyze: integrity check failed (0572)");
+                    ap.assert(
+                        wrka.m == m && wrka.n == m && wrka.ninitialized == wrka.ridx[m],
+                        "SPSymmAnalyze: integrity check failed (0572)"
+                    );
                     ablasf.isetv(m, 1, tmp0, _params);
                     for (i = 0; i <= m - 1; i++)
                     {
@@ -44298,7 +44730,8 @@ public partial class alglib
                             //
                             // There are still exist sparse rows that need reordering, apply permutation and manually truncate matrix
                             //
-                            for (i = 0; i <= m - 1; i++) fillinperm[invfillinperm[range0 + buf.invtmpperm[i]]] = range0 + i;
+                            for (i = 0; i <= m - 1; i++)
+                                fillinperm[invfillinperm[range0 + buf.invtmpperm[i]]] = range0 + i;
 
                             for (i = 0; i <= n - 1; i++) invfillinperm[fillinperm[i]] = i;
 
@@ -44315,7 +44748,8 @@ public partial class alglib
                 }
             }
 
-            if (dotrace) ap.trace(string.Format("> multiround AMD, column_range=[{0,7:d},{1,7:d}], stopped\n", range0, range1));
+            if (dotrace)
+                ap.trace(string.Format("> multiround AMD, column_range=[{0,7:d},{1,7:d}], stopped\n", range0, range1));
 
             //
             // Recycle temporary arrays
@@ -44845,12 +45279,10 @@ public partial class alglib
                 }
 
             if (nz == n)
-            {
                 //
                 // Nothing to update
                 //
                 return;
-            }
 
             //
             // If working with upper triangular matrix
@@ -44974,12 +45406,10 @@ public partial class alglib
                     apserv.inc(ref nfix, _params);
 
             if (nfix == 0)
-            {
                 //
                 // Nothing to fix
                 //
                 return;
-            }
 
             if (nfix == n)
             {
@@ -44988,22 +45418,18 @@ public partial class alglib
                 // Set A to identity and exit.
                 //
                 if (isupper)
-                {
                     for (i = 0; i <= n - 1; i++)
                     {
                         a[i, i] = 1;
                         for (j = i + 1; j <= n - 1; j++) a[i, j] = 0;
                     }
-                }
                 else
-                {
                     for (i = 0; i <= n - 1; i++)
                     {
                         for (j = 0; j <= i - 1; j++) a[i, j] = 0;
 
                         a[i, i] = 1;
                     }
-                }
 
                 return;
             }
@@ -45517,7 +45943,9 @@ public partial class alglib
                 sparse.sparsecopytransposecrsbuf(analysis.wrkat, analysis.wrka, _params);
             }
             else
+            {
                 sparse.sparsecopytocrsbuf(a, analysis.wrka, _params);
+            }
 
             result = spchol.spsymmanalyze(analysis.wrka, priorities, 0.0, 0, facttype, permtype, donotreusemem, analysis.analysis, _params);
             if (!result) return result;
@@ -45531,7 +45959,9 @@ public partial class alglib
                 sparse.sparsecopytransposecrsbuf(analysis.wrka, a, _params);
             }
             else
+            {
                 spchol.spsymmextract(analysis.analysis, a, ref dummyd, ref dummyp, _params);
+            }
 
             return result;
         }
@@ -45651,7 +46081,9 @@ public partial class alglib
                 sparse.sparsecopytransposecrsbuf(analysis.wrkat, analysis.wrka, _params);
             }
             else
+            {
                 sparse.sparsecopytocrsbuf(a, analysis.wrka, _params);
+            }
 
             result = spchol.spsymmanalyze(analysis.wrka, priorities, 0.0, 0, facttype, permtype, donotreusemem, analysis.analysis, _params);
             if (!result) return result;
@@ -45665,7 +46097,9 @@ public partial class alglib
                 sparse.sparsecopytransposecrsbuf(analysis.wrka, a, _params);
             }
             else
+            {
                 spchol.spsymmextract(analysis.analysis, a, ref dummyd, ref p, _params);
+            }
 
             return result;
         }
@@ -45748,7 +46182,8 @@ public partial class alglib
             ap.assert(facttype == 0 || facttype == 1, "SparseCholeskyAnalyze: unexpected FactType");
             ap.assert(
                 permtype == 0 || permtype == 1 || permtype == 2 || permtype == 3 || permtype == -1 || permtype == -2 || permtype == -3,
-                "SparseCholeskyAnalyze: unexpected PermType");
+                "SparseCholeskyAnalyze: unexpected PermType"
+            );
 
             //
             // Prepare wrapper object
@@ -45777,10 +46212,14 @@ public partial class alglib
                 if (isupper)
                 {
                     sparse.sparsecopytransposecrsbuf(analysis.crsa, analysis.crsat, _params);
-                    result = spchol.spsymmanalyze(analysis.crsat, priorities, 0.0, 0, facttype, permtype, reusemem, analysis.analysis, _params);
+                    result =
+                        spchol.spsymmanalyze(analysis.crsat, priorities, 0.0, 0, facttype, permtype, reusemem, analysis.analysis, _params);
                 }
                 else
-                    result = spchol.spsymmanalyze(analysis.crsa, priorities, 0.0, 0, facttype, permtype, reusemem, analysis.analysis, _params);
+                {
+                    result =
+                        spchol.spsymmanalyze(analysis.crsa, priorities, 0.0, 0, facttype, permtype, reusemem, analysis.analysis, _params);
+                }
             }
             else
             {
@@ -45792,10 +46231,13 @@ public partial class alglib
                 if (isupper)
                 {
                     sparse.sparsecopytransposecrsbuf(a, analysis.crsat, _params);
-                    result = spchol.spsymmanalyze(analysis.crsat, priorities, 0.0, 0, facttype, permtype, reusemem, analysis.analysis, _params);
+                    result =
+                        spchol.spsymmanalyze(analysis.crsat, priorities, 0.0, 0, facttype, permtype, reusemem, analysis.analysis, _params);
                 }
                 else
+                {
                     result = spchol.spsymmanalyze(a, priorities, 0.0, 0, facttype, permtype, reusemem, analysis.analysis, _params);
+                }
             }
 
             return result;
@@ -45845,8 +46287,8 @@ public partial class alglib
              20.09.2020
              Bochkanov Sergey
         *************************************************************************/
-        public static void sparsecholeskysetmodtype(sparsedecompositionanalysis analysis, int modstrategy, double p0, double p1, double p2, double p3,
-            xparams _params)
+        public static void sparsecholeskysetmodtype(sparsedecompositionanalysis analysis, int modstrategy, double p0, double p1, double p2,
+            double p3, xparams _params)
         {
             spchol.spsymmsetmodificationstrategy(analysis.analysis, modstrategy, p0, p1, p2, p3, _params);
         }
@@ -45924,8 +46366,8 @@ public partial class alglib
              20.09.2020
              Bochkanov Sergey
         *************************************************************************/
-        public static bool sparsecholeskyfactorize(sparsedecompositionanalysis analysis, bool needupper, sparse.sparsematrix a, ref double[] d,
-            ref int[] p, xparams _params)
+        public static bool sparsecholeskyfactorize(sparsedecompositionanalysis analysis, bool needupper, sparse.sparsematrix a,
+            ref double[] d, ref int[] p, xparams _params)
         {
             var result = new bool();
 
@@ -46004,7 +46446,10 @@ public partial class alglib
         public static void sparsecholeskyreload(sparsedecompositionanalysis analysis, sparse.sparsematrix a, bool isupper, xparams _params)
         {
             ap.assert(sparse.sparsegetnrows(a, _params) == sparse.sparsegetncols(a, _params), "SparseCholeskyReload: A is not square");
-            ap.assert(sparse.sparsegetnrows(a, _params) == analysis.n, "SparseCholeskyReload: size of A does not match that stored in Analysis");
+            ap.assert(
+                sparse.sparsegetnrows(a, _params) == analysis.n,
+                "SparseCholeskyReload: size of A does not match that stored in Analysis"
+            );
             if (!sparse.sparseiscrs(a, _params))
             {
                 //
@@ -46019,7 +46464,9 @@ public partial class alglib
                     spchol.spsymmreload(analysis.analysis, analysis.crsat, _params);
                 }
                 else
+                {
                     spchol.spsymmreload(analysis.analysis, analysis.crsa, _params);
+                }
             }
             else
             {
@@ -46034,7 +46481,9 @@ public partial class alglib
                     spchol.spsymmreload(analysis.analysis, analysis.crsat, _params);
                 }
                 else
+                {
                     spchol.spsymmreload(analysis.analysis, a, _params);
+                }
             }
         }
 
@@ -46290,7 +46739,9 @@ public partial class alglib
                     result = true;
                 }
                 else
+                {
                     result = false;
+                }
 
                 return result;
             }
@@ -46394,7 +46845,9 @@ public partial class alglib
                     result = true;
                 }
                 else
+                {
                     result = false;
+                }
 
                 return result;
             }
@@ -46480,7 +46933,6 @@ public partial class alglib
             if (n == 0) return result;
 
             if (isupper)
-            {
                 //
                 // Compute the Cholesky factorization A = U'*U.
                 //
@@ -46515,16 +46967,15 @@ public partial class alglib
 
                             ablas.cmatrixmv(n - j - 1, j, aaa, offs, offs + j + 1, 1, tmp, 0, tmp, n, _params);
                             i1_ = n - (offs + j + 1);
-                            for (i_ = offs + j + 1; i_ <= offs + n - 1; i_++) aaa[offs + j, i_] = aaa[offs + j, i_] + tmp[i_ + i1_];
+                            for (i_ = offs + j + 1; i_ <= offs + n - 1; i_++)
+                                aaa[offs + j, i_] = aaa[offs + j, i_] + tmp[i_ + i1_];
                         }
 
                         r = 1 / ajj;
                         for (i_ = offs + j + 1; i_ <= offs + n - 1; i_++) aaa[offs + j, i_] = r * aaa[offs + j, i_];
                     }
                 }
-            }
             else
-            {
                 //
                 // Compute the Cholesky factorization A = L*L'.
                 //
@@ -46559,14 +47010,16 @@ public partial class alglib
                             for (i_ = 0; i_ <= j - 1; i_++) tmp[i_] = math.conj(aaa[offs + j, i_ + i1_]);
 
                             ablas.cmatrixmv(n - j - 1, j, aaa, offs + j + 1, offs, 0, tmp, 0, tmp, n, _params);
-                            for (i = 0; i <= n - j - 2; i++) aaa[offs + j + 1 + i, offs + j] = (aaa[offs + j + 1 + i, offs + j] - tmp[n + i]) * r;
+                            for (i = 0; i <= n - j - 2; i++)
+                                aaa[offs + j + 1 + i, offs + j] = (aaa[offs + j + 1 + i, offs + j] - tmp[n + i]) * r;
                         }
                         else
+                        {
                             for (i = 0; i <= n - j - 2; i++)
                                 aaa[offs + j + 1 + i, offs + j] = aaa[offs + j + 1 + i, offs + j] * r;
+                        }
                     }
                 }
-            }
 
             return result;
         }
@@ -46604,7 +47057,6 @@ public partial class alglib
             if (n == 0) return result;
 
             if (isupper)
-            {
                 //
                 // Compute the Cholesky factorization A = U'*U.
                 //
@@ -46639,16 +47091,15 @@ public partial class alglib
 
                             ablas.rmatrixmv(n - j - 1, j, aaa, offs, offs + j + 1, 1, tmp, 0, tmp, n, _params);
                             i1_ = n - (offs + j + 1);
-                            for (i_ = offs + j + 1; i_ <= offs + n - 1; i_++) aaa[offs + j, i_] = aaa[offs + j, i_] + tmp[i_ + i1_];
+                            for (i_ = offs + j + 1; i_ <= offs + n - 1; i_++)
+                                aaa[offs + j, i_] = aaa[offs + j, i_] + tmp[i_ + i1_];
                         }
 
                         r = 1 / ajj;
                         for (i_ = offs + j + 1; i_ <= offs + n - 1; i_++) aaa[offs + j, i_] = r * aaa[offs + j, i_];
                     }
                 }
-            }
             else
-            {
                 //
                 // Compute the Cholesky factorization A = L*L'.
                 //
@@ -46683,14 +47134,16 @@ public partial class alglib
                             for (i_ = 0; i_ <= j - 1; i_++) tmp[i_] = aaa[offs + j, i_ + i1_];
 
                             ablas.rmatrixmv(n - j - 1, j, aaa, offs + j + 1, offs, 0, tmp, 0, tmp, n, _params);
-                            for (i = 0; i <= n - j - 2; i++) aaa[offs + j + 1 + i, offs + j] = (aaa[offs + j + 1 + i, offs + j] - tmp[n + i]) * r;
+                            for (i = 0; i <= n - j - 2; i++)
+                                aaa[offs + j + 1 + i, offs + j] = (aaa[offs + j + 1 + i, offs + j] - tmp[n + i]) * r;
                         }
                         else
+                        {
                             for (i = 0; i <= n - j - 2; i++)
                                 aaa[offs + j + 1 + i, offs + j] = aaa[offs + j + 1 + i, offs + j] * r;
+                        }
                     }
                 }
-            }
 
             return result;
         }
@@ -46847,8 +47300,8 @@ public partial class alglib
              Courant Institute, Argonne National Lab, and Rice University
              October 31, 1999.
         *************************************************************************/
-        public static bool rmatrixbdsvd(double[] d, double[] e, int n, bool isupper, bool isfractionalaccuracyrequired, double[,] u, int nru,
-            double[,] c, int ncc, double[,] vt, int ncvt, xparams _params)
+        public static bool rmatrixbdsvd(double[] d, double[] e, int n, bool isupper, bool isfractionalaccuracyrequired, double[,] u,
+            int nru, double[,] c, int ncc, double[,] vt, int ncvt, xparams _params)
         {
             var result = new bool();
             var i = 0;
@@ -46869,7 +47322,8 @@ public partial class alglib
             for (i = 0; i <= n - 2; i++) en[i] = e[i];
 
             en[n - 1] = 0.0;
-            if (ablasmkl.rmatrixbdsvdmkl(d, en, n, isupper, u, nru, c, ncc, vt, ncvt, ref result, _params)) return result;
+            if (ablasmkl.rmatrixbdsvdmkl(d, en, n, isupper, u, nru, c, ncc, vt, ncvt, ref result, _params))
+                return result;
 
             //
             // Use ALGLIB code
@@ -46885,7 +47339,24 @@ public partial class alglib
                 for (i_ = 1; i_ <= n - 1; i_++) e1[i_] = e[i_ + i1_];
             }
 
-            result = bidiagonalsvddecompositioninternal(d1, e1, n, isupper, isfractionalaccuracyrequired, u, 0, nru, c, 0, ncc, vt, 0, ncvt, _params);
+            result =
+                bidiagonalsvddecompositioninternal(
+                    d1,
+                    e1,
+                    n,
+                    isupper,
+                    isfractionalaccuracyrequired,
+                    u,
+                    0,
+                    nru,
+                    c,
+                    0,
+                    ncc,
+                    vt,
+                    0,
+                    ncvt,
+                    _params
+                );
             i1_ = 1 - 0;
             for (i_ = 0; i_ <= n - 1; i_++) d[i_] = d1[i_ + i1_];
 
@@ -46900,7 +47371,24 @@ public partial class alglib
 
             e = (double[])e.Clone();
 
-            result = bidiagonalsvddecompositioninternal(d, e, n, isupper, isfractionalaccuracyrequired, u, 1, nru, c, 1, ncc, vt, 1, ncvt, _params);
+            result =
+                bidiagonalsvddecompositioninternal(
+                    d,
+                    e,
+                    n,
+                    isupper,
+                    isfractionalaccuracyrequired,
+                    u,
+                    1,
+                    nru,
+                    c,
+                    1,
+                    ncc,
+                    vt,
+                    1,
+                    ncvt,
+                    _params
+                );
             return result;
         }
 
@@ -46908,8 +47396,9 @@ public partial class alglib
         /*************************************************************************
         Internal working subroutine for bidiagonal decomposition
         *************************************************************************/
-        private static bool bidiagonalsvddecompositioninternal(double[] d, double[] e, int n, bool isupper, bool isfractionalaccuracyrequired,
-            double[,] uu, int ustart, int nru, double[,] c, int cstart, int ncc, double[,] vt, int vstart, int ncvt, xparams _params)
+        private static bool bidiagonalsvddecompositioninternal(double[] d, double[] e, int n, bool isupper,
+            bool isfractionalaccuracyrequired, double[,] uu, int ustart, int nru, double[,] c, int cstart, int ncc, double[,] vt,
+            int vstart, int ncvt, xparams _params)
         {
             var result = new bool();
             var i = 0;
@@ -47057,10 +47546,32 @@ public partial class alglib
                 // Update singular vectors if desired
                 //
                 if (nru > 0)
-                    rotations.applyrotationsfromtheleft(fwddir, 1 + ustart - 1, n + ustart - 1, ustart, uend, work0, work1, ut, utemp, _params);
+                    rotations.applyrotationsfromtheleft(
+                        fwddir,
+                        1 + ustart - 1,
+                        n + ustart - 1,
+                        ustart,
+                        uend,
+                        work0,
+                        work1,
+                        ut,
+                        utemp,
+                        _params
+                    );
 
                 if (ncc > 0)
-                    rotations.applyrotationsfromtheleft(fwddir, 1 + cstart - 1, n + cstart - 1, cstart, cend, work0, work1, c, ctemp, _params);
+                    rotations.applyrotationsfromtheleft(
+                        fwddir,
+                        1 + cstart - 1,
+                        n + cstart - 1,
+                        cstart,
+                        cend,
+                        work0,
+                        work1,
+                        c,
+                        ctemp,
+                        _params
+                    );
             }
 
             //
@@ -47165,7 +47676,9 @@ public partial class alglib
                 }
 
                 if (!matrixsplitflag)
+                {
                     ll = 0;
+                }
                 else
                 {
                     //
@@ -47266,19 +47779,15 @@ public partial class alglib
                 if (ll != oldll || m != oldm || bchangedir)
                 {
                     if (Math.Abs(d[ll]) >= Math.Abs(d[m]))
-                    {
                         //
                         // Chase bulge from top (big end) to bottom (small end)
                         //
                         idir = 1;
-                    }
                     else
-                    {
                         //
                         // Chase bulge from bottom (big end) to top (small end)
                         //
                         idir = 2;
-                    }
                 }
 
                 //
@@ -47436,7 +47945,6 @@ public partial class alglib
                         // Update singular vectors
                         //
                         if (ncvt > 0)
-                        {
                             rotations.applyrotationsfromtheleft(
                                 fwddir,
                                 ll + vstart - 1,
@@ -47447,11 +47955,10 @@ public partial class alglib
                                 work1,
                                 vt,
                                 vttemp,
-                                _params);
-                        }
+                                _params
+                            );
 
                         if (nru > 0)
-                        {
                             rotations.applyrotationsfromtheleft(
                                 fwddir,
                                 ll + ustart - 1,
@@ -47462,11 +47969,10 @@ public partial class alglib
                                 work3,
                                 ut,
                                 utemp,
-                                _params);
-                        }
+                                _params
+                            );
 
                         if (ncc > 0)
-                        {
                             rotations.applyrotationsfromtheleft(
                                 fwddir,
                                 ll + cstart - 1,
@@ -47477,8 +47983,8 @@ public partial class alglib
                                 work3,
                                 c,
                                 ctemp,
-                                _params);
-                        }
+                                _params
+                            );
 
                         //
                         // Test convergence
@@ -47514,7 +48020,6 @@ public partial class alglib
                         // Update singular vectors
                         //
                         if (ncvt > 0)
-                        {
                             rotations.applyrotationsfromtheleft(
                                 !fwddir,
                                 ll + vstart - 1,
@@ -47525,11 +48030,10 @@ public partial class alglib
                                 work3,
                                 vt,
                                 vttemp,
-                                _params);
-                        }
+                                _params
+                            );
 
                         if (nru > 0)
-                        {
                             rotations.applyrotationsfromtheleft(
                                 !fwddir,
                                 ll + ustart - 1,
@@ -47540,11 +48044,10 @@ public partial class alglib
                                 work1,
                                 ut,
                                 utemp,
-                                _params);
-                        }
+                                _params
+                            );
 
                         if (ncc > 0)
-                        {
                             rotations.applyrotationsfromtheleft(
                                 !fwddir,
                                 ll + cstart - 1,
@@ -47555,8 +48058,8 @@ public partial class alglib
                                 work1,
                                 c,
                                 ctemp,
-                                _params);
-                        }
+                                _params
+                            );
 
                         //
                         // Test convergence
@@ -47608,7 +48111,6 @@ public partial class alglib
                         // Update singular vectors
                         //
                         if (ncvt > 0)
-                        {
                             rotations.applyrotationsfromtheleft(
                                 fwddir,
                                 ll + vstart - 1,
@@ -47619,11 +48121,10 @@ public partial class alglib
                                 work1,
                                 vt,
                                 vttemp,
-                                _params);
-                        }
+                                _params
+                            );
 
                         if (nru > 0)
-                        {
                             rotations.applyrotationsfromtheleft(
                                 fwddir,
                                 ll + ustart - 1,
@@ -47634,11 +48135,10 @@ public partial class alglib
                                 work3,
                                 ut,
                                 utemp,
-                                _params);
-                        }
+                                _params
+                            );
 
                         if (ncc > 0)
-                        {
                             rotations.applyrotationsfromtheleft(
                                 fwddir,
                                 ll + cstart - 1,
@@ -47649,8 +48149,8 @@ public partial class alglib
                                 work3,
                                 c,
                                 ctemp,
-                                _params);
-                        }
+                                _params
+                            );
 
                         //
                         // Test convergence
@@ -47701,7 +48201,6 @@ public partial class alglib
                         // Update singular vectors if desired
                         //
                         if (ncvt > 0)
-                        {
                             rotations.applyrotationsfromtheleft(
                                 !fwddir,
                                 ll + vstart - 1,
@@ -47712,11 +48211,10 @@ public partial class alglib
                                 work3,
                                 vt,
                                 vttemp,
-                                _params);
-                        }
+                                _params
+                            );
 
                         if (nru > 0)
-                        {
                             rotations.applyrotationsfromtheleft(
                                 !fwddir,
                                 ll + ustart - 1,
@@ -47727,11 +48225,10 @@ public partial class alglib
                                 work1,
                                 ut,
                                 utemp,
-                                _params);
-                        }
+                                _params
+                            );
 
                         if (ncc > 0)
-                        {
                             rotations.applyrotationsfromtheleft(
                                 !fwddir,
                                 ll + cstart - 1,
@@ -47742,8 +48239,8 @@ public partial class alglib
                                 work1,
                                 c,
                                 ctemp,
-                                _params);
-                        }
+                                _params
+                            );
                     }
                 }
 
@@ -47913,8 +48410,8 @@ public partial class alglib
         }
 
 
-        private static void svdv2x2(double f, double g, double h, ref double ssmin, ref double ssmax, ref double snr, ref double csr, ref double snl,
-            ref double csl, xparams _params)
+        private static void svdv2x2(double f, double g, double h, ref double ssmin, ref double ssmax, ref double snr, ref double csr,
+            ref double snl, ref double csl, xparams _params)
         {
             var gasmal = new bool();
             var swp = new bool();
@@ -48066,7 +48563,9 @@ public partial class alglib
                             t = gt / extsignbdsqr(d, ft, _params) + m / t;
                     }
                     else
+                    {
                         t = (m / (s + t) + m / (r + l)) * (1 + a);
+                    }
 
                     l = Math.Sqrt(t * t + 4);
                     crt = 2 / l;
@@ -48095,11 +48594,14 @@ public partial class alglib
             //
             // Correct signs of SSMAX and SSMIN
             //
-            if (pmax == 1) tsign = extsignbdsqr(1, csr, _params) * extsignbdsqr(1, csl, _params) * extsignbdsqr(1, f, _params);
+            if (pmax == 1)
+                tsign = extsignbdsqr(1, csr, _params) * extsignbdsqr(1, csl, _params) * extsignbdsqr(1, f, _params);
 
-            if (pmax == 2) tsign = extsignbdsqr(1, snr, _params) * extsignbdsqr(1, csl, _params) * extsignbdsqr(1, g, _params);
+            if (pmax == 2)
+                tsign = extsignbdsqr(1, snr, _params) * extsignbdsqr(1, csl, _params) * extsignbdsqr(1, g, _params);
 
-            if (pmax == 3) tsign = extsignbdsqr(1, snr, _params) * extsignbdsqr(1, snl, _params) * extsignbdsqr(1, h, _params);
+            if (pmax == 3)
+                tsign = extsignbdsqr(1, snr, _params) * extsignbdsqr(1, snl, _params) * extsignbdsqr(1, h, _params);
 
             ssmax = extsignbdsqr(ssmax, tsign, _params);
             ssmin = extsignbdsqr(ssmin, tsign * extsignbdsqr(1, f, _params) * extsignbdsqr(1, h, _params), _params);
@@ -48172,8 +48674,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 2005 by Bochkanov Sergey
         *************************************************************************/
-        public static bool rmatrixsvd(double[,] a, int m, int n, int uneeded, int vtneeded, int additionalmemory, ref double[] w, ref double[,] u,
-            ref double[,] vt, xparams _params)
+        public static bool rmatrixsvd(double[,] a, int m, int n, int uneeded, int vtneeded, int additionalmemory, ref double[] w,
+            ref double[,] u, ref double[,] vt, xparams _params)
         {
             var result = new bool();
             var tauq = new double[0];
@@ -48480,7 +48982,8 @@ public partial class alglib
             var vt = new double[0, 0];
 
             ap.assert(n >= 1, "RMatrixRCond2: N<1!");
-            if (!svd.rmatrixsvd(a, n, n, 0, 0, 0, ref w, ref u, ref vt, _params)) ap.assert(false, "RMatrixRCond2: SVD solver failure");
+            if (!svd.rmatrixsvd(a, n, n, 0, 0, 0, ref w, ref u, ref vt, _params))
+                ap.assert(false, "RMatrixRCond2: SVD solver failure");
 
             result = 0;
             if (w[0] != 0) result = w[n - 1] / w[0];
@@ -48515,7 +49018,8 @@ public partial class alglib
 
             ap.assert(m >= 1, "RMatrixRCond2Rect: M<1!");
             ap.assert(n >= 1, "RMatrixRCond2Rect: N<1!");
-            if (!svd.rmatrixsvd(a, m, n, 0, 0, 0, ref w, ref u, ref vt, _params)) ap.assert(false, "RMatrixRCond2Rect: SVD solver failure");
+            if (!svd.rmatrixsvd(a, m, n, 0, 0, 0, ref w, ref u, ref vt, _params))
+                ap.assert(false, "RMatrixRCond2Rect: SVD solver failure");
 
             result = 0;
             if (w[0] != 0) result = w[Math.Min(m, n) - 1] / w[0];
@@ -48629,7 +49133,9 @@ public partial class alglib
 
                 for (j = j1; j <= j2; j++)
                     if (i == j)
+                    {
                         t[i] = t[i] + Math.Abs(a[i, i]);
+                    }
                     else
                     {
                         t[i] = t[i] + Math.Abs(a[i, j]);
@@ -48646,7 +49152,9 @@ public partial class alglib
                 result = v;
             }
             else
+            {
                 result = -1;
+            }
 
             return result;
         }
@@ -48678,7 +49186,8 @@ public partial class alglib
 
             a = (double[,])a.Clone();
 
-            if (!evd.smatrixevd(a, n, 0, isupper, ref d, ref z, _params)) ap.assert(false, "SPDMatrixRCond2: EVD solver failure");
+            if (!evd.smatrixevd(a, n, 0, isupper, ref d, ref z, _params))
+                ap.assert(false, "SPDMatrixRCond2: EVD solver failure");
 
             result = 0;
             if (d[n - 1] > 0) result = d[0] / d[n - 1];
@@ -48925,7 +49434,9 @@ public partial class alglib
 
                 for (j = j1; j <= j2; j++)
                     if (i == j)
+                    {
                         t[i] = t[i] + math.abscomplex(a[i, i]);
+                    }
                     else
                     {
                         t[i] = t[i] + math.abscomplex(a[i, j]);
@@ -48942,7 +49453,9 @@ public partial class alglib
                 result = v;
             }
             else
+            {
                 result = -1;
+            }
 
             return result;
         }
@@ -49521,8 +50034,8 @@ public partial class alglib
              Courant Institute, Argonne National Lab, and Rice University
              March 31, 1993
         *************************************************************************/
-        private static void cmatrixrcondtrinternal(complex[,] a, int n, bool isupper, bool isunit, bool onenorm, double anorm, ref double rc,
-            xparams _params)
+        private static void cmatrixrcondtrinternal(complex[,] a, int n, bool isupper, bool isunit, bool onenorm, double anorm,
+            ref double rc, xparams _params)
         {
             var ex = new complex[0];
             var cwork2 = new complex[0];
@@ -49665,8 +50178,8 @@ public partial class alglib
              Courant Institute, Argonne National Lab, and Rice University
              February 29, 1992
         *************************************************************************/
-        private static void spdmatrixrcondcholeskyinternal(double[,] cha, int n, bool isupper, bool isnormprovided, double anorm, ref double rc,
-            xparams _params)
+        private static void spdmatrixrcondcholeskyinternal(double[,] cha, int n, bool isupper, bool isnormprovided, double anorm,
+            ref double rc, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -49698,17 +50211,13 @@ public partial class alglib
             maxgrowth = 1 / rcondthreshold(_params);
             sa = 0;
             if (isupper)
-            {
                 for (i = 0; i <= n - 1; i++)
                 for (j = i; j <= n - 1; j++)
                     sa = Math.Max(sa, math.abscomplex(cha[i, j]));
-            }
             else
-            {
                 for (i = 0; i <= n - 1; i++)
                 for (j = 0; j <= i; j++)
                     sa = Math.Max(sa, math.abscomplex(cha[i, j]));
-            }
 
             if (sa == 0) sa = 1;
 
@@ -49863,8 +50372,8 @@ public partial class alglib
              Courant Institute, Argonne National Lab, and Rice University
              February 29, 1992
         *************************************************************************/
-        private static void hpdmatrixrcondcholeskyinternal(complex[,] cha, int n, bool isupper, bool isnormprovided, double anorm, ref double rc,
-            xparams _params)
+        private static void hpdmatrixrcondcholeskyinternal(complex[,] cha, int n, bool isupper, bool isnormprovided, double anorm,
+            ref double rc, xparams _params)
         {
             var isave = new int[0];
             var rsave = new double[0];
@@ -49897,17 +50406,13 @@ public partial class alglib
             maxgrowth = 1 / rcondthreshold(_params);
             sa = 0;
             if (isupper)
-            {
                 for (i = 0; i <= n - 1; i++)
                 for (j = i; j <= n - 1; j++)
                     sa = Math.Max(sa, math.abscomplex(cha[i, j]));
-            }
             else
-            {
                 for (i = 0; i <= n - 1; i++)
                 for (j = 0; j <= i; j++)
                     sa = Math.Max(sa, math.abscomplex(cha[i, j]));
-            }
 
             if (sa == 0) sa = 1;
 
@@ -50162,7 +50667,9 @@ public partial class alglib
                                 for (i_ = 0; i_ <= i - 2; i_++) v += lua[i - 1, i_] * ex[i_ + i1_];
                             }
                             else
+                            {
                                 v = 0;
+                            }
 
                             ex[i] = ex[i] + v;
                         }
@@ -50402,7 +50909,8 @@ public partial class alglib
                                 if (i > 1)
                                 {
                                     i1_ = 0 - 1;
-                                    for (i_ = 1; i_ <= i - 1; i_++) cwork2[i_] = cwork2[i_] + v * math.conj(lua[i - 1, i_ + i1_]);
+                                    for (i_ = 1; i_ <= i - 1; i_++)
+                                        cwork2[i_] = cwork2[i_] + v * math.conj(lua[i - 1, i_ + i1_]);
                                 }
 
                                 cwork2[i] = cwork2[i] + v;
@@ -50524,7 +51032,8 @@ public partial class alglib
              Courant Institute, Argonne National Lab, and Rice University
              February 29, 1992
         *************************************************************************/
-        private static void rmatrixestimatenorm(int n, ref double[] v, ref double[] x, ref int[] isgn, ref double est, ref int kase, xparams _params)
+        private static void rmatrixestimatenorm(int n, ref double[] v, ref double[] x, ref int[] isgn, ref double est, ref int kase,
+            xparams _params)
         {
             var itmax = 0;
             var i = 0;
@@ -50779,7 +51288,8 @@ public partial class alglib
                     ref altsgn,
                     ref estold,
                     ref temp,
-                    _params);
+                    _params
+                );
                 return;
             }
 
@@ -50795,7 +51305,8 @@ public partial class alglib
                 ref altsgn,
                 ref estold,
                 ref temp,
-                _params);
+                _params
+            );
 
             //
             // ENTRY   (JUMP = 1)
@@ -50820,7 +51331,8 @@ public partial class alglib
                         ref altsgn,
                         ref estold,
                         ref temp,
-                        _params);
+                        _params
+                    );
                     return;
                 }
 
@@ -50848,7 +51360,8 @@ public partial class alglib
                     ref altsgn,
                     ref estold,
                     ref temp,
-                    _params);
+                    _params
+                );
                 return;
             }
 
@@ -50881,7 +51394,8 @@ public partial class alglib
                     ref altsgn,
                     ref estold,
                     ref temp,
-                    _params);
+                    _params
+                );
                 return;
             }
 
@@ -50925,7 +51439,8 @@ public partial class alglib
                         ref altsgn,
                         ref estold,
                         ref temp,
-                        _params);
+                        _params
+                    );
                     return;
                 }
 
@@ -50952,7 +51467,8 @@ public partial class alglib
                     ref altsgn,
                     ref estold,
                     ref temp,
-                    _params);
+                    _params
+                );
                 return;
             }
 
@@ -50988,7 +51504,8 @@ public partial class alglib
                         ref altsgn,
                         ref estold,
                         ref temp,
-                        _params);
+                        _params
+                    );
                     return;
                 }
 
@@ -51016,7 +51533,8 @@ public partial class alglib
                     ref altsgn,
                     ref estold,
                     ref temp,
-                    _params);
+                    _params
+                );
                 return;
             }
 
@@ -51047,7 +51565,8 @@ public partial class alglib
                     ref altsgn,
                     ref estold,
                     ref temp,
-                    _params);
+                    _params
+                );
             }
         }
 
@@ -51083,8 +51602,8 @@ public partial class alglib
         }
 
 
-        private static void internalcomplexrcondsaveall(ref int[] isave, ref double[] rsave, ref int i, ref int iter, ref int j, ref int jlast,
-            ref int jump, ref double absxi, ref double altsgn, ref double estold, ref double temp, xparams _params)
+        private static void internalcomplexrcondsaveall(ref int[] isave, ref double[] rsave, ref int i, ref int iter, ref int j,
+            ref int jlast, ref int jump, ref double absxi, ref double altsgn, ref double estold, ref double temp, xparams _params)
         {
             isave[0] = i;
             isave[1] = iter;
@@ -51098,8 +51617,8 @@ public partial class alglib
         }
 
 
-        private static void internalcomplexrcondloadall(ref int[] isave, ref double[] rsave, ref int i, ref int iter, ref int j, ref int jlast,
-            ref int jump, ref double absxi, ref double altsgn, ref double estold, ref double temp, xparams _params)
+        private static void internalcomplexrcondloadall(ref int[] isave, ref double[] rsave, ref int i, ref int iter, ref int j,
+            ref int jlast, ref int jump, ref double absxi, ref double altsgn, ref double estold, ref double temp, xparams _params)
         {
             i = isave[0];
             iter = isave[1];
@@ -51141,7 +51660,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 13.10.2010 by Bochkanov Sergey
         *************************************************************************/
-        public static void fblscholeskysolve(double[,] cha, double sqrtscalea, int n, bool isupper, double[] xb, ref double[] tmp, xparams _params)
+        public static void fblscholeskysolve(double[,] cha, double sqrtscalea, int n, bool isupper, double[] xb, ref double[] tmp,
+            xparams _params)
         {
             double v = 0;
             var i_ = 0;
@@ -51221,7 +51741,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 20.08.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void fblssolvecgx(double[,] a, int m, int n, double alpha, double[] b, ref double[] x, ref double[] buf, xparams _params)
+        public static void fblssolvecgx(double[,] a, int m, int n, double alpha, double[] b, ref double[] x, ref double[] buf,
+            xparams _params)
         {
             var k = 0;
             var offsrk = 0;
@@ -52063,8 +52584,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 20.01.2012 by Bochkanov Sergey
         *************************************************************************/
-        public static void fblssolvels(ref double[,] a, ref double[] b, int m, int n, ref double[] tmp0, ref double[] tmp1, ref double[] tmp2,
-            xparams _params)
+        public static void fblssolvels(ref double[,] a, ref double[] b, int m, int n, ref double[] tmp0, ref double[] tmp1,
+            ref double[] tmp2, xparams _params)
         {
             var i = 0;
             var k = 0;
@@ -53154,17 +53675,13 @@ public partial class alglib
             if (rep.r1 < rcond.rcondthreshold(_params) || rep.rinf < rcond.rcondthreshold(_params))
             {
                 if (isupper)
-                {
                     for (i = 0; i <= n - 1; i++)
                     for (j = i; j <= n - 1; j++)
                         a[i, j] = 0;
-                }
                 else
-                {
                     for (i = 0; i <= n - 1; i++)
                     for (j = 0; j <= i; j++)
                         a[i, j] = 0;
-                }
 
                 rep.r1 = 0;
                 rep.rinf = 0;
@@ -53348,17 +53865,13 @@ public partial class alglib
             if (rep.r1 < rcond.rcondthreshold(_params) || rep.rinf < rcond.rcondthreshold(_params))
             {
                 if (isupper)
-                {
                     for (i = 0; i <= n - 1; i++)
                     for (j = i; j <= n - 1; j++)
                         a[i, j] = 0;
-                }
                 else
-                {
                     for (i = 0; i <= n - 1; i++)
                     for (j = 0; j <= i; j++)
                         a[i, j] = 0;
-                }
 
                 rep.r1 = 0;
                 rep.rinf = 0;
@@ -53687,7 +54200,8 @@ public partial class alglib
              10.02.2010
              Bochkanov Sergey
         *************************************************************************/
-        public static void spdmatrixcholeskyinverserec(double[,] a, int offs, int n, bool isupper, double[] tmp, matinvreport rep, xparams _params)
+        public static void spdmatrixcholeskyinverserec(double[,] a, int offs, int n, bool isupper, double[] tmp, matinvreport rep,
+            xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -53715,7 +54229,6 @@ public partial class alglib
                 rmatrixtrinverserec(a, offs, n, isupper, false, tmp, rep, _params);
                 ap.assert(rep.terminationtype > 0, "SPDMatrixCholeskyInverseRec: integrity check failed");
                 if (isupper)
-                {
                     //
                     // Compute the product U * U'.
                     // NOTE: we never assume that diagonal of U is real
@@ -53746,7 +54259,8 @@ public partial class alglib
                             {
                                 v = a[offs + j, offs + i];
                                 i1_ = j - (offs + j);
-                                for (i_ = offs + j; i_ <= offs + i - 1; i_++) a[offs + j, i_] = a[offs + j, i_] + v * tmp[i_ + i1_];
+                                for (i_ = offs + j; i_ <= offs + i - 1; i_++)
+                                    a[offs + j, i_] = a[offs + j, i_] + v * tmp[i_ + i1_];
                             }
 
                             v = a[offs + i, offs + i];
@@ -53754,9 +54268,7 @@ public partial class alglib
 
                             a[offs + i, offs + i] = math.sqr(a[offs + i, offs + i]);
                         }
-                }
                 else
-                {
                     //
                     // Compute the product L' * L
                     // NOTE: we never assume that diagonal of L is real
@@ -53787,7 +54299,8 @@ public partial class alglib
                             {
                                 v = a[offs + i, offs + j];
                                 i1_ = 0 - offs;
-                                for (i_ = offs; i_ <= offs + j; i_++) a[offs + j, i_] = a[offs + j, i_] + v * tmp[i_ + i1_];
+                                for (i_ = offs; i_ <= offs + j; i_++)
+                                    a[offs + j, i_] = a[offs + j, i_] + v * tmp[i_ + i1_];
                             }
 
                             v = a[offs + i, offs + i];
@@ -53795,7 +54308,6 @@ public partial class alglib
 
                             a[offs + i, offs + i] = math.sqr(a[offs + i, offs + i]);
                         }
-                }
 
                 return;
             }
@@ -53912,7 +54424,6 @@ public partial class alglib
             if (n <= tsa)
             {
                 if (isupper)
-                {
                     //
                     // Compute inverse of upper triangular matrix.
                     //
@@ -53930,7 +54441,9 @@ public partial class alglib
                             ajj = -a[offs + j, offs + j];
                         }
                         else
+                        {
                             ajj = -1;
+                        }
 
                         //
                         // Compute elements 1:j-1 of j-th column.
@@ -53947,7 +54460,9 @@ public partial class alglib
                                     for (i_ = offs + i + 1; i_ <= offs + j - 1; i_++) v += a[offs + i, i_] * tmp[i_];
                                 }
                                 else
+                                {
                                     v = 0;
+                                }
 
                                 if (!isunit)
                                     a[offs + i, offs + j] = v + a[offs + i, offs + i] * tmp[offs + i];
@@ -53958,9 +54473,7 @@ public partial class alglib
                             for (i_ = offs + 0; i_ <= offs + j - 1; i_++) a[i_, offs + j] = ajj * a[i_, offs + j];
                         }
                     }
-                }
                 else
-                {
                     //
                     // Compute inverse of lower triangular matrix.
                     //
@@ -53978,7 +54491,9 @@ public partial class alglib
                             ajj = -a[offs + j, offs + j];
                         }
                         else
+                        {
                             ajj = -1;
+                        }
 
                         if (j < n - 1)
                         {
@@ -53995,7 +54510,9 @@ public partial class alglib
                                     for (i_ = offs + j + 1; i_ <= offs + i - 1; i_++) v += a[offs + i, i_] * tmp[i_];
                                 }
                                 else
+                                {
                                     v = 0;
+                                }
 
                                 if (!isunit)
                                     a[offs + i, offs + j] = v + a[offs + i, offs + i] * tmp[offs + i];
@@ -54006,7 +54523,6 @@ public partial class alglib
                             for (i_ = offs + j + 1; i_ <= offs + n - 1; i_++) a[i_, offs + j] = ajj * a[i_, offs + j];
                         }
                     }
-                }
 
                 return;
             }
@@ -54048,8 +54564,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_rmatrixtrinverserec(double[,] a, int offs, int n, bool isupper, bool isunit, double[] tmp, matinvreport rep,
-            xparams _params)
+        public static bool _trypexec_rmatrixtrinverserec(double[,] a, int offs, int n, bool isupper, bool isunit, double[] tmp,
+            matinvreport rep, xparams _params)
         {
             return false;
         }
@@ -54099,7 +54615,6 @@ public partial class alglib
             if (n <= tsa)
             {
                 if (isupper)
-                {
                     //
                     // Compute inverse of upper triangular matrix.
                     //
@@ -54117,7 +54632,9 @@ public partial class alglib
                             ajj = -a[offs + j, offs + j];
                         }
                         else
+                        {
                             ajj = -1;
+                        }
 
                         //
                         // Compute elements 1:j-1 of j-th column.
@@ -54134,7 +54651,9 @@ public partial class alglib
                                     for (i_ = offs + i + 1; i_ <= offs + j - 1; i_++) v += a[offs + i, i_] * tmp[i_];
                                 }
                                 else
+                                {
                                     v = 0;
+                                }
 
                                 if (!isunit)
                                     a[offs + i, offs + j] = v + a[offs + i, offs + i] * tmp[offs + i];
@@ -54145,9 +54664,7 @@ public partial class alglib
                             for (i_ = offs + 0; i_ <= offs + j - 1; i_++) a[i_, offs + j] = ajj * a[i_, offs + j];
                         }
                     }
-                }
                 else
-                {
                     //
                     // Compute inverse of lower triangular matrix.
                     //
@@ -54165,7 +54682,9 @@ public partial class alglib
                             ajj = -a[offs + j, offs + j];
                         }
                         else
+                        {
                             ajj = -1;
+                        }
 
                         if (j < n - 1)
                         {
@@ -54182,7 +54701,9 @@ public partial class alglib
                                     for (i_ = offs + j + 1; i_ <= offs + i - 1; i_++) v += a[offs + i, i_] * tmp[i_];
                                 }
                                 else
+                                {
                                     v = 0;
+                                }
 
                                 if (!isunit)
                                     a[offs + i, offs + j] = v + a[offs + i, offs + i] * tmp[offs + i];
@@ -54193,7 +54714,6 @@ public partial class alglib
                             for (i_ = offs + j + 1; i_ <= offs + n - 1; i_++) a[i_, offs + j] = ajj * a[i_, offs + j];
                         }
                     }
-                }
 
                 return;
             }
@@ -54235,8 +54755,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_cmatrixtrinverserec(complex[,] a, int offs, int n, bool isupper, bool isunit, complex[] tmp, matinvreport rep,
-            xparams _params)
+        public static bool _trypexec_cmatrixtrinverserec(complex[,] a, int offs, int n, bool isupper, bool isunit, complex[] tmp,
+            matinvreport rep, xparams _params)
         {
             return false;
         }
@@ -54297,7 +54817,6 @@ public partial class alglib
                     // Compute current column of inv(A).
                     //
                     if (j < n - 1)
-                    {
                         for (i = 0; i <= n - 1; i++)
                         {
                             i1_ = j + 1 - (offs + j + 1);
@@ -54306,7 +54825,6 @@ public partial class alglib
 
                             a[offs + i, offs + j] = a[offs + i, offs + j] - v;
                         }
-                    }
                 }
 
                 return;
@@ -54459,7 +54977,6 @@ public partial class alglib
                     // Compute current column of inv(A).
                     //
                     if (j < n - 1)
-                    {
                         for (i = 0; i <= n - 1; i++)
                         {
                             i1_ = j + 1 - (offs + j + 1);
@@ -54468,7 +54985,6 @@ public partial class alglib
 
                             a[offs + i, offs + j] = a[offs + i, offs + j] - v;
                         }
-                    }
                 }
 
                 return;
@@ -54602,7 +55118,6 @@ public partial class alglib
                 cmatrixtrinverserec(a, offs, n, isupper, false, tmp, rep, _params);
                 ap.assert(rep.terminationtype > 0, "HPDMatrixCholeskyInverseRec: integrity check failed");
                 if (isupper)
-                {
                     //
                     // Compute the product U * U'.
                     // NOTE: we never assume that diagonal of U is real
@@ -54633,7 +55148,8 @@ public partial class alglib
                             {
                                 v = a[offs + j, offs + i];
                                 i1_ = j - (offs + j);
-                                for (i_ = offs + j; i_ <= offs + i - 1; i_++) a[offs + j, i_] = a[offs + j, i_] + v * tmp[i_ + i1_];
+                                for (i_ = offs + j; i_ <= offs + i - 1; i_++)
+                                    a[offs + j, i_] = a[offs + j, i_] + v * tmp[i_ + i1_];
                             }
 
                             v = math.conj(a[offs + i, offs + i]);
@@ -54641,9 +55157,7 @@ public partial class alglib
 
                             a[offs + i, offs + i] = math.sqr(a[offs + i, offs + i].x) + math.sqr(a[offs + i, offs + i].y);
                         }
-                }
                 else
-                {
                     //
                     // Compute the product L' * L
                     // NOTE: we never assume that diagonal of L is real
@@ -54674,7 +55188,8 @@ public partial class alglib
                             {
                                 v = math.conj(a[offs + i, offs + j]);
                                 i1_ = 0 - offs;
-                                for (i_ = offs; i_ <= offs + j; i_++) a[offs + j, i_] = a[offs + j, i_] + v * tmp[i_ + i1_];
+                                for (i_ = offs; i_ <= offs + j; i_++)
+                                    a[offs + j, i_] = a[offs + j, i_] + v * tmp[i_ + i1_];
                             }
 
                             v = math.conj(a[offs + i, offs + i]);
@@ -54682,7 +55197,6 @@ public partial class alglib
 
                             a[offs + i, offs + i] = math.sqr(a[offs + i, offs + i].x) + math.sqr(a[offs + i, offs + i].y);
                         }
-                }
 
                 return;
             }
@@ -55175,8 +55689,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 1.28.2006 by Bochkanov Sergey
         *************************************************************************/
-        public static bool smatrixgevd(double[,] a, int n, bool isuppera, double[,] b, bool isupperb, int zneeded, int problemtype, ref double[] d,
-            ref double[,] z, xparams _params)
+        public static bool smatrixgevd(double[,] a, int n, bool isuppera, double[,] b, bool isupperb, int zneeded, int problemtype,
+            ref double[] d, ref double[,] z, xparams _params)
         {
             var result = new bool();
             var r = new double[0, 0];
@@ -55310,8 +55824,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 1.28.2006 by Bochkanov Sergey
         *************************************************************************/
-        public static bool smatrixgevdreduce(double[,] a, int n, bool isuppera, double[,] b, bool isupperb, int problemtype, ref double[,] r,
-            ref bool isupperr, xparams _params)
+        public static bool smatrixgevdreduce(double[,] a, int n, bool isuppera, double[,] b, bool isupperb, int problemtype,
+            ref double[,] r, ref bool isupperr, xparams _params)
         {
             var result = new bool();
             var t = new double[0, 0];
@@ -55347,17 +55861,13 @@ public partial class alglib
                 //
                 t = new double[n - 1 + 1, n - 1 + 1];
                 if (isupperb)
-                {
                     for (i = 0; i <= n - 1; i++)
                     for (i_ = i; i_ <= n - 1; i_++)
                         t[i_, i] = b[i, i_];
-                }
                 else
-                {
                     for (i = 0; i <= n - 1; i++)
                     for (i_ = 0; i_ <= i; i_++)
                         t[i, i_] = b[i, i_];
-                }
 
                 if (!trfac.spdmatrixcholesky(t, n, false, _params))
                 {
@@ -55447,17 +55957,13 @@ public partial class alglib
                 //
                 t = new double[n - 1 + 1, n - 1 + 1];
                 if (isupperb)
-                {
                     for (i = 0; i <= n - 1; i++)
                     for (i_ = i; i_ <= n - 1; i_++)
                         t[i, i_] = b[i, i_];
-                }
                 else
-                {
                     for (i = 0; i <= n - 1; i++)
                     for (i_ = i; i_ <= n - 1; i_++)
                         t[i, i_] = b[i_, i];
-                }
 
                 if (!trfac.spdmatrixcholesky(t, n, true, _params))
                 {

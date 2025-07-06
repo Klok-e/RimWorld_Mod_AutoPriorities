@@ -18,6 +18,7 @@ http://www.fsf.org/licensing/licenses
 >>> END OF LICENSE >>>
 *************************************************************************/
 
+#pragma warning disable CS8625
 #pragma warning disable 1691
 #pragma warning disable 162
 #pragma warning disable 164
@@ -217,7 +218,8 @@ public partial class alglib
         pca.pcatruncatedsubspace(x, npoints, nvars, nneeded, eps, maxits, ref s2, ref v, null);
     }
 
-    public static void pcatruncatedsubspace(double[,] x, int nneeded, double eps, int maxits, out double[] s2, out double[,] v, xparams _params)
+    public static void pcatruncatedsubspace(double[,] x, int nneeded, double eps, int maxits, out double[] s2, out double[,] v,
+        xparams _params)
     {
         int npoints;
         int nvars;
@@ -305,16 +307,16 @@ public partial class alglib
       -- ALGLIB --
          Copyright 10.01.2017 by Bochkanov Sergey
     *************************************************************************/
-    public static void pcatruncatedsubspacesparse(sparsematrix x, int npoints, int nvars, int nneeded, double eps, int maxits, out double[] s2,
-        out double[,] v)
+    public static void pcatruncatedsubspacesparse(sparsematrix x, int npoints, int nvars, int nneeded, double eps, int maxits,
+        out double[] s2, out double[,] v)
     {
         s2 = new double[0];
         v = new double[0, 0];
         pca.pcatruncatedsubspacesparse(x.innerobj, npoints, nvars, nneeded, eps, maxits, ref s2, ref v, null);
     }
 
-    public static void pcatruncatedsubspacesparse(sparsematrix x, int npoints, int nvars, int nneeded, double eps, int maxits, out double[] s2,
-        out double[,] v, xparams _params)
+    public static void pcatruncatedsubspacesparse(sparsematrix x, int npoints, int nvars, int nneeded, double eps, int maxits,
+        out double[] s2, out double[,] v, xparams _params)
     {
         s2 = new double[0];
         v = new double[0, 0];
@@ -351,8 +353,8 @@ public partial class alglib
       -- ALGLIB --
          Copyright 22.05.2008 by Bochkanov Sergey
     *************************************************************************/
-    public static void dsoptimalsplit2(double[] a, int[] c, int n, out int info, out double threshold, out double pal, out double pbl, out double par,
-        out double pbr, out double cve)
+    public static void dsoptimalsplit2(double[] a, int[] c, int n, out int info, out double threshold, out double pal, out double pbl,
+        out double par, out double pbr, out double cve)
     {
         info = 0;
         threshold = 0;
@@ -364,8 +366,8 @@ public partial class alglib
         bdss.dsoptimalsplit2(a, c, n, ref info, ref threshold, ref pal, ref pbl, ref par, ref pbr, ref cve, null);
     }
 
-    public static void dsoptimalsplit2(double[] a, int[] c, int n, out int info, out double threshold, out double pal, out double pbl, out double par,
-        out double pbr, out double cve, xparams _params)
+    public static void dsoptimalsplit2(double[] a, int[] c, int n, out int info, out double threshold, out double pal, out double pbl,
+        out double par, out double pbr, out double cve, xparams _params)
     {
         info = 0;
         threshold = 0;
@@ -401,8 +403,8 @@ public partial class alglib
       -- ALGLIB --
          Copyright 11.12.2008 by Bochkanov Sergey
     *************************************************************************/
-    public static void dsoptimalsplit2fast(ref double[] a, ref int[] c, ref int[] tiesbuf, ref int[] cntbuf, ref double[] bufr, ref int[] bufi, int n,
-        int nc, double alpha, out int info, out double threshold, out double rms, out double cvrms)
+    public static void dsoptimalsplit2fast(ref double[] a, ref int[] c, ref int[] tiesbuf, ref int[] cntbuf, ref double[] bufr,
+        ref int[] bufi, int n, int nc, double alpha, out int info, out double threshold, out double rms, out double cvrms)
     {
         info = 0;
         threshold = 0;
@@ -422,11 +424,12 @@ public partial class alglib
             ref threshold,
             ref rms,
             ref cvrms,
-            null);
+            null
+        );
     }
 
-    public static void dsoptimalsplit2fast(ref double[] a, ref int[] c, ref int[] tiesbuf, ref int[] cntbuf, ref double[] bufr, ref int[] bufi, int n,
-        int nc, double alpha, out int info, out double threshold, out double rms, out double cvrms, xparams _params)
+    public static void dsoptimalsplit2fast(ref double[] a, ref int[] c, ref int[] tiesbuf, ref int[] cntbuf, ref double[] bufr,
+        ref int[] bufi, int n, int nc, double alpha, out int info, out double threshold, out double rms, out double cvrms, xparams _params)
     {
         info = 0;
         threshold = 0;
@@ -446,7 +449,8 @@ public partial class alglib
             ref threshold,
             ref rms,
             ref cvrms,
-            _params);
+            _params
+        );
     }
 }
 
@@ -659,7 +663,8 @@ public partial class alglib
         mlpbase.mlpcreateb2(nin, nhid1, nhid2, nout, b, d, network.innerobj, null);
     }
 
-    public static void mlpcreateb2(int nin, int nhid1, int nhid2, int nout, double b, double d, out multilayerperceptron network, xparams _params)
+    public static void mlpcreateb2(int nin, int nhid1, int nhid2, int nout, double b, double d, out multilayerperceptron network,
+        xparams _params)
     {
         network = new multilayerperceptron();
         mlpbase.mlpcreateb2(nin, nhid1, nhid2, nout, b, d, network.innerobj, _params);
@@ -715,7 +720,8 @@ public partial class alglib
         mlpbase.mlpcreater2(nin, nhid1, nhid2, nout, a, b, network.innerobj, null);
     }
 
-    public static void mlpcreater2(int nin, int nhid1, int nhid2, int nout, double a, double b, out multilayerperceptron network, xparams _params)
+    public static void mlpcreater2(int nin, int nhid1, int nhid2, int nout, double a, double b, out multilayerperceptron network,
+        xparams _params)
     {
         network = new multilayerperceptron();
         mlpbase.mlpcreater2(nin, nhid1, nhid2, nout, a, b, network.innerobj, _params);
@@ -2124,7 +2130,8 @@ public partial class alglib
         mlpbase.mlpgrad(network.innerobj, x, desiredy, ref e, ref grad, null);
     }
 
-    public static void mlpgrad(multilayerperceptron network, double[] x, double[] desiredy, out double e, ref double[] grad, xparams _params)
+    public static void mlpgrad(multilayerperceptron network, double[] x, double[] desiredy, out double e, ref double[] grad,
+        xparams _params)
     {
         e = 0;
         mlpbase.mlpgrad(network.innerobj, x, desiredy, ref e, ref grad, _params);
@@ -2156,7 +2163,8 @@ public partial class alglib
         mlpbase.mlpgradn(network.innerobj, x, desiredy, ref e, ref grad, null);
     }
 
-    public static void mlpgradn(multilayerperceptron network, double[] x, double[] desiredy, out double e, ref double[] grad, xparams _params)
+    public static void mlpgradn(multilayerperceptron network, double[] x, double[] desiredy, out double e, ref double[] grad,
+        xparams _params)
     {
         e = 0;
         mlpbase.mlpgradn(network.innerobj, x, desiredy, ref e, ref grad, _params);
@@ -2252,7 +2260,8 @@ public partial class alglib
         mlpbase.mlpgradbatchsparse(network.innerobj, xy.innerobj, ssize, ref e, ref grad, null);
     }
 
-    public static void mlpgradbatchsparse(multilayerperceptron network, sparsematrix xy, int ssize, out double e, ref double[] grad, xparams _params)
+    public static void mlpgradbatchsparse(multilayerperceptron network, sparsematrix xy, int ssize, out double e, ref double[] grad,
+        xparams _params)
     {
         e = 0;
         mlpbase.mlpgradbatchsparse(network.innerobj, xy.innerobj, ssize, ref e, ref grad, _params);
@@ -2375,15 +2384,15 @@ public partial class alglib
       -- ALGLIB --
          Copyright 26.07.2012 by Bochkanov Sergey
     *************************************************************************/
-    public static void mlpgradbatchsparsesubset(multilayerperceptron network, sparsematrix xy, int setsize, int[] idx, int subsetsize, out double e,
-        ref double[] grad)
+    public static void mlpgradbatchsparsesubset(multilayerperceptron network, sparsematrix xy, int setsize, int[] idx, int subsetsize,
+        out double e, ref double[] grad)
     {
         e = 0;
         mlpbase.mlpgradbatchsparsesubset(network.innerobj, xy.innerobj, setsize, idx, subsetsize, ref e, ref grad, null);
     }
 
-    public static void mlpgradbatchsparsesubset(multilayerperceptron network, sparsematrix xy, int setsize, int[] idx, int subsetsize, out double e,
-        ref double[] grad, xparams _params)
+    public static void mlpgradbatchsparsesubset(multilayerperceptron network, sparsematrix xy, int setsize, int[] idx, int subsetsize,
+        out double e, ref double[] grad, xparams _params)
     {
         e = 0;
         mlpbase.mlpgradbatchsparsesubset(network.innerobj, xy.innerobj, setsize, idx, subsetsize, ref e, ref grad, _params);
@@ -2418,7 +2427,8 @@ public partial class alglib
         mlpbase.mlpgradnbatch(network.innerobj, xy, ssize, ref e, ref grad, null);
     }
 
-    public static void mlpgradnbatch(multilayerperceptron network, double[,] xy, int ssize, out double e, ref double[] grad, xparams _params)
+    public static void mlpgradnbatch(multilayerperceptron network, double[,] xy, int ssize, out double e, ref double[] grad,
+        xparams _params)
     {
         e = 0;
         mlpbase.mlpgradnbatch(network.innerobj, xy, ssize, ref e, ref grad, _params);
@@ -2436,14 +2446,15 @@ public partial class alglib
          B. A. Pearlmutter,
          Neural Computation, 1994.
     *************************************************************************/
-    public static void mlphessiannbatch(multilayerperceptron network, double[,] xy, int ssize, out double e, ref double[] grad, ref double[,] h)
+    public static void mlphessiannbatch(multilayerperceptron network, double[,] xy, int ssize, out double e, ref double[] grad,
+        ref double[,] h)
     {
         e = 0;
         mlpbase.mlphessiannbatch(network.innerobj, xy, ssize, ref e, ref grad, ref h, null);
     }
 
-    public static void mlphessiannbatch(multilayerperceptron network, double[,] xy, int ssize, out double e, ref double[] grad, ref double[,] h,
-        xparams _params)
+    public static void mlphessiannbatch(multilayerperceptron network, double[,] xy, int ssize, out double e, ref double[] grad,
+        ref double[,] h, xparams _params)
     {
         e = 0;
         mlpbase.mlphessiannbatch(network.innerobj, xy, ssize, ref e, ref grad, ref h, _params);
@@ -2461,14 +2472,15 @@ public partial class alglib
          B. A. Pearlmutter,
          Neural Computation, 1994.
     *************************************************************************/
-    public static void mlphessianbatch(multilayerperceptron network, double[,] xy, int ssize, out double e, ref double[] grad, ref double[,] h)
+    public static void mlphessianbatch(multilayerperceptron network, double[,] xy, int ssize, out double e, ref double[] grad,
+        ref double[,] h)
     {
         e = 0;
         mlpbase.mlphessianbatch(network.innerobj, xy, ssize, ref e, ref grad, ref h, null);
     }
 
-    public static void mlphessianbatch(multilayerperceptron network, double[,] xy, int ssize, out double e, ref double[] grad, ref double[,] h,
-        xparams _params)
+    public static void mlphessianbatch(multilayerperceptron network, double[,] xy, int ssize, out double e, ref double[] grad,
+        ref double[,] h, xparams _params)
     {
         e = 0;
         mlpbase.mlphessianbatch(network.innerobj, xy, ssize, ref e, ref grad, ref h, _params);
@@ -2508,14 +2520,15 @@ public partial class alglib
       -- ALGLIB --
          Copyright 04.09.2012 by Bochkanov Sergey
     *************************************************************************/
-    public static void mlpallerrorssubset(multilayerperceptron network, double[,] xy, int setsize, int[] subset, int subsetsize, out modelerrors rep)
+    public static void mlpallerrorssubset(multilayerperceptron network, double[,] xy, int setsize, int[] subset, int subsetsize,
+        out modelerrors rep)
     {
         rep = new modelerrors();
         mlpbase.mlpallerrorssubset(network.innerobj, xy, setsize, subset, subsetsize, rep.innerobj, null);
     }
 
-    public static void mlpallerrorssubset(multilayerperceptron network, double[,] xy, int setsize, int[] subset, int subsetsize, out modelerrors rep,
-        xparams _params)
+    public static void mlpallerrorssubset(multilayerperceptron network, double[,] xy, int setsize, int[] subset, int subsetsize,
+        out modelerrors rep, xparams _params)
     {
         rep = new modelerrors();
         mlpbase.mlpallerrorssubset(network.innerobj, xy, setsize, subset, subsetsize, rep.innerobj, _params);
@@ -2627,7 +2640,8 @@ public partial class alglib
         return mlpbase.mlperrorsubset(network.innerobj, xy, setsize, subset, subsetsize, null);
     }
 
-    public static double mlperrorsubset(multilayerperceptron network, double[,] xy, int setsize, int[] subset, int subsetsize, xparams _params)
+    public static double mlperrorsubset(multilayerperceptron network, double[,] xy, int setsize, int[] subset, int subsetsize,
+        xparams _params)
     {
         return mlpbase.mlperrorsubset(network.innerobj, xy, setsize, subset, subsetsize, _params);
     }
@@ -2979,7 +2993,8 @@ public partial class alglib
         mlpe.mlpecreateb1(nin, nhid, nout, b, d, ensemblesize, ensemble.innerobj, null);
     }
 
-    public static void mlpecreateb1(int nin, int nhid, int nout, double b, double d, int ensemblesize, out mlpensemble ensemble, xparams _params)
+    public static void mlpecreateb1(int nin, int nhid, int nout, double b, double d, int ensemblesize, out mlpensemble ensemble,
+        xparams _params)
     {
         ensemble = new mlpensemble();
         mlpe.mlpecreateb1(nin, nhid, nout, b, d, ensemblesize, ensemble.innerobj, _params);
@@ -3034,7 +3049,8 @@ public partial class alglib
         mlpe.mlpecreater1(nin, nhid, nout, a, b, ensemblesize, ensemble.innerobj, null);
     }
 
-    public static void mlpecreater1(int nin, int nhid, int nout, double a, double b, int ensemblesize, out mlpensemble ensemble, xparams _params)
+    public static void mlpecreater1(int nin, int nhid, int nout, double a, double b, int ensemblesize, out mlpensemble ensemble,
+        xparams _params)
     {
         ensemble = new mlpensemble();
         mlpe.mlpecreater1(nin, nhid, nout, a, b, ensemblesize, ensemble.innerobj, _params);
@@ -5184,7 +5200,8 @@ public partial class alglib
         dforest.dfbuilderbuildrandomforest(s.innerobj, ntrees, df.innerobj, rep.innerobj, null);
     }
 
-    public static void dfbuilderbuildrandomforest(decisionforestbuilder s, int ntrees, out decisionforest df, out dfreport rep, xparams _params)
+    public static void dfbuilderbuildrandomforest(decisionforestbuilder s, int ntrees, out decisionforest df, out dfreport rep,
+        xparams _params)
     {
         df = new decisionforest();
         rep = new dfreport();
@@ -5596,7 +5613,19 @@ public partial class alglib
         info = 0;
         df = new decisionforest();
         rep = new dfreport();
-        dforest.dfbuildrandomdecisionforestx1(xy, npoints, nvars, nclasses, ntrees, nrndvars, r, ref info, df.innerobj, rep.innerobj, _params);
+        dforest.dfbuildrandomdecisionforestx1(
+            xy,
+            npoints,
+            nvars,
+            nclasses,
+            ntrees,
+            nrndvars,
+            r,
+            ref info,
+            df.innerobj,
+            rep.innerobj,
+            _params
+        );
     }
 
 
@@ -7971,14 +8000,15 @@ public partial class alglib
       -- ALGLIB --
          Copyright 30.10.2017 by Bochkanov Sergey
     *************************************************************************/
-    public static void ssaforecastavgsequence(ssamodel s, double[] data, int datalen, int m, int forecastlen, bool applysmoothing, out double[] trend)
+    public static void ssaforecastavgsequence(ssamodel s, double[] data, int datalen, int m, int forecastlen, bool applysmoothing,
+        out double[] trend)
     {
         trend = new double[0];
         ssa.ssaforecastavgsequence(s.innerobj, data, datalen, m, forecastlen, applysmoothing, ref trend, null);
     }
 
-    public static void ssaforecastavgsequence(ssamodel s, double[] data, int datalen, int m, int forecastlen, bool applysmoothing, out double[] trend,
-        xparams _params)
+    public static void ssaforecastavgsequence(ssamodel s, double[] data, int datalen, int m, int forecastlen, bool applysmoothing,
+        out double[] trend, xparams _params)
     {
         trend = new double[0];
         ssa.ssaforecastavgsequence(s.innerobj, data, datalen, m, forecastlen, applysmoothing, ref trend, _params);
@@ -10465,16 +10495,16 @@ public partial class alglib
       -- ALGLIB --
          Copyright 09.12.2007 by Bochkanov Sergey
     *************************************************************************/
-    public static void mlptrainlbfgs(multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, double wstep, int maxits,
-        out int info, out mlpreport rep)
+    public static void mlptrainlbfgs(multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, double wstep,
+        int maxits, out int info, out mlpreport rep)
     {
         info = 0;
         rep = new mlpreport();
         mlptrain.mlptrainlbfgs(network.innerobj, xy, npoints, decay, restarts, wstep, maxits, ref info, rep.innerobj, null);
     }
 
-    public static void mlptrainlbfgs(multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, double wstep, int maxits,
-        out int info, out mlpreport rep, xparams _params)
+    public static void mlptrainlbfgs(multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, double wstep,
+        int maxits, out int info, out mlpreport rep, xparams _params)
     {
         info = 0;
         rep = new mlpreport();
@@ -10576,8 +10606,8 @@ public partial class alglib
       -- ALGLIB --
          Copyright 09.12.2007 by Bochkanov Sergey
     *************************************************************************/
-    public static void mlpkfoldcvlbfgs(multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, double wstep, int maxits,
-        int foldscount, out int info, out mlpreport rep, out mlpcvreport cvrep)
+    public static void mlpkfoldcvlbfgs(multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, double wstep,
+        int maxits, int foldscount, out int info, out mlpreport rep, out mlpcvreport cvrep)
     {
         info = 0;
         rep = new mlpreport();
@@ -10594,11 +10624,12 @@ public partial class alglib
             ref info,
             rep.innerobj,
             cvrep.innerobj,
-            null);
+            null
+        );
     }
 
-    public static void mlpkfoldcvlbfgs(multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, double wstep, int maxits,
-        int foldscount, out int info, out mlpreport rep, out mlpcvreport cvrep, xparams _params)
+    public static void mlpkfoldcvlbfgs(multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, double wstep,
+        int maxits, int foldscount, out int info, out mlpreport rep, out mlpcvreport cvrep, xparams _params)
     {
         info = 0;
         rep = new mlpreport();
@@ -10615,7 +10646,8 @@ public partial class alglib
             ref info,
             rep.innerobj,
             cvrep.innerobj,
-            _params);
+            _params
+        );
     }
 
     /*************************************************************************
@@ -10645,8 +10677,8 @@ public partial class alglib
       -- ALGLIB --
          Copyright 09.12.2007 by Bochkanov Sergey
     *************************************************************************/
-    public static void mlpkfoldcvlm(multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, int foldscount, out int info,
-        out mlpreport rep, out mlpcvreport cvrep)
+    public static void mlpkfoldcvlm(multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, int foldscount,
+        out int info, out mlpreport rep, out mlpcvreport cvrep)
     {
         info = 0;
         rep = new mlpreport();
@@ -10654,8 +10686,8 @@ public partial class alglib
         mlptrain.mlpkfoldcvlm(network.innerobj, xy, npoints, decay, restarts, foldscount, ref info, rep.innerobj, cvrep.innerobj, null);
     }
 
-    public static void mlpkfoldcvlm(multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, int foldscount, out int info,
-        out mlpreport rep, out mlpcvreport cvrep, xparams _params)
+    public static void mlpkfoldcvlm(multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, int foldscount,
+        out int info, out mlpreport rep, out mlpcvreport cvrep, xparams _params)
     {
         info = 0;
         rep = new mlpreport();
@@ -10729,7 +10761,8 @@ public partial class alglib
         mlptrain.mlpkfoldcv(s.innerobj, network.innerobj, nrestarts, foldscount, rep.innerobj, null);
     }
 
-    public static void mlpkfoldcv(mlptrainer s, multilayerperceptron network, int nrestarts, int foldscount, out mlpreport rep, xparams _params)
+    public static void mlpkfoldcv(mlptrainer s, multilayerperceptron network, int nrestarts, int foldscount, out mlpreport rep,
+        xparams _params)
     {
         rep = new mlpreport();
         mlptrain.mlpkfoldcv(s.innerobj, network.innerobj, nrestarts, foldscount, rep.innerobj, _params);
@@ -11193,8 +11226,8 @@ public partial class alglib
       -- ALGLIB --
          Copyright 17.02.2009 by Bochkanov Sergey
     *************************************************************************/
-    public static void mlpebagginglm(mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts, out int info, out mlpreport rep,
-        out mlpcvreport ooberrors)
+    public static void mlpebagginglm(mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts, out int info,
+        out mlpreport rep, out mlpcvreport ooberrors)
     {
         info = 0;
         rep = new mlpreport();
@@ -11202,8 +11235,8 @@ public partial class alglib
         mlptrain.mlpebagginglm(ensemble.innerobj, xy, npoints, decay, restarts, ref info, rep.innerobj, ooberrors.innerobj, null);
     }
 
-    public static void mlpebagginglm(mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts, out int info, out mlpreport rep,
-        out mlpcvreport ooberrors, xparams _params)
+    public static void mlpebagginglm(mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts, out int info,
+        out mlpreport rep, out mlpcvreport ooberrors, xparams _params)
     {
         info = 0;
         rep = new mlpreport();
@@ -11239,17 +11272,8 @@ public partial class alglib
       -- ALGLIB --
          Copyright 17.02.2009 by Bochkanov Sergey
     *************************************************************************/
-    public static void mlpebagginglbfgs(mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts, double wstep, int maxits,
-        out int info, out mlpreport rep, out mlpcvreport ooberrors)
-    {
-        info = 0;
-        rep = new mlpreport();
-        ooberrors = new mlpcvreport();
-        mlptrain.mlpebagginglbfgs(ensemble.innerobj, xy, npoints, decay, restarts, wstep, maxits, ref info, rep.innerobj, ooberrors.innerobj, null);
-    }
-
-    public static void mlpebagginglbfgs(mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts, double wstep, int maxits,
-        out int info, out mlpreport rep, out mlpcvreport ooberrors, xparams _params)
+    public static void mlpebagginglbfgs(mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts, double wstep,
+        int maxits, out int info, out mlpreport rep, out mlpcvreport ooberrors)
     {
         info = 0;
         rep = new mlpreport();
@@ -11265,7 +11289,29 @@ public partial class alglib
             ref info,
             rep.innerobj,
             ooberrors.innerobj,
-            _params);
+            null
+        );
+    }
+
+    public static void mlpebagginglbfgs(mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts, double wstep,
+        int maxits, out int info, out mlpreport rep, out mlpcvreport ooberrors, xparams _params)
+    {
+        info = 0;
+        rep = new mlpreport();
+        ooberrors = new mlpcvreport();
+        mlptrain.mlpebagginglbfgs(
+            ensemble.innerobj,
+            xy,
+            npoints,
+            decay,
+            restarts,
+            wstep,
+            maxits,
+            ref info,
+            rep.innerobj,
+            ooberrors.innerobj,
+            _params
+        );
     }
 
     /*************************************************************************
@@ -11292,15 +11338,16 @@ public partial class alglib
       -- ALGLIB --
          Copyright 10.03.2009 by Bochkanov Sergey
     *************************************************************************/
-    public static void mlpetraines(mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts, out int info, out mlpreport rep)
+    public static void mlpetraines(mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts, out int info,
+        out mlpreport rep)
     {
         info = 0;
         rep = new mlpreport();
         mlptrain.mlpetraines(ensemble.innerobj, xy, npoints, decay, restarts, ref info, rep.innerobj, null);
     }
 
-    public static void mlpetraines(mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts, out int info, out mlpreport rep,
-        xparams _params)
+    public static void mlpetraines(mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts, out int info,
+        out mlpreport rep, xparams _params)
     {
         info = 0;
         rep = new mlpreport();
@@ -11564,7 +11611,8 @@ public partial class alglib
       -- ALGLIB --
          Copyright 21.03.2009 by Bochkanov Sergey
     *************************************************************************/
-    public static void kmeansgenerate(double[,] xy, int npoints, int nvars, int k, int restarts, out int info, out double[,] c, out int[] xyc)
+    public static void kmeansgenerate(double[,] xy, int npoints, int nvars, int k, int restarts, out int info, out double[,] c,
+        out int[] xyc)
     {
         info = 0;
         c = new double[0, 0];
@@ -11572,8 +11620,8 @@ public partial class alglib
         datacomp.kmeansgenerate(xy, npoints, nvars, k, restarts, ref info, ref c, ref xyc, null);
     }
 
-    public static void kmeansgenerate(double[,] xy, int npoints, int nvars, int k, int restarts, out int info, out double[,] c, out int[] xyc,
-        xparams _params)
+    public static void kmeansgenerate(double[,] xy, int npoints, int nvars, int k, int restarts, out int info, out double[,] c,
+        out int[] xyc, xparams _params)
     {
         info = 0;
         c = new double[0, 0];
@@ -12300,7 +12348,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 19.05.2008 by Bochkanov Sergey
         *************************************************************************/
-        public static void dsnormalizec(double[,] xy, int npoints, int nvars, ref int info, ref double[] means, ref double[] sigmas, xparams _params)
+        public static void dsnormalizec(double[,] xy, int npoints, int nvars, ref int info, ref double[] means, ref double[] sigmas,
+            xparams _params)
         {
             var j = 0;
             var tmp = new double[0];
@@ -12456,8 +12505,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 11.12.2008 by Bochkanov Sergey
         *************************************************************************/
-        public static void dstiefasti(ref double[] a, ref int[] b, int n, ref int[] ties, ref int tiecount, ref double[] bufr, ref int[] bufi,
-            xparams _params)
+        public static void dstiefasti(ref double[] a, ref int[] b, int n, ref int[] ties, ref int tiecount, ref double[] bufr,
+            ref int[] bufi, xparams _params)
         {
             var i = 0;
             var k = 0;
@@ -12710,8 +12759,9 @@ public partial class alglib
           -- ALGLIB --
              Copyright 11.12.2008 by Bochkanov Sergey
         *************************************************************************/
-        public static void dsoptimalsplit2fast(ref double[] a, ref int[] c, ref int[] tiesbuf, ref int[] cntbuf, ref double[] bufr, ref int[] bufi,
-            int n, int nc, double alpha, ref int info, ref double threshold, ref double rms, ref double cvrms, xparams _params)
+        public static void dsoptimalsplit2fast(ref double[] a, ref int[] c, ref int[] tiesbuf, ref int[] cntbuf, ref double[] bufr,
+            ref int[] bufi, int n, int nc, double alpha, ref int info, ref double threshold, ref double rms, ref double cvrms,
+            xparams _params)
         {
             var i = 0;
             var k = 0;
@@ -12874,8 +12924,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 22.05.2008 by Bochkanov Sergey
         *************************************************************************/
-        public static void dssplitk(double[] a, int[] c, int n, int nc, int kmax, ref int info, ref double[] thresholds, ref int ni, ref double cve,
-            xparams _params)
+        public static void dssplitk(double[] a, int[] c, int n, int nc, int kmax, ref int info, ref double[] thresholds, ref int ni,
+            ref double cve, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -13031,7 +13081,9 @@ public partial class alglib
                         j = j + 1;
                     }
                     else
+                    {
                         i = i + 1;
+                    }
                 }
 
                 ap.assert(cursizes[k - 1] != 0 && j == tiecount, "DSSplitK: internal error #1");
@@ -13667,7 +13719,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 30.03.2008 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpcreateb2(int nin, int nhid1, int nhid2, int nout, double b, double d, multilayerperceptron network, xparams _params)
+        public static void mlpcreateb2(int nin, int nhid1, int nhid2, int nout, double b, double d, multilayerperceptron network,
+            xparams _params)
         {
             var lsizes = new int[0];
             var ltypes = new int[0];
@@ -13829,7 +13882,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 30.03.2008 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpcreater2(int nin, int nhid1, int nhid2, int nout, double a, double b, multilayerperceptron network, xparams _params)
+        public static void mlpcreater2(int nin, int nhid1, int nhid2, int nout, double a, double b, multilayerperceptron network,
+            xparams _params)
         {
             var lsizes = new int[0];
             var ltypes = new int[0];
@@ -14095,10 +14149,12 @@ public partial class alglib
 
             ap.assert(
                 ap.len(network1.structinfo) > 0 && ap.len(network1.structinfo) >= network1.structinfo[0],
-                "MLPSameArchitecture: Network1 is uninitialized");
+                "MLPSameArchitecture: Network1 is uninitialized"
+            );
             ap.assert(
                 ap.len(network2.structinfo) > 0 && ap.len(network2.structinfo) >= network2.structinfo[0],
-                "MLPSameArchitecture: Network2 is uninitialized");
+                "MLPSameArchitecture: Network2 is uninitialized"
+            );
             result = false;
             if (network1.structinfo[0] != network2.structinfo[0]) return result;
 
@@ -14140,36 +14196,38 @@ public partial class alglib
 
             ap.assert(
                 ap.len(network1.structinfo) > 0 && ap.len(network1.structinfo) >= network1.structinfo[0],
-                "MLPCopyTunableParameters: Network1 is uninitialized");
+                "MLPCopyTunableParameters: Network1 is uninitialized"
+            );
             ap.assert(
                 ap.len(network2.structinfo) > 0 && ap.len(network2.structinfo) >= network2.structinfo[0],
-                "MLPCopyTunableParameters: Network2 is uninitialized");
-            ap.assert(network1.structinfo[0] == network2.structinfo[0], "MLPCopyTunableParameters: Network1 geometry differs from that of Network2");
+                "MLPCopyTunableParameters: Network2 is uninitialized"
+            );
+            ap.assert(
+                network1.structinfo[0] == network2.structinfo[0],
+                "MLPCopyTunableParameters: Network1 geometry differs from that of Network2"
+            );
             ninfo = network1.structinfo[0];
             for (i = 0; i <= ninfo - 1; i++)
                 ap.assert(
                     network1.structinfo[i] == network2.structinfo[i],
-                    "MLPCopyTunableParameters: Network1 geometry differs from that of Network2");
+                    "MLPCopyTunableParameters: Network1 geometry differs from that of Network2"
+                );
 
             mlpproperties(network1, ref nin, ref nout, ref wcount, _params);
             for (i = 0; i <= wcount - 1; i++) network2.weights[i] = network1.weights[i];
 
             if (mlpissoftmax(network1, _params))
-            {
                 for (i = 0; i <= nin - 1; i++)
                 {
                     network2.columnmeans[i] = network1.columnmeans[i];
                     network2.columnsigmas[i] = network1.columnsigmas[i];
                 }
-            }
             else
-            {
                 for (i = 0; i <= nin + nout - 1; i++)
                 {
                     network2.columnmeans[i] = network1.columnmeans[i];
                     network2.columnsigmas[i] = network1.columnsigmas[i];
                 }
-            }
         }
 
 
@@ -14205,7 +14263,8 @@ public partial class alglib
 
             ap.assert(
                 ap.len(network.structinfo) > 0 && ap.len(network.structinfo) >= network.structinfo[0],
-                "MLPExportTunableParameters: Network is uninitialized");
+                "MLPExportTunableParameters: Network is uninitialized"
+            );
             mlpproperties(network, ref nin, ref nout, ref wcount, _params);
             if (mlpissoftmax(network, _params))
             {
@@ -14273,7 +14332,8 @@ public partial class alglib
 
             ap.assert(
                 ap.len(network.structinfo) > 0 && ap.len(network.structinfo) >= network.structinfo[0],
-                "MLPImportTunableParameters: Network is uninitialized");
+                "MLPImportTunableParameters: Network is uninitialized"
+            );
             mlpproperties(network, ref nin, ref nout, ref wcount, _params);
             if (mlpissoftmax(network, _params))
             {
@@ -14700,29 +14760,23 @@ public partial class alglib
             }
 
             if (!mlpissoftmax(network, _params))
-            {
                 for (i = 0; i <= nout - 1; i++)
                 {
                     offs = istart + (ntotal - nout + i) * nfieldwidth;
                     ntype = network.structinfo[offs + 0];
                     if (ntype == 0)
-                    {
                         //
                         // Shifts are changed only for linear outputs neurons
                         //
                         network.columnmeans[nin + i] = 2 * math.randomreal() - 1;
-                    }
 
                     if (ntype == 0 || ntype == 3)
-                    {
                         //
                         // Scales are changed only for linear or bounded outputs neurons.
                         // Note that scale randomization preserves sign.
                         //
                         network.columnsigmas[nin + i] = Math.Sign(network.columnsigmas[nin + i]) * (1.5 * math.randomreal() + 0.5);
-                    }
                 }
-            }
         }
 
 
@@ -14794,7 +14848,6 @@ public partial class alglib
             // Outputs
             //
             if (!mlpissoftmax(network, _params))
-            {
                 for (i = 0; i <= nout - 1; i++)
                 {
                     offs = istart + (ntotal - nout + i) * nfieldwidth;
@@ -14824,7 +14877,6 @@ public partial class alglib
                         if (network.columnsigmas[nin + i] == 0) network.columnsigmas[nin + i] = 1;
                     }
                 }
-            }
         }
 
 
@@ -14909,7 +14961,6 @@ public partial class alglib
             // Outputs
             //
             if (!mlpissoftmax(network, _params))
-            {
                 for (i = 0; i <= nout - 1; i++)
                 {
                     offs = istart + (ntotal - nout + i) * nfieldwidth;
@@ -14939,7 +14990,6 @@ public partial class alglib
                         if (network.columnsigmas[nin + i] == 0) network.columnsigmas[nin + i] = 1;
                     }
                 }
-            }
         }
 
 
@@ -15052,7 +15102,6 @@ public partial class alglib
             // Outputs
             //
             if (!mlpissoftmax(network, _params))
-            {
                 for (i = 0; i <= nout - 1; i++)
                 {
                     offs = istart + (ntotal - nout + i) * nfieldwidth;
@@ -15082,7 +15131,6 @@ public partial class alglib
                         if (network.columnsigmas[nin + i] == 0) network.columnsigmas[nin + i] = 1;
                     }
                 }
-            }
         }
 
 
@@ -15200,7 +15248,6 @@ public partial class alglib
             // Outputs
             //
             if (!mlpissoftmax(network, _params))
-            {
                 for (i = 0; i <= nout - 1; i++)
                 {
                     offs = istart + (ntotal - nout + i) * nfieldwidth;
@@ -15230,7 +15277,6 @@ public partial class alglib
                         if (network.columnsigmas[nin + i] == 0) network.columnsigmas[nin + i] = 1;
                     }
                 }
-            }
         }
 
 
@@ -15423,7 +15469,10 @@ public partial class alglib
             mean = 0;
             sigma = 0;
 
-            ap.assert(i >= 0 && i < network.hllayersizes[ap.len(network.hllayersizes) - 1], "MLPGetOutputScaling: incorrect (nonexistent) I");
+            ap.assert(
+                i >= 0 && i < network.hllayersizes[ap.len(network.hllayersizes) - 1],
+                "MLPGetOutputScaling: incorrect (nonexistent) I"
+            );
             if (network.structinfo[6] == 1)
             {
                 mean = 0;
@@ -15457,7 +15506,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 25.03.2011 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpgetneuroninfo(multilayerperceptron network, int k, int i, ref int fkind, ref double threshold, xparams _params)
+        public static void mlpgetneuroninfo(multilayerperceptron network, int k, int i, ref int fkind, ref double threshold,
+            xparams _params)
         {
             fkind = 0;
             threshold = 0;
@@ -15548,7 +15598,10 @@ public partial class alglib
         *************************************************************************/
         public static void mlpsetoutputscaling(multilayerperceptron network, int i, double mean, double sigma, xparams _params)
         {
-            ap.assert(i >= 0 && i < network.hllayersizes[ap.len(network.hllayersizes) - 1], "MLPSetOutputScaling: incorrect (nonexistent) I");
+            ap.assert(
+                i >= 0 && i < network.hllayersizes[ap.len(network.hllayersizes) - 1],
+                "MLPSetOutputScaling: incorrect (nonexistent) I"
+            );
             ap.assert(math.isfinite(mean), "MLPSetOutputScaling: infinite or NAN Mean");
             ap.assert(math.isfinite(sigma), "MLPSetOutputScaling: infinite or NAN Sigma");
             if (network.structinfo[6] == 1)
@@ -15624,7 +15677,9 @@ public partial class alglib
                 network.structinfo[activationoffset + 0] = fkind;
             }
             else
+            {
                 ap.assert(fkind == 0, "MLPSetNeuronInfo: you try to set activation function for neuron which can not have one");
+            }
 
             //
             // Threshold
@@ -15632,9 +15687,7 @@ public partial class alglib
             if (network.hlneurons[highlevelidx * hlnfieldwidth + 3] >= 0)
                 network.weights[network.hlneurons[highlevelidx * hlnfieldwidth + 3]] = threshold;
             else
-            {
                 ap.assert(threshold == 0, "MLPSetNeuronInfo: you try to set non-zero threshold for neuron which can not have one");
-            }
         }
 
 
@@ -15807,7 +15860,8 @@ public partial class alglib
                 ref network.dfdnet,
                 x,
                 ref y,
-                _params);
+                _params
+            );
         }
 
 
@@ -15885,11 +15939,10 @@ public partial class alglib
                 if (mlpissoftmax(network, _params))
                     ap.assert(ap.cols(xy) >= mlpgetinputscount(network, _params) + 1, "MLPError: XY has less than NIn+1 columns");
                 else
-                {
                     ap.assert(
                         ap.cols(xy) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPError: XY has less than NIn+NOut columns");
-                }
+                        "MLPError: XY has less than NIn+NOut columns"
+                    );
             }
 
             mlpallerrorsx(network, xy, network.dummysxy, npoints, 0, network.dummyidx, 0, npoints, 0, network.buf, network.err, _params);
@@ -15955,17 +16008,15 @@ public partial class alglib
             if (npoints > 0)
             {
                 if (mlpissoftmax(network, _params))
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + 1,
-                        "MLPErrorSparse: XY has less than NIn+1 columns");
-                }
+                        "MLPErrorSparse: XY has less than NIn+1 columns"
+                    );
                 else
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPErrorSparse: XY has less than NIn+NOut columns");
-                }
+                        "MLPErrorSparse: XY has less than NIn+NOut columns"
+                    );
             }
 
             mlpallerrorsx(network, network.dummydxy, xy, npoints, 1, network.dummyidx, 0, npoints, 0, network.buf, network.err, _params);
@@ -16090,11 +16141,10 @@ public partial class alglib
                 if (mlpissoftmax(network, _params))
                     ap.assert(ap.cols(xy) >= mlpgetinputscount(network, _params) + 1, "MLPClsError: XY has less than NIn+1 columns");
                 else
-                {
                     ap.assert(
                         ap.cols(xy) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPClsError: XY has less than NIn+NOut columns");
-                }
+                        "MLPClsError: XY has less than NIn+NOut columns"
+                    );
             }
 
             mlpallerrorsx(network, xy, network.dummysxy, npoints, 0, network.dummyidx, 0, npoints, 0, network.buf, network.err, _params);
@@ -16158,11 +16208,10 @@ public partial class alglib
                 if (mlpissoftmax(network, _params))
                     ap.assert(ap.cols(xy) >= mlpgetinputscount(network, _params) + 1, "MLPRelClsError: XY has less than NIn+1 columns");
                 else
-                {
                     ap.assert(
                         ap.cols(xy) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPRelClsError: XY has less than NIn+NOut columns");
-                }
+                        "MLPRelClsError: XY has less than NIn+NOut columns"
+                    );
             }
 
             if (npoints > 0)
@@ -16229,17 +16278,15 @@ public partial class alglib
             if (npoints > 0)
             {
                 if (mlpissoftmax(network, _params))
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + 1,
-                        "MLPRelClsErrorSparse: sparse matrix XY has less than NIn+1 columns");
-                }
+                        "MLPRelClsErrorSparse: sparse matrix XY has less than NIn+1 columns"
+                    );
                 else
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPRelClsErrorSparse: sparse matrix XY has less than NIn+NOut columns");
-                }
+                        "MLPRelClsErrorSparse: sparse matrix XY has less than NIn+NOut columns"
+                    );
             }
 
             mlpallerrorsx(network, network.dummydxy, xy, npoints, 1, network.dummyidx, 0, npoints, 0, network.buf, network.err, _params);
@@ -16303,11 +16350,10 @@ public partial class alglib
                 if (mlpissoftmax(network, _params))
                     ap.assert(ap.cols(xy) >= mlpgetinputscount(network, _params) + 1, "MLPAvgCE: XY has less than NIn+1 columns");
                 else
-                {
                     ap.assert(
                         ap.cols(xy) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPAvgCE: XY has less than NIn+NOut columns");
-                }
+                        "MLPAvgCE: XY has less than NIn+NOut columns"
+                    );
             }
 
             mlpallerrorsx(network, xy, network.dummysxy, npoints, 0, network.dummyidx, 0, npoints, 0, network.buf, network.err, _params);
@@ -16375,17 +16421,15 @@ public partial class alglib
             if (npoints > 0)
             {
                 if (mlpissoftmax(network, _params))
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + 1,
-                        "MLPAvgCESparse: sparse matrix XY has less than NIn+1 columns");
-                }
+                        "MLPAvgCESparse: sparse matrix XY has less than NIn+1 columns"
+                    );
                 else
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPAvgCESparse: sparse matrix XY has less than NIn+NOut columns");
-                }
+                        "MLPAvgCESparse: sparse matrix XY has less than NIn+NOut columns"
+                    );
             }
 
             mlpallerrorsx(network, network.dummydxy, xy, npoints, 1, network.dummyidx, 0, npoints, 0, network.buf, network.err, _params);
@@ -16450,11 +16494,10 @@ public partial class alglib
                 if (mlpissoftmax(network, _params))
                     ap.assert(ap.cols(xy) >= mlpgetinputscount(network, _params) + 1, "MLPRMSError: XY has less than NIn+1 columns");
                 else
-                {
                     ap.assert(
                         ap.cols(xy) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPRMSError: XY has less than NIn+NOut columns");
-                }
+                        "MLPRMSError: XY has less than NIn+NOut columns"
+                    );
             }
 
             mlpallerrorsx(network, xy, network.dummysxy, npoints, 0, network.dummyidx, 0, npoints, 0, network.buf, network.err, _params);
@@ -16522,17 +16565,15 @@ public partial class alglib
             if (npoints > 0)
             {
                 if (mlpissoftmax(network, _params))
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + 1,
-                        "MLPRMSErrorSparse: sparse matrix XY has less than NIn+1 columns");
-                }
+                        "MLPRMSErrorSparse: sparse matrix XY has less than NIn+1 columns"
+                    );
                 else
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPRMSErrorSparse: sparse matrix XY has less than NIn+NOut columns");
-                }
+                        "MLPRMSErrorSparse: sparse matrix XY has less than NIn+NOut columns"
+                    );
             }
 
             mlpallerrorsx(network, network.dummydxy, xy, npoints, 1, network.dummyidx, 0, npoints, 0, network.buf, network.err, _params);
@@ -16596,11 +16637,10 @@ public partial class alglib
                 if (mlpissoftmax(network, _params))
                     ap.assert(ap.cols(xy) >= mlpgetinputscount(network, _params) + 1, "MLPAvgError: XY has less than NIn+1 columns");
                 else
-                {
                     ap.assert(
                         ap.cols(xy) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPAvgError: XY has less than NIn+NOut columns");
-                }
+                        "MLPAvgError: XY has less than NIn+NOut columns"
+                    );
             }
 
             mlpallerrorsx(network, xy, network.dummysxy, npoints, 0, network.dummyidx, 0, npoints, 0, network.buf, network.err, _params);
@@ -16667,17 +16707,15 @@ public partial class alglib
             if (npoints > 0)
             {
                 if (mlpissoftmax(network, _params))
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + 1,
-                        "MLPAvgErrorSparse: XY has less than NIn+1 columns");
-                }
+                        "MLPAvgErrorSparse: XY has less than NIn+1 columns"
+                    );
                 else
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPAvgErrorSparse: XY has less than NIn+NOut columns");
-                }
+                        "MLPAvgErrorSparse: XY has less than NIn+NOut columns"
+                    );
             }
 
             mlpallerrorsx(network, network.dummydxy, xy, npoints, 1, network.dummyidx, 0, npoints, 0, network.buf, network.err, _params);
@@ -16742,11 +16780,10 @@ public partial class alglib
                 if (mlpissoftmax(network, _params))
                     ap.assert(ap.cols(xy) >= mlpgetinputscount(network, _params) + 1, "MLPAvgRelError: XY has less than NIn+1 columns");
                 else
-                {
                     ap.assert(
                         ap.cols(xy) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPAvgRelError: XY has less than NIn+NOut columns");
-                }
+                        "MLPAvgRelError: XY has less than NIn+NOut columns"
+                    );
             }
 
             mlpallerrorsx(network, xy, network.dummysxy, npoints, 0, network.dummyidx, 0, npoints, 0, network.buf, network.err, _params);
@@ -16814,17 +16851,15 @@ public partial class alglib
             if (npoints > 0)
             {
                 if (mlpissoftmax(network, _params))
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + 1,
-                        "MLPAvgRelErrorSparse: XY has less than NIn+1 columns");
-                }
+                        "MLPAvgRelErrorSparse: XY has less than NIn+1 columns"
+                    );
                 else
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPAvgRelErrorSparse: XY has less than NIn+NOut columns");
-                }
+                        "MLPAvgRelErrorSparse: XY has less than NIn+NOut columns"
+                    );
             }
 
             mlpallerrorsx(network, network.dummydxy, xy, npoints, 1, network.dummyidx, 0, npoints, 0, network.buf, network.err, _params);
@@ -16852,7 +16887,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 04.11.2007 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpgrad(multilayerperceptron network, double[] x, double[] desiredy, ref double e, ref double[] grad, xparams _params)
+        public static void mlpgrad(multilayerperceptron network, double[] x, double[] desiredy, ref double e, ref double[] grad,
+            xparams _params)
         {
             var i = 0;
             var nout = 0;
@@ -16908,7 +16944,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 04.11.2007 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpgradn(multilayerperceptron network, double[] x, double[] desiredy, ref double e, ref double[] grad, xparams _params)
+        public static void mlpgradn(multilayerperceptron network, double[] x, double[] desiredy, ref double e, ref double[] grad,
+            xparams _params)
         {
             double s = 0;
             var i = 0;
@@ -17000,7 +17037,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 04.11.2007 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpgradbatch(multilayerperceptron network, double[,] xy, int ssize, ref double e, ref double[] grad, xparams _params)
+        public static void mlpgradbatch(multilayerperceptron network, double[,] xy, int ssize, ref double e, ref double[] grad,
+            xparams _params)
         {
             var i = 0;
             var nin = 0;
@@ -17040,7 +17078,8 @@ public partial class alglib
                 subsettype,
                 network.buf,
                 network.gradbuf,
-                _params);
+                _params
+            );
             e = 0.0;
             for (i = 0; i <= wcount - 1; i++) grad[i] = 0.0;
 
@@ -17092,8 +17131,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 26.07.2012 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpgradbatchsparse(multilayerperceptron network, sparse.sparsematrix xy, int ssize, ref double e, ref double[] grad,
-            xparams _params)
+        public static void mlpgradbatchsparse(multilayerperceptron network, sparse.sparsematrix xy, int ssize, ref double e,
+            ref double[] grad, xparams _params)
         {
             var i = 0;
             var nin = 0;
@@ -17134,7 +17173,8 @@ public partial class alglib
                 subsettype,
                 network.buf,
                 network.gradbuf,
-                _params);
+                _params
+            );
             e = 0.0;
             for (i = 0; i <= wcount - 1; i++) grad[i] = 0.0;
 
@@ -17198,8 +17238,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 26.07.2012 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpgradbatchsubset(multilayerperceptron network, double[,] xy, int setsize, int[] idx, int subsetsize, ref double e,
-            ref double[] grad, xparams _params)
+        public static void mlpgradbatchsubset(multilayerperceptron network, double[,] xy, int setsize, int[] idx, int subsetsize,
+            ref double e, ref double[] grad, xparams _params)
         {
             var i = 0;
             var nin = 0;
@@ -17245,7 +17285,20 @@ public partial class alglib
                 smp.ae_shared_pool_next_recycled(network.gradbuf, ref sgrad);
             }
 
-            mlpgradbatchx(network, xy, network.dummysxy, setsize, 0, idx, subset0, subset1, subsettype, network.buf, network.gradbuf, _params);
+            mlpgradbatchx(
+                network,
+                xy,
+                network.dummysxy,
+                setsize,
+                0,
+                idx,
+                subset0,
+                subset1,
+                subsettype,
+                network.buf,
+                network.gradbuf,
+                _params
+            );
             e = 0.0;
             for (i = 0; i <= wcount - 1; i++) grad[i] = 0.0;
 
@@ -17314,8 +17367,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 26.07.2012 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpgradbatchsparsesubset(multilayerperceptron network, sparse.sparsematrix xy, int setsize, int[] idx, int subsetsize,
-            ref double e, ref double[] grad, xparams _params)
+        public static void mlpgradbatchsparsesubset(multilayerperceptron network, sparse.sparsematrix xy, int setsize, int[] idx,
+            int subsetsize, ref double e, ref double[] grad, xparams _params)
         {
             var i = 0;
             var nin = 0;
@@ -17362,7 +17415,20 @@ public partial class alglib
                 smp.ae_shared_pool_next_recycled(network.gradbuf, ref sgrad);
             }
 
-            mlpgradbatchx(network, network.dummydxy, xy, setsize, 1, idx, subset0, subset1, subsettype, network.buf, network.gradbuf, _params);
+            mlpgradbatchx(
+                network,
+                network.dummydxy,
+                xy,
+                setsize,
+                1,
+                idx,
+                subset0,
+                subset1,
+                subsettype,
+                network.buf,
+                network.gradbuf,
+                _params
+            );
             e = 0.0;
             for (i = 0; i <= wcount - 1; i++) grad[i] = 0.0;
 
@@ -17387,7 +17453,8 @@ public partial class alglib
              Copyright 26.07.2012 by Bochkanov Sergey
         *************************************************************************/
         public static void mlpgradbatchx(multilayerperceptron network, double[,] densexy, sparse.sparsematrix sparsexy, int datasetsize,
-            int datasettype, int[] idx, int subset0, int subset1, int subsettype, smp.shared_pool buf, smp.shared_pool gradbuf, xparams _params)
+            int datasettype, int[] idx, int subset0, int subset1, int subsettype, smp.shared_pool buf, smp.shared_pool gradbuf,
+            xparams _params)
         {
             var nin = 0;
             var nout = 0;
@@ -17435,7 +17502,6 @@ public partial class alglib
             problemcost = subset1 - subset0;
             problemcost = problemcost * wcount * 2;
             if (problemcost >= apserv.smpactivationlevel(_params) && subset1 - subset0 >= 2 * microbatchsize)
-            {
                 if (_trypexec_mlpgradbatchx(
                         network,
                         densexy,
@@ -17448,15 +17514,41 @@ public partial class alglib
                         subsettype,
                         buf,
                         gradbuf,
-                        _params))
+                        _params
+                    ))
                     return;
-            }
 
             if (subset1 - subset0 >= 2 * microbatchsize && problemcost > apserv.spawnlevel(_params))
             {
                 apserv.splitlength(subset1 - subset0, microbatchsize, ref len0, ref len1, _params);
-                mlpgradbatchx(network, densexy, sparsexy, datasetsize, datasettype, idx, subset0, subset0 + len0, subsettype, buf, gradbuf, _params);
-                mlpgradbatchx(network, densexy, sparsexy, datasetsize, datasettype, idx, subset0 + len0, subset1, subsettype, buf, gradbuf, _params);
+                mlpgradbatchx(
+                    network,
+                    densexy,
+                    sparsexy,
+                    datasetsize,
+                    datasettype,
+                    idx,
+                    subset0,
+                    subset0 + len0,
+                    subsettype,
+                    buf,
+                    gradbuf,
+                    _params
+                );
+                mlpgradbatchx(
+                    network,
+                    densexy,
+                    sparsexy,
+                    datasetsize,
+                    datasettype,
+                    idx,
+                    subset0 + len0,
+                    subset1,
+                    subsettype,
+                    buf,
+                    gradbuf,
+                    _params
+                );
                 return;
             }
 
@@ -17508,8 +17600,9 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_mlpgradbatchx(multilayerperceptron network, double[,] densexy, sparse.sparsematrix sparsexy, int datasetsize,
-            int datasettype, int[] idx, int subset0, int subset1, int subsettype, smp.shared_pool buf, smp.shared_pool gradbuf, xparams _params)
+        public static bool _trypexec_mlpgradbatchx(multilayerperceptron network, double[,] densexy, sparse.sparsematrix sparsexy,
+            int datasetsize, int datasettype, int[] idx, int subset0, int subset1, int subsettype, smp.shared_pool buf,
+            smp.shared_pool gradbuf, xparams _params)
         {
             return false;
         }
@@ -17538,7 +17631,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 04.11.2007 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpgradnbatch(multilayerperceptron network, double[,] xy, int ssize, ref double e, ref double[] grad, xparams _params)
+        public static void mlpgradnbatch(multilayerperceptron network, double[,] xy, int ssize, ref double e, ref double[] grad,
+            xparams _params)
         {
             var i = 0;
             var nin = 0;
@@ -17562,7 +17656,17 @@ public partial class alglib
             i = 0;
             while (i <= ssize - 1)
             {
-                mlpchunkedgradient(network, xy, i, Math.Min(ssize, i + pbuf.chunksize) - i, pbuf.batch4buf, pbuf.hpcbuf, ref e, true, _params);
+                mlpchunkedgradient(
+                    network,
+                    xy,
+                    i,
+                    Math.Min(ssize, i + pbuf.chunksize) - i,
+                    pbuf.batch4buf,
+                    pbuf.hpcbuf,
+                    ref e,
+                    true,
+                    _params
+                );
                 i = i + pbuf.chunksize;
             }
 
@@ -17583,8 +17687,8 @@ public partial class alglib
              B. A. Pearlmutter,
              Neural Computation, 1994.
         *************************************************************************/
-        public static void mlphessiannbatch(multilayerperceptron network, double[,] xy, int ssize, ref double e, ref double[] grad, ref double[,] h,
-            xparams _params)
+        public static void mlphessiannbatch(multilayerperceptron network, double[,] xy, int ssize, ref double e, ref double[] grad,
+            ref double[,] h, xparams _params)
         {
             e = 0;
 
@@ -17604,8 +17708,8 @@ public partial class alglib
              B. A. Pearlmutter,
              Neural Computation, 1994.
         *************************************************************************/
-        public static void mlphessianbatch(multilayerperceptron network, double[,] xy, int ssize, ref double e, ref double[] grad, ref double[,] h,
-            xparams _params)
+        public static void mlphessianbatch(multilayerperceptron network, double[,] xy, int ssize, ref double e, ref double[] grad,
+            ref double[,] h, xparams _params)
         {
             e = 0;
 
@@ -17696,12 +17800,10 @@ public partial class alglib
                 {
                     perr = true;
                     if (structinfo[offs + 0] == -2)
-                    {
                         //
                         // input neuron, left unchanged
                         //
                         perr = false;
-                    }
 
                     if (structinfo[offs + 0] == -3)
                     {
@@ -17899,7 +18001,10 @@ public partial class alglib
             //
             issoftmax = s.unserialize_bool();
             apserv.unserializeintegerarray(s, ref layersizes, _params);
-            ap.assert(ap.len(layersizes) == 2 || ap.len(layersizes) == 3 || ap.len(layersizes) == 4, "MLPUnserialize: too many hidden layers!");
+            ap.assert(
+                ap.len(layersizes) == 2 || ap.len(layersizes) == 3 || ap.len(layersizes) == 4,
+                "MLPUnserialize: too many hidden layers!"
+            );
             nin = layersizes[0];
             nout = layersizes[ap.len(layersizes) - 1];
             if (ap.len(layersizes) == 2)
@@ -17995,8 +18100,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 04.09.2012 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpallerrorssubset(multilayerperceptron network, double[,] xy, int setsize, int[] subset, int subsetsize, modelerrors rep,
-            xparams _params)
+        public static void mlpallerrorssubset(multilayerperceptron network, double[,] xy, int setsize, int[] subset, int subsetsize,
+            modelerrors rep, xparams _params)
         {
             var idx0 = 0;
             var idx1 = 0;
@@ -18008,11 +18113,10 @@ public partial class alglib
                 if (mlpissoftmax(network, _params))
                     ap.assert(ap.cols(xy) >= mlpgetinputscount(network, _params) + 1, "MLPAllErrorsSubset: XY has less than NIn+1 columns");
                 else
-                {
                     ap.assert(
                         ap.cols(xy) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPAllErrorsSubset: XY has less than NIn+NOut columns");
-                }
+                        "MLPAllErrorsSubset: XY has less than NIn+NOut columns"
+                    );
             }
 
             if (subsetsize >= 0)
@@ -18068,8 +18172,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 04.09.2012 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpallerrorssparsesubset(multilayerperceptron network, sparse.sparsematrix xy, int setsize, int[] subset, int subsetsize,
-            modelerrors rep, xparams _params)
+        public static void mlpallerrorssparsesubset(multilayerperceptron network, sparse.sparsematrix xy, int setsize, int[] subset,
+            int subsetsize, modelerrors rep, xparams _params)
         {
             var idx0 = 0;
             var idx1 = 0;
@@ -18080,17 +18184,15 @@ public partial class alglib
             if (setsize > 0)
             {
                 if (mlpissoftmax(network, _params))
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + 1,
-                        "MLPAllErrorsSparseSubset: XY has less than NIn+1 columns");
-                }
+                        "MLPAllErrorsSparseSubset: XY has less than NIn+1 columns"
+                    );
                 else
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPAllErrorsSparseSubset: XY has less than NIn+NOut columns");
-                }
+                        "MLPAllErrorsSparseSubset: XY has less than NIn+NOut columns"
+                    );
             }
 
             if (subsetsize >= 0)
@@ -18161,7 +18263,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 04.09.2012 by Bochkanov Sergey
         *************************************************************************/
-        public static double mlperrorsubset(multilayerperceptron network, double[,] xy, int setsize, int[] subset, int subsetsize, xparams _params)
+        public static double mlperrorsubset(multilayerperceptron network, double[,] xy, int setsize, int[] subset, int subsetsize,
+            xparams _params)
         {
             double result = 0;
             var idx0 = 0;
@@ -18174,11 +18277,10 @@ public partial class alglib
                 if (mlpissoftmax(network, _params))
                     ap.assert(ap.cols(xy) >= mlpgetinputscount(network, _params) + 1, "MLPErrorSubset: XY has less than NIn+1 columns");
                 else
-                {
                     ap.assert(
                         ap.cols(xy) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPErrorSubset: XY has less than NIn+NOut columns");
-                }
+                        "MLPErrorSubset: XY has less than NIn+NOut columns"
+                    );
             }
 
             if (subsetsize >= 0)
@@ -18256,8 +18358,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 04.09.2012 by Bochkanov Sergey
         *************************************************************************/
-        public static double mlperrorsparsesubset(multilayerperceptron network, sparse.sparsematrix xy, int setsize, int[] subset, int subsetsize,
-            xparams _params)
+        public static double mlperrorsparsesubset(multilayerperceptron network, sparse.sparsematrix xy, int setsize, int[] subset,
+            int subsetsize, xparams _params)
         {
             double result = 0;
             var idx0 = 0;
@@ -18269,17 +18371,15 @@ public partial class alglib
             if (setsize > 0)
             {
                 if (mlpissoftmax(network, _params))
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + 1,
-                        "MLPErrorSparseSubset: XY has less than NIn+1 columns");
-                }
+                        "MLPErrorSparseSubset: XY has less than NIn+1 columns"
+                    );
                 else
-                {
                     ap.assert(
                         sparse.sparsegetncols(xy, _params) >= mlpgetinputscount(network, _params) + mlpgetoutputscount(network, _params),
-                        "MLPErrorSparseSubset: XY has less than NIn+NOut columns");
-                }
+                        "MLPErrorSparseSubset: XY has less than NIn+NOut columns"
+                    );
             }
 
             if (subsetsize >= 0)
@@ -18358,7 +18458,6 @@ public partial class alglib
             problemcost = subset1 - subset0;
             problemcost = problemcost * wcount * 2;
             if (problemcost >= apserv.smpactivationlevel(_params) && subset1 - subset0 >= 2 * microbatchsize)
-            {
                 if (_trypexec_mlpallerrorsx(
                         network,
                         densexy,
@@ -18371,15 +18470,41 @@ public partial class alglib
                         subsettype,
                         buf,
                         rep,
-                        _params))
+                        _params
+                    ))
                     return;
-            }
 
             if (subset1 - subset0 >= 2 * microbatchsize && problemcost > apserv.spawnlevel(_params))
             {
                 apserv.splitlength(subset1 - subset0, microbatchsize, ref len0, ref len1, _params);
-                mlpallerrorsx(network, densexy, sparsexy, datasetsize, datasettype, idx, subset0, subset0 + len0, subsettype, buf, rep0, _params);
-                mlpallerrorsx(network, densexy, sparsexy, datasetsize, datasettype, idx, subset0 + len0, subset1, subsettype, buf, rep1, _params);
+                mlpallerrorsx(
+                    network,
+                    densexy,
+                    sparsexy,
+                    datasetsize,
+                    datasettype,
+                    idx,
+                    subset0,
+                    subset0 + len0,
+                    subsettype,
+                    buf,
+                    rep0,
+                    _params
+                );
+                mlpallerrorsx(
+                    network,
+                    densexy,
+                    sparsexy,
+                    datasetsize,
+                    datasettype,
+                    idx,
+                    subset0 + len0,
+                    subset1,
+                    subsettype,
+                    buf,
+                    rep1,
+                    _params
+                );
                 rep.relclserror = (len0 * rep0.relclserror + len1 * rep1.relclserror) / (len0 + len1);
                 rep.avgce = (len0 * rep0.avgce + len1 * rep1.avgce) / (len0 + len1);
                 rep.rmserror = Math.Sqrt((len0 * math.sqr(rep0.rmserror) + len1 * math.sqr(rep1.rmserror)) / (len0 + len1));
@@ -18449,7 +18574,9 @@ public partial class alglib
                     for (i_ = 0; i_ <= nout - 1; i_++) pbuf.y[i_] = pbuf.xy2[j, i_ + i1_];
 
                     if (iscls)
+                    {
                         pbuf.desiredy[0] = pbuf.xy[j, nin];
+                    }
                     else
                     {
                         i1_ = nin - 0;
@@ -18482,8 +18609,9 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_mlpallerrorsx(multilayerperceptron network, double[,] densexy, sparse.sparsematrix sparsexy, int datasetsize,
-            int datasettype, int[] idx, int subset0, int subset1, int subsettype, smp.shared_pool buf, modelerrors rep, xparams _params)
+        public static bool _trypexec_mlpallerrorsx(multilayerperceptron network, double[,] densexy, sparse.sparsematrix sparsexy,
+            int datasetsize, int datasettype, int[] idx, int subset0, int subset1, int subsettype, smp.shared_pool buf, modelerrors rep,
+            xparams _params)
         {
             return false;
         }
@@ -18492,8 +18620,8 @@ public partial class alglib
         /*************************************************************************
         Internal subroutine: adding new input layer to network
         *************************************************************************/
-        private static void addinputlayer(int ncount, ref int[] lsizes, ref int[] ltypes, ref int[] lconnfirst, ref int[] lconnlast, ref int lastproc,
-            xparams _params)
+        private static void addinputlayer(int ncount, ref int[] lsizes, ref int[] ltypes, ref int[] lconnfirst, ref int[] lconnlast,
+            ref int lastproc, xparams _params)
         {
             lsizes[0] = ncount;
             ltypes[0] = -2;
@@ -18506,8 +18634,8 @@ public partial class alglib
         /*************************************************************************
         Internal subroutine: adding new summator layer to network
         *************************************************************************/
-        private static void addbiasedsummatorlayer(int ncount, ref int[] lsizes, ref int[] ltypes, ref int[] lconnfirst, ref int[] lconnlast,
-            ref int lastproc, xparams _params)
+        private static void addbiasedsummatorlayer(int ncount, ref int[] lsizes, ref int[] ltypes, ref int[] lconnfirst,
+            ref int[] lconnlast, ref int lastproc, xparams _params)
         {
             lsizes[lastproc + 1] = 1;
             ltypes[lastproc + 1] = -3;
@@ -18816,7 +18944,19 @@ public partial class alglib
                 }
 
                 hladdinputlayer(network, ref idxconn, ref idxneuro, ref idxstruct, nin, _params);
-                hladdoutputlayer(network, ref idxconn, ref idxneuro, ref idxstruct, ref idxweights, 1, nin, nout, iscls, islinearout, _params);
+                hladdoutputlayer(
+                    network,
+                    ref idxconn,
+                    ref idxneuro,
+                    ref idxstruct,
+                    ref idxweights,
+                    1,
+                    nin,
+                    nout,
+                    iscls,
+                    islinearout,
+                    _params
+                );
                 return;
             }
 
@@ -18844,7 +18984,19 @@ public partial class alglib
 
                 hladdinputlayer(network, ref idxconn, ref idxneuro, ref idxstruct, nin, _params);
                 hladdhiddenlayer(network, ref idxconn, ref idxneuro, ref idxstruct, ref idxweights, 1, nin, nhid1, _params);
-                hladdoutputlayer(network, ref idxconn, ref idxneuro, ref idxstruct, ref idxweights, 2, nhid1, nout, iscls, islinearout, _params);
+                hladdoutputlayer(
+                    network,
+                    ref idxconn,
+                    ref idxneuro,
+                    ref idxstruct,
+                    ref idxweights,
+                    2,
+                    nhid1,
+                    nout,
+                    iscls,
+                    islinearout,
+                    _params
+                );
                 return;
             }
 
@@ -18872,7 +19024,19 @@ public partial class alglib
             hladdinputlayer(network, ref idxconn, ref idxneuro, ref idxstruct, nin, _params);
             hladdhiddenlayer(network, ref idxconn, ref idxneuro, ref idxstruct, ref idxweights, 1, nin, nhid1, _params);
             hladdhiddenlayer(network, ref idxconn, ref idxneuro, ref idxstruct, ref idxweights, 2, nhid1, nhid2, _params);
-            hladdoutputlayer(network, ref idxconn, ref idxneuro, ref idxstruct, ref idxweights, 3, nhid2, nout, iscls, islinearout, _params);
+            hladdoutputlayer(
+                network,
+                ref idxconn,
+                ref idxneuro,
+                ref idxstruct,
+                ref idxweights,
+                3,
+                nhid2,
+                nout,
+                iscls,
+                islinearout,
+                _params
+            );
         }
 
 
@@ -19043,13 +19207,11 @@ public partial class alglib
             }
 
             if (!isclsnet)
-            {
                 for (i = 0; i <= nout - 1; i++)
                 {
                     network.columnmeans[nin + i] = 0;
                     network.columnsigmas[nin + i] = 1;
                 }
-            }
 
             mlprandomize(network, _params);
 
@@ -19071,8 +19233,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 25.03.2011 by Bochkanov Sergey
         *************************************************************************/
-        private static void mlpgetneuroninfox(multilayerperceptron network, int k, int i, ref int[] integerbuf, ref int fkind, ref double threshold,
-            xparams _params)
+        private static void mlpgetneuroninfox(multilayerperceptron network, int k, int i, ref int[] integerbuf, ref int fkind,
+            ref double threshold, xparams _params)
         {
             var ncnt = 0;
             var istart = 0;
@@ -19103,7 +19265,9 @@ public partial class alglib
                 fkind = network.structinfo[activationoffset + 0];
             }
             else
+            {
                 fkind = 0;
+            }
 
             if (network.hlneurons[highlevelidx * hlnfieldwidth + 3] >= 0)
                 threshold = network.weights[network.hlneurons[highlevelidx * hlnfieldwidth + 3]];
@@ -19133,7 +19297,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 25.03.2011 by Bochkanov Sergey
         *************************************************************************/
-        private static double mlpgetweightx(multilayerperceptron network, int k0, int i0, int k1, int i1, ref int[] integerbuf, xparams _params)
+        private static double mlpgetweightx(multilayerperceptron network, int k0, int i0, int k1, int i1, ref int[] integerbuf,
+            xparams _params)
         {
             double result = 0;
             var ccnt = 0;
@@ -19335,28 +19500,22 @@ public partial class alglib
                     {
                         bflag = true;
                         if (network.structinfo[offs + 0] == -2)
-                        {
                             //
                             // input neuron, left unchanged
                             //
                             bflag = false;
-                        }
 
                         if (network.structinfo[offs + 0] == -3)
-                        {
                             //
                             // "-1" neuron, left unchanged
                             //
                             bflag = false;
-                        }
 
                         if (network.structinfo[offs + 0] == -4)
-                        {
                             //
                             // "0" neuron, left unchanged
                             //
                             bflag = false;
-                        }
 
                         ap.assert(!bflag, "MLPHessianNBatch: internal error - unknown neuron type!");
                     }
@@ -19503,16 +19662,15 @@ public partial class alglib
                                 if (j == i)
                                     deidyj = expi / math.sqr(s) * ((z + expi) * (s - 2 * expi) / s + expi * s2 / math.sqr(s));
                                 else
-                                {
-                                    deidyj = expi
-                                             * expj
-                                             / math.sqr(s)
-                                             * (s2 / math.sqr(s)
-                                                - 2 * z / s
-                                                - (expi + expj) / s
-                                                + (network.y[i] - desiredy[i])
-                                                - (network.y[j] - desiredy[j]));
-                                }
+                                    deidyj =
+                                        expi
+                                        * expj
+                                        / math.sqr(s)
+                                        * (s2 / math.sqr(s)
+                                           - 2 * z / s
+                                           - (expi + expj) / s
+                                           + (network.y[i] - desiredy[i])
+                                           - (network.y[j] - desiredy[j]));
 
                                 for (i_ = 0; i_ <= wcount - 1; i_++)
                                     rdy[ntotal - nout + i, i_] = rdy[ntotal - nout + i, i_] + deidyj * ry[ntotal - nout + j, i_];
@@ -19593,7 +19751,8 @@ public partial class alglib
                         for (j = w1; j <= w2; j++)
                         {
                             v = network.weights[j];
-                            for (i_ = 0; i_ <= wcount - 1; i_++) rdy[n1 + j - w1, i_] = rdy[n1 + j - w1, i_] + v * rdx[i, i_];
+                            for (i_ = 0; i_ <= wcount - 1; i_++)
+                                rdy[n1 + j - w1, i_] = rdy[n1 + j - w1, i_] + v * rdx[i, i_];
 
                             rdy[n1 + j - w1, j] = rdy[n1 + j - w1, j] + network.derror[i];
                         }
@@ -19605,12 +19764,10 @@ public partial class alglib
                     {
                         bflag = false;
                         if (network.structinfo[offs + 0] == -2 || network.structinfo[offs + 0] == -3 || network.structinfo[offs + 0] == -4)
-                        {
                             //
                             // Special neuron type, no back-propagation required
                             //
                             bflag = true;
-                        }
 
                         ap.assert(bflag, "MLPHessianNBatch: unknown neuron type!");
                     }
@@ -19624,8 +19781,8 @@ public partial class alglib
 
         Network must be processed by MLPProcess on X
         *************************************************************************/
-        private static void mlpinternalcalculategradient(multilayerperceptron network, double[] neurons, double[] weights, ref double[] derror,
-            ref double[] grad, bool naturalerrorfunc, xparams _params)
+        private static void mlpinternalcalculategradient(multilayerperceptron network, double[] neurons, double[] weights,
+            ref double[] derror, ref double[] grad, bool naturalerrorfunc, xparams _params)
         {
             var i = 0;
             var n1 = 0;
@@ -19661,7 +19818,10 @@ public partial class alglib
             // Pre-processing of dError/dOut:
             // from dError/dOut(normalized) to dError/dOut(non-normalized)
             //
-            ap.assert(network.structinfo[6] == 0 || network.structinfo[6] == 1, "MLPInternalCalculateGradient: unknown normalization type!");
+            ap.assert(
+                network.structinfo[6] == 0 || network.structinfo[6] == 1,
+                "MLPInternalCalculateGradient: unknown normalization type!"
+            );
             if (network.structinfo[6] == 1)
             {
                 //
@@ -19698,7 +19858,8 @@ public partial class alglib
                 //
                 // Un-standardisation
                 //
-                for (i = 0; i <= nout - 1; i++) network.derror[ntotal - nout + i] = network.derror[ntotal - nout + i] * network.columnsigmas[nin + i];
+                for (i = 0; i <= nout - 1; i++)
+                    network.derror[ntotal - nout + i] = network.derror[ntotal - nout + i] * network.columnsigmas[nin + i];
             }
 
             //
@@ -19746,12 +19907,10 @@ public partial class alglib
                 {
                     bflag = false;
                     if (network.structinfo[offs + 0] == -2 || network.structinfo[offs + 0] == -3 || network.structinfo[offs + 0] == -4)
-                    {
                         //
                         // Special neuron type, no back-propagation required
                         //
                         bflag = true;
-                    }
 
                     ap.assert(bflag, "MLPInternalCalculateGradient: unknown neuron type!");
                 }
@@ -19759,8 +19918,8 @@ public partial class alglib
         }
 
 
-        private static void mlpchunkedgradient(multilayerperceptron network, double[,] xy, int cstart, int csize, double[] batch4buf, double[] hpcbuf,
-            ref double e, bool naturalerrorfunc, xparams _params)
+        private static void mlpchunkedgradient(multilayerperceptron network, double[,] xy, int cstart, int csize, double[] batch4buf,
+            double[] hpcbuf, ref double e, bool naturalerrorfunc, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -19821,7 +19980,8 @@ public partial class alglib
                     hpcbuf,
                     ref e,
                     naturalerrorfunc,
-                    _params))
+                    _params
+                ))
                 return;
 
             //
@@ -19934,12 +20094,10 @@ public partial class alglib
                 {
                     bflag = false;
                     if (neurontype == -2)
-                    {
                         //
                         // Input neuron, left unchanged
                         //
                         bflag = true;
-                    }
 
                     if (neurontype == -3)
                     {
@@ -20240,11 +20398,12 @@ public partial class alglib
                         offs0 = srcentryoffs;
                         offs1 = srcentryoffs + derroroffs;
                         v = network.weights[srcweightidx];
-                        hpcbuf[srcweightidx] = hpcbuf[srcweightidx]
-                                               + batch4buf[offs0 + 0] * v0
-                                               + batch4buf[offs0 + 1] * v1
-                                               + batch4buf[offs0 + 2] * v2
-                                               + batch4buf[offs0 + 3] * v3;
+                        hpcbuf[srcweightidx] =
+                            hpcbuf[srcweightidx]
+                            + batch4buf[offs0 + 0] * v0
+                            + batch4buf[offs0 + 1] * v1
+                            + batch4buf[offs0 + 2] * v2
+                            + batch4buf[offs0 + 3] * v3;
                         batch4buf[offs1 + 0] = batch4buf[offs1 + 0] + v * v0;
                         batch4buf[offs1 + 1] = batch4buf[offs1 + 1] + v * v1;
                         batch4buf[offs1 + 2] = batch4buf[offs1 + 2] + v * v2;
@@ -20260,12 +20419,10 @@ public partial class alglib
                 {
                     bflag = false;
                     if (neurontype == -2 || neurontype == -3 || neurontype == -4)
-                    {
                         //
                         // Special neuron type, no back-propagation required
                         //
                         bflag = true;
-                    }
 
                     ap.assert(bflag, "MLPInternalCalculateGradient: unknown neuron type!");
                 }
@@ -20273,8 +20430,8 @@ public partial class alglib
         }
 
 
-        private static void mlpchunkedprocess(multilayerperceptron network, double[,] xy, int cstart, int csize, double[] batch4buf, double[] hpcbuf,
-            xparams _params)
+        private static void mlpchunkedprocess(multilayerperceptron network, double[,] xy, int cstart, int csize, double[] batch4buf,
+            double[] hpcbuf, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -20323,7 +20480,8 @@ public partial class alglib
                     csize,
                     batch4buf,
                     hpcbuf,
-                    _params))
+                    _params
+                ))
                 return;
 
             //
@@ -20424,12 +20582,10 @@ public partial class alglib
                 {
                     bflag = false;
                     if (neurontype == -2)
-                    {
                         //
                         // Input neuron, left unchanged
                         //
                         bflag = true;
-                    }
 
                     if (neurontype == -3)
                     {
@@ -20582,7 +20738,9 @@ public partial class alglib
             double r = 0;
 
             if (t == 0)
+            {
                 result = 0;
+            }
             else
             {
                 if (Math.Abs(z) > 1)
@@ -20640,28 +20798,22 @@ public partial class alglib
             istart = network.structinfo[5];
             neurontype = network.structinfo[istart + neuronidx * nfieldwidth + 0];
             if (neurontype == -2)
-            {
                 //
                 // Input neuron - stop
                 //
                 return;
-            }
 
             if (neurontype == -3)
-            {
                 //
                 // "-1" neuron: stop
                 //
                 return;
-            }
 
             if (neurontype == -4)
-            {
                 //
                 // "0" neuron: stop
                 //
                 return;
-            }
 
             if (neurontype == 0)
             {
@@ -20683,20 +20835,16 @@ public partial class alglib
             }
 
             if (neurontype == -5)
-            {
                 //
                 // Linear activation function: stop
                 //
                 return;
-            }
 
             if (neurontype > 0)
-            {
                 //
                 // Nonlinear activation function: stop
                 //
                 return;
-            }
 
             ap.assert(false, "RandomizeBackwardPass: unexpected neuron type");
         }
@@ -20939,7 +21087,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 18.02.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpecreateb1(int nin, int nhid, int nout, double b, double d, int ensemblesize, mlpensemble ensemble, xparams _params)
+        public static void mlpecreateb1(int nin, int nhid, int nout, double b, double d, int ensemblesize, mlpensemble ensemble,
+            xparams _params)
         {
             var net = new mlpbase.multilayerperceptron();
 
@@ -20985,7 +21134,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 18.02.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpecreater1(int nin, int nhid, int nout, double a, double b, int ensemblesize, mlpensemble ensemble, xparams _params)
+        public static void mlpecreater1(int nin, int nhid, int nout, double a, double b, int ensemblesize, mlpensemble ensemble,
+            xparams _params)
         {
             var net = new mlpbase.multilayerperceptron();
 
@@ -21061,7 +21211,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 17.02.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpecreatefromnetwork(mlpbase.multilayerperceptron network, int ensemblesize, mlpensemble ensemble, xparams _params)
+        public static void mlpecreatefromnetwork(mlpbase.multilayerperceptron network, int ensemblesize, mlpensemble ensemble,
+            xparams _params)
         {
             var i = 0;
             var ccount = 0;
@@ -21098,10 +21249,12 @@ public partial class alglib
             for (i = 0; i <= ensemblesize - 1; i++)
             {
                 i1_ = 0 - i * ccount;
-                for (i_ = i * ccount; i_ <= (i + 1) * ccount - 1; i_++) ensemble.columnmeans[i_] = network.columnmeans[i_ + i1_];
+                for (i_ = i * ccount; i_ <= (i + 1) * ccount - 1; i_++)
+                    ensemble.columnmeans[i_] = network.columnmeans[i_ + i1_];
 
                 i1_ = 0 - i * ccount;
-                for (i_ = i * ccount; i_ <= (i + 1) * ccount - 1; i_++) ensemble.columnsigmas[i_] = network.columnsigmas[i_ + i1_];
+                for (i_ = i * ccount; i_ <= (i + 1) * ccount - 1; i_++)
+                    ensemble.columnsigmas[i_] = network.columnsigmas[i_ + i1_];
             }
 
             //
@@ -21154,9 +21307,11 @@ public partial class alglib
             ensemble2.ensemblesize = ensemble1.ensemblesize;
             for (i_ = 0; i_ <= ensemble1.ensemblesize * wcount - 1; i_++) ensemble2.weights[i_] = ensemble1.weights[i_];
 
-            for (i_ = 0; i_ <= ensemble1.ensemblesize * ccount - 1; i_++) ensemble2.columnmeans[i_] = ensemble1.columnmeans[i_];
+            for (i_ = 0; i_ <= ensemble1.ensemblesize * ccount - 1; i_++)
+                ensemble2.columnmeans[i_] = ensemble1.columnmeans[i_];
 
-            for (i_ = 0; i_ <= ensemble1.ensemblesize * ccount - 1; i_++) ensemble2.columnsigmas[i_] = ensemble1.columnsigmas[i_];
+            for (i_ = 0; i_ <= ensemble1.ensemblesize * ccount - 1; i_++)
+                ensemble2.columnsigmas[i_] = ensemble1.columnsigmas[i_];
 
             mlpbase.mlpcopy(ensemble1.network, ensemble2.network, _params);
         }
@@ -21295,8 +21450,9 @@ public partial class alglib
           -- ALGLIB --
              Copyright 17.02.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpeallerrorsx(mlpensemble ensemble, double[,] densexy, sparse.sparsematrix sparsexy, int datasetsize, int datasettype,
-            int[] idx, int subset0, int subset1, int subsettype, smp.shared_pool buf, mlpbase.modelerrors rep, xparams _params)
+        public static void mlpeallerrorsx(mlpensemble ensemble, double[,] densexy, sparse.sparsematrix sparsexy, int datasetsize,
+            int datasettype, int[] idx, int subset0, int subset1, int subsettype, smp.shared_pool buf, mlpbase.modelerrors rep,
+            xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -21383,8 +21539,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 10.09.2012 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpeallerrorssparse(mlpensemble ensemble, sparse.sparsematrix xy, int npoints, ref double relcls, ref double avgce,
-            ref double rms, ref double avg, ref double avgrel, xparams _params)
+        public static void mlpeallerrorssparse(mlpensemble ensemble, sparse.sparsematrix xy, int npoints, ref double relcls,
+            ref double avgce, ref double rms, ref double avg, ref double avgrel, xparams _params)
         {
             var i = 0;
             var buf = new double[0];
@@ -21420,7 +21576,9 @@ public partial class alglib
                 sparse.sparsegetrow(xy, i, ref workx, _params);
                 mlpeprocess(ensemble, workx, ref y, _params);
                 if (mlpbase.mlpissoftmax(ensemble.network, _params))
+                {
                     dy[0] = workx[nin];
+                }
                 else
                 {
                     i1_ = nin - 0;
@@ -21472,7 +21630,8 @@ public partial class alglib
                 0,
                 ensemble.network.buf,
                 rep,
-                _params);
+                _params
+            );
             result = rep.relclserror;
             return result;
         }
@@ -21510,7 +21669,8 @@ public partial class alglib
                 0,
                 ensemble.network.buf,
                 rep,
-                _params);
+                _params
+            );
             result = rep.avgce;
             return result;
         }
@@ -21549,7 +21709,8 @@ public partial class alglib
                 0,
                 ensemble.network.buf,
                 rep,
-                _params);
+                _params
+            );
             result = rep.rmserror;
             return result;
         }
@@ -21587,7 +21748,8 @@ public partial class alglib
                 0,
                 ensemble.network.buf,
                 rep,
-                _params);
+                _params
+            );
             result = rep.avgerror;
             return result;
         }
@@ -21625,7 +21787,8 @@ public partial class alglib
                 0,
                 ensemble.network.buf,
                 rep,
-                _params);
+                _params
+            );
             result = rep.avgrelerror;
             return result;
         }
@@ -21840,7 +22003,8 @@ public partial class alglib
                 || disttype == 13
                 || disttype == 20
                 || disttype == 21,
-                "ClusterizerSetPoints: incorrect DistType");
+                "ClusterizerSetPoints: incorrect DistType"
+            );
             ap.assert(npoints >= 0, "ClusterizerSetPoints: NPoints<0");
             ap.assert(nfeatures >= 1, "ClusterizerSetPoints: NFeatures<1");
             ap.assert(ap.rows(xy) >= npoints, "ClusterizerSetPoints: Rows(XY)<NPoints");
@@ -21914,7 +22078,10 @@ public partial class alglib
 
                 for (j = j0; j <= j1; j++)
                 {
-                    ap.assert(math.isfinite(d[i, j]) && d[i, j] >= 0, "ClusterizerSetDistances: D contains infinite, NAN or negative elements");
+                    ap.assert(
+                        math.isfinite(d[i, j]) && d[i, j] >= 0,
+                        "ClusterizerSetDistances: D contains infinite, NAN or negative elements"
+                    );
                     s.d[i, j] = d[i, j];
                     s.d[j, i] = d[i, j];
                 }
@@ -22302,7 +22469,8 @@ public partial class alglib
                 ref rep.cidx,
                 ref rep.energy,
                 s.kmeanstmp,
-                _params);
+                _params
+            );
         }
 
 
@@ -22389,7 +22557,8 @@ public partial class alglib
                 || disttype == 13
                 || disttype == 20
                 || disttype == 21,
-                "ClusterizerGetDistances: incorrect DistType");
+                "ClusterizerGetDistances: incorrect DistType"
+            );
             ap.assert(ap.rows(xy) >= npoints, "ClusterizerGetDistances: Rows(XY)<NPoints");
             ap.assert(ap.cols(xy) >= nfeatures, "ClusterizerGetDistances: Cols(XY)<NFeatures");
             ap.assert(apserv.apservisfinitematrix(xy, npoints, nfeatures, _params), "ClusterizerGetDistances: XY contains NAN/INF");
@@ -22404,8 +22573,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 29.05.2015 by Bochkanov Sergey
         *************************************************************************/
-        public static void clusterizergetdistancesbuf(apserv.apbuffers buf, double[,] xy, int npoints, int nfeatures, int disttype, ref double[,] d,
-            xparams _params)
+        public static void clusterizergetdistancesbuf(apserv.apbuffers buf, double[,] xy, int npoints, int nfeatures, int disttype,
+            ref double[,] d, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -22426,7 +22595,8 @@ public partial class alglib
                 || disttype == 13
                 || disttype == 20
                 || disttype == 21,
-                "ClusterizerGetDistancesBuf: incorrect DistType");
+                "ClusterizerGetDistancesBuf: incorrect DistType"
+            );
             ap.assert(ap.rows(xy) >= npoints, "ClusterizerGetDistancesBuf: Rows(XY)<NPoints");
             ap.assert(ap.cols(xy) >= nfeatures, "ClusterizerGetDistancesBuf: Cols(XY)<NFeatures");
             ap.assert(apserv.apservisfinitematrix(xy, npoints, nfeatures, _params), "ClusterizerGetDistancesBuf: XY contains NAN/INF");
@@ -22959,9 +23129,9 @@ public partial class alglib
           -- ALGLIB --
              Copyright 21.03.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void kmeansgenerateinternal(double[,] xy, int npoints, int nvars, int k, int initalgo, int seed, int maxits, int restarts,
-            bool kmeansdbgnoits, ref int info, ref int iterationscount, ref double[,] ccol, bool needccol, ref double[,] crow, bool needcrow,
-            ref int[] xyc, ref double energy, kmeansbuffers buf, xparams _params)
+        public static void kmeansgenerateinternal(double[,] xy, int npoints, int nvars, int k, int initalgo, int seed, int maxits,
+            int restarts, bool kmeansdbgnoits, ref int info, ref int iterationscount, ref double[,] ccol, bool needccol, ref double[,] crow,
+            bool needcrow, ref int[] xyc, ref double energy, kmeansbuffers buf, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -23464,8 +23634,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_kmeansupdatedistances(double[,] xy, int idx0, int idx1, int nvars, double[,] ct, int cidx0, int cidx1, int[] xyc,
-            double[] xydist2, smp.shared_pool bufferpool, xparams _params)
+        public static bool _trypexec_kmeansupdatedistances(double[,] xy, int idx0, int idx1, int nvars, double[,] ct, int cidx0, int cidx1,
+            int[] xyc, double[] xydist2, smp.shared_pool bufferpool, xparams _params)
         {
             return false;
         }
@@ -23514,8 +23684,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 21.01.2015 by Bochkanov Sergey
         *************************************************************************/
-        private static void selectinitialcenters(double[,] xy, int npoints, int nvars, int initalgo, hqrnd.hqrndstate rs, int k, ref double[,] ct,
-            apserv.apbuffers initbuf, smp.shared_pool updatepool, xparams _params)
+        private static void selectinitialcenters(double[,] xy, int npoints, int nvars, int initalgo, hqrnd.hqrndstate rs, int k,
+            ref double[,] ct, apserv.apbuffers initbuf, smp.shared_pool updatepool, xparams _params)
         {
             var cidx = 0;
             var i = 0;
@@ -23708,7 +23878,8 @@ public partial class alglib
                         initbuf.ia1,
                         initbuf.ra1,
                         updatepool,
-                        _params);
+                        _params
+                    );
                     samplescntnew = 0;
 
                     //
@@ -24031,11 +24202,9 @@ public partial class alglib
             // For AHCAlgo=4 (Ward's method) replace distances by their squares times 0.5
             //
             if (s.ahcalgo == 4)
-            {
                 for (i = 0; i <= npoints - 1; i++)
                 for (j = 0; j <= npoints - 1; j++)
                     d[i, j] = 0.5 * d[i, j] * d[i, j];
-            }
 
             //
             // Distance matrix is built, perform merges.
@@ -24072,14 +24241,12 @@ public partial class alglib
                 d01 = math.maxrealnumber;
                 for (i = 0; i <= npoints - 1; i++)
                     if (cidx[i] >= 0)
-                    {
                         if (d[i, nnidx[i]] < d01)
                         {
                             c0 = i;
                             c1 = nnidx[i];
                             d01 = d[i, nnidx[i]];
                         }
-                    }
 
                 ap.assert(d01 < math.maxrealnumber, "ClusterizerRunAHC: internal error");
                 if (cidx[c0] > cidx[c1])
@@ -24107,7 +24274,8 @@ public partial class alglib
                 //
                 ap.assert(
                     s.ahcalgo == 0 || s.ahcalgo == 1 || s.ahcalgo == 2 || s.ahcalgo == 3 || s.ahcalgo == 4,
-                    "ClusterizerRunAHC: internal error");
+                    "ClusterizerRunAHC: internal error"
+                );
                 for (i = 0; i <= npoints - 1; i++)
                     if (i != c0 && i != c1)
                     {
@@ -24118,11 +24286,13 @@ public partial class alglib
 
                         if (s.ahcalgo == 1) d[i, c0] = Math.Min(d[i, c0], d[i, c1]);
 
-                        if (s.ahcalgo == 2) d[i, c0] = (csizes[c0] * d[i, c0] + csizes[c1] * d[i, c1]) / (csizes[c0] + csizes[c1]);
+                        if (s.ahcalgo == 2)
+                            d[i, c0] = (csizes[c0] * d[i, c0] + csizes[c1] * d[i, c1]) / (csizes[c0] + csizes[c1]);
 
                         if (s.ahcalgo == 3) d[i, c0] = (d[i, c0] + d[i, c1]) / 2;
 
-                        if (s.ahcalgo == 4) d[i, c0] = ((n0 + ni) * d[i, c0] + (n1 + ni) * d[i, c1] - ni * d01) / (n0 + n1 + ni);
+                        if (s.ahcalgo == 4)
+                            d[i, c0] = ((n0 + ni) * d[i, c0] + (n1 + ni) * d[i, c1] - ni * d01) / (n0 + n1 + ni);
 
                         d[c0, i] = d[i, c0];
                     }
@@ -24310,8 +24480,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 07.04.2013 by Bochkanov Sergey
         *************************************************************************/
-        private static void evaluatedistancematrixrec(double[,] xy, int nfeatures, int disttype, double[,] d, int i0, int i1, int j0, int j1,
-            xparams _params)
+        private static void evaluatedistancematrixrec(double[,] xy, int nfeatures, int disttype, double[,] d, int i0, int i1, int j0,
+            int j1, xparams _params)
         {
             double rcomplexity = 0;
             var len0 = 0;
@@ -24381,7 +24551,6 @@ public partial class alglib
                 {
                     v = 0.0;
                     if (disttype == 0)
-                    {
                         for (k = 0; k <= nfeatures - 1; k++)
                         {
                             vv = xy[i, k] - xy[j, k];
@@ -24389,10 +24558,8 @@ public partial class alglib
 
                             if (vv > v) v = vv;
                         }
-                    }
 
                     if (disttype == 1)
-                    {
                         for (k = 0; k <= nfeatures - 1; k++)
                         {
                             vv = xy[i, k] - xy[j, k];
@@ -24400,7 +24567,6 @@ public partial class alglib
 
                             v = v + vv;
                         }
-                    }
 
                     d[i, j] = v;
                 }
@@ -24410,8 +24576,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_evaluatedistancematrixrec(double[,] xy, int nfeatures, int disttype, double[,] d, int i0, int i1, int j0, int j1,
-            xparams _params)
+        public static bool _trypexec_evaluatedistancematrixrec(double[,] xy, int nfeatures, int disttype, double[,] d, int i0, int i1,
+            int j0, int j1, xparams _params)
         {
             return false;
         }
@@ -24893,15 +25059,16 @@ public partial class alglib
             ap.assert(nclasses >= 1, "dfbuildersetdataset: nclasses<1");
             ap.assert(ap.rows(xy) >= npoints, "dfbuildersetdataset: rows(xy)<npoints");
             ap.assert(ap.cols(xy) >= nvars + 1, "dfbuildersetdataset: cols(xy)<nvars+1");
-            ap.assert(apserv.apservisfinitematrix(xy, npoints, nvars + 1, _params), "dfbuildersetdataset: xy parameter contains INFs or NANs");
+            ap.assert(
+                apserv.apservisfinitematrix(xy, npoints, nvars + 1, _params),
+                "dfbuildersetdataset: xy parameter contains INFs or NANs"
+            );
             if (nclasses > 1)
-            {
                 for (i = 0; i <= npoints - 1; i++)
                 {
                     j = (int)Math.Round(xy[i, nvars]);
                     ap.assert(j >= 0 && j < nclasses, "dfbuildersetdataset: last column of xy contains invalid class number");
                 }
-            }
 
             //
             // Set dataset
@@ -25099,7 +25266,10 @@ public partial class alglib
         *************************************************************************/
         public static void dfbuildersetrdfsplitstrength(decisionforestbuilder s, int splitstrength, xparams _params)
         {
-            ap.assert(splitstrength == 0 || splitstrength == 1 || splitstrength == 2, "dfbuildersetrdfsplitstrength: unexpected split type");
+            ap.assert(
+                splitstrength == 0 || splitstrength == 1 || splitstrength == 2,
+                "dfbuildersetrdfsplitstrength: unexpected split type"
+            );
             s.rdfsplitstrength = splitstrength;
         }
 
@@ -26375,8 +26545,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 19.02.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void dfbuildrandomdecisionforest(double[,] xy, int npoints, int nvars, int nclasses, int ntrees, double r, ref int info,
-            decisionforest df, dfreport rep, xparams _params)
+        public static void dfbuildrandomdecisionforest(double[,] xy, int npoints, int nvars, int nclasses, int ntrees, double r,
+            ref int info, decisionforest df, dfreport rep, xparams _params)
         {
             var samplesize = 0;
 
@@ -26401,7 +26571,8 @@ public partial class alglib
                 ref info,
                 df,
                 rep,
-                _params);
+                _params
+            );
         }
 
 
@@ -26413,8 +26584,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 19.02.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void dfbuildrandomdecisionforestx1(double[,] xy, int npoints, int nvars, int nclasses, int ntrees, int nrndvars, double r,
-            ref int info, decisionforest df, dfreport rep, xparams _params)
+        public static void dfbuildrandomdecisionforestx1(double[,] xy, int npoints, int nvars, int nclasses, int ntrees, int nrndvars,
+            double r, ref int info, decisionforest df, dfreport rep, xparams _params)
         {
             var samplesize = 0;
 
@@ -26433,12 +26604,25 @@ public partial class alglib
             }
 
             samplesize = Math.Max((int)Math.Round(r * npoints), 1);
-            dfbuildinternal(xy, npoints, nvars, nclasses, ntrees, samplesize, nrndvars, dfusestrongsplits + dfuseevs, ref info, df, rep, _params);
+            dfbuildinternal(
+                xy,
+                npoints,
+                nvars,
+                nclasses,
+                ntrees,
+                samplesize,
+                nrndvars,
+                dfusestrongsplits + dfuseevs,
+                ref info,
+                df,
+                rep,
+                _params
+            );
         }
 
 
-        public static void dfbuildinternal(double[,] xy, int npoints, int nvars, int nclasses, int ntrees, int samplesize, int nfeatures, int flags,
-            ref int info, decisionforest df, dfreport rep, xparams _params)
+        public static void dfbuildinternal(double[,] xy, int npoints, int nvars, int nclasses, int ntrees, int samplesize, int nfeatures,
+            int flags, ref int info, decisionforest df, dfreport rep, xparams _params)
         {
             var builder = new decisionforestbuilder();
             var i = 0;
@@ -26456,14 +26640,12 @@ public partial class alglib
             }
 
             if (nclasses > 1)
-            {
                 for (i = 0; i <= npoints - 1; i++)
                     if ((int)Math.Round(xy[i, nvars]) < 0 || (int)Math.Round(xy[i, nvars]) >= nclasses)
                     {
                         info = -2;
                         return;
                     }
-            }
 
             info = 1;
             dfbuildercreate(builder, _params);
@@ -26586,35 +26768,35 @@ public partial class alglib
             // Perform recurrent construction
             //
             if (s.rdfimportance == needtrngini)
-            {
-                meanloss = meannrms2(
-                    nclasses,
-                    workbuf.trnlabelsi,
-                    workbuf.trnlabelsr,
-                    0,
-                    workbuf.trnsize,
-                    workbuf.trnlabelsi,
-                    workbuf.trnlabelsr,
-                    0,
-                    workbuf.trnsize,
-                    ref workbuf.tmpnrms2,
-                    _params);
-            }
+                meanloss =
+                    meannrms2(
+                        nclasses,
+                        workbuf.trnlabelsi,
+                        workbuf.trnlabelsr,
+                        0,
+                        workbuf.trnsize,
+                        workbuf.trnlabelsi,
+                        workbuf.trnlabelsr,
+                        0,
+                        workbuf.trnsize,
+                        ref workbuf.tmpnrms2,
+                        _params
+                    );
             else
-            {
-                meanloss = meannrms2(
-                    nclasses,
-                    workbuf.trnlabelsi,
-                    workbuf.trnlabelsr,
-                    0,
-                    workbuf.trnsize,
-                    workbuf.ooblabelsi,
-                    workbuf.ooblabelsr,
-                    0,
-                    workbuf.oobsize,
-                    ref workbuf.tmpnrms2,
-                    _params);
-            }
+                meanloss =
+                    meannrms2(
+                        nclasses,
+                        workbuf.trnlabelsi,
+                        workbuf.trnlabelsr,
+                        0,
+                        workbuf.trnsize,
+                        workbuf.ooblabelsi,
+                        workbuf.ooblabelsr,
+                        0,
+                        workbuf.oobsize,
+                        ref workbuf.tmpnrms2,
+                        _params
+                    );
 
             treesize = 1;
             buildrandomtreerec(
@@ -26632,7 +26814,8 @@ public partial class alglib
                 meanloss,
                 meanloss,
                 ref treesize,
-                _params);
+                _params
+            );
             workbuf.treebuf[0] = treesize;
 
             //
@@ -26687,9 +26870,9 @@ public partial class alglib
           -- ALGLIB --
              Copyright 21.05.2018 by Bochkanov Sergey
         *************************************************************************/
-        private static void buildrandomtreerec(decisionforestbuilder s, dfworkbuf workbuf, int workingset, int varstoselect, double[] treebuf,
-            dfvotebuf votebuf, hqrnd.hqrndstate rs, int idx0, int idx1, int oobidx0, int oobidx1, double meanloss, double topmostmeanloss,
-            ref int treesize, xparams _params)
+        private static void buildrandomtreerec(decisionforestbuilder s, dfworkbuf workbuf, int workingset, int varstoselect,
+            double[] treebuf, dfvotebuf votebuf, hqrnd.hqrndstate rs, int idx0, int idx1, int oobidx0, int oobidx1, double meanloss,
+            double topmostmeanloss, ref int treesize, xparams _params)
         {
             var npoints = 0;
             var nclasses = 0;
@@ -26731,7 +26914,9 @@ public partial class alglib
                 }
             }
             else
+            {
                 labelsaresame = false;
+            }
 
             //
             // Leaf node
@@ -26866,67 +27051,78 @@ public partial class alglib
                 idxoob = i1;
             }
             else
+            {
                 idxoob = oobidx0;
+            }
 
             //
             // Compute estimates of NRMS2 loss over TRN or OOB subsets, update Gini importances
             //
             if (s.rdfimportance == needtrngini)
             {
-                meanloss0 = meannrms2(
-                    nclasses,
-                    workbuf.trnlabelsi,
-                    workbuf.trnlabelsr,
-                    idx0,
-                    idxtrn,
-                    workbuf.trnlabelsi,
-                    workbuf.trnlabelsr,
-                    idx0,
-                    idxtrn,
-                    ref workbuf.tmpnrms2,
-                    _params);
-                meanloss1 = meannrms2(
-                    nclasses,
-                    workbuf.trnlabelsi,
-                    workbuf.trnlabelsr,
-                    idxtrn,
-                    idx1,
-                    workbuf.trnlabelsi,
-                    workbuf.trnlabelsr,
-                    idxtrn,
-                    idx1,
-                    ref workbuf.tmpnrms2,
-                    _params);
+                meanloss0 =
+                    meannrms2(
+                        nclasses,
+                        workbuf.trnlabelsi,
+                        workbuf.trnlabelsr,
+                        idx0,
+                        idxtrn,
+                        workbuf.trnlabelsi,
+                        workbuf.trnlabelsr,
+                        idx0,
+                        idxtrn,
+                        ref workbuf.tmpnrms2,
+                        _params
+                    );
+                meanloss1 =
+                    meannrms2(
+                        nclasses,
+                        workbuf.trnlabelsi,
+                        workbuf.trnlabelsr,
+                        idxtrn,
+                        idx1,
+                        workbuf.trnlabelsi,
+                        workbuf.trnlabelsr,
+                        idxtrn,
+                        idx1,
+                        ref workbuf.tmpnrms2,
+                        _params
+                    );
             }
             else
             {
-                meanloss0 = meannrms2(
-                    nclasses,
-                    workbuf.trnlabelsi,
-                    workbuf.trnlabelsr,
-                    idx0,
-                    idxtrn,
-                    workbuf.ooblabelsi,
-                    workbuf.ooblabelsr,
-                    oobidx0,
-                    idxoob,
-                    ref workbuf.tmpnrms2,
-                    _params);
-                meanloss1 = meannrms2(
-                    nclasses,
-                    workbuf.trnlabelsi,
-                    workbuf.trnlabelsr,
-                    idxtrn,
-                    idx1,
-                    workbuf.ooblabelsi,
-                    workbuf.ooblabelsr,
-                    idxoob,
-                    oobidx1,
-                    ref workbuf.tmpnrms2,
-                    _params);
+                meanloss0 =
+                    meannrms2(
+                        nclasses,
+                        workbuf.trnlabelsi,
+                        workbuf.trnlabelsr,
+                        idx0,
+                        idxtrn,
+                        workbuf.ooblabelsi,
+                        workbuf.ooblabelsr,
+                        oobidx0,
+                        idxoob,
+                        ref workbuf.tmpnrms2,
+                        _params
+                    );
+                meanloss1 =
+                    meannrms2(
+                        nclasses,
+                        workbuf.trnlabelsi,
+                        workbuf.trnlabelsr,
+                        idxtrn,
+                        idx1,
+                        workbuf.ooblabelsi,
+                        workbuf.ooblabelsr,
+                        idxoob,
+                        oobidx1,
+                        ref workbuf.tmpnrms2,
+                        _params
+                    );
             }
 
-            votebuf.giniimportances[varbest] = votebuf.giniimportances[varbest] + (meanloss - (meanloss0 + meanloss1)) / (topmostmeanloss + 1.0e-20);
+            votebuf.giniimportances[varbest] =
+                votebuf.giniimportances[varbest] + (meanloss - (meanloss0 + meanloss1)) / (topmostmeanloss + 1.0e-20);
 
             //
             // Generate tree node and subtrees (recursively)
@@ -26950,7 +27146,8 @@ public partial class alglib
                 meanloss0,
                 topmostmeanloss,
                 ref treesize,
-                _params);
+                _params
+            );
             treebuf[i + 2] = treesize;
             buildrandomtreerec(
                 s,
@@ -26967,7 +27164,8 @@ public partial class alglib
                 meanloss1,
                 topmostmeanloss,
                 ref treesize,
-                _params);
+                _params
+            );
         }
 
 
@@ -26982,8 +27180,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 21.05.2018 by Bochkanov Sergey
         *************************************************************************/
-        private static void estimatevariableimportance(decisionforestbuilder s, int sessionseed, decisionforest df, int ntrees, dfreport rep,
-            xparams _params)
+        private static void estimatevariableimportance(decisionforestbuilder s, int sessionseed, decisionforest df, int ntrees,
+            dfreport rep, xparams _params)
         {
             var npoints = 0;
             var nvars = 0;
@@ -27024,12 +27222,14 @@ public partial class alglib
                 smp.ae_shared_pool_first_recycled(s.votepool, ref vote);
                 while (vote != null)
                 {
-                    for (i = 0; i <= nvars - 1; i++) rep.varimportances[i] = rep.varimportances[i] + vote.giniimportances[i] / ntrees;
+                    for (i = 0; i <= nvars - 1; i++)
+                        rep.varimportances[i] = rep.varimportances[i] + vote.giniimportances[i] / ntrees;
 
                     smp.ae_shared_pool_next_recycled(s.votepool, ref vote);
                 }
 
-                for (i = 0; i <= nvars - 1; i++) rep.varimportances[i] = apserv.boundval(rep.varimportances[i], 0, 1, _params);
+                for (i = 0; i <= nvars - 1; i++)
+                    rep.varimportances[i] = apserv.boundval(rep.varimportances[i], 0, 1, _params);
 
                 //
                 // Compute topvars[] array
@@ -27053,7 +27253,8 @@ public partial class alglib
                 ap.assert(df.forestformat == dfuncompressedv0, "EstimateVariableImportance: integrity check failed (ff)");
                 ap.assert(
                     ap.rows(s.iobmatrix) >= ntrees && ap.cols(s.iobmatrix) >= npoints,
-                    "EstimateVariableImportance: integrity check failed (IOB)");
+                    "EstimateVariableImportance: integrity check failed (IOB)"
+                );
 
                 //
                 // Generate packed representation of the shuffle which is applied to all variables
@@ -27078,7 +27279,8 @@ public partial class alglib
                     s.varimpshuffle2[j] = k;
                 }
 
-                for (i = 0; i <= nvars - 1; i++) s.varimpshuffle2[npoints + i] = hqrnd.hqrnduniformi(varimprs, npoints, _params);
+                for (i = 0; i <= nvars - 1; i++)
+                    s.varimpshuffle2[npoints + i] = hqrnd.hqrnduniformi(varimprs, npoints, _params);
 
                 //
                 // Prepare buffer object, seed pool
@@ -27147,8 +27349,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_estimatevariableimportance(decisionforestbuilder s, int sessionseed, decisionforest df, int ntrees, dfreport rep,
-            xparams _params)
+        public static bool _trypexec_estimatevariableimportance(decisionforestbuilder s, int sessionseed, decisionforest df, int ntrees,
+            dfreport rep, xparams _params)
         {
             return false;
         }
@@ -27165,8 +27367,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 21.05.2018 by Bochkanov Sergey
         *************************************************************************/
-        private static void estimatepermutationimportances(decisionforestbuilder s, decisionforest df, int ntrees, smp.shared_pool permpool, int idx0,
-            int idx1, xparams _params)
+        private static void estimatepermutationimportances(decisionforestbuilder s, decisionforest df, int ntrees, smp.shared_pool permpool,
+            int idx0, int idx1, xparams _params)
         {
             var npoints = 0;
             var nvars = 0;
@@ -27189,7 +27391,10 @@ public partial class alglib
             nclasses = s.nclasses;
             ap.assert(df.forestformat == dfuncompressedv0, "EstimateVariableImportance: integrity check failed (ff)");
             ap.assert(idx0 >= 0 && idx0 <= idx1 && idx1 <= npoints, "EstimateVariableImportance: integrity check failed (idx)");
-            ap.assert(ap.rows(s.iobmatrix) >= ntrees && ap.cols(s.iobmatrix) >= npoints, "EstimateVariableImportance: integrity check failed (IOB)");
+            ap.assert(
+                ap.rows(s.iobmatrix) >= ntrees && ap.cols(s.iobmatrix) >= npoints,
+                "EstimateVariableImportance: integrity check failed (IOB)"
+            );
 
             //
             // Perform parallelization if batch is too large
@@ -27230,7 +27435,9 @@ public partial class alglib
                     permimpbuf.targety[s.dsival[i]] = 1;
                 }
                 else
+                {
                     permimpbuf.targety[0] = s.dsrval[i];
+                }
 
                 //
                 // Process all trees, for each tree compute NPerm losses corresponding
@@ -27284,7 +27491,9 @@ public partial class alglib
                             permimpbuf.yv[varidx * nclasses + j] = permimpbuf.yv[varidx * nclasses + j] + 1;
                         }
                         else
+                        {
                             permimpbuf.yv[varidx] = permimpbuf.yv[varidx] + prediction;
+                        }
 
                         //
                         // Save loss for all variables being perturbed (XDist).
@@ -27325,7 +27534,9 @@ public partial class alglib
                                             permimpbuf.yv[varidx * nclasses + j] = permimpbuf.yv[varidx * nclasses + j] + 1;
                                         }
                                         else
+                                        {
                                             permimpbuf.yv[varidx] = permimpbuf.yv[varidx] + df.trees[nodeoffs + 1];
+                                        }
 
                                         break;
                                     }
@@ -27351,7 +27562,9 @@ public partial class alglib
                                     permimpbuf.yv[varidx * nclasses + j] = permimpbuf.yv[varidx * nclasses + j] + 1;
                                 }
                                 else
+                                {
                                     permimpbuf.yv[varidx] = permimpbuf.yv[varidx] + prediction;
+                                }
                             }
 
                         //
@@ -27373,7 +27586,8 @@ public partial class alglib
                         permimpbuf.yv[j * nclasses + k] = permimpbuf.yv[j * nclasses + k] / apserv.coalesce(oobcounts, 1, _params);
 
                     v = 0;
-                    for (k = 0; k <= nclasses - 1; k++) v = v + math.sqr(permimpbuf.yv[j * nclasses + k] - permimpbuf.targety[k]);
+                    for (k = 0; k <= nclasses - 1; k++)
+                        v = v + math.sqr(permimpbuf.yv[j * nclasses + k] - permimpbuf.targety[k]);
 
                     permimpbuf.losses[j] = permimpbuf.losses[j] + v;
                 }
@@ -27394,8 +27608,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_estimatepermutationimportances(decisionforestbuilder s, decisionforest df, int ntrees, smp.shared_pool permpool,
-            int idx0, int idx1, xparams _params)
+        public static bool _trypexec_estimatepermutationimportances(decisionforestbuilder s, decisionforest df, int ntrees,
+            smp.shared_pool permpool, int idx0, int idx1, xparams _params)
         {
             return false;
         }
@@ -27575,7 +27789,12 @@ public partial class alglib
                 //
                 // select variables from pool
                 //
-                apserv.swapelementsi(workbuf.varpool, varstried, varstried + hqrnd.hqrnduniformi(rs, varsinpool - varstried, _params), _params);
+                apserv.swapelementsi(
+                    workbuf.varpool,
+                    varstried,
+                    varstried + hqrnd.hqrnduniformi(rs, varsinpool - varstried, _params),
+                    _params
+                );
                 varcur = workbuf.varpool[varstried];
 
                 //
@@ -27649,8 +27868,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 21.05.2018 by Bochkanov Sergey
         *************************************************************************/
-        private static void evaluatedensesplit(decisionforestbuilder s, dfworkbuf workbuf, hqrnd.hqrndstate rs, int splitvar, int idx0, int idx1,
-            ref int info, ref double split, ref double rms, xparams _params)
+        private static void evaluatedensesplit(decisionforestbuilder s, dfworkbuf workbuf, hqrnd.hqrndstate rs, int splitvar, int idx0,
+            int idx1, ref int info, ref double split, ref double rms, xparams _params)
         {
             var nclasses = 0;
             var i = 0;
@@ -27773,7 +27992,8 @@ public partial class alglib
                         ref rms,
                         ref workbuf.tmp1r,
                         ref workbuf.tmp1i,
-                        _params);
+                        _params
+                    );
                 }
                 else
                 {
@@ -27794,7 +28014,8 @@ public partial class alglib
                         ref rms,
                         ref workbuf.tmp2r,
                         ref workbuf.tmp3r,
-                        _params);
+                        _params
+                    );
                 }
             }
         }
@@ -27803,8 +28024,9 @@ public partial class alglib
         /*************************************************************************
         Classifier split
         *************************************************************************/
-        private static void classifiersplit(decisionforestbuilder s, dfworkbuf workbuf, ref double[] x, ref int[] c, int n, hqrnd.hqrndstate rs,
-            ref int info, ref double threshold, ref double e, ref double[] sortrbuf, ref int[] sortibuf, xparams _params)
+        private static void classifiersplit(decisionforestbuilder s, dfworkbuf workbuf, ref double[] x, ref int[] c, int n,
+            hqrnd.hqrndstate rs, ref int info, ref double threshold, ref double e, ref double[] sortrbuf, ref int[] sortibuf,
+            xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -27828,7 +28050,8 @@ public partial class alglib
 
             ap.assert(
                 s.rdfsplitstrength == 0 || s.rdfsplitstrength == 1 || s.rdfsplitstrength == 2,
-                "RDF: unexpected split type at ClassifierSplit()");
+                "RDF: unexpected split type at ClassifierSplit()"
+            );
             nclasses = s.nclasses;
             advanceby = 1;
             if (n >= 20) advanceby = Math.Max(2, (int)Math.Round(n * 0.05));
@@ -28435,7 +28658,8 @@ public partial class alglib
                 smp.ae_shared_pool_next_recycled(s.treepool, ref tree);
             }
 
-            for (i = 0; i <= df.ntrees - 1; i++) ap.assert(treesizes[i] > 0, "MergeTrees: integrity check failed (wrong TreeSize)");
+            for (i = 0; i <= df.ntrees - 1; i++)
+                ap.assert(treesizes[i] > 0, "MergeTrees: integrity check failed (wrong TreeSize)");
 
             //
             // Determine offsets for individual trees in output buffer
@@ -28543,10 +28767,12 @@ public partial class alglib
             for (i = 0; i <= npoints - 1; i++)
             {
                 v = 1 / apserv.coalesce(buf.trncounts[i], 1, _params);
-                for (j = 0; j <= nclasses - 1; j++) buf.trntotals[i * nclasses + j] = buf.trntotals[i * nclasses + j] * v;
+                for (j = 0; j <= nclasses - 1; j++)
+                    buf.trntotals[i * nclasses + j] = buf.trntotals[i * nclasses + j] * v;
 
                 v = 1 / apserv.coalesce(buf.oobcounts[i], 1, _params);
-                for (j = 0; j <= nclasses - 1; j++) buf.oobtotals[i * nclasses + j] = buf.oobtotals[i * nclasses + j] * v;
+                for (j = 0; j <= nclasses - 1; j++)
+                    buf.oobtotals[i * nclasses + j] = buf.oobtotals[i * nclasses + j] * v;
             }
 
             //
@@ -28808,22 +29034,26 @@ public partial class alglib
                 // Split
                 //
                 jmponbranch = (int)Math.Round(df.trees[treepos + 2]);
-                child0size = computecompressedsizerec(
-                    df,
-                    usemantissa8,
-                    treeroot,
-                    treepos + innernodewidth,
-                    compressedsizes,
-                    savecompressedsizes,
-                    _params);
-                child1size = computecompressedsizerec(
-                    df,
-                    usemantissa8,
-                    treeroot,
-                    treeroot + jmponbranch,
-                    compressedsizes,
-                    savecompressedsizes,
-                    _params);
+                child0size =
+                    computecompressedsizerec(
+                        df,
+                        usemantissa8,
+                        treeroot,
+                        treepos + innernodewidth,
+                        compressedsizes,
+                        savecompressedsizes,
+                        _params
+                    );
+                child1size =
+                    computecompressedsizerec(
+                        df,
+                        usemantissa8,
+                        treeroot,
+                        treeroot + jmponbranch,
+                        compressedsizes,
+                        savecompressedsizes,
+                        _params
+                    );
                 if (child0size <= child1size)
                 {
                     //
@@ -28958,7 +29188,10 @@ public partial class alglib
             //
             // Integrity check at the end
             //
-            ap.assert(dstoffs - dstoffsold == compressedsizes[treepos - treeroot], "CompressRec: integrity check failed (compressed size at leaf)");
+            ap.assert(
+                dstoffs - dstoffsold == compressedsizes[treepos - treeroot],
+                "CompressRec: integrity check failed (compressed size at leaf)"
+            );
         }
 
 
@@ -29313,7 +29546,9 @@ public partial class alglib
                 if (df.trees[nodeoffs] == -1)
                 {
                     if (df.nclasses == 1)
+                    {
                         y[0] = y[0] + df.trees[nodeoffs + 1];
+                    }
                     else
                     {
                         idx = (int)Math.Round(df.trees[nodeoffs + 1]);
@@ -29426,7 +29661,9 @@ public partial class alglib
                     result = result * result;
                 }
                 else
+                {
                     result = r * xfastpow(r, n - 1, _params);
+                }
 
                 return result;
             }
@@ -30544,8 +30781,8 @@ public partial class alglib
         }
 
 
-        public static void lrlines(double[,] xy, double[] s, int n, ref double a, ref double b, ref double vara, ref double varb, ref double covab,
-            ref double corrab, ref double p, xparams _params)
+        public static void lrlines(double[,] xy, double[] s, int n, ref double a, ref double b, ref double vara, ref double varb,
+            ref double covab, ref double corrab, ref double p, xparams _params)
         {
             var i = 0;
             double ss = 0;
@@ -30634,7 +30871,9 @@ public partial class alglib
                 p = igammaf.incompletegammac((n - 2) / (double)2, chi2 / 2, _params);
             }
             else
+            {
                 p = 1;
+            }
 
             //
             // Calculate other parameters
@@ -30752,7 +30991,8 @@ public partial class alglib
             svi = new double[nvars - 1 + 1];
             ar.c = new double[nvars - 1 + 1, nvars - 1 + 1];
             vm = new double[nvars - 1 + 1, nvars - 1 + 1];
-            if (!svd.rmatrixsvd(a, npoints, nvars, 1, 1, 2, ref sv, ref u, ref vt, _params)) ap.assert(false, "LINREG: SVD solver failed");
+            if (!svd.rmatrixsvd(a, npoints, nvars, 1, 1, 2, ref sv, ref u, ref vt, _params))
+                ap.assert(false, "LINREG: SVD solver failed");
 
             if (sv[0] <= 0)
             {
@@ -30861,7 +31101,8 @@ public partial class alglib
                             nvars - 1,
                             0.0,
                             ref work,
-                            _params);
+                            _params
+                        );
                         blas.matrixmatrixmultiply(
                             vt,
                             0,
@@ -30883,7 +31124,8 @@ public partial class alglib
                             nvars - 1,
                             0.0,
                             ref work,
-                            _params);
+                            _params
+                        );
                         return;
                     }
 
@@ -31023,13 +31265,11 @@ public partial class alglib
             }
 
             if (ncv == 0)
-            {
                 //
                 // Something strange: ALL ui are degenerate.
                 // Unexpected...
                 //
                 ap.assert(false, "LINREG: integrity check 0301 failed");
-            }
 
             ar.rmserror = Math.Sqrt(ar.rmserror / npoints);
             ar.avgerror = ar.avgerror / npoints;
@@ -31222,7 +31462,9 @@ public partial class alglib
                 // Update RunningSum and TermsInSum
                 //
                 if (i - k >= 0)
+                {
                     runningsum = runningsum - v + x[i - k];
+                }
                 else
                 {
                     runningsum = runningsum - v;
@@ -31242,7 +31484,9 @@ public partial class alglib
                         zeroprefix = Math.Min(zeroprefix + 1, k);
                 }
                 else
+                {
                     zeroprefix = Math.Min(zeroprefix, i + 1);
+                }
 
                 if (zeroprefix == termsinsum) runningsum = 0;
             }
@@ -32347,7 +32591,8 @@ public partial class alglib
                 0.0,
                 s.tmp0,
                 0,
-                _params);
+                _params
+            );
             ablas.rmatrixgemv(s.windowwidth, s.nbasis, 1.0, s.basis, 0, 0, 0, s.tmp0, 0, 0.0, trend, 0, _params);
             offs = s.sequenceidx[s.nsequences] - s.windowwidth;
             cnt = s.windowwidth;
@@ -32517,7 +32762,8 @@ public partial class alglib
             //
             ap.assert(
                 s.sequenceidx[s.nsequences] - s.sequenceidx[s.nsequences - 1] >= s.windowwidth,
-                "SSAAnalyzeLast: integrity check failed / 23vd4");
+                "SSAAnalyzeLast: integrity check failed / 23vd4"
+            );
             cntzeros = Math.Max(nticks - (s.sequenceidx[s.nsequences] - s.sequenceidx[s.nsequences - 1]), 0);
             for (i = 0; i <= cntzeros - 1; i++)
             {
@@ -32526,7 +32772,16 @@ public partial class alglib
             }
 
             cnt = Math.Min(nticks, s.sequenceidx[s.nsequences] - s.sequenceidx[s.nsequences - 1]);
-            analyzesequence(s, s.sequencedata, s.sequenceidx[s.nsequences] - cnt, s.sequenceidx[s.nsequences], trend, noise, cntzeros, _params);
+            analyzesequence(
+                s,
+                s.sequencedata,
+                s.sequenceidx[s.nsequences] - cnt,
+                s.sequenceidx[s.nsequences],
+                trend,
+                noise,
+                cntzeros,
+                _params
+            );
         }
 
 
@@ -32603,7 +32858,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 30.10.2017 by Bochkanov Sergey
         *************************************************************************/
-        public static void ssaanalyzesequence(ssamodel s, double[] data, int nticks, ref double[] trend, ref double[] noise, xparams _params)
+        public static void ssaanalyzesequence(ssamodel s, double[] data, int nticks, ref double[] trend, ref double[] noise,
+            xparams _params)
         {
             var i = 0;
 
@@ -32793,7 +33049,10 @@ public partial class alglib
             // * second, perform analysis phase
             //
             ap.assert(s.nsequences > 0, "SSAForecastLast: integrity check failed");
-            ap.assert(s.sequenceidx[s.nsequences] - s.sequenceidx[s.nsequences - 1] >= s.windowwidth, "SSAForecastLast: integrity check failed");
+            ap.assert(
+                s.sequenceidx[s.nsequences] - s.sequenceidx[s.nsequences - 1] >= s.windowwidth,
+                "SSAForecastLast: integrity check failed"
+            );
             apserv.rvectorsetlengthatleast(ref s.tmp0, s.nbasis, _params);
             apserv.rvectorsetlengthatleast(ref s.fctrend, s.windowwidth, _params);
             ablas.rmatrixgemv(
@@ -32809,7 +33068,8 @@ public partial class alglib
                 0.0,
                 s.tmp0,
                 0,
-                _params);
+                _params
+            );
             ablas.rmatrixgemv(s.windowwidth, s.nbasis, 1.0, s.basis, 0, 0, 0, s.tmp0, 0, 0.0, s.fctrend, 0, _params);
             apserv.rvectorsetlengthatleast(ref s.tmp1, winw - 1, _params);
             for (i = 1; i <= winw - 1; i++) s.tmp1[i - 1] = s.fctrend[i];
@@ -32905,8 +33165,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 30.10.2017 by Bochkanov Sergey
         *************************************************************************/
-        public static void ssaforecastsequence(ssamodel s, double[] data, int datalen, int forecastlen, bool applysmoothing, ref double[] trend,
-            xparams _params)
+        public static void ssaforecastsequence(ssamodel s, double[] data, int datalen, int forecastlen, bool applysmoothing,
+            ref double[] trend, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -32974,8 +33234,10 @@ public partial class alglib
                 ablas.rmatrixgemv(winw, s.nbasis, 1.0, s.basis, 0, 0, 0, s.tmp0, 0, 0.0, s.fctrend, 0, _params);
             }
             else
+            {
                 for (i = 0; i <= winw - 1; i++)
                     s.fctrend[i] = data[datalen + i - winw];
+            }
 
             //
             // Apply recurrent formula for SSA forecasting
@@ -33145,7 +33407,18 @@ public partial class alglib
             //
             m = Math.Min(m, s.sequenceidx[s.nsequences] - s.sequenceidx[s.nsequences - 1] - winw + 1);
             ap.assert(m >= 1, "SSAForecastAvgLast: integrity check failed");
-            forecastavgsequence(s, s.sequencedata, s.sequenceidx[s.nsequences - 1], s.sequenceidx[s.nsequences], m, nticks, true, trend, 0, _params);
+            forecastavgsequence(
+                s,
+                s.sequencedata,
+                s.sequenceidx[s.nsequences - 1],
+                s.sequenceidx[s.nsequences],
+                m,
+                nticks,
+                true,
+                trend,
+                0,
+                _params
+            );
         }
 
 
@@ -33317,7 +33590,8 @@ public partial class alglib
             isdegenerate = isdegenerate || s.algotype == 0;
             isdegenerate = isdegenerate || s.nsequences == 0;
             allsmaller = true;
-            for (i = 0; i <= s.nsequences - 1; i++) allsmaller = allsmaller && s.sequenceidx[i + 1] - s.sequenceidx[i] < s.windowwidth;
+            for (i = 0; i <= s.nsequences - 1; i++)
+                allsmaller = allsmaller && s.sequenceidx[i + 1] - s.sequenceidx[i] < s.windowwidth;
 
             isdegenerate = isdegenerate || allsmaller;
             result = !isdegenerate;
@@ -33407,7 +33681,10 @@ public partial class alglib
             // Critical checks
             //
             ap.assert(appendlen >= 0, "SSA: incorrect parameters passed to UpdateBasis(), integrity check failed");
-            ap.assert(!(!s.arebasisandsolvervalid && appendlen != 0), "SSA: incorrect parameters passed to UpdateBasis(), integrity check failed");
+            ap.assert(
+                !(!s.arebasisandsolvervalid && appendlen != 0),
+                "SSA: incorrect parameters passed to UpdateBasis(), integrity check failed"
+            );
             ap.assert(!(appendlen == 0 && updateits > 0.0), "SSA: incorrect parameters passed to UpdateBasis(), integrity check failed");
 
             //
@@ -33488,7 +33765,6 @@ public partial class alglib
 
                     ap.assert(dstoffs == windowstotal, "SSA: integrity check in UpdateBasis() failed / fh45f");
                     if (s.rtpowerup > 1)
-                    {
                         //
                         // Shuffle queue, it helps to avoid time-related bias in algorithm
                         //
@@ -33497,7 +33773,6 @@ public partial class alglib
                             j = i + hqrnd.hqrnduniformi(s.rs, windowstotal - i, _params);
                             apserv.swapelementsi(s.rtqueue, i, j, _params);
                         }
-                    }
 
                     s.rtqueuecnt = windowstotal;
                     s.rtqueuechunk = 1;
@@ -33521,14 +33796,13 @@ public partial class alglib
                 ap.assert(s.nsequences >= 1, "SSA: integrity check failed / 658ev");
                 ap.assert(
                     appendlen == 1 || appendlen == s.sequenceidx[s.nsequences] - s.sequenceidx[s.nsequences - 1] - winw + 1,
-                    "SSA: integrity check failed / sd3g7");
+                    "SSA: integrity check failed / sd3g7"
+                );
                 if (s.sequenceidx[s.nsequences] - s.sequenceidx[s.nsequences - 1] < winw)
-                {
                     //
                     // Last sequence is too short, nothing to update
                     //
                     return;
-                }
 
                 if (s.algotype == 2 || s.algotype == 3)
                 {
@@ -33559,7 +33833,8 @@ public partial class alglib
                             s.sequenceidx[s.nsequences] - winw,
                             s.sequencedata,
                             s.sequenceidx[s.nsequences] - winw,
-                            _params);
+                            _params
+                        );
                     }
                 }
             }
@@ -33622,7 +33897,8 @@ public partial class alglib
                     {
                         apserv.inc(ref s.dbgcntevd, _params);
                         s.nbasis = Math.Min(winw, s.topk);
-                        if (!evd.smatrixevd(s.xxt, winw, 1, true, ref s.sv, ref s.basis, _params)) ap.assert(false, "SSA: SMatrixEVD failed");
+                        if (!evd.smatrixevd(s.xxt, winw, 1, true, ref s.sv, ref s.basis, _params))
+                            ap.assert(false, "SSA: SMatrixEVD failed");
 
                         for (i = 0; i <= winw - 1; i++)
                         {
@@ -33669,7 +33945,8 @@ public partial class alglib
                             ap.assert(s.arebasisandsolvervalid, "SSA: integrity check in UpdateBasis() failed / srg6f");
                             ap.assert(updateits >= 0, "SSA: integrity check in UpdateBasis() failed / srg4f");
                             subspaceits = (int)Math.Floor(updateits);
-                            if (hqrnd.hqrnduniformr(s.rs, _params) < updateits - (int)Math.Floor(updateits)) apserv.inc(ref subspaceits, _params);
+                            if (hqrnd.hqrnduniformr(s.rs, _params) < updateits - (int)Math.Floor(updateits))
+                                apserv.inc(ref subspaceits, _params);
 
                             ap.assert(subspaceits >= 0, "SSA: integrity check in UpdateBasis() failed / srg9f");
                         }
@@ -33680,7 +33957,8 @@ public partial class alglib
                         // Dequeuing is done only for appends, and only when we have
                         // non-empty queue.
                         //
-                        if (appendlen > 0 && s.rtqueuecnt > 0) realtimedequeue(s, 1.0, Math.Min(s.rtqueuechunk, s.rtqueuecnt), _params);
+                        if (appendlen > 0 && s.rtqueuecnt > 0)
+                            realtimedequeue(s, 1.0, Math.Min(s.rtqueuechunk, s.rtqueuecnt), _params);
 
                         //
                         // Now, proceed to solver
@@ -33693,7 +33971,9 @@ public partial class alglib
                                 evd.eigsubspacecreatebuf(winw, s.nbasis, s.solver, _params);
                             }
                             else
+                            {
                                 evd.eigsubspacesetwarmstart(s.solver, true, _params);
+                            }
 
                             evd.eigsubspacesetcond(s.solver, 0.0, subspaceits, _params);
 
@@ -33706,7 +33986,25 @@ public partial class alglib
                             {
                                 evd.eigsubspaceoocgetrequestinfo(s.solver, ref requesttype, ref requestsize, _params);
                                 ap.assert(requesttype == 0, "SSA: integrity check in UpdateBasis() failed / 346372");
-                                ablas.rmatrixgemm(winw, requestsize, winw, 1.0, s.xxt, 0, 0, 0, s.solver.x, 0, 0, 0, 0.0, s.solver.ax, 0, 0, _params);
+                                ablas.rmatrixgemm(
+                                    winw,
+                                    requestsize,
+                                    winw,
+                                    1.0,
+                                    s.xxt,
+                                    0,
+                                    0,
+                                    0,
+                                    s.solver.x,
+                                    0,
+                                    0,
+                                    0,
+                                    0.0,
+                                    s.solver.ax,
+                                    0,
+                                    0,
+                                    _params
+                                );
                             }
 
                             evd.eigsubspaceoocstop(s.solver, ref s.sv, ref s.basis, s.solverrep, _params);
@@ -33717,7 +34015,9 @@ public partial class alglib
                         }
                     }
                     else
+                    {
                         ap.assert(false, "SSA: integrity check in UpdateBasis() failed / dfgs34");
+                    }
                 }
             }
 
@@ -33746,7 +34046,9 @@ public partial class alglib
                     degeneraterecurrence = true;
             }
             else
+            {
                 degeneraterecurrence = true;
+            }
 
             if (degeneraterecurrence)
             {
@@ -33784,7 +34086,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 30.10.2017 by Bochkanov Sergey
         *************************************************************************/
-        private static void analyzesequence(ssamodel s, double[] data, int i0, int i1, double[] trend, double[] noise, int offs, xparams _params)
+        private static void analyzesequence(ssamodel s, double[] data, int i0, int i1, double[] trend, double[] noise, int offs,
+            xparams _params)
         {
             var winw = 0;
             var nwindows = 0;
@@ -33865,7 +34168,8 @@ public partial class alglib
                         s.aseqtbproduct,
                         0,
                         0,
-                        _params);
+                        _params
+                    );
                     ablas.rmatrixgemm(
                         batchsize,
                         winw,
@@ -33883,7 +34187,8 @@ public partial class alglib
                         s.aseqtrajectory,
                         0,
                         0,
-                        _params);
+                        _params
+                    );
 
                     //
                     // Hankelize
@@ -33936,8 +34241,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 30.10.2017 by Bochkanov Sergey
         *************************************************************************/
-        private static void forecastavgsequence(ssamodel s, double[] data, int i0, int i1, int m, int forecastlen, bool smooth, double[] trend,
-            int offs, xparams _params)
+        private static void forecastavgsequence(ssamodel s, double[] data, int i0, int i1, int m, int forecastlen, bool smooth,
+            double[] trend, int offs, xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -33982,8 +34287,10 @@ public partial class alglib
                     for (j = 0; j <= winw - 1; j++) s.fctrendm[k, j] = s.tmp1[j];
                 }
                 else
+                {
                     for (j = 0; j <= winw - 1; j++)
                         s.fctrendm[k, j] = data[i1 - winw - (m - 1 - k) + j];
+                }
             }
 
             //
@@ -34043,17 +34350,13 @@ public partial class alglib
             // Premultiply XXT by Beta
             //
             if (beta != 0)
-            {
                 for (i = 0; i <= winw - 1; i++)
                 for (j = 0; j <= winw - 1; j++)
                     s.xxt[i, j] = s.xxt[i, j] * beta;
-            }
             else
-            {
                 for (i = 0; i <= winw - 1; i++)
                 for (j = 0; j <= winw - 1; j++)
                     s.xxt[i, j] = 0;
-            }
 
             //
             // Dequeue
@@ -34097,7 +34400,8 @@ public partial class alglib
         {
             ap.assert(windowwidth > 0, "UpdateXXTPrepare: WinW<=0");
             s.uxbatchlimit = Math.Max(updatesize, 1);
-            if (memorylimit > 0) s.uxbatchlimit = Math.Min(s.uxbatchlimit, Math.Max(memorylimit / windowwidth, 4 * windowwidth));
+            if (memorylimit > 0)
+                s.uxbatchlimit = Math.Min(s.uxbatchlimit, Math.Max(memorylimit / windowwidth, 4 * windowwidth));
 
             s.uxbatchwidth = windowwidth;
             s.uxbatchsize = 0;
@@ -34581,7 +34885,8 @@ public partial class alglib
             //    J = (v'*v) / (v'*(inv(root(D))*Z'*SW*Z*inv(root(D)))*v)  =
             //      = (v'*v) / (v'*A*v)
             //
-            if (!evd.smatrixevd(st, nvars, 1, true, ref d, ref z, _params)) ap.assert(false, "FisherLDAN: EVD solver failure");
+            if (!evd.smatrixevd(st, nvars, 1, true, ref d, ref z, _params))
+                ap.assert(false, "FisherLDAN: EVD solver failure");
 
             w = new double[nvars, nvars];
             if (d[nvars - 1] <= 0 || d[0] <= 1000 * math.machineepsilon * d[nvars - 1])
@@ -34644,7 +34949,8 @@ public partial class alglib
                 for (j = 0; j <= nvars - 1; j++)
                     a[i, j] = a[i, j] / Math.Sqrt(d[i] * d[j]);
 
-                if (!evd.smatrixevd(a, nvars, 1, true, ref d2, ref z2, _params)) ap.assert(false, "FisherLDAN: EVD solver failure");
+                if (!evd.smatrixevd(a, nvars, 1, true, ref d2, ref z2, _params))
+                    ap.assert(false, "FisherLDAN: EVD solver failure");
 
                 for (i = 0; i <= nvars - 1; i++)
                 for (k = 0; k <= nvars - 1; k++)
@@ -34974,7 +35280,8 @@ public partial class alglib
 
             if (k < 2) return;
 
-            if (ap.rows(s.data) < s.npairs + k - 1) apserv.rmatrixresize(ref s.data, Math.Max(2 * ap.rows(s.data), s.npairs + k - 1), 2 * n, _params);
+            if (ap.rows(s.data) < s.npairs + k - 1)
+                apserv.rmatrixresize(ref s.data, Math.Max(2 * ap.rows(s.data), s.npairs + k - 1), 2 * n, _params);
 
             for (i = 0; i <= k - 2; i++)
             {
@@ -35511,7 +35818,9 @@ public partial class alglib
                         s.effectivew[i] = 1.0;
                 }
                 else
+                {
                     s.effectivew[i] = s.pw[i];
+                }
 
             for (i = 0; i <= n - 1; i++)
             for (j = 0; j <= n - 1; j++)
@@ -35548,9 +35857,11 @@ public partial class alglib
                 // Calculate intersection of the default and user-specified bound constraints.
                 // This code checks consistency of such combination.
                 //
-                if (math.isfinite(s.bndl[i, j]) && s.bndl[i, j] > s.effectivebndl[i * n + j]) s.effectivebndl[i * n + j] = s.bndl[i, j];
+                if (math.isfinite(s.bndl[i, j]) && s.bndl[i, j] > s.effectivebndl[i * n + j])
+                    s.effectivebndl[i * n + j] = s.bndl[i, j];
 
-                if (math.isfinite(s.bndu[i, j]) && s.bndu[i, j] < s.effectivebndu[i * n + j]) s.effectivebndu[i * n + j] = s.bndu[i, j];
+                if (math.isfinite(s.bndu[i, j]) && s.bndu[i, j] < s.effectivebndu[i * n + j])
+                    s.effectivebndu[i * n + j] = s.bndu[i, j];
 
                 if (s.effectivebndl[i * n + j] > s.effectivebndu[i * n + j])
                 {
@@ -35647,7 +35958,8 @@ public partial class alglib
 
                         vv = s.effectivew[i];
                         s.bs.f = s.bs.f + math.sqr(vv * (v - s.data[k, n + i]));
-                        for (j = 0; j <= n - 1; j++) s.bs.g[i * n + j] = s.bs.g[i * n + j] + 2 * vv * vv * (v - s.data[k, n + i]) * s.data[k, j];
+                        for (j = 0; j <= n - 1; j++)
+                            s.bs.g[i * n + j] = s.bs.g[i * n + j] + 2 * vv * vv * (v - s.data[k, n + i]) * s.data[k, j];
                     }
 
                     //
@@ -35944,7 +36256,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 10.09.2008 by Bochkanov Sergey
         *************************************************************************/
-        public static void mnltrainh(double[,] xy, int npoints, int nvars, int nclasses, ref int info, logitmodel lm, mnlreport rep, xparams _params)
+        public static void mnltrainh(double[,] xy, int npoints, int nvars, int nclasses, ref int info, logitmodel lm, mnlreport rep,
+            xparams _params)
         {
             var i = 0;
             var j = 0;
@@ -36035,13 +36348,11 @@ public partial class alglib
                     for (i = 0; i <= nclasses - 2; i++)
                         lm.w[offs + i * (nvars + 1) + nvars] = -v;
                 else
-                {
                     for (i = 0; i <= nclasses - 2; i++)
                         if (i == k)
                             lm.w[offs + i * (nvars + 1) + nvars] = v;
                         else
                             lm.w[offs + i * (nvars + 1) + nvars] = 0;
-                }
 
                 return;
             }
@@ -36103,7 +36414,8 @@ public partial class alglib
                     ref work,
                     mcstate,
                     ref mcstage,
-                    _params);
+                    _params
+                );
                 while (mcstage != 0)
                 {
                     mlpbase.mlpgradnbatch(network, xy, npoints, ref e, ref g, _params);
@@ -36126,7 +36438,8 @@ public partial class alglib
                         ref work,
                         mcstate,
                         ref mcstage,
-                        _params);
+                        _params
+                    );
                 }
             }
 
@@ -36201,7 +36514,8 @@ public partial class alglib
                     ref work,
                     mcstate,
                     ref mcstage,
-                    _params);
+                    _params
+                );
                 while (mcstage != 0)
                 {
                     mlpbase.mlpgradnbatch(network, xy, npoints, ref e, ref g, _params);
@@ -36224,7 +36538,8 @@ public partial class alglib
                         ref work,
                         mcstate,
                         ref mcstage,
-                        _params);
+                        _params
+                    );
                 }
 
                 if (spd && (mcinfo == 2 || mcinfo == 4 || mcinfo == 6)) break;
@@ -36248,7 +36563,8 @@ public partial class alglib
                 lm.w[j + nvars] = lm.w[j + nvars] + v * network.columnmeans[k] / s;
             }
 
-            for (k = 0; k <= nclasses - 2; k++) lm.w[offs + (nvars + 1) * k + nvars] = -lm.w[offs + (nvars + 1) * k + nvars];
+            for (k = 0; k <= nclasses - 2; k++)
+                lm.w[offs + (nvars + 1) * k + nvars] = -lm.w[offs + (nvars + 1) * k + nvars];
         }
 
 
@@ -36451,7 +36767,10 @@ public partial class alglib
             result = 0;
             for (i = 0; i <= npoints - 1; i++)
             {
-                ap.assert((int)Math.Round(xy[i, nvars]) >= 0 && (int)Math.Round(xy[i, nvars]) < nclasses, "MNLAvgCE: incorrect class number!");
+                ap.assert(
+                    (int)Math.Round(xy[i, nvars]) >= 0 && (int)Math.Round(xy[i, nvars]) < nclasses,
+                    "MNLAvgCE: incorrect class number!"
+                );
 
                 //
                 // Process
@@ -36659,7 +36978,8 @@ public partial class alglib
             {
                 i1_ = 0 - (offs + i * (nvars + 1));
                 v = 0.0;
-                for (i_ = offs + i * (nvars + 1); i_ <= offs + i * (nvars + 1) + nvars - 1; i_++) v += w[i_] * x[i_ + i1_];
+                for (i_ = offs + i * (nvars + 1); i_ <= offs + i * (nvars + 1) + nvars - 1; i_++)
+                    v += w[i_] * x[i_ + i1_];
 
                 w[i1 + i] = v + w[offs + i * (nvars + 1) + nvars];
             }
@@ -36808,8 +37128,8 @@ public partial class alglib
         ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. JUNE 1983
         JORGE J. MORE', DAVID J. THUENTE
         *************************************************************************/
-        private static void mnlmcsrch(int n, ref double[] x, ref double f, ref double[] g, double[] s, ref double stp, ref int info, ref int nfev,
-            ref double[] wa, logitmcstate state, ref int stage, xparams _params)
+        private static void mnlmcsrch(int n, ref double[] x, ref double f, ref double[] g, double[] s, ref double stp, ref int info,
+            ref int nfev, ref double[] wa, logitmcstate state, ref int stage, xparams _params)
         {
             double v = 0;
             double p5 = 0;
@@ -37040,7 +37360,8 @@ public partial class alglib
                             state.stmin,
                             state.stmax,
                             ref state.infoc,
-                            _params);
+                            _params
+                        );
 
                         //
                         //           RESET THE FUNCTION AND GRADIENT VALUES FOR F.
@@ -37070,7 +37391,8 @@ public partial class alglib
                             state.stmin,
                             state.stmax,
                             ref state.infoc,
-                            _params);
+                            _params
+                        );
                     }
 
                     //
@@ -37079,7 +37401,8 @@ public partial class alglib
                     //
                     if (state.brackt)
                     {
-                        if (Math.Abs(state.sty - state.stx) >= p66 * state.width1) stp = state.stx + p5 * (state.sty - state.stx);
+                        if (Math.Abs(state.sty - state.stx) >= p66 * state.width1)
+                            stp = state.stx + p5 * (state.sty - state.stx);
 
                         state.width1 = state.width;
                         state.width = Math.Abs(state.sty - state.stx);
@@ -37094,8 +37417,8 @@ public partial class alglib
         }
 
 
-        private static void mnlmcstep(ref double stx, ref double fx, ref double dx, ref double sty, ref double fy, ref double dy, ref double stp,
-            double fp, double dp, ref bool brackt, double stmin, double stmax, ref int info, xparams _params)
+        private static void mnlmcstep(ref double stx, ref double fx, ref double dx, ref double sty, ref double fy, ref double dy,
+            ref double stp, double fp, double dp, ref bool brackt, double stmin, double stmax, ref int info, xparams _params)
         {
             var bound = new bool();
             double gamma = 0;
@@ -37208,7 +37531,9 @@ public partial class alglib
                         q = gamma + (dx - dp) + gamma;
                         r = p / q;
                         if (r < 0 && gamma != 0)
+                        {
                             stpc = stp + r * (stx - stp);
+                        }
                         else
                         {
                             if (stp > stx)
@@ -37552,7 +37877,10 @@ public partial class alglib
             ap.assert(nout >= 1, "knnbuildersetdatasetreg: nout<1");
             ap.assert(ap.rows(xy) >= npoints, "knnbuildersetdatasetreg: rows(xy)<npoints");
             ap.assert(ap.cols(xy) >= nvars + nout, "knnbuildersetdatasetreg: cols(xy)<nvars+nout");
-            ap.assert(apserv.apservisfinitematrix(xy, npoints, nvars + nout, _params), "knnbuildersetdatasetreg: xy parameter contains INFs or NANs");
+            ap.assert(
+                apserv.apservisfinitematrix(xy, npoints, nvars + nout, _params),
+                "knnbuildersetdatasetreg: xy parameter contains INFs or NANs"
+            );
 
             //
             // Set dataset
@@ -37613,7 +37941,10 @@ public partial class alglib
             ap.assert(nclasses >= 2, "knnbuildersetdatasetcls: nclasses<2");
             ap.assert(ap.rows(xy) >= npoints, "knnbuildersetdatasetcls: rows(xy)<npoints");
             ap.assert(ap.cols(xy) >= nvars + 1, "knnbuildersetdatasetcls: cols(xy)<nvars+1");
-            ap.assert(apserv.apservisfinitematrix(xy, npoints, nvars + 1, _params), "knnbuildersetdatasetcls: xy parameter contains INFs or NANs");
+            ap.assert(
+                apserv.apservisfinitematrix(xy, npoints, nvars + 1, _params),
+                "knnbuildersetdatasetcls: xy parameter contains INFs or NANs"
+            );
             for (i = 0; i <= npoints - 1; i++)
             {
                 j = (int)Math.Round(xy[i, nvars]);
@@ -38268,8 +38599,10 @@ public partial class alglib
                     desiredy[0] = j;
                 }
                 else
+                {
                     for (j = 0; j <= nout - 1; j++)
                         desiredy[j] = xy[i, nvars + j];
+                }
 
                 processinternal(model, buf, _params);
                 bdss.dserraccumulate(ref errbuf, buf.y, desiredy, _params);
@@ -38663,8 +38996,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 10.03.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlptrainlm(mlpbase.multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, ref int info,
-            mlpreport rep, xparams _params)
+        public static void mlptrainlm(mlpbase.multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts,
+            ref int info, mlpreport rep, xparams _params)
         {
             var nin = 0;
             var nout = 0;
@@ -38719,14 +39052,12 @@ public partial class alglib
             }
 
             if (mlpbase.mlpissoftmax(network, _params))
-            {
                 for (i = 0; i <= npoints - 1; i++)
                     if ((int)Math.Round(xy[i, nin]) < 0 || (int)Math.Round(xy[i, nin]) >= nout)
                     {
                         info = -2;
                         return;
                     }
-            }
 
             decay = Math.Max(decay, mindecay);
             info = 2;
@@ -39026,8 +39357,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 09.12.2007 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlptrainlbfgs(mlpbase.multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, double wstep,
-            int maxits, ref int info, mlpreport rep, xparams _params)
+        public static void mlptrainlbfgs(mlpbase.multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts,
+            double wstep, int maxits, ref int info, mlpreport rep, xparams _params)
         {
             var i = 0;
             var pass = 0;
@@ -39063,14 +39394,12 @@ public partial class alglib
 
             mlpbase.mlpproperties(network, ref nin, ref nout, ref wcount, _params);
             if (mlpbase.mlpissoftmax(network, _params))
-            {
                 for (i = 0; i <= npoints - 1; i++)
                     if ((int)Math.Round(xy[i, nin]) < 0 || (int)Math.Round(xy[i, nin]) >= nout)
                     {
                         info = -2;
                         return;
                     }
-            }
 
             decay = Math.Max(decay, mindecay);
             info = 2;
@@ -39188,8 +39517,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 10.03.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlptraines(mlpbase.multilayerperceptron network, double[,] trnxy, int trnsize, double[,] valxy, int valsize, double decay,
-            int restarts, ref int info, mlpreport rep, xparams _params)
+        public static void mlptraines(mlpbase.multilayerperceptron network, double[,] trnxy, int trnsize, double[,] valxy, int valsize,
+            double decay, int restarts, ref int info, mlpreport rep, xparams _params)
         {
             var i = 0;
             var pass = 0;
@@ -39230,7 +39559,9 @@ public partial class alglib
                 restarts = 1;
             }
             else
+            {
                 needrandomization = true;
+            }
 
             mlpbase.mlpproperties(network, ref nin, ref nout, ref wcount, _params);
             if (mlpbase.mlpissoftmax(network, _params))
@@ -39379,8 +39710,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 09.12.2007 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpkfoldcvlbfgs(mlpbase.multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, double wstep,
-            int maxits, int foldscount, ref int info, mlpreport rep, mlpcvreport cvrep, xparams _params)
+        public static void mlpkfoldcvlbfgs(mlpbase.multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts,
+            double wstep, int maxits, int foldscount, ref int info, mlpreport rep, mlpcvreport cvrep, xparams _params)
         {
             info = 0;
 
@@ -39415,8 +39746,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 09.12.2007 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpkfoldcvlm(mlpbase.multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts, int foldscount,
-            ref int info, mlpreport rep, mlpcvreport cvrep, xparams _params)
+        public static void mlpkfoldcvlm(mlpbase.multilayerperceptron network, double[,] xy, int npoints, double decay, int restarts,
+            int foldscount, ref int info, mlpreport rep, mlpcvreport cvrep, xparams _params)
         {
             info = 0;
 
@@ -39620,7 +39951,9 @@ public partial class alglib
                     for (i_ = 0; i_ <= nout - 1; i_++) dy[i_] = datacv.xyrow[i_ + i1_];
                 }
                 else
+                {
                     dy[0] = datacv.xyrow[nin];
+                }
 
                 bdss.dserraccumulate(ref buf, datacv.y, dy, _params);
             }
@@ -39759,7 +40092,8 @@ public partial class alglib
                 for (i = 0; i <= npoints - 1; i++)
                     ap.assert(
                         (int)Math.Round(xy[i, s.nin]) >= 0 && (int)Math.Round(xy[i, s.nin]) < s.nout,
-                        "MLPSetDataset: invalid parameter XY(in classifier used nonexistent class number: either XY[.,NIn]<0 or XY[.,NIn]>=NClasses).");
+                        "MLPSetDataset: invalid parameter XY(in classifier used nonexistent class number: either XY[.,NIn]<0 or XY[.,NIn]>=NClasses)."
+                    );
             }
 
             apserv.rmatrixsetlengthatleast(ref s.densexy, npoints, ndim, _params);
@@ -39820,38 +40154,46 @@ public partial class alglib
             ap.assert(npoints >= 0, "MLPSetSparseDataset: NPoint<0");
             ap.assert(
                 npoints <= sparse.sparsegetnrows(xy, _params),
-                "MLPSetSparseDataset: invalid size of sparse matrix XY(NPoint more then rows of matrix XY)");
+                "MLPSetSparseDataset: invalid size of sparse matrix XY(NPoint more then rows of matrix XY)"
+            );
             if (npoints > 0)
             {
                 t0 = 0;
                 t1 = 0;
                 if (s.rcpar)
                 {
-                    ap.assert(s.nout >= 1, "MLPSetSparseDataset: possible parameter S is not initialized or is spoiled(NOut<1 for regression).");
+                    ap.assert(
+                        s.nout >= 1,
+                        "MLPSetSparseDataset: possible parameter S is not initialized or is spoiled(NOut<1 for regression)."
+                    );
                     ap.assert(
                         s.nin + s.nout <= sparse.sparsegetncols(xy, _params),
-                        "MLPSetSparseDataset: invalid size of sparse matrix XY(too few columns in sparse matrix XY).");
+                        "MLPSetSparseDataset: invalid size of sparse matrix XY(too few columns in sparse matrix XY)."
+                    );
                     while (sparse.sparseenumerate(xy, ref t0, ref t1, ref i, ref j, ref v, _params))
                         if (i < npoints && j < s.nin + s.nout)
                             ap.assert(math.isfinite(v), "MLPSetSparseDataset: sparse matrix XY contains Infinite or NaN.");
                 }
                 else
                 {
-                    ap.assert(s.nout >= 2, "MLPSetSparseDataset: possible parameter S is not initialized or is spoiled(NClasses<2 for classifier).");
+                    ap.assert(
+                        s.nout >= 2,
+                        "MLPSetSparseDataset: possible parameter S is not initialized or is spoiled(NClasses<2 for classifier)."
+                    );
                     ap.assert(
                         s.nin + 1 <= sparse.sparsegetncols(xy, _params),
-                        "MLPSetSparseDataset: invalid size of sparse matrix XY(too few columns in sparse matrix XY).");
+                        "MLPSetSparseDataset: invalid size of sparse matrix XY(too few columns in sparse matrix XY)."
+                    );
                     while (sparse.sparseenumerate(xy, ref t0, ref t1, ref i, ref j, ref v, _params))
                         if (i < npoints && j <= s.nin)
                         {
                             if (j != s.nin)
                                 ap.assert(math.isfinite(v), "MLPSetSparseDataset: sparse matrix XY contains Infinite or NaN.");
                             else
-                            {
                                 ap.assert(
                                     math.isfinite(v) && (int)Math.Round(v) >= 0 && (int)Math.Round(v) < s.nout,
-                                    "MLPSetSparseDataset: invalid sparse matrix XY(in classifier used nonexistent class number: either XY[.,NIn]<0 or XY[.,NIn]>=NClasses).");
-                            }
+                                    "MLPSetSparseDataset: invalid sparse matrix XY(in classifier used nonexistent class number: either XY[.,NIn]<0 or XY[.,NIn]>=NClasses)."
+                                );
                         }
                 }
             }
@@ -39999,7 +40341,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 23.07.2012 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlptrainnetwork(mlptrainer s, mlpbase.multilayerperceptron network, int nrestarts, mlpreport rep, xparams _params)
+        public static void mlptrainnetwork(mlptrainer s, mlpbase.multilayerperceptron network, int nrestarts, mlpreport rep,
+            xparams _params)
         {
             var nin = 0;
             var nout = 0;
@@ -40223,7 +40566,10 @@ public partial class alglib
             ap.assert(ntype == ttype, "MLPContinueTraining: type of input network is not similar to network type in trainer object.");
             mlpbase.mlpproperties(network, ref nin, ref nout, ref wcount, _params);
             ap.assert(s.nin == nin, "MLPContinueTraining: number of inputs in trainer is not equal to number of inputs in the network.");
-            ap.assert(s.nout == nout, "MLPContinueTraining: number of outputs in trainer is not equal to number of outputs in the network.");
+            ap.assert(
+                s.nout == nout,
+                "MLPContinueTraining: number of outputs in trainer is not equal to number of outputs in the network."
+            );
             result = mlpcontinuetrainingx(s, s.subset, -1, ref s.ngradbatch, s.session, _params);
             if (result)
                 for (i_ = 0; i_ <= wcount - 1; i_++)
@@ -40328,8 +40674,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 10.03.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void mlpetraines(mlpe.mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts, ref int info, mlpreport rep,
-            xparams _params)
+        public static void mlpetraines(mlpe.mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts, ref int info,
+            mlpreport rep, xparams _params)
         {
             var i = 0;
             var k = 0;
@@ -40360,14 +40706,12 @@ public partial class alglib
             }
 
             if (mlpbase.mlpissoftmax(ensemble.network, _params))
-            {
                 for (i = 0; i <= npoints - 1; i++)
                     if ((int)Math.Round(xy[i, nin]) < 0 || (int)Math.Round(xy[i, nin]) >= nout)
                     {
                         info = -2;
                         return;
                     }
-            }
 
             info = 6;
 
@@ -40438,13 +40782,16 @@ public partial class alglib
                 // save results
                 //
                 i1_ = 0 - k * wcount;
-                for (i_ = k * wcount; i_ <= (k + 1) * wcount - 1; i_++) ensemble.weights[i_] = ensemble.network.weights[i_ + i1_];
+                for (i_ = k * wcount; i_ <= (k + 1) * wcount - 1; i_++)
+                    ensemble.weights[i_] = ensemble.network.weights[i_ + i1_];
 
                 i1_ = 0 - k * pcount;
-                for (i_ = k * pcount; i_ <= (k + 1) * pcount - 1; i_++) ensemble.columnmeans[i_] = ensemble.network.columnmeans[i_ + i1_];
+                for (i_ = k * pcount; i_ <= (k + 1) * pcount - 1; i_++)
+                    ensemble.columnmeans[i_] = ensemble.network.columnmeans[i_ + i1_];
 
                 i1_ = 0 - k * pcount;
-                for (i_ = k * pcount; i_ <= (k + 1) * pcount - 1; i_++) ensemble.columnsigmas[i_] = ensemble.network.columnsigmas[i_ + i1_];
+                for (i_ = k * pcount; i_ <= (k + 1) * pcount - 1; i_++)
+                    ensemble.columnsigmas[i_] = ensemble.network.columnsigmas[i_ + i1_];
 
                 rep.ngrad = rep.ngrad + tmprep.ngrad;
                 rep.nhess = rep.nhess + tmprep.nhess;
@@ -40463,7 +40810,8 @@ public partial class alglib
                 0,
                 ensemble.network.buf,
                 moderr,
-                _params);
+                _params
+            );
             rep.relclserror = moderr.relclserror;
             rep.avgce = moderr.avgce;
             rep.rmserror = moderr.rmserror;
@@ -40537,11 +40885,17 @@ public partial class alglib
             else
                 ttype = 1;
 
-            ap.assert(ntype == ttype, "MLPTrainEnsembleES: internal error - type of input network is not similar to network type in trainer object");
+            ap.assert(
+                ntype == ttype,
+                "MLPTrainEnsembleES: internal error - type of input network is not similar to network type in trainer object"
+            );
             nin = mlpbase.mlpgetinputscount(ensemble.network, _params);
             ap.assert(s.nin == nin, "MLPTrainEnsembleES: number of inputs in trainer is not equal to number of inputs in ensemble network");
             nout = mlpbase.mlpgetoutputscount(ensemble.network, _params);
-            ap.assert(s.nout == nout, "MLPTrainEnsembleES: number of outputs in trainer is not equal to number of outputs in ensemble network");
+            ap.assert(
+                s.nout == nout,
+                "MLPTrainEnsembleES: number of outputs in trainer is not equal to number of outputs in ensemble network"
+            );
             ap.assert(nrestarts >= 0, "MLPTrainEnsembleES: NRestarts<0.");
 
             //
@@ -40576,7 +40930,6 @@ public partial class alglib
             // Calculate errors.
             //
             if (s.datatype == 0)
-            {
                 mlpe.mlpeallerrorsx(
                     ensemble,
                     s.densexy,
@@ -40589,11 +40942,10 @@ public partial class alglib
                     0,
                     ensemble.network.buf,
                     tmprep,
-                    _params);
-            }
+                    _params
+                );
 
             if (s.datatype == 1)
-            {
                 mlpe.mlpeallerrorsx(
                     ensemble,
                     s.densexy,
@@ -40606,8 +40958,8 @@ public partial class alglib
                     0,
                     ensemble.network.buf,
                     tmprep,
-                    _params);
-            }
+                    _params
+                );
 
             rep.relclserror = tmprep.relclserror;
             rep.avgce = tmprep.avgce;
@@ -40620,8 +40972,8 @@ public partial class alglib
         /*************************************************************************
         Internal cross-validation subroutine
         *************************************************************************/
-        private static void mlpkfoldcvgeneral(mlpbase.multilayerperceptron n, double[,] xy, int npoints, double decay, int restarts, int foldscount,
-            bool lmalgorithm, double wstep, int maxits, ref int info, mlpreport rep, mlpcvreport cvrep, xparams _params)
+        private static void mlpkfoldcvgeneral(mlpbase.multilayerperceptron n, double[,] xy, int npoints, double decay, int restarts,
+            int foldscount, bool lmalgorithm, double wstep, int maxits, ref int info, mlpreport rep, mlpcvreport cvrep, xparams _params)
         {
             var i = 0;
             var fold = 0;
@@ -40906,7 +41258,8 @@ public partial class alglib
                     datacv.rep,
                     true,
                     datacv.trnpool,
-                    _params);
+                    _params
+                );
                 datacv.ngrad = datacv.ngrad + datacv.rep.ngrad;
 
                 //
@@ -40978,7 +41331,8 @@ public partial class alglib
              Copyright 13.08.2012 by Bochkanov Sergey
         *************************************************************************/
         private static void mlptrainnetworkx(mlptrainer s, int nrestarts, int algokind, int[] trnsubset, int trnsubsetsize, int[] valsubset,
-            int valsubsetsize, mlpbase.multilayerperceptron network, mlpreport rep, bool isrootcall, smp.shared_pool sessions, xparams _params)
+            int valsubsetsize, mlpbase.multilayerperceptron network, mlpreport rep, bool isrootcall, smp.shared_pool sessions,
+            xparams _params)
         {
             var modrep = new mlpbase.modelerrors();
             double eval = 0;
@@ -41016,7 +41370,6 @@ public partial class alglib
                 // Hence is our approach to evaluation of task complexity.
                 //
                 if (Math.Max(nrestarts, 1) * apserv.rmul3(2 * wcount, s.npoints, 100, _params) >= apserv.smpactivationlevel(_params))
-                {
                     if (_trypexec_mlptrainnetworkx(
                             s,
                             nrestarts,
@@ -41029,9 +41382,9 @@ public partial class alglib
                             rep,
                             isrootcall,
                             sessions,
-                            _params))
+                            _params
+                        ))
                         return;
-                }
 
                 //
                 // Check correctness of parameters
@@ -41050,36 +41403,56 @@ public partial class alglib
 
                 ap.assert(
                     ntype == ttype,
-                    "MLPTrainNetworkX: internal error - type of the training network is not similar to network type in trainer object");
+                    "MLPTrainNetworkX: internal error - type of the training network is not similar to network type in trainer object"
+                );
                 ap.assert(
                     s.nin == nin,
-                    "MLPTrainNetworkX: internal error - number of inputs in trainer is not equal to number of inputs in the training network.");
+                    "MLPTrainNetworkX: internal error - number of inputs in trainer is not equal to number of inputs in the training network."
+                );
                 ap.assert(
                     s.nout == nout,
-                    "MLPTrainNetworkX: internal error - number of outputs in trainer is not equal to number of outputs in the training network.");
+                    "MLPTrainNetworkX: internal error - number of outputs in trainer is not equal to number of outputs in the training network."
+                );
                 ap.assert(nrestarts >= 0, "MLPTrainNetworkX: internal error - NRestarts<0.");
                 ap.assert(
                     ap.len(trnsubset) >= trnsubsetsize,
-                    "MLPTrainNetworkX: internal error - parameter TrnSubsetSize more than input subset size(Length(TrnSubset)<TrnSubsetSize)");
+                    "MLPTrainNetworkX: internal error - parameter TrnSubsetSize more than input subset size(Length(TrnSubset)<TrnSubsetSize)"
+                );
                 for (i = 0; i <= trnsubsetsize - 1; i++)
                     ap.assert(
                         trnsubset[i] >= 0 && trnsubset[i] <= s.npoints - 1,
-                        "MLPTrainNetworkX: internal error - parameter TrnSubset contains incorrect index(TrnSubset[I]<0 or TrnSubset[I]>S.NPoints-1)");
+                        "MLPTrainNetworkX: internal error - parameter TrnSubset contains incorrect index(TrnSubset[I]<0 or TrnSubset[I]>S.NPoints-1)"
+                    );
 
                 ap.assert(
                     ap.len(valsubset) >= valsubsetsize,
-                    "MLPTrainNetworkX: internal error - parameter ValSubsetSize more than input subset size(Length(ValSubset)<ValSubsetSize)");
+                    "MLPTrainNetworkX: internal error - parameter ValSubsetSize more than input subset size(Length(ValSubset)<ValSubsetSize)"
+                );
                 for (i = 0; i <= valsubsetsize - 1; i++)
                     ap.assert(
                         valsubset[i] >= 0 && valsubset[i] <= s.npoints - 1,
-                        "MLPTrainNetworkX: internal error - parameter ValSubset contains incorrect index(ValSubset[I]<0 or ValSubset[I]>S.NPoints-1)");
+                        "MLPTrainNetworkX: internal error - parameter ValSubset contains incorrect index(ValSubset[I]<0 or ValSubset[I]>S.NPoints-1)"
+                    );
 
                 //
                 // Train
                 //
                 randomizenetwork = nrestarts > 0;
                 initmlptrnsessions(network, randomizenetwork, s, sessions, _params);
-                mlptrainnetworkx(s, nrestarts, algokind, trnsubset, trnsubsetsize, valsubset, valsubsetsize, network, rep, false, sessions, _params);
+                mlptrainnetworkx(
+                    s,
+                    nrestarts,
+                    algokind,
+                    trnsubset,
+                    trnsubsetsize,
+                    valsubset,
+                    valsubsetsize,
+                    network,
+                    rep,
+                    false,
+                    sessions,
+                    _params
+                );
 
                 //
                 // Choose best network
@@ -41100,9 +41473,11 @@ public partial class alglib
                 //
                 // Calculate errors
                 //
-                if (s.datatype == 0) mlpbase.mlpallerrorssubset(network, s.densexy, s.npoints, trnsubset, trnsubsetsize, modrep, _params);
+                if (s.datatype == 0)
+                    mlpbase.mlpallerrorssubset(network, s.densexy, s.npoints, trnsubset, trnsubsetsize, modrep, _params);
 
-                if (s.datatype == 1) mlpbase.mlpallerrorssparsesubset(network, s.sparsexy, s.npoints, trnsubset, trnsubsetsize, modrep, _params);
+                if (s.datatype == 1)
+                    mlpbase.mlpallerrorssparsesubset(network, s.sparsexy, s.npoints, trnsubset, trnsubsetsize, modrep, _params);
 
                 rep.relclserror = modrep.relclserror;
                 rep.avgce = modrep.avgce;
@@ -41126,8 +41501,34 @@ public partial class alglib
                 //
                 nr0 = nrestarts / 2;
                 nr1 = nrestarts - nr0;
-                mlptrainnetworkx(s, nr0, algokind, trnsubset, trnsubsetsize, valsubset, valsubsetsize, network, rep0, false, sessions, _params);
-                mlptrainnetworkx(s, nr1, algokind, trnsubset, trnsubsetsize, valsubset, valsubsetsize, network, rep1, false, sessions, _params);
+                mlptrainnetworkx(
+                    s,
+                    nr0,
+                    algokind,
+                    trnsubset,
+                    trnsubsetsize,
+                    valsubset,
+                    valsubsetsize,
+                    network,
+                    rep0,
+                    false,
+                    sessions,
+                    _params
+                );
+                mlptrainnetworkx(
+                    s,
+                    nr1,
+                    algokind,
+                    trnsubset,
+                    trnsubsetsize,
+                    valsubset,
+                    valsubsetsize,
+                    network,
+                    rep1,
+                    false,
+                    sessions,
+                    _params
+                );
 
                 //
                 // Aggregate results
@@ -41167,15 +41568,18 @@ public partial class alglib
                 itbest = 0;
                 itcnt = 0;
                 mlpstarttrainingx(s, rndstart, algokind, trnsubset, trnsubsetsize, psession, _params);
-                if (s.datatype == 0) ebest = mlpbase.mlperrorsubset(psession.network, s.densexy, s.npoints, valsubset, valsubsetsize, _params);
+                if (s.datatype == 0)
+                    ebest = mlpbase.mlperrorsubset(psession.network, s.densexy, s.npoints, valsubset, valsubsetsize, _params);
 
-                if (s.datatype == 1) ebest = mlpbase.mlperrorsparsesubset(psession.network, s.sparsexy, s.npoints, valsubset, valsubsetsize, _params);
+                if (s.datatype == 1)
+                    ebest = mlpbase.mlperrorsparsesubset(psession.network, s.sparsexy, s.npoints, valsubset, valsubsetsize, _params);
 
                 for (i_ = 0; i_ <= wcount - 1; i_++) psession.wbuf0[i_] = psession.network.weights[i_];
 
                 while (mlpcontinuetrainingx(s, trnsubset, trnsubsetsize, ref ngradbatch, psession, _params))
                 {
-                    if (s.datatype == 0) eval = mlpbase.mlperrorsubset(psession.network, s.densexy, s.npoints, valsubset, valsubsetsize, _params);
+                    if (s.datatype == 0)
+                        eval = mlpbase.mlperrorsubset(psession.network, s.densexy, s.npoints, valsubset, valsubsetsize, _params);
 
                     if (s.datatype == 1)
                         eval = mlpbase.mlperrorsparsesubset(psession.network, s.sparsexy, s.npoints, valsubset, valsubsetsize, _params);
@@ -41198,16 +41602,20 @@ public partial class alglib
                 rep.ngrad = ngradbatch;
             }
             else
+            {
                 for (i = 0; i <= wcount - 1; i++)
                     psession.network.weights[i] = 0;
+            }
 
             //
             // Evaluate network performance and update PSession.BestParameters/BestRMSError
             // (if needed).
             //
-            if (s.datatype == 0) mlpbase.mlpallerrorssubset(psession.network, s.densexy, s.npoints, trnsubset, trnsubsetsize, modrep, _params);
+            if (s.datatype == 0)
+                mlpbase.mlpallerrorssubset(psession.network, s.densexy, s.npoints, trnsubset, trnsubsetsize, modrep, _params);
 
-            if (s.datatype == 1) mlpbase.mlpallerrorssparsesubset(psession.network, s.sparsexy, s.npoints, trnsubset, trnsubsetsize, modrep, _params);
+            if (s.datatype == 1)
+                mlpbase.mlpallerrorssparsesubset(psession.network, s.sparsexy, s.npoints, trnsubset, trnsubsetsize, modrep, _params);
 
             if (modrep.rmserror < psession.bestrmserror)
             {
@@ -41225,8 +41633,9 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_mlptrainnetworkx(mlptrainer s, int nrestarts, int algokind, int[] trnsubset, int trnsubsetsize, int[] valsubset,
-            int valsubsetsize, mlpbase.multilayerperceptron network, mlpreport rep, bool isrootcall, smp.shared_pool sessions, xparams _params)
+        public static bool _trypexec_mlptrainnetworkx(mlptrainer s, int nrestarts, int algokind, int[] trnsubset, int trnsubsetsize,
+            int[] valsubset, int valsubsetsize, mlpbase.multilayerperceptron network, mlpreport rep, bool isrootcall,
+            smp.shared_pool sessions, xparams _params)
         {
             return false;
         }
@@ -41242,8 +41651,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 22.08.2012 by Bochkanov Sergey
         *************************************************************************/
-        private static void mlptrainensemblex(mlptrainer s, mlpe.mlpensemble ensemble, int idx0, int idx1, int nrestarts, int trainingmethod,
-            apserv.sinteger ngrad, bool isrootcall, smp.shared_pool esessions, xparams _params)
+        private static void mlptrainensemblex(mlptrainer s, mlpe.mlpensemble ensemble, int idx0, int idx1, int nrestarts,
+            int trainingmethod, apserv.sinteger ngrad, bool isrootcall, smp.shared_pool esessions, xparams _params)
         {
             var pcount = 0;
             var nin = 0;
@@ -41301,8 +41710,20 @@ public partial class alglib
                 // We expect that minimum number of iterations before convergence is 100.
                 // Hence is our approach to evaluation of task complexity.
                 //
-                if (Math.Max(nrestarts, 1) * (idx1 - idx0) * apserv.rmul3(2 * wcount, s.npoints, 100, _params) >= apserv.smpactivationlevel(_params))
-                    if (_trypexec_mlptrainensemblex(s, ensemble, idx0, idx1, nrestarts, trainingmethod, ngrad, isrootcall, esessions, _params))
+                if (Math.Max(nrestarts, 1) * (idx1 - idx0) * apserv.rmul3(2 * wcount, s.npoints, 100, _params)
+                    >= apserv.smpactivationlevel(_params))
+                    if (_trypexec_mlptrainensemblex(
+                            s,
+                            ensemble,
+                            idx0,
+                            idx1,
+                            nrestarts,
+                            trainingmethod,
+                            ngrad,
+                            isrootcall,
+                            esessions,
+                            _params
+                        ))
                         return;
 
                 //
@@ -41360,7 +41781,6 @@ public partial class alglib
                 trnsubsetsize = 0;
                 valsubsetsize = 0;
                 if (trainingmethod == 0)
-                {
                     do
                     {
                         trnsubsetsize = 0;
@@ -41383,13 +41803,13 @@ public partial class alglib
                                 valsubsetsize = valsubsetsize + 1;
                             }
                     } while (!(trnsubsetsize != 0 && valsubsetsize != 0));
-                }
 
                 if (trainingmethod == 1)
                 {
                     valsubsetsize = 0;
                     trnsubsetsize = s.npoints;
-                    for (i = 0; i <= s.npoints - 1; i++) psession.trnsubset[i] = hqrnd.hqrnduniformi(rs, s.npoints, _params);
+                    for (i = 0; i <= s.npoints - 1; i++)
+                        psession.trnsubset[i] = hqrnd.hqrnduniformi(rs, s.npoints, _params);
                 }
 
                 //
@@ -41407,20 +41827,24 @@ public partial class alglib
                     psession.mlprep,
                     true,
                     psession.mlpsessions,
-                    _params);
+                    _params
+                );
                 ngrad.val = ngrad.val + psession.mlprep.ngrad;
 
                 //
                 // Save results
                 //
                 i1_ = 0 - k * wcount;
-                for (i_ = k * wcount; i_ <= (k + 1) * wcount - 1; i_++) ensemble.weights[i_] = psession.network.weights[i_ + i1_];
+                for (i_ = k * wcount; i_ <= (k + 1) * wcount - 1; i_++)
+                    ensemble.weights[i_] = psession.network.weights[i_ + i1_];
 
                 i1_ = 0 - k * pcount;
-                for (i_ = k * pcount; i_ <= (k + 1) * pcount - 1; i_++) ensemble.columnmeans[i_] = psession.network.columnmeans[i_ + i1_];
+                for (i_ = k * pcount; i_ <= (k + 1) * pcount - 1; i_++)
+                    ensemble.columnmeans[i_] = psession.network.columnmeans[i_ + i1_];
 
                 i1_ = 0 - k * pcount;
-                for (i_ = k * pcount; i_ <= (k + 1) * pcount - 1; i_++) ensemble.columnsigmas[i_] = psession.network.columnsigmas[i_ + i1_];
+                for (i_ = k * pcount; i_ <= (k + 1) * pcount - 1; i_++)
+                    ensemble.columnsigmas[i_] = psession.network.columnsigmas[i_ + i1_];
             }
 
             //
@@ -41433,8 +41857,8 @@ public partial class alglib
         /*************************************************************************
         Serial stub for GPL edition.
         *************************************************************************/
-        public static bool _trypexec_mlptrainensemblex(mlptrainer s, mlpe.mlpensemble ensemble, int idx0, int idx1, int nrestarts, int trainingmethod,
-            apserv.sinteger ngrad, bool isrootcall, smp.shared_pool esessions, xparams _params)
+        public static bool _trypexec_mlptrainensemblex(mlptrainer s, mlpe.mlpensemble ensemble, int idx0, int idx1, int nrestarts,
+            int trainingmethod, apserv.sinteger ngrad, bool isrootcall, smp.shared_pool esessions, xparams _params)
         {
             return false;
         }
@@ -41455,8 +41879,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 13.08.2012 by Bochkanov Sergey
         *************************************************************************/
-        private static void mlpstarttrainingx(mlptrainer s, bool randomstart, int algokind, int[] subset, int subsetsize, smlptrnsession session,
-            xparams _params)
+        private static void mlpstarttrainingx(mlptrainer s, bool randomstart, int algokind, int[] subset, int subsetsize,
+            smlptrnsession session, xparams _params)
         {
             var nin = 0;
             var nout = 0;
@@ -41483,17 +41907,20 @@ public partial class alglib
 
             ap.assert(
                 ntype == ttype,
-                "MLPStartTrainingX: internal error - type of the resulting network is not similar to network type in trainer object");
+                "MLPStartTrainingX: internal error - type of the resulting network is not similar to network type in trainer object"
+            );
             mlpbase.mlpproperties(session.network, ref nin, ref nout, ref wcount, _params);
             ap.assert(s.nin == nin, "MLPStartTrainingX: number of inputs in trainer is not equal to number of inputs in the network.");
             ap.assert(s.nout == nout, "MLPStartTrainingX: number of outputs in trainer is not equal to number of outputs in the network.");
             ap.assert(
                 ap.len(subset) >= subsetsize,
-                "MLPStartTrainingX: internal error - parameter SubsetSize more than input subset size(Length(Subset)<SubsetSize)");
+                "MLPStartTrainingX: internal error - parameter SubsetSize more than input subset size(Length(Subset)<SubsetSize)"
+            );
             for (i = 0; i <= subsetsize - 1; i++)
                 ap.assert(
                     subset[i] >= 0 && subset[i] <= s.npoints - 1,
-                    "MLPStartTrainingX: internal error - parameter Subset contains incorrect index(Subset[I]<0 or Subset[I]>S.NPoints-1)");
+                    "MLPStartTrainingX: internal error - parameter Subset contains incorrect index(Subset[I]<0 or Subset[I]>S.NPoints-1)"
+                );
 
             //
             // Prepare session
@@ -41506,8 +41933,10 @@ public partial class alglib
                 minlbfgs.minlbfgsrestartfrom(session.optimizer, session.network.weights, _params);
             }
             else
+            {
                 for (i = 0; i <= wcount - 1; i++)
                     session.network.weights[i] = 0;
+            }
 
             if (algokind == -1)
             {
@@ -41515,7 +41944,9 @@ public partial class alglib
                 if (s.algokind == 1) session.minibatchsize = s.minibatchsize;
             }
             else
+            {
                 session.algoused = 0;
+            }
 
             hqrnd.hqrndrandomize(session.generator, _params);
             session.rstate.ia = new int[15 + 1];
@@ -41650,21 +42081,26 @@ public partial class alglib
 
             ap.assert(
                 ntype == ttype,
-                "MLPContinueTrainingX: internal error - type of the resulting network is not similar to network type in trainer object.");
+                "MLPContinueTrainingX: internal error - type of the resulting network is not similar to network type in trainer object."
+            );
             mlpbase.mlpproperties(session.network, ref nin, ref nout, ref wcount, _params);
             ap.assert(
                 s.nin == nin,
-                "MLPContinueTrainingX: internal error - number of inputs in trainer is not equal to number of inputs in the network.");
+                "MLPContinueTrainingX: internal error - number of inputs in trainer is not equal to number of inputs in the network."
+            );
             ap.assert(
                 s.nout == nout,
-                "MLPContinueTrainingX: internal error - number of outputs in trainer is not equal to number of outputs in the network.");
+                "MLPContinueTrainingX: internal error - number of outputs in trainer is not equal to number of outputs in the network."
+            );
             ap.assert(
                 ap.len(subset) >= subsetsize,
-                "MLPContinueTrainingX: internal error - parameter SubsetSize more than input subset size(Length(Subset)<SubsetSize).");
+                "MLPContinueTrainingX: internal error - parameter SubsetSize more than input subset size(Length(Subset)<SubsetSize)."
+            );
             for (i = 0; i <= subsetsize - 1; i++)
                 ap.assert(
                     subset[i] >= 0 && subset[i] <= s.npoints - 1,
-                    "MLPContinueTrainingX: internal error - parameter Subset contains incorrect index(Subset[I]<0 or Subset[I]>S.NPoints-1).");
+                    "MLPContinueTrainingX: internal error - parameter Subset contains incorrect index(Subset[I]<0 or Subset[I]>S.NPoints-1)."
+                );
 
             //
             // Quick exit on empty training set
@@ -41698,7 +42134,6 @@ public partial class alglib
             for (i_ = 0; i_ <= wcount - 1; i_++) session.network.weights[i_] = session.optimizer.x[i_];
 
             if (s.datatype == 0)
-            {
                 mlpbase.mlpgradbatchsubset(
                     session.network,
                     s.densexy,
@@ -41707,11 +42142,10 @@ public partial class alglib
                     subsetsize,
                     ref session.optimizer.f,
                     ref session.optimizer.g,
-                    _params);
-            }
+                    _params
+                );
 
             if (s.datatype == 1)
-            {
                 mlpbase.mlpgradbatchsparsesubset(
                     session.network,
                     s.sparsexy,
@@ -41720,8 +42154,8 @@ public partial class alglib
                     subsetsize,
                     ref session.optimizer.f,
                     ref session.optimizer.g,
-                    _params);
-            }
+                    _params
+                );
 
             //
             // Increment number of operations performed on batch gradient
@@ -41731,7 +42165,8 @@ public partial class alglib
             for (i_ = 0; i_ <= wcount - 1; i_++) v += session.network.weights[i_] * session.network.weights[i_];
 
             session.optimizer.f = session.optimizer.f + 0.5 * decay * v;
-            for (i_ = 0; i_ <= wcount - 1; i_++) session.optimizer.g[i_] = session.optimizer.g[i_] + decay * session.network.weights[i_];
+            for (i_ = 0; i_ <= wcount - 1; i_++)
+                session.optimizer.g[i_] = session.optimizer.g[i_] + decay * session.network.weights[i_];
 
             goto lbl_1;
             lbl_2:
@@ -41772,8 +42207,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 19.02.2009 by Bochkanov Sergey
         *************************************************************************/
-        private static void mlpebagginginternal(mlpe.mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts, double wstep,
-            int maxits, bool lmalgorithm, ref int info, mlpreport rep, mlpcvreport ooberrors, xparams _params)
+        private static void mlpebagginginternal(mlpe.mlpensemble ensemble, double[,] xy, int npoints, double decay, int restarts,
+            double wstep, int maxits, bool lmalgorithm, ref int info, mlpreport rep, mlpcvreport ooberrors, xparams _params)
         {
             var xys = new double[0, 0];
             var s = new bool[0];
@@ -41819,14 +42254,12 @@ public partial class alglib
             }
 
             if (mlpbase.mlpissoftmax(ensemble.network, _params))
-            {
                 for (i = 0; i <= npoints - 1; i++)
                     if ((int)Math.Round(xy[i, nin]) < 0 || (int)Math.Round(xy[i, nin]) >= nout)
                     {
                         info = -2;
                         return;
                     }
-            }
 
             //
             // allocate temporaries
@@ -41903,13 +42336,16 @@ public partial class alglib
                 rep.nhess = rep.nhess + tmprep.nhess;
                 rep.ncholesky = rep.ncholesky + tmprep.ncholesky;
                 i1_ = 0 - k * wcount;
-                for (i_ = k * wcount; i_ <= (k + 1) * wcount - 1; i_++) ensemble.weights[i_] = ensemble.network.weights[i_ + i1_];
+                for (i_ = k * wcount; i_ <= (k + 1) * wcount - 1; i_++)
+                    ensemble.weights[i_] = ensemble.network.weights[i_ + i1_];
 
                 i1_ = 0 - k * pcnt;
-                for (i_ = k * pcnt; i_ <= (k + 1) * pcnt - 1; i_++) ensemble.columnmeans[i_] = ensemble.network.columnmeans[i_ + i1_];
+                for (i_ = k * pcnt; i_ <= (k + 1) * pcnt - 1; i_++)
+                    ensemble.columnmeans[i_] = ensemble.network.columnmeans[i_ + i1_];
 
                 i1_ = 0 - k * pcnt;
-                for (i_ = k * pcnt; i_ <= (k + 1) * pcnt - 1; i_++) ensemble.columnsigmas[i_] = ensemble.network.columnsigmas[i_ + i1_];
+                for (i_ = k * pcnt; i_ <= (k + 1) * pcnt - 1; i_++)
+                    ensemble.columnsigmas[i_] = ensemble.network.columnsigmas[i_ + i1_];
 
                 //
                 // OOB estimates
@@ -41941,7 +42377,9 @@ public partial class alglib
                     for (i_ = 0; i_ <= nout - 1; i_++) y[i_] = v * oobbuf[i, i_];
 
                     if (mlpbase.mlpissoftmax(ensemble.network, _params))
+                    {
                         dy[0] = xy[i, nin];
+                    }
                     else
                     {
                         i1_ = nin - 0;
@@ -41996,7 +42434,9 @@ public partial class alglib
                 session.randomizenetwork = true;
             }
             else
+            {
                 session.randomizenetwork = false;
+            }
 
             //
             // Determine network geometry and initialize optimizer 
@@ -42039,7 +42479,10 @@ public partial class alglib
                 smp.ae_shared_pool_first_recycled(sessions, ref p);
                 while (p != null)
                 {
-                    ap.assert(mlpbase.mlpsamearchitecture(p.network, networktrained, _params), "InitMLPTrnSessions: internal consistency error");
+                    ap.assert(
+                        mlpbase.mlpsamearchitecture(p.network, networktrained, _params),
+                        "InitMLPTrnSessions: internal consistency error"
+                    );
                     p.bestrmserror = math.maxrealnumber;
                     smp.ae_shared_pool_next_recycled(sessions, ref p);
                 }
@@ -42081,8 +42524,8 @@ public partial class alglib
         This function initializes temporaries needed for training session.
 
         *************************************************************************/
-        private static void initmlpetrnsessions(mlpbase.multilayerperceptron individualnetwork, mlptrainer trainer, smp.shared_pool sessions,
-            xparams _params)
+        private static void initmlpetrnsessions(mlpbase.multilayerperceptron individualnetwork, mlptrainer trainer,
+            smp.shared_pool sessions, xparams _params)
         {
             var t = new mlpetrnsession();
 
@@ -42419,8 +42862,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 21.03.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void kmeansgenerate(double[,] xy, int npoints, int nvars, int k, int restarts, ref int info, ref double[,] c, ref int[] xyc,
-            xparams _params)
+        public static void kmeansgenerate(double[,] xy, int npoints, int nvars, int k, int restarts, ref int info, ref double[,] c,
+            ref int[] xyc, xparams _params)
         {
             var dummy = new double[0, 0];
             var itscnt = 0;
@@ -42451,7 +42894,8 @@ public partial class alglib
                 ref xyc,
                 ref e,
                 buf,
-                _params);
+                _params
+            );
         }
     }
 }

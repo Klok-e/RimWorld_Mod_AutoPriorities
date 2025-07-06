@@ -18,6 +18,7 @@ http://www.fsf.org/licensing/licenses
 >>> END OF LICENSE >>>
 *************************************************************************/
 
+#pragma warning disable CS8625
 #pragma warning disable 1691
 #pragma warning disable 162
 #pragma warning disable 164
@@ -71,7 +72,8 @@ public partial class alglib
         gq.gqgeneraterec(alpha, beta, mu0, n, ref info, ref x, ref w, null);
     }
 
-    public static void gqgeneraterec(double[] alpha, double[] beta, double mu0, int n, out int info, out double[] x, out double[] w, xparams _params)
+    public static void gqgeneraterec(double[] alpha, double[] beta, double mu0, int n, out int info, out double[] x, out double[] w,
+        xparams _params)
     {
         info = 0;
         x = new double[0];
@@ -118,8 +120,8 @@ public partial class alglib
       -- ALGLIB --
          Copyright 2005-2009 by Bochkanov Sergey
     *************************************************************************/
-    public static void gqgenerategausslobattorec(double[] alpha, double[] beta, double mu0, double a, double b, int n, out int info, out double[] x,
-        out double[] w)
+    public static void gqgenerategausslobattorec(double[] alpha, double[] beta, double mu0, double a, double b, int n, out int info,
+        out double[] x, out double[] w)
     {
         info = 0;
         x = new double[0];
@@ -127,8 +129,8 @@ public partial class alglib
         gq.gqgenerategausslobattorec(alpha, beta, mu0, a, b, n, ref info, ref x, ref w, null);
     }
 
-    public static void gqgenerategausslobattorec(double[] alpha, double[] beta, double mu0, double a, double b, int n, out int info, out double[] x,
-        out double[] w, xparams _params)
+    public static void gqgenerategausslobattorec(double[] alpha, double[] beta, double mu0, double a, double b, int n, out int info,
+        out double[] x, out double[] w, xparams _params)
     {
         info = 0;
         x = new double[0];
@@ -268,7 +270,8 @@ public partial class alglib
         gq.gqgenerategaussjacobi(n, alpha, beta, ref info, ref x, ref w, null);
     }
 
-    public static void gqgenerategaussjacobi(int n, double alpha, double beta, out int info, out double[] x, out double[] w, xparams _params)
+    public static void gqgenerategaussjacobi(int n, double alpha, double beta, out int info, out double[] x, out double[] w,
+        xparams _params)
     {
         info = 0;
         x = new double[0];
@@ -464,7 +467,8 @@ public partial class alglib
         gkq.gkqgenerategausslegendre(n, ref info, ref x, ref wkronrod, ref wgauss, null);
     }
 
-    public static void gkqgenerategausslegendre(int n, out int info, out double[] x, out double[] wkronrod, out double[] wgauss, xparams _params)
+    public static void gkqgenerategausslegendre(int n, out int info, out double[] x, out double[] wkronrod, out double[] wgauss,
+        xparams _params)
     {
         info = 0;
         x = new double[0];
@@ -1421,7 +1425,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 12.05.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void gqgenerategaussjacobi(int n, double alpha, double beta, ref int info, ref double[] x, ref double[] w, xparams _params)
+        public static void gqgenerategaussjacobi(int n, double alpha, double beta, ref int info, ref double[] x, ref double[] w,
+            xparams _params)
         {
             var a = new double[0];
             var b = new double[0];
@@ -1446,7 +1451,8 @@ public partial class alglib
             b = new double[n];
             apb = alpha + beta;
             a[0] = (beta - alpha) / (apb + 2);
-            t = (apb + 1) * Math.Log(2)
+            t =
+                (apb + 1) * Math.Log(2)
                 + gammafunc.lngamma(alpha + 1, ref s, _params)
                 + gammafunc.lngamma(beta + 1, ref s, _params)
                 - gammafunc.lngamma(apb + 2, ref s, _params);
@@ -1466,11 +1472,12 @@ public partial class alglib
                 for (i = 2; i <= n - 1; i++)
                 {
                     a[i] = 0.25 * (beta2 - alpha2) / (i * i * (1 + 0.5 * apb / i) * (1 + 0.5 * (apb + 2) / i));
-                    b[i] = 0.25
-                           * (1 + alpha / i)
-                           * (1 + beta / i)
-                           * (1 + apb / i)
-                           / ((1 + 0.5 * (apb + 1) / i) * (1 + 0.5 * (apb - 1) / i) * math.sqr(1 + 0.5 * apb / i));
+                    b[i] =
+                        0.25
+                        * (1 + alpha / i)
+                        * (1 + beta / i)
+                        * (1 + apb / i)
+                        / ((1 + 0.5 * (apb + 1) / i) * (1 + 0.5 * (apb - 1) / i) * math.sqr(1 + 0.5 * apb / i));
                 }
             }
 
@@ -1546,13 +1553,11 @@ public partial class alglib
 
             b[0] = Math.Exp(t);
             if (n > 1)
-            {
                 for (i = 1; i <= n - 1; i++)
                 {
                     a[i] = 2 * i + alpha + 1;
                     b[i] = i * (i + alpha);
                 }
-            }
 
             gqgeneraterec(a, b, b[0], n, ref info, ref x, ref w, _params);
 
@@ -1624,11 +1629,9 @@ public partial class alglib
             // test basic properties to detect errors
             //
             if (info > 0)
-            {
                 for (i = 0; i <= n - 2; i++)
                     if (x[i] >= x[i + 1])
                         info = -4;
-            }
         }
     }
 
@@ -1680,8 +1683,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 08.05.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void gkqgeneraterec(double[] alpha, double[] beta, double mu0, int n, ref int info, ref double[] x, ref double[] wkronrod,
-            ref double[] wgauss, xparams _params)
+        public static void gkqgeneraterec(double[] alpha, double[] beta, double mu0, int n, ref int info, ref double[] x,
+            ref double[] wkronrod, ref double[] wgauss, xparams _params)
         {
             var ta = new double[0];
             var i = 0;
@@ -1871,7 +1874,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 12.05.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void gkqgenerategausslegendre(int n, ref int info, ref double[] x, ref double[] wkronrod, ref double[] wgauss, xparams _params)
+        public static void gkqgenerategausslegendre(int n, ref int info, ref double[] x, ref double[] wkronrod, ref double[] wgauss,
+            xparams _params)
         {
             double eps = 0;
 
@@ -1886,7 +1890,9 @@ public partial class alglib
                 gkqlegendretbl(n, ref x, ref wkronrod, ref wgauss, ref eps, _params);
             }
             else
+            {
                 gkqlegendrecalc(n, ref info, ref x, ref wkronrod, ref wgauss, _params);
+            }
         }
 
 
@@ -1963,7 +1969,8 @@ public partial class alglib
 
             apb = alpha + beta;
             a[0] = (beta - alpha) / (apb + 2);
-            t = (apb + 1) * Math.Log(2)
+            t =
+                (apb + 1) * Math.Log(2)
                 + gammafunc.lngamma(alpha + 1, ref s, _params)
                 + gammafunc.lngamma(beta + 1, ref s, _params)
                 - gammafunc.lngamma(apb + 2, ref s, _params);
@@ -1983,11 +1990,12 @@ public partial class alglib
                 for (i = 2; i <= clen - 1; i++)
                 {
                     a[i] = 0.25 * (beta2 - alpha2) / (i * i * (1 + 0.5 * apb / i) * (1 + 0.5 * (apb + 2) / i));
-                    b[i] = 0.25
-                           * (1 + alpha / i)
-                           * (1 + beta / i)
-                           * (1 + apb / i)
-                           / ((1 + 0.5 * (apb + 1) / i) * (1 + 0.5 * (apb - 1) / i) * math.sqr(1 + 0.5 * apb / i));
+                    b[i] =
+                        0.25
+                        * (1 + alpha / i)
+                        * (1 + beta / i)
+                        * (1 + apb / i)
+                        / ((1 + 0.5 * (apb + 1) / i) * (1 + 0.5 * (apb - 1) / i) * math.sqr(1 + 0.5 * apb / i));
                 }
             }
 
@@ -2102,7 +2110,8 @@ public partial class alglib
           -- ALGLIB --
              Copyright 12.05.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static void gkqlegendretbl(int n, ref double[] x, ref double[] wkronrod, ref double[] wgauss, ref double eps, xparams _params)
+        public static void gkqlegendretbl(int n, ref double[] x, ref double[] wkronrod, ref double[] wgauss, ref double eps,
+            xparams _params)
         {
             var i = 0;
             var ng = 0;
@@ -2764,7 +2773,9 @@ public partial class alglib
             // reduction to general form
             //
             if (a < b)
+            {
                 s = 1;
+            }
             else
             {
                 s = -1;
@@ -3216,7 +3227,8 @@ public partial class alglib
             //
             // additional memory if needed
             //
-            if (state.heapused == state.heapsize) mheapresize(ref state.heap, ref state.heapsize, 4 * state.heapsize, state.heapwidth, _params);
+            if (state.heapused == state.heapsize)
+                mheapresize(ref state.heap, ref state.heapsize, 4 * state.heapsize, state.heapwidth, _params);
 
             //
             // TODO: every 20 iterations recalculate errors/sums
@@ -3359,7 +3371,9 @@ public partial class alglib
                     p = maxcp;
                 }
                 else
+                {
                     break;
+                }
             }
         }
 
@@ -3389,7 +3403,9 @@ public partial class alglib
                     p = parent;
                 }
                 else
+                {
                     break;
+                }
             }
         }
 
