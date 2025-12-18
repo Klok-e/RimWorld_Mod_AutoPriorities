@@ -231,7 +231,7 @@ namespace AutoPriorities.Core
             var log = logger!;
             var worldFacade = new WorldInfoFacade(worldInfoRetriever, log);
             var stringSerializer = new PawnDataStringSerializer(log, worldFacade);
-            var saveDataHandler = new SaveDataHandler(log, stringSerializer);
+            var saveDataHandler = new SaveDataHandler(stringSerializer);
             var mapSpecificSerializer = new MapSpecificDataPawnsDataSerializer(log, stringSerializer, saveDataHandler);
             var workSpeedCalculator = new WorkSpeedCalculator(log, worldInfoRetriever);
             _pawnsDataBuilder = new PawnsDataBuilder(mapSpecificSerializer, worldInfoRetriever, log, workSpeedCalculator);

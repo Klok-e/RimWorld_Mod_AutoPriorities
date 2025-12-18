@@ -28,8 +28,7 @@ namespace AutoPriorities.PawnDataSerializer
             {
                 var ser = (PercentTableSaver.Ser)new XmlSerializer(typeof(PercentTableSaver.Ser)).Deserialize(stream);
                 var workTableEntries = ser.ParsedData(_worldInfoFacade);
-                var excludedPawnEntries = ser.ParsedExcluded(_worldInfoFacade);
-                return new DeserializedData { ExcludedPawns = excludedPawnEntries, WorkTablesData = workTableEntries };
+                return new DeserializedData { WorkTablesData = workTableEntries };
             }
             catch (Exception e)
             {

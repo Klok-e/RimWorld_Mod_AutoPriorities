@@ -16,8 +16,11 @@ namespace AutoPriorities.WorldInfoRetriever
             return WorkTypeDefsUtility.WorkTypeDefsInPriorityOrder.Select(x => new WorkTypeWrapper(x));
         }
 
-        public IEnumerable<IPawnWrapper> GetAdultPawnsInPlayerFactionInCurrentMap()
+        public IEnumerable<IPawnWrapper>? GetAdultPawnsInPlayerFactionInCurrentMap()
         {
+            if (Find.CurrentMap?.mapPawns?.FreeColonists == null)
+                return null;
+
             return PlayerPawnsDisplayOrderUtility.InOrder(Find.CurrentMap.mapPawns.FreeColonists)
                 .Where(pawn => !pawn.DevelopmentalStage.Baby())
                 .Select(x => new PawnWrapper(x));
@@ -25,9 +28,10 @@ namespace AutoPriorities.WorldInfoRetriever
 
         public IEnumerable<IPawnWrapper> GetAllAdultPawnsInPlayerFaction()
         {
-            var caravans = Find.WorldObjects.Caravans.Where(caravan => caravan.IsPlayerControlled)
-                .SelectMany(caravan => caravan.PawnsListForReading)
-                .Where(pawn => pawn.IsColonist || pawn.IsSlaveOfColony);
+            var caravans =
+                Find.WorldObjects.Caravans.Where(caravan => caravan.IsPlayerControlled)
+                    .SelectMany(caravan => caravan.PawnsListForReading)
+                    .Where(pawn => pawn.IsColonist || pawn.IsSlaveOfColony);
             var colonists = Find.Maps.SelectMany(x => x.mapPawns.FreeColonists);
             return caravans.Concat(colonists).Where(pawn => !pawn.DevelopmentalStage.Baby()).Select(x => new PawnWrapper(x));
         }

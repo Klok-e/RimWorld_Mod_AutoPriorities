@@ -17,6 +17,8 @@ A copy of the GNU General Public License is available at
 http://www.fsf.org/licensing/licenses
 >>> END OF LICENSE >>>
 *************************************************************************/
+
+#pragma warning disable
 #pragma warning disable 1691
 #pragma warning disable 162
 #pragma warning disable 164

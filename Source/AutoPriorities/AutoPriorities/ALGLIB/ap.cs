@@ -18,6 +18,7 @@ http://www.fsf.org/licensing/licenses
 >>> END OF LICENSE >>>
 **************************************************************************/
 
+#pragma warning disable
 #if ALGLIB_USE_SIMD
 #define _ALGLIB_ALREADY_DEFINED_SIMD_ALIASES
 using Sse2 = System.Runtime.Intrinsics.X86.Sse2;

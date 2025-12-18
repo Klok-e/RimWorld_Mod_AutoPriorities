@@ -53,20 +53,21 @@ namespace AutoPriorities
 
         public PawnsData ShallowCopy()
         {
-            var shallowCopy = new PawnsData(_serializer, _worldInfoRetriever, _logger, _workSpeedCalculator)
-            {
-                WorkTables = WorkTables.Select(x => x.ShallowCopy()).ToList(),
-                ExcludedPawns = ExcludedPawns.ToHashSet(),
-                WorkTypesNotRequiringSkills = WorkTypesNotRequiringSkills.ToHashSet(),
-                SortedPawnFitnessForEveryWork = SortedPawnFitnessForEveryWork.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
-                CurrentMapPlayerPawns = CurrentMapPlayerPawns.ToList(),
-                AllPlayerPawns = AllPlayerPawns.ToList(),
-                IgnoreLearningRate = IgnoreLearningRate,
-                IgnoreOppositionToWork = IgnoreOppositionToWork,
-                MinimumSkillLevel = MinimumSkillLevel,
-                IgnoreWorkSpeed = IgnoreWorkSpeed,
-                RunOnTimer = RunOnTimer,
-            };
+            var shallowCopy =
+                new PawnsData(_serializer, _worldInfoRetriever, _logger, _workSpeedCalculator)
+                {
+                    WorkTables = WorkTables.Select(x => x.ShallowCopy()).ToList(),
+                    ExcludedPawns = ExcludedPawns.ToHashSet(),
+                    WorkTypesNotRequiringSkills = WorkTypesNotRequiringSkills.ToHashSet(),
+                    SortedPawnFitnessForEveryWork = SortedPawnFitnessForEveryWork.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
+                    CurrentMapPlayerPawns = CurrentMapPlayerPawns.ToList(),
+                    AllPlayerPawns = AllPlayerPawns.ToList(),
+                    IgnoreLearningRate = IgnoreLearningRate,
+                    IgnoreOppositionToWork = IgnoreOppositionToWork,
+                    MinimumSkillLevel = MinimumSkillLevel,
+                    IgnoreWorkSpeed = IgnoreWorkSpeed,
+                    RunOnTimer = RunOnTimer,
+                };
 
             return shallowCopy;
         }
@@ -125,12 +126,29 @@ namespace AutoPriorities
                 // get all work types
                 var workTypes = _worldInfoRetriever.GetWorkTypeDefsInPriorityOrder().ToArray();
 
-                var allPawns = _worldInfoRetriever.GetAllAdultPawnsInPlayerFaction();
+                if (_worldInfoRetriever.DebugLogs())
+                    _logger.Info($"workTypes.Length {workTypes.Length}");
+
+                var allPawns = _worldInfoRetriever.GetAllAdultPawnsInPlayerFaction().ToList();
+
+                if (_worldInfoRetriever.DebugLogs())
+                    _logger.Info($"allPawns.Count {allPawns.Count}");
+
                 AllPlayerPawns.Clear();
                 AllPlayerPawns.AddRange(allPawns);
 
                 // get all pawns owned by player
                 var pawns = _worldInfoRetriever.GetAdultPawnsInPlayerFactionInCurrentMap();
+                if (pawns == null)
+                {
+                    if (_worldInfoRetriever.DebugLogs())
+                        _logger.Info("No map currently loaded. Skipping pawn data rebuild.");
+
+                    return;
+                }
+
+                if (_worldInfoRetriever.DebugLogs())
+                    _logger.Info($"pawns.Count {allPawns.Count}");
 
                 // get all skills associated with the work types
                 CurrentMapPlayerPawns.Clear();
@@ -178,6 +196,7 @@ namespace AutoPriorities
                         continue;
 
                     WorkTypes.Add(work);
+
                     if (work.RelevantSkillsCount == 0)
                         WorkTypesNotRequiringSkills.Add(work);
                 }

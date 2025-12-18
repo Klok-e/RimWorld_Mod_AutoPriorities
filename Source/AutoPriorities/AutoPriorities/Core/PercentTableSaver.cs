@@ -20,20 +20,9 @@ namespace AutoPriorities.Core
         {
             public List<Tupl> data = new();
 
-            // serialized from file only now for backward compatibility, TODO: delete sometimes in the future
-            public List<WorktypePawn> excludedPawns = new();
-
             public List<WorkTableEntry> ParsedData(IWorldInfoFacade serializer)
             {
                 return data.Select(x => x.Parsed(serializer)).ToList();
-            }
-
-            public HashSet<ExcludedPawnEntry> ParsedExcluded(IWorldInfoFacade serializer)
-            {
-                return excludedPawns.Select(x => x.Parsed(serializer))
-                    .Where(p => p is { Item1: not null, Item2: not null })
-                    .Select(p => new ExcludedPawnEntry { WorkDef = p.Item1!, Pawn = p.Item2! })
-                    .ToHashSet();
             }
 
             public static Ser Serialized(List<WorkTableEntry> percents)

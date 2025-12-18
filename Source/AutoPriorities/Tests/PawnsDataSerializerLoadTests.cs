@@ -25,7 +25,7 @@ namespace Tests
             _retriever = Substitute.For<IWorldInfoRetriever>();
             _worldInfo = new WorldInfoFacade(_retriever, _logger);
             var pawnDataStringSerializer = new PawnDataStringSerializer(_logger, _worldInfo);
-            _saveDataHandler = new SaveDataHandler(_logger, pawnDataStringSerializer);
+            _saveDataHandler = new SaveDataHandler(pawnDataStringSerializer);
             _fixture = FixtureBuilder.Create();
 
             _mapSpecificData = Substitute.For<IMapSpecificData>();
@@ -48,8 +48,7 @@ namespace Tests
 
             _retriever.GetWorkTypeDefsInPriorityOrder()
                 .Returns(
-                    TestHelper.WorkTypes.Select(
-                        x =>
+                    TestHelper.WorkTypes.Select(x =>
                         {
                             var workTypeWrapper = _fixture.Create<IWorkTypeWrapper>();
                             workTypeWrapper.DefName.Returns(x);
@@ -83,8 +82,7 @@ namespace Tests
 
             _retriever.GetWorkTypeDefsInPriorityOrder()
                 .Returns(
-                    TestHelper.WorkTypesTruncated.Select(
-                        x =>
+                    TestHelper.WorkTypesTruncated.Select(x =>
                         {
                             var workTypeWrapper = _fixture.Create<IWorkTypeWrapper>();
                             workTypeWrapper.DefName.Returns(x);
