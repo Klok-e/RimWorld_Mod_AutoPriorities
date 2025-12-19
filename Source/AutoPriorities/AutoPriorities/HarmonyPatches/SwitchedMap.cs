@@ -11,11 +11,11 @@ namespace AutoPriorities.HarmonyPatches
     {
         [HarmonyPostfix]
         // ReSharper disable once UnusedMember.Local
-        private static void Postfix()
+        private static void Postfix(Map value)
         {
-#if DEBUG
-            Controller.logger?.Info("Switched map by notification");
-#endif
+            if (Controller.DebugLogs)
+                Controller.logger?.Info($"Switched map by notification. Map value: {value}");
+
             Controller.SwitchMap();
         }
     }
