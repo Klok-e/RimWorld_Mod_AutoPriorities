@@ -126,12 +126,12 @@ namespace AutoPriorities
                 // get all work types
                 var workTypes = _worldInfoRetriever.GetWorkTypeDefsInPriorityOrder().ToArray();
 
-                if (_worldInfoRetriever.DebugLogs())
+                if (_worldInfoRetriever.AnnoyingDebugLogs())
                     _logger.Info($"workTypes.Length {workTypes.Length}");
 
                 var allPawns = _worldInfoRetriever.GetAllAdultPawnsInPlayerFaction().ToList();
 
-                if (_worldInfoRetriever.DebugLogs())
+                if (_worldInfoRetriever.AnnoyingDebugLogs())
                     _logger.Info($"allPawns.Count {allPawns.Count}");
 
                 AllPlayerPawns.Clear();
@@ -147,7 +147,7 @@ namespace AutoPriorities
                     return;
                 }
 
-                if (_worldInfoRetriever.DebugLogs())
+                if (_worldInfoRetriever.AnnoyingDebugLogs())
                     _logger.Info($"pawns.Count {allPawns.Count}");
 
                 // get all skills associated with the work types

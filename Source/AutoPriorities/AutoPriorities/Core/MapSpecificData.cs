@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using AutoPriorities.PawnDataSerializer;
-using AutoPriorities.Wrappers;
 using Verse;
 
 namespace AutoPriorities.Core
 {
     public class MapSpecificData : MapComponent, IMapSpecificData
     {
-        private List<ExcludedPawnSerializableEntry>? _excludedPawns;
         private bool _ignoreLearningRate;
         private bool _ignoreOppositionToWork;
         private bool _ignoreWorkSpeed;
@@ -19,6 +15,17 @@ namespace AutoPriorities.Core
 
         public MapSpecificData(Map map) : base(map)
         {
+            var copy = Controller.AbandonedMapMapSpecificData;
+            if (copy == null) return;
+
+            Controller.AbandonedMapMapSpecificData = null;
+            _ignoreLearningRate = copy._ignoreLearningRate;
+            _ignoreOppositionToWork = copy._ignoreOppositionToWork;
+            _ignoreWorkSpeed = copy._ignoreWorkSpeed;
+            _importantWorkTypes = copy._importantWorkTypes;
+            _minimumSkillLevel = copy._minimumSkillLevel;
+            _runOnTimer = copy._runOnTimer;
+            PawnsDataXml = copy.PawnsDataXml;
         }
 
         public List<string>? ImportantWorkTypes
@@ -33,26 +40,6 @@ namespace AutoPriorities.Core
         {
             get => _minimumSkillLevel;
             set => _minimumSkillLevel = value;
-        }
-
-        public List<ExcludedPawnEntry> ExcludedPawns
-        {
-            get => (_excludedPawns ?? new List<ExcludedPawnSerializableEntry>()).Where(x => x.workTypeDef != null && x.pawn != null)
-                .Select(
-                    x => new ExcludedPawnEntry
-                    {
-                        WorkDef = new WorkTypeWrapper(x.workTypeDef ?? throw new InvalidOperationException()),
-                        Pawn = new PawnWrapper(x.pawn ?? throw new InvalidOperationException()),
-                    }
-                )
-                .ToList();
-            set => _excludedPawns = value.Select(
-                    x => new ExcludedPawnSerializableEntry
-                        {
-                            pawn = x.Pawn.GetPawnOrThrow(), workTypeDef = x.WorkDef.GetWorkTypeDefOrThrow(),
-                        }
-                )
-                .ToList();
         }
 
         public bool IgnoreLearningRate
@@ -89,7 +76,6 @@ namespace AutoPriorities.Core
             Scribe_Values.Look(ref _ignoreOppositionToWork, "AutoPriorities_IgnoreOppositionToWork");
             Scribe_Values.Look(ref _ignoreWorkSpeed, "AutoPriorities_IgnoreWorkSpeed");
             Scribe_Values.Look(ref _runOnTimer, "runOncePerDay");
-            Scribe_Collections.Look(ref _excludedPawns, "AutoPriorities_ExcludedPawns", LookMode.Deep);
 
             var dataStr = Convert.ToBase64String(PawnsDataXml ?? Array.Empty<byte>());
             Scribe_Values.Look(ref dataStr, "AutoPriorities_PawnsDataXml");
@@ -98,16 +84,17 @@ namespace AutoPriorities.Core
 
         public static MapSpecificData? GetForCurrentMap()
         {
-            var map = Find.CurrentMap;
-            if (map == null)
+            var currentMap = Find.CurrentMap;
+            if (currentMap == null)
             {
-                Log.Error("Called GetMapComponent on a null map");
+                Controller.logger?.Err("Called GetMapComponent on a null map");
                 return null;
             }
 
-            if (map.GetComponent<MapSpecificData>() == null) map.components.Add(new MapSpecificData(map));
+            if (Controller.DebugLogs)
+                Controller.logger?.Info("MapSpecificData retrieved");
 
-            return map.GetComponent<MapSpecificData>();
+            return currentMap.GetComponent<MapSpecificData>();
         }
     }
 }

@@ -26,24 +26,25 @@ namespace AutoPriorities
         {
             var pawn = pawnWrapper.GetPawnOrThrow();
 
-            var statDef = work.DefName switch
-            {
-                "Mining" => StatDefOf.MiningSpeed,
-                "PlantCutting" => StatDefOf.PlantHarvestYield,
-                "Growing" => StatDefOf.PlantWorkSpeed,
-                "Research" => StatDefOf.PlantWorkSpeed,
-                "Construction" => StatDefOf.ConstructSuccessChance,
-                "Handling" => StatDefOf.AnimalGatherSpeed,
-                "Cooking" => CookSpeed,
-                "Doctor" => StatDefOf.MedicalTendSpeed,
-                "Social" => StatDefOf.NegotiationAbility,
-                "Hauling" => StatDefOf.MoveSpeed,
-                "Cleaning" => StatDefOf.MoveSpeed,
-                "Hunting" => StatDefOf.HuntingStealth,
-                _ => StatDefOf.GeneralLaborSpeed,
-            };
+            var statDef =
+                work.DefName switch
+                {
+                    "Mining" => StatDefOf.MiningSpeed,
+                    "PlantCutting" => StatDefOf.PlantHarvestYield,
+                    "Growing" => StatDefOf.PlantWorkSpeed,
+                    "Research" => StatDefOf.PlantWorkSpeed,
+                    "Construction" => StatDefOf.ConstructSuccessChance,
+                    "Handling" => StatDefOf.AnimalGatherSpeed,
+                    "Cooking" => CookSpeed,
+                    "Doctor" => StatDefOf.MedicalTendSpeed,
+                    "Social" => StatDefOf.NegotiationAbility,
+                    "Hauling" => StatDefOf.MoveSpeed,
+                    "Cleaning" => StatDefOf.MoveSpeed,
+                    "Hunting" => StatDefOf.HuntingStealth,
+                    _ => StatDefOf.GeneralLaborSpeed,
+                };
 
-            if (_worldInfoRetriever.DebugLogs())
+            if (_worldInfoRetriever.AnnoyingDebugLogs())
             {
                 var postProcessStats = string.Join(", ", (statDef.postProcessStatFactors ?? new List<StatDef>()).Select(x => x.defName));
                 _logger.Info(

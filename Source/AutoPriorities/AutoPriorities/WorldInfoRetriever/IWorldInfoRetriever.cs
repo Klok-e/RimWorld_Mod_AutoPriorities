@@ -18,6 +18,7 @@ namespace AutoPriorities.WorldInfoRetriever
         bool DebugSaveTablesAndPawns();
 
         bool DebugLogs();
+        bool AnnoyingDebugLogs();
 
         float OptimizationFeasibleSolutionTimeoutSeconds();
 

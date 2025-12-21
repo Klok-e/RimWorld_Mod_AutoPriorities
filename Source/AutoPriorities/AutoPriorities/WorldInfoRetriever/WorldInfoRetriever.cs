@@ -56,6 +56,11 @@ namespace AutoPriorities.WorldInfoRetriever
             return Controller.DebugLogs;
         }
 
+        public bool AnnoyingDebugLogs()
+        {
+            return Controller.AnnonyingDebugLogs;
+        }
+
         public float OptimizationFeasibleSolutionTimeoutSeconds()
         {
             return Controller.OptimizationFeasibleSolutionTimeoutSeconds;

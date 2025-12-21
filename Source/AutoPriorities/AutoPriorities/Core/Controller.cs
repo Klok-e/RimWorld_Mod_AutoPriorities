@@ -51,6 +51,8 @@ namespace AutoPriorities.Core
 
         public static AutoPrioritiesDialog? Dialog { get; private set; }
 
+        public static MapSpecificData? AbandonedMapMapSpecificData { get; set; }
+
         public static event Action? SetPrioritiesOnTimerCallback;
 
         public override void Initialize()
@@ -147,7 +149,7 @@ namespace AutoPriorities.Core
 
         public static void SwitchMap()
         {
-            if (_pawnData == null)
+            if (_pawnData == null || Find.CurrentMap == null)
                 return;
 
             _pawnsDataBuilder?.Build(_pawnData);
