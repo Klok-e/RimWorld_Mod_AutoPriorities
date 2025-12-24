@@ -14,6 +14,8 @@ namespace AutoPriorities
 
         public bool IgnoreOppositionToWork { get; init; }
 
+        public bool IgnoreDownedStatus { get; init; }
+
         public bool IgnoreWorkSpeed { get; init; }
 
         public bool RunOnTimer { get; set; }

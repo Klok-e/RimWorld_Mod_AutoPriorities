@@ -33,8 +33,12 @@ namespace AutoPriorities.Ui
 
         public const string IgnoreOppositionToWork = "Ignore opposition to work";
 
+        public const string IgnoreDownedStatus = "Ignore downed status";
+
         public const string IgnoreOppositionToWorkTooltip =
-            "if true, pawns with ideoligions opposing a type of work, will get assigned that work type anyway.";
+            "if true, pawns with ideoligions opposing a type of work will get assigned that work type anyway.";
+
+        public const string IgnoreOppositionDownedStatusTooltip = "if true, downed pawns will be ignored.";
 
         public const string MinimumSkillLevel = "Minimum skill level";
 

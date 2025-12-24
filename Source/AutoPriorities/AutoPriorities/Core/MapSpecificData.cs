@@ -21,6 +21,7 @@ namespace AutoPriorities.Core
             Controller.AbandonedMapMapSpecificData = null;
             _ignoreLearningRate = copy._ignoreLearningRate;
             _ignoreOppositionToWork = copy._ignoreOppositionToWork;
+            IgnoreDownedStatus = copy.IgnoreDownedStatus;
             _ignoreWorkSpeed = copy._ignoreWorkSpeed;
             _importantWorkTypes = copy._importantWorkTypes;
             _minimumSkillLevel = copy._minimumSkillLevel;
@@ -53,6 +54,8 @@ namespace AutoPriorities.Core
             get => _ignoreOppositionToWork;
             set => _ignoreOppositionToWork = value;
         }
+
+        public bool IgnoreDownedStatus { get; set; }
 
         public bool IgnoreWorkSpeed
         {

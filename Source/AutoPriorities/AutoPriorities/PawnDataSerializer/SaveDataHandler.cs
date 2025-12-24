@@ -27,6 +27,7 @@ namespace AutoPriorities.PawnDataSerializer
                 IgnoreLearningRate = mapSpecificData.IgnoreLearningRate,
                 MinimumSkillLevel = mapSpecificData.MinimumSkillLevel,
                 IgnoreOppositionToWork = mapSpecificData.IgnoreOppositionToWork,
+                IgnoreDownedStatus = mapSpecificData.IgnoreDownedStatus,
                 IgnoreWorkSpeed = mapSpecificData.IgnoreWorkSpeed,
                 RunOnTimer = mapSpecificData.RunOnTimer,
             };
@@ -41,6 +42,7 @@ namespace AutoPriorities.PawnDataSerializer
             worldSpecificDataSaveTo.ExcludedPawns = request.ExcludedPawns.ToList();
             mapDataSaveTo.IgnoreLearningRate = request.IgnoreLearningRate;
             mapDataSaveTo.IgnoreWorkSpeed = request.IgnoreWorkSpeed;
+            mapDataSaveTo.IgnoreDownedStatus = request.IgnoreDownedStatus;
             mapDataSaveTo.RunOnTimer = request.RunOnTimer;
         }
     }

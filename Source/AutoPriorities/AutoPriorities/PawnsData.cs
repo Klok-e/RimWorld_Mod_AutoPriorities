@@ -47,6 +47,8 @@ namespace AutoPriorities
 
         public bool IgnoreOppositionToWork { get; set; }
 
+        public bool IgnoreDownedStatus { get; set; }
+
         public bool RunOnTimer { get; set; }
 
         public float MinimumSkillLevel { get; set; }
@@ -64,6 +66,7 @@ namespace AutoPriorities
                     AllPlayerPawns = AllPlayerPawns.ToList(),
                     IgnoreLearningRate = IgnoreLearningRate,
                     IgnoreOppositionToWork = IgnoreOppositionToWork,
+                    IgnoreDownedStatus = IgnoreDownedStatus,
                     MinimumSkillLevel = MinimumSkillLevel,
                     IgnoreWorkSpeed = IgnoreWorkSpeed,
                     RunOnTimer = RunOnTimer,
@@ -79,6 +82,7 @@ namespace AutoPriorities
             IgnoreLearningRate = data.IgnoreLearningRate;
             MinimumSkillLevel = data.MinimumSkillLevel;
             IgnoreOppositionToWork = data.IgnoreOppositionToWork;
+            IgnoreDownedStatus = data.IgnoreDownedStatus;
             IgnoreWorkSpeed = data.IgnoreWorkSpeed;
             RunOnTimer = data.RunOnTimer;
 
@@ -114,6 +118,7 @@ namespace AutoPriorities
                 IgnoreLearningRate = IgnoreLearningRate,
                 MinimumSkillLevel = MinimumSkillLevel,
                 IgnoreOppositionToWork = IgnoreOppositionToWork,
+                IgnoreDownedStatus = IgnoreDownedStatus,
                 IgnoreWorkSpeed = IgnoreWorkSpeed,
                 RunOnTimer = RunOnTimer,
             };
@@ -162,6 +167,7 @@ namespace AutoPriorities
                         try
                         {
                             if (!pawn.IsCapableOfWholeWorkType(work)
+                                || (pawn.IsIncapacitated() && !IgnoreDownedStatus)
                                 || ExcludedPawns.Contains(new ExcludedPawnEntry { WorkDef = work, Pawn = pawn }))
                             {
                                 continue;

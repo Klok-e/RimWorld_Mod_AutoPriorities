@@ -263,8 +263,12 @@ namespace AutoPriorities.Ui
                 new Rect(inRect.xMin, minFitnessRect.yMax + Consts.LabelMargin, inRect.width, Consts.ButtonHeight);
             DrawIgnoreOppositionToWorkCheckbox(checkIgnoreOppositionToWorkRect);
 
-            var checkIgnoreWorkSpeedRect =
+            var checkIgnoreDownedStatusRect =
                 new Rect(inRect.xMin, checkIgnoreOppositionToWorkRect.yMax + Consts.LabelMargin, inRect.width, Consts.ButtonHeight);
+            DrawIgnoreDownedStatusCheckbox(checkIgnoreDownedStatusRect);
+
+            var checkIgnoreWorkSpeedRect =
+                new Rect(inRect.xMin, checkIgnoreDownedStatusRect.yMax + Consts.LabelMargin, inRect.width, Consts.ButtonHeight);
             DrawIgnoreWorkSpeedCheckbox(checkIgnoreWorkSpeedRect);
 
             var checkRunOncePerDayRect =
@@ -319,6 +323,20 @@ namespace AutoPriorities.Ui
             DrawCheckbox(inRect, Consts.IgnoreOppositionToWork, Consts.IgnoreOppositionToWorkTooltip, ref pawnsDataIgnoreOppositionToWork);
 
             _pawnsData.IgnoreOppositionToWork = pawnsDataIgnoreOppositionToWork;
+        }
+
+        private void DrawIgnoreDownedStatusCheckbox(Rect inRect)
+        {
+            var pawnsDataIgnoreDownedStatusWork = _pawnsData.IgnoreDownedStatus;
+
+            DrawCheckbox(
+                inRect,
+                Consts.IgnoreDownedStatus,
+                Consts.IgnoreOppositionDownedStatusTooltip,
+                ref pawnsDataIgnoreDownedStatusWork
+            );
+
+            _pawnsData.IgnoreDownedStatus = pawnsDataIgnoreDownedStatusWork;
         }
 
         private void DrawIgnoreWorkSpeedCheckbox(Rect inRect)

@@ -17,6 +17,7 @@ namespace AutoPriorities.Wrappers
         bool IsCapableOfWholeWorkType(IWorkTypeWrapper work);
 
         bool IsOpposedToWorkType(IWorkTypeWrapper work);
+        bool IsIncapacitated();
 
         float AverageOfRelevantSkillsFor(IWorkTypeWrapper work);
 

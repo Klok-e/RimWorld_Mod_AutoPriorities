@@ -36,6 +36,11 @@ namespace AutoPriorities.Wrappers
             return GetPawnOrThrow().Ideo?.IsWorkTypeConsideredDangerous(work.WorkTypeDef) == true;
         }
 
+        public bool IsIncapacitated()
+        {
+            return GetPawnOrThrow().Downed;
+        }
+
         public float AverageOfRelevantSkillsFor(IWorkTypeWrapper work)
         {
             return GetPawnOrThrow().skills.AverageOfRelevantSkillsFor(work.WorkTypeDef);
@@ -43,7 +48,8 @@ namespace AutoPriorities.Wrappers
 
         public float MaxLearningRateFactor(IWorkTypeWrapper work)
         {
-            var factor = (work.WorkTypeDef ?? throw new NullReferenceException(nameof(work.WorkTypeDef))).relevantSkills
+            var factor =
+                (work.WorkTypeDef ?? throw new NullReferenceException(nameof(work.WorkTypeDef))).relevantSkills
                 .Select(GetPawnOrThrow().skills.GetSkill)
                 .Select(x => x.LearnRateFactor())
                 .DefaultIfEmpty(1)

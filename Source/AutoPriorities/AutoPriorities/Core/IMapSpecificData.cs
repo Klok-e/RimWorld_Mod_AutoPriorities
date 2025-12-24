@@ -10,6 +10,7 @@ namespace AutoPriorities.Core
 
         public bool IgnoreLearningRate { get; set; }
         bool IgnoreOppositionToWork { get; set; }
+        bool IgnoreDownedStatus { get; set; }
         bool IgnoreWorkSpeed { get; set; }
         bool RunOnTimer { get; set; }
     }
