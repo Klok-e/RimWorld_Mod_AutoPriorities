@@ -11,10 +11,30 @@ endif
 all: cleanup deploy
 
 copy-assemblies:
-	./copy_assemblies.sh
+	echo copying Rimworld assemblies...
+	cp -r $(RIMWORLD_ASSEMBLIES_DIR) ./Source/RimManaged
 
-build: copy-assemblies
-	./build.sh
+build: cleanup copy-assemblies
+	set -e;
+
+	echo selected $(BUILD_CONFIGURATION) configuration
+	echo compiling...
+	msbuild Source/AutoPriorities/AutoPriorities.sln -verbosity:quiet -p:Configuration=$(BUILD_CONFIGURATION)
+
+	# copy assemblies to correct places
+	mkdir -p "$(RIMWORLD_VERSION)/Assemblies/"
+	cp -Rf "Source/AutoPriorities/AutoPriorities/bin/$(BUILD_CONFIGURATION)/." "$(RIMWORLD_VERSION)/Assemblies/"
+
+	mkdir -p "ConditionalAssemblies/$(RIMWORLD_VERSION)/"
+	cp -Rf "Source/AutoPriorities/FluffyWorktabPatch/bin/$(BUILD_CONFIGURATION)/." "ConditionalAssemblies/$(RIMWORLD_VERSION)/"
+	cp -Rf "Source/AutoPriorities/BetterPawnControlPatch/bin/$(BUILD_CONFIGURATION)/." "ConditionalAssemblies/$(RIMWORLD_VERSION)/"
+
+	mkdir ./Build
+	echo building mod to $(realpath ./Build)
+	for dir in 1.* Textures About LICENSE ConditionalAssemblies; do \
+		cp -r ./$$dir "./Build/$$dir"; \
+	done
+	echo build complete.
 
 cleanup:
 	echo 'removing old build...'

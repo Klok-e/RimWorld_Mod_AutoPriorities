@@ -6,6 +6,7 @@ namespace AutoPriorities.Core
 {
     public class MapSpecificData : MapComponent, IMapSpecificData
     {
+        private bool _ignoreDownedStatus;
         private bool _ignoreLearningRate;
         private bool _ignoreOppositionToWork;
         private bool _ignoreWorkSpeed;
@@ -21,7 +22,7 @@ namespace AutoPriorities.Core
             Controller.AbandonedMapMapSpecificData = null;
             _ignoreLearningRate = copy._ignoreLearningRate;
             _ignoreOppositionToWork = copy._ignoreOppositionToWork;
-            IgnoreDownedStatus = copy.IgnoreDownedStatus;
+            _ignoreDownedStatus = copy._ignoreDownedStatus;
             _ignoreWorkSpeed = copy._ignoreWorkSpeed;
             _importantWorkTypes = copy._importantWorkTypes;
             _minimumSkillLevel = copy._minimumSkillLevel;
@@ -55,7 +56,11 @@ namespace AutoPriorities.Core
             set => _ignoreOppositionToWork = value;
         }
 
-        public bool IgnoreDownedStatus { get; set; }
+        public bool IgnoreDownedStatus
+        {
+            get => _ignoreDownedStatus;
+            set => _ignoreDownedStatus = value;
+        }
 
         public bool IgnoreWorkSpeed
         {
@@ -77,6 +82,7 @@ namespace AutoPriorities.Core
             Scribe_Values.Look(ref _minimumSkillLevel, "AutoPriorities_MinimumSkillLevel");
             Scribe_Values.Look(ref _ignoreLearningRate, "AutoPriorities_IgnoreLearningRate");
             Scribe_Values.Look(ref _ignoreOppositionToWork, "AutoPriorities_IgnoreOppositionToWork");
+            Scribe_Values.Look(ref _ignoreDownedStatus, "AutoPriorities_IgnoreDownedStatus");
             Scribe_Values.Look(ref _ignoreWorkSpeed, "AutoPriorities_IgnoreWorkSpeed");
             Scribe_Values.Look(ref _runOnTimer, "runOncePerDay");
 

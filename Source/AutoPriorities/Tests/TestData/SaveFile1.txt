@@ -338,5 +338,4 @@
       <priority>3</priority>
     </Tupl>
   </data>
-  <excludedPawns />
 </Ser>

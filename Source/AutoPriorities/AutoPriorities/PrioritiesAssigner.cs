@@ -75,12 +75,13 @@ namespace AutoPriorities
                     _pawnsData,
                     pawnJobsCached,
                     _pawnsData.WorkTypesNotRequiringSkills.Subtract(importantWorks),
-                    work => _pawnsData.SortedPawnFitnessForEveryWork[work]
-                        .Select(
-                            p => new PawnFitnessData { Pawn = p.Pawn, Fitness = 1f / (1 + pawnJobsCached[p.Pawn].Count), SkillLevel = 0 }
-                        )
-                        .OrderByDescending(p => p.Fitness)
-                        .ToList(),
+                    work =>
+                        _pawnsData.SortedPawnFitnessForEveryWork[work]
+                            .Select(p =>
+                                new PawnFitnessData { Pawn = p.Pawn, Fitness = 1f / (1 + pawnJobsCached[p.Pawn].Count), SkillLevel = 0 }
+                            )
+                            .OrderByDescending(p => p.Fitness)
+                            .ToList(),
                     priorityPercentCached
                 );
             }
@@ -95,15 +96,22 @@ namespace AutoPriorities
             SaveTablesAndPawnsIfDebug();
 
             var pawnsDataCopy = _pawnsData.ShallowCopy();
-            ThreadPool.QueueUserWorkItem(
-                _ =>
+            Action? safeOnFinished = null;
+            if (onFinished != null)
+                safeOnFinished = () => Controller.EnqueueDelayedAction(onFinished);
+
+            Action? safeOnSolverFailed = null;
+            if (onSolverFailed != null)
+                safeOnSolverFailed = () => Controller.EnqueueDelayedAction(onSolverFailed);
+
+            ThreadPool.QueueUserWorkItem(_ =>
                 {
                     try
                     {
-                        var assignPrioritiesAction = AssignPrioritiesByOptimization(pawnsDataCopy, onSolverFailed);
+                        var assignPrioritiesAction = AssignPrioritiesByOptimization(pawnsDataCopy, safeOnSolverFailed);
 
                         // so that it's called in the main thread
-                        if (assignPrioritiesAction != null) Controller.Instance?.delayedActionsQueue.Enqueue(assignPrioritiesAction);
+                        if (assignPrioritiesAction != null) Controller.EnqueueDelayedAction(assignPrioritiesAction);
                     }
                     catch (Exception e)
                     {
@@ -111,7 +119,7 @@ namespace AutoPriorities
                     }
                     finally
                     {
-                        onFinished?.Invoke();
+                        safeOnFinished?.Invoke();
                     }
                 }
             );
@@ -209,12 +217,13 @@ namespace AutoPriorities
                 FillListPriorityPercents(pawnsData, workType, priorityPercentCached);
                 if (priorityPercentCached.Count == 0) continue;
 
-                var groups = priorityPercentCached.Distinct(x => x.priority)
-                    .Select(a => a.percent)
-                    .IterPercents(pawnData.Count(pawnsData.CanPawnBeAssigned))
-                    .GroupBy(v => v.percentIndex)
-                    .Select(g => (priorityPercentCached[g.Key].priority, jobsToSet: g.Count()))
-                    .OrderBy(x => x.priority.v);
+                var groups =
+                    priorityPercentCached.Distinct(x => x.priority)
+                        .Select(a => a.percent)
+                        .IterPercents(pawnData.Count(pawnsData.CanPawnBeAssigned))
+                        .GroupBy(v => v.percentIndex)
+                        .Select(g => (priorityPercentCached[g.Key].priority, jobsToSet: g.Count()))
+                        .OrderBy(x => x.priority.v);
 
                 var sumJobsRemain = pawnData.Count;
                 foreach (var (priority, jobsToSet) in groups)
@@ -252,7 +261,6 @@ namespace AutoPriorities
             for (var workTableIndex = 0; workTableIndex < workTableEntries.Length; workTableIndex++)
             {
                 var maxJobs = workTableEntries[workTableIndex].JobCount.v;
-                if (maxJobs <= 0) continue;
 
                 foreach (var pawn in pawnsData.CurrentMapPlayerPawns)
                 {
@@ -266,7 +274,10 @@ namespace AutoPriorities
                         rowPawn[offset + workTableIndex] = 1.0f;
                     }
 
-                    model.AddMaxJobsConstraint(rowPawn, 0, maxJobs, workTableIndex);
+                    if (maxJobs <= 0)
+                        model.AddConstraint(rowPawn, 0, 0);
+                    else
+                        model.AddMaxJobsConstraint(rowPawn, 0, maxJobs, workTableIndex);
                 }
             }
 
@@ -294,19 +305,20 @@ namespace AutoPriorities
                 return null;
             }
 
-            var algorithm = new GeneticAlgorithm(
-                _logger,
-                _worldInfoRetriever,
-                solution,
-                workTableEntries.Length,
-                model,
-                populationSize: _worldInfoRetriever.OptimizationPopulationSize(),
-                secondsTimeout: _worldInfoRetriever.OptimizationFeasibleSolutionTimeoutSeconds(),
-                secondsImproveSolution: _worldInfoRetriever.OptimizationImprovementSeconds(),
-                mutationRate: _worldInfoRetriever.OptimizationMutationRate(),
-                jobsPerPawnWeight: _worldInfoRetriever.OptimizationJobsPerPawnWeight(),
-                infeasiblePenalty: 1000000.0f
-            );
+            var algorithm =
+                new GeneticAlgorithm(
+                    _logger,
+                    _worldInfoRetriever,
+                    solution,
+                    workTableEntries.Length,
+                    model,
+                    populationSize: _worldInfoRetriever.OptimizationPopulationSize(),
+                    secondsTimeout: _worldInfoRetriever.OptimizationFeasibleSolutionTimeoutSeconds(),
+                    secondsImproveSolution: _worldInfoRetriever.OptimizationImprovementSeconds(),
+                    mutationRate: _worldInfoRetriever.OptimizationMutationRate(),
+                    jobsPerPawnWeight: _worldInfoRetriever.OptimizationJobsPerPawnWeight(),
+                    infeasiblePenalty: 1000000.0f
+                );
 
             if (!algorithm.Run(out var floatSolution) || floatSolution == null)
             {
@@ -415,7 +427,7 @@ namespace AutoPriorities
 #endif
 
                         if (pawnJobs[pawn].ContainsKey(work)
-                            || jobsPawnHasOnThisPriority >= maxJobs.v
+                            || (maxJobs.v > 0 && jobsPawnHasOnThisPriority >= maxJobs.v)
                             || !pawnsData.CanPawnBeAssigned(pawnFitness))
                             continue;
 
@@ -450,9 +462,8 @@ namespace AutoPriorities
         {
             priorities.Clear();
             priorities.AddRange(
-                pawnsData.WorkTables.Select(
-                        tup => (priority: tup.Priority, jobCount: tup.JobCount,
-                            pawnsData.PercentValue(tup.WorkTypes[work], work, tup.Priority))
+                pawnsData.WorkTables.Select(tup =>
+                        (priority: tup.Priority, jobCount: tup.JobCount, pawnsData.PercentValue(tup.WorkTypes[work], work, tup.Priority))
                     )
                     .Distinct(t => t.priority)
                     .Where(t => t.priority.v > 0)
@@ -467,15 +478,15 @@ namespace AutoPriorities
             File.WriteAllBytes(
                 "PrioritiesSmarterWorkTables.xml",
                 new ArraySimpleData<WorkTablesSimpleData>(
-                    _pawnsData.WorkTables.Select(
-                            x => new WorkTablesSimpleData
+                    _pawnsData.WorkTables.Select(x =>
+                            new WorkTablesSimpleData
                             {
                                 priority = x.Priority,
                                 jobCount = x.JobCount,
-                                workTypes = x.WorkTypes.Select(
-                                        y => new WorkTypesSimpleData { key = new WorkTypeSimpleData(y.Key), value = y.Value }
-                                    )
-                                    .ToList(),
+                                workTypes =
+                                    x.WorkTypes.Select(y => new WorkTypesSimpleData { key = new WorkTypeSimpleData(y.Key), value = y.Value }
+                                        )
+                                        .ToList(),
                             }
                         )
                         .ToList()
@@ -489,8 +500,8 @@ namespace AutoPriorities
             File.WriteAllBytes(
                 "PrioritiesSmarterAllPlayerPawns.xml",
                 new ArraySimpleData<PawnSimpleData>(
-                    _pawnsData.CurrentMapPlayerPawns.Select(
-                            y => new PawnSimpleData(y)
+                    _pawnsData.CurrentMapPlayerPawns.Select(y =>
+                            new PawnSimpleData(y)
                             {
                                 pawnWorkTypeData = _pawnsData.WorkTypes.Select(x => new PawnWorkTypeData(y, x)).ToList(),
                             }

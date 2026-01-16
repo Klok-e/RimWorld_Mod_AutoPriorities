@@ -8,176 +8,101 @@ using AutoPriorities.PawnDataSerializer.Exporter;
 using AutoPriorities.Ui;
 using AutoPriorities.Utils.Extensions;
 using AutoPriorities.WorldInfoRetriever;
-using HugsLib;
-using HugsLib.Settings;
+using HarmonyLib;
 using Verse;
 using ILogger = AutoPriorities.APLogger.ILogger;
 using Logger = AutoPriorities.APLogger.Logger;
 
 namespace AutoPriorities.Core
 {
-    public class Controller : ModBase
+    [StaticConstructorOnStartup]
+    public static class Controller
     {
         public static ILogger? logger;
         private static PawnsData? _pawnData;
         private static PawnsDataBuilder? _pawnsDataBuilder;
+        private static Harmony? _harmony;
+        private static ModContentPack? _contentPack;
+        private static int _nextSetPrioritiesTick = -1;
 
-        public readonly ConcurrentQueue<Action> delayedActionsQueue = new();
-        public static Controller? Instance { get; private set; }
+        private static readonly ConcurrentQueue<Action> DelayedActionsQueue = new();
 
-        public static SettingHandle<int>? MaxPriority { get; private set; }
+        static Controller()
+        {
+            var mod = LoadedModManager.GetMod<AutoPrioritiesMod>();
+            var contentPack = mod?.Content;
+            if (contentPack == null)
+            {
+                Log.Warning("AutoPriorities: ModContentPack not found; skipping initialization.");
+                return;
+            }
 
-        public static SettingHandle<float>? OptimizationFeasibleSolutionTimeoutSeconds { get; private set; }
+            Initialize(contentPack);
+        }
 
-        public static SettingHandle<float>? OptimizationImprovementSeconds { get; private set; }
-
-        public static SettingHandle<float>? OptimizationMutationRate { get; private set; }
-
-        public static SettingHandle<int>? OptimizationPopulationSize { get; private set; }
-
-        public static SettingHandle<bool>? UseOldAssignmentAlgorithm { get; private set; }
-
-        public static SettingHandle<bool>? DebugSaveTablesAndPawns { get; private set; }
-
-        public static SettingHandle<bool>? DebugLogs { get; private set; }
-
-        public static SettingHandle<bool>? AnnonyingDebugLogs { get; private set; }
-
-        public static SettingHandle<float>? OptimizationJobsPerPawnWeight { get; private set; }
-
-        public static SettingHandle<int>? TimerTicks { get; private set; }
+        public static AutoPrioritiesDialog? Dialog { get; private set; }
+        public static MapSpecificData? AbandonedMapMapSpecificData { get; set; }
 
         public static int? MaxPriorityAlien { get; set; }
 
-        public static AutoPrioritiesDialog? Dialog { get; private set; }
+        public static int MaxPriority => AutoPrioritiesMod.Settings?.maxPriority ?? 4;
+        public static bool UseOldAssignmentAlgorithm => AutoPrioritiesMod.Settings?.useOldAssignmentAlgorithm ?? false;
+        public static bool DebugSaveTablesAndPawns => AutoPrioritiesMod.Settings?.debugSaveTablesAndPawns ?? false;
+        public static bool DebugLogs => AutoPrioritiesMod.Settings?.debugLogs ?? false;
+        public static bool AnnonyingDebugLogs => AutoPrioritiesMod.Settings?.annonyingDebugLogs ?? false;
 
-        public static MapSpecificData? AbandonedMapMapSpecificData { get; set; }
+        public static float OptimizationFeasibleSolutionTimeoutSeconds =>
+            AutoPrioritiesMod.Settings?.optimizationFeasibleSolutionTimeoutSeconds ?? 10f;
 
+        public static float OptimizationImprovementSeconds => AutoPrioritiesMod.Settings?.optimizationImprovementSeconds ?? 1f;
+        public static float OptimizationMutationRate => AutoPrioritiesMod.Settings?.optimizationMutationRate ?? 0.8f;
+        public static int OptimizationPopulationSize => AutoPrioritiesMod.Settings?.optimizationPopulationSize ?? 256;
+        public static float OptimizationJobsPerPawnWeight => AutoPrioritiesMod.Settings?.optimizationJobsPerPawnWeight ?? 1f;
+        public static int TimerTicks => AutoPrioritiesMod.Settings?.timerTicks ?? 60000;
         public static event Action? SetPrioritiesOnTimerCallback;
 
-        public override void Initialize()
+        public static void Initialize(ModContentPack contentPack)
         {
-            base.Initialize();
-            logger = new Logger(Logger);
-            Instance = this;
+            if (_harmony != null)
+                return;
+
+            _contentPack = contentPack;
+            logger = new Logger();
+
+            _harmony = new Harmony("autoPriorities");
 
             PatchMod("fluffy.worktab", "FluffyWorktabPatch.dll");
             PatchMod("arof.fluffy.worktab", "FluffyWorktabPatch.dll");
             PatchMod("arof.fluffy.worktab.continued", "FluffyWorktabPatch.dll");
             PatchMod("voult.betterpawncontrol", "BetterPawnControlPatch.dll");
 
-            HarmonyInst.PatchAll();
+            _harmony.PatchAll();
         }
 
-        public override void MapLoaded(Map map)
+        public static void OnGameLoaded()
         {
-            base.WorldLoaded();
-            Dialog = CreateDialog();
+            LongEventHandler.ExecuteWhenFinished(() =>
+                {
+                    if (Find.CurrentMap == null)
+                        return;
 
-            SetupPrioritiesOnTimerIfNeeded();
+                    if (Dialog == null)
+                        Dialog = CreateDialog();
+
+                    SetupPrioritiesOnTimerIfNeeded();
+                }
+            );
         }
 
-        public override void DefsLoaded()
+        public static void GameTick()
         {
-            base.DefsLoaded();
-            MaxPriority = Settings.GetHandle("maxPriority", "Max priority", "Sets max priority", 4);
-            UseOldAssignmentAlgorithm =
-                Settings.GetHandle(
-                    "useOldAssignmentAlgorithm",
-                    "Use old assignment algorithm",
-                    "Use the old greedy assignment algorithm; the new algorithm represents "
-                    + "assignment problem as a linear programming optimization problem and uses an LP solver to get an optimal solution.",
-                    false
-                );
-
-            DebugSaveTablesAndPawns =
-                Settings.GetHandle("debugSaveTablesAndPawns", "Debug save tables and pawns", "Debug save tables and pawns", false);
-            DebugLogs = Settings.GetHandle("debugLogs", "Debug logs", "Debug logs", false);
-            AnnonyingDebugLogs = Settings.GetHandle("annonyingDebugLogs", "Annoying debug logs", "Annoying debug logs", false);
-            OptimizationFeasibleSolutionTimeoutSeconds =
-                Settings.GetHandle(
-                    "optimizationFeasibleSolutionTimeoutSeconds",
-                    "Optimization feasible solution timeout",
-                    "For how long to wait before abandoning finding a solution which satisfies all restrictions (random search).",
-                    10f,
-                    x => float.TryParse(x, out var result) && result is >= 0f and <= 120
-                );
-            OptimizationImprovementSeconds =
-                Settings.GetHandle(
-                    "optimizationImprovementSeconds",
-                    "Optimization improvement seconds",
-                    "For how long to try to optimize the solution after finding a solution which satisfies all restrictions. "
-                    + "Increase to increase likelihood of an optimal or a more consistent solution.",
-                    1f,
-                    x => float.TryParse(x, out var result) && result is >= 0f and <= 60
-                );
-            OptimizationMutationRate =
-                Settings.GetHandle(
-                    "optimizationMutationRate",
-                    "Optimization mutation rate",
-                    "The rate at which mutations occur during the optimization process. Parameter of random search.",
-                    0.8f,
-                    x => float.TryParse(x, out var result) && result is >= 0f and <= 1f
-                );
-            OptimizationPopulationSize =
-                Settings.GetHandle(
-                    "optimizationPopulationSize",
-                    "Optimization population size",
-                    "The population size used in the optimization algorithm. Reduce to reduce memory footprint.",
-                    256,
-                    x => int.TryParse(x, out var result) && result is >= 2 and <= 4096
-                );
-            OptimizationJobsPerPawnWeight =
-                Settings.GetHandle(
-                    "optimizationJobsPerPawnWeight",
-                    "Optimization jobs per pawn weight",
-                    "Controls spread of jobs over multiple pawns. Applies only for variables which weren't found with a continuous LP solver. Very minor impact.",
-                    1f,
-                    x => float.TryParse(x, out var result) && result >= 0
-                );
-
-            TimerTicks =
-                Settings.GetHandle(
-                    "timerTicks",
-                    "Timer ticks",
-                    "Used in a timer for setting priorities periodically. Default - 24 hours (60000 ticks).",
-                    60000,
-                    x => int.TryParse(x, out var result) && result > 0
-                );
-            TimerTicks.ValueChanged += _ => { SetupPrioritiesOnTimerIfNeeded(); };
+            if (_nextSetPrioritiesTick > 0 && Find.TickManager.TicksGame >= _nextSetPrioritiesTick)
+                SetPriorities();
         }
 
-        public static void SwitchMap()
+        public static void ProcessDelayedActions()
         {
-            if (_pawnData == null || Find.CurrentMap == null)
-                return;
-
-            _pawnsDataBuilder?.Build(_pawnData);
-
-            SetupPrioritiesOnTimerIfNeeded();
-        }
-
-        public static void RebuildPawns()
-        {
-            _pawnData?.Rebuild();
-        }
-
-        public static void SetupPrioritiesOnTimerIfNeeded()
-        {
-            HugsLibController.Instance.TickDelayScheduler.TryUnscheduleCallback(SetPriorities);
-
-            if (_pawnData?.RunOnTimer != true)
-                return;
-
-            if (DebugLogs)
-                logger?.Info($"Set up set priorities to run every {TimerTicks} ticks");
-
-            HugsLibController.Instance.TickDelayScheduler.ScheduleCallback(SetPriorities, TimerTicks);
-        }
-
-        public override void Update()
-        {
-            while (!delayedActionsQueue.IsEmpty && delayedActionsQueue.TryDequeue(out var action))
+            while (DelayedActionsQueue.TryDequeue(out var action))
                 try
                 {
                     action();
@@ -188,26 +113,91 @@ namespace AutoPriorities.Core
                 }
         }
 
+        public static void EnqueueDelayedAction(Action action)
+        {
+            DelayedActionsQueue.Enqueue(action);
+        }
+
+        public static void SwitchMap()
+        {
+            if (Find.CurrentMap == null)
+                return;
+
+            LongEventHandler.ExecuteWhenFinished(() =>
+                {
+                    if (Find.CurrentMap == null)
+                        return;
+
+                    if (_pawnData == null || _pawnsDataBuilder == null)
+                        Dialog = CreateDialog();
+                    else
+                        _pawnsDataBuilder.Build(_pawnData);
+
+                    SetupPrioritiesOnTimerIfNeeded();
+                }
+            );
+        }
+
+        public static void RebuildPawns()
+        {
+            _pawnData?.Rebuild();
+        }
+
+        public static void SetupPrioritiesOnTimerIfNeeded()
+        {
+            _nextSetPrioritiesTick = -1;
+
+            if (_pawnData?.RunOnTimer != true)
+                return;
+
+            if (Find.TickManager == null)
+                return;
+
+            if (DebugLogs)
+                logger?.Info($"Set up set priorities to run every {TimerTicks} ticks");
+
+            var timerTicks = TimerTicks;
+            if (timerTicks <= 0)
+                return;
+
+            _nextSetPrioritiesTick = Find.TickManager.TicksGame + timerTicks;
+        }
+
         private static void SetPriorities()
         {
             if (DebugLogs)
                 logger?.Info("Auto running priorities on timer...");
 
-            if (_pawnData?.RunOnTimer != true) return;
+            if (_pawnData?.RunOnTimer != true)
+                return;
+
+            if (Find.TickManager == null)
+                return;
 
             Dialog?.RunSetPriorities(() => SetPrioritiesOnTimerCallback?.Invoke());
-            HugsLibController.Instance.TickDelayScheduler.ScheduleCallback(SetPriorities, TimerTicks);
+
+            var timerTicks = TimerTicks;
+            if (timerTicks <= 0)
+            {
+                _nextSetPrioritiesTick = -1;
+                return;
+            }
+
+            _nextSetPrioritiesTick = Find.TickManager.TicksGame + timerTicks;
         }
 
-        private void PatchMod(string packageId, string patchName)
+        private static void PatchMod(string packageId, string patchName)
         {
             if (!LoadedModManager.RunningModsListForReading.Exists(m => m.PackageId == packageId))
                 return;
 
+            if (_contentPack == null || _harmony == null)
+                return;
+
             logger?.Info($"Patching for: {packageId}");
 
-            var asm = Assembly.LoadFile(Path.Combine(ModContentPack.RootDir, Path.Combine("ConditionalAssemblies/1.6/", patchName)));
-            HarmonyInst.PatchAll(asm);
+            var asm = Assembly.LoadFile(Path.Combine(_contentPack.RootDir, Path.Combine("ConditionalAssemblies/1.6/", patchName)));
+            _harmony.PatchAll(asm);
 
             var methods = asm.GetMethodsWithHelpAttribute<PatchInitializeAttribute>();
             foreach (var method in methods)

@@ -41,6 +41,7 @@ namespace AutoPriorities.PawnDataSerializer
             mapDataSaveTo.MinimumSkillLevel = request.MinimumSkillLevel;
             worldSpecificDataSaveTo.ExcludedPawns = request.ExcludedPawns.ToList();
             mapDataSaveTo.IgnoreLearningRate = request.IgnoreLearningRate;
+            mapDataSaveTo.IgnoreOppositionToWork = request.IgnoreOppositionToWork;
             mapDataSaveTo.IgnoreWorkSpeed = request.IgnoreWorkSpeed;
             mapDataSaveTo.IgnoreDownedStatus = request.IgnoreDownedStatus;
             mapDataSaveTo.RunOnTimer = request.RunOnTimer;
