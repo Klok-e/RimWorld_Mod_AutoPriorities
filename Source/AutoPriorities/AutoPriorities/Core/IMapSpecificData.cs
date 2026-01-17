@@ -13,5 +13,6 @@ namespace AutoPriorities.Core
         bool IgnoreDownedStatus { get; set; }
         bool IgnoreWorkSpeed { get; set; }
         bool RunOnTimer { get; set; }
+        bool HasOpenedDialogOnce { get; set; }
     }
 }

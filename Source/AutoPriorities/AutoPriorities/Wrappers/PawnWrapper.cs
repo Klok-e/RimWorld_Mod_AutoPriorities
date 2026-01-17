@@ -58,6 +58,15 @@ namespace AutoPriorities.Wrappers
             return factor;
         }
 
+        public int WorkSettingsGetPriority(IWorkTypeWrapper work)
+        {
+            var pawn = GetPawnOrThrow();
+            if (pawn.workSettings is not { EverWork: true })
+                return 0;
+
+            return pawn.workSettings.GetPriority(work.GetWorkTypeDefOrThrow());
+        }
+
         public void WorkSettingsSetPriority(IWorkTypeWrapper work, int priorityV)
         {
             GetPawnOrThrow()

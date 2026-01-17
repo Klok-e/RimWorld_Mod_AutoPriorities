@@ -23,6 +23,8 @@ namespace AutoPriorities.Wrappers
 
         float MaxLearningRateFactor(IWorkTypeWrapper work);
 
+        int WorkSettingsGetPriority(IWorkTypeWrapper work);
+
         void WorkSettingsSetPriority(IWorkTypeWrapper work, int priorityV);
     }
 }

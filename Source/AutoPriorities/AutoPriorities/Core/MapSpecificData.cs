@@ -6,12 +6,13 @@ namespace AutoPriorities.Core
 {
     public class MapSpecificData : MapComponent, IMapSpecificData
     {
+        private bool _hasOpenedDialogOnce;
         private bool _ignoreDownedStatus;
         private bool _ignoreLearningRate;
         private bool _ignoreOppositionToWork;
         private bool _ignoreWorkSpeed;
         private List<string>? _importantWorkTypes = new() { "Firefighter", "Patient", "PatientBedRest", "BasicWorker" };
-        private float _minimumSkillLevel;
+        private float _minimumSkillLevel = 3;
         private bool _runOnTimer;
 
         public MapSpecificData(Map map) : base(map)
@@ -24,6 +25,7 @@ namespace AutoPriorities.Core
             _ignoreOppositionToWork = copy._ignoreOppositionToWork;
             _ignoreDownedStatus = copy._ignoreDownedStatus;
             _ignoreWorkSpeed = copy._ignoreWorkSpeed;
+            _hasOpenedDialogOnce = copy._hasOpenedDialogOnce;
             _importantWorkTypes = copy._importantWorkTypes;
             _minimumSkillLevel = copy._minimumSkillLevel;
             _runOnTimer = copy._runOnTimer;
@@ -74,6 +76,12 @@ namespace AutoPriorities.Core
             set => _runOnTimer = value;
         }
 
+        public bool HasOpenedDialogOnce
+        {
+            get => _hasOpenedDialogOnce;
+            set => _hasOpenedDialogOnce = value;
+        }
+
         public override void ExposeData()
         {
             base.ExposeData();
@@ -85,6 +93,7 @@ namespace AutoPriorities.Core
             Scribe_Values.Look(ref _ignoreDownedStatus, "AutoPriorities_IgnoreDownedStatus");
             Scribe_Values.Look(ref _ignoreWorkSpeed, "AutoPriorities_IgnoreWorkSpeed");
             Scribe_Values.Look(ref _runOnTimer, "runOncePerDay");
+            Scribe_Values.Look(ref _hasOpenedDialogOnce, "AutoPriorities_HasOpenedDialogOnce");
 
             var dataStr = Convert.ToBase64String(PawnsDataXml ?? Array.Empty<byte>());
             Scribe_Values.Look(ref dataStr, "AutoPriorities_PawnsDataXml");

@@ -37,8 +37,9 @@ Note: projects reference RimWorld assemblies via `../..//RimManaged/`. Ensure `R
 ## Agent-Specific Instructions
 
 - Use JetBrains MCP commands (e.g., Rider MCP) when available for file access, edits, search, and inspections.
+- Use MCP edit tools for file changes whenever possible.
 - Rider MCP `projectPath` is the C# project root (`.../Source/AutoPriorities`), not the repo root (
   `.../RimWorld_Mod_AutoPriorities`). Use MCP only under the project root; use shell for repo-root files like `About/`.
-- For `mcp__rider__get_file_text_by_path`, omit `truncateMode` unless needed.
+- For `mcp__rider__get_file_text_by_path` `truncateMode` valid values are: `START`, `MIDDLE`, `END`, `NONE`.
 - For code changes: only collect IDE-reported problems via MCP inspections after you edit a file.
 - After changes: always build the project, then resolve warnings and errors in that order before finishing.

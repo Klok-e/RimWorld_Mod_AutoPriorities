@@ -26,6 +26,7 @@ namespace AutoPriorities.Ui
         public const string LoadingOptimizing = "Optimizing";
         public const string LoadingDot = ".";
         public const string OptimizationFailedMessage = "Set priorities failed to find a solution which satisfies all requirements";
+        public const string SeedFromWorkTabMessage = "Auto Priorities seeded from Work tab";
 
         public const string IgnoreLearningRate = "Ignore learning rate";
 
@@ -54,6 +55,7 @@ namespace AutoPriorities.Ui
             "Run once every N ticks. Default is 60000 - 24 hours. Interval can be changed in the mod settings.";
 
         public const string Misc = "Misc";
+        public const string SeedFromWorkTabLabel = "Seed from Work tab";
         public const string DeleteLabel = "Delete";
         public const string ExportLabel = "Export";
         public const string ImportLabel = "Import";

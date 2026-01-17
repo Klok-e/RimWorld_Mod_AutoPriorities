@@ -127,7 +127,10 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
         {
             var path = _saveFilePather.FullPath(name);
             if (!File.Exists(path))
+            {
                 _logger.Warn("Tried to rename a nonexistent file.");
+                return;
+            }
 
             File.Move(path, _saveFilePather.FullPath(newName));
             RecacheSaves();
@@ -148,8 +151,7 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
             var number =
                 _savesCached.Select(savedPawnDataReference => Regex.Match(savedPawnDataReference.FileName, @"^([\w]+?)([\d]*)$"))
                     .Where(match => match.Success)
-                    .Select(
-                        match =>
+                    .Select(match =>
                         {
                             var s = match.Groups[2].ToString();
 #if DEBUG
@@ -173,7 +175,11 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
         {
             var path = _saveFilePather.FullPath(name);
             if (!File.Exists(path))
+            {
                 _logger.Warn("Tried to delete a nonexistent file.");
+                return;
+            }
+
             File.Delete(path);
             RecacheSaves();
         }

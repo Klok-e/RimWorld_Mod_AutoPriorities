@@ -19,22 +19,20 @@
         unskilled job first.
 
         NOTE:
-        1. Compatible with Fluffy's Worktab.
-        2. Mods that add job types are supported.
-        3. It is safe to add or remove from existing saves.
+        1. Mods that add job types are supported.
+        2. It is safe to add or remove from existing saves.
 
         GitHub: https://github.com/LokiVKlokeNaAndoke/RimWorld_Mod_AutoPriorities
     </description>
     <modDependencies>
         <li>
-            <packageId>UnlimitedHugs.HugsLib</packageId>
-            <displayName>HugsLib</displayName>
-            <downloadUrl>https://github.com/UnlimitedHugs/RimworldHugsLib/releases/latest</downloadUrl>
-            <steamWorkshopUrl>steam://url/CommunityFilePage/818773962</steamWorkshopUrl>
+            <packageId>brrainz.harmony</packageId>
+            <displayName>Harmony</displayName>
+            <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
         </li>
     </modDependencies>
     <loadAfter>
-        <li>UnlimitedHugs.HugsLib</li>
+        <li>brrainz.harmony</li>
         <li>fluffy.worktab</li>
         <li>arof.fluffy.worktab</li>
         <li>arof.fluffy.worktab.continued</li>

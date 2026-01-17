@@ -131,7 +131,11 @@ namespace AutoPriorities
                 return null;
 
             // Setup the solver decision variables (cost) for each (workType, pawn, priority + not_assigned)
-            var workTableEntries = pawnsData.WorkTables.Distinct(y => y.Priority.v).ToArray();
+            var workTableEntries = pawnsData.WorkTables.Distinct(y => y.Priority.v).Where(x => x.Priority.v > 0).ToArray();
+
+            if (workTableEntries.Length == 0)
+                return null;
+
             var assignmentOffsets = new Dictionary<(IWorkTypeWrapper, IPawnWrapper), int>();
 
             var variables = new List<float>();

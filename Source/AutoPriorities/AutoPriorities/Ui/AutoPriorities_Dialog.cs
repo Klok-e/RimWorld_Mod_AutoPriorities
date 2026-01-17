@@ -83,6 +83,9 @@ namespace AutoPriorities.Ui
         {
             base.PostOpen();
             _pawnsData.Rebuild();
+
+            SeedFromWorkTabIfFirstOpen();
+
             if (_openedOnce)
                 windowRect = _rect;
             else
@@ -274,6 +277,10 @@ namespace AutoPriorities.Ui
             var checkRunOncePerDayRect =
                 new Rect(inRect.xMin, checkIgnoreWorkSpeedRect.yMax + Consts.LabelMargin, inRect.width, Consts.ButtonHeight);
             DrawRunOncePerDayCheckbox(checkRunOncePerDayRect);
+
+            var seedFromWorkTabRect =
+                new Rect(inRect.xMin, checkRunOncePerDayRect.yMax + Consts.LabelMargin, inRect.width, Consts.ButtonHeight);
+            DrawSeedFromWorkTabButton(seedFromWorkTabRect);
         }
 
         private void DrawCheckbox(Rect inRect, string labelText, string tooltipText, ref bool value)
@@ -359,6 +366,26 @@ namespace AutoPriorities.Ui
             _pawnsData.RunOnTimer = runOnTimer;
 
             if (runOnTimer != oldValue) Controller.SetupPrioritiesOnTimerIfNeeded();
+        }
+
+        private void DrawSeedFromWorkTabButton(Rect inRect)
+        {
+            if (!Widgets.ButtonText(inRect, Consts.SeedFromWorkTabLabel))
+                return;
+
+            _pawnsData.Rebuild();
+            var seeded = _pawnsData.SeedFromWorkTab(true);
+            if (seeded)
+            {
+                _pawnsData.SaveState();
+                Messages.Message(Consts.SeedFromWorkTabMessage, MessageTypeDefOf.NeutralEvent, false);
+            }
+
+            var mapData = MapSpecificData.GetForCurrentMap();
+            if (mapData != null)
+                mapData.HasOpenedDialogOnce = true;
+
+            SoundDefOf.Click.PlayOneShotOnCamera();
         }
 
         private void DrawNumericInput(Rect inRect, string labelText, string tooltipText, ref float value, ref string? buffer)
@@ -642,6 +669,19 @@ namespace AutoPriorities.Ui
             _pawnExcludeScrollPosTop.x = _pawnExcludeScrollPosCenter.x;
 
             Text.Anchor = anchor;
+        }
+
+        private void SeedFromWorkTabIfFirstOpen()
+        {
+            var mapData = MapSpecificData.GetForCurrentMap();
+            if (mapData is not { HasOpenedDialogOnce: false }) return;
+
+            var seeded = _pawnsData.SeedFromWorkTabIfEmpty();
+            mapData.HasOpenedDialogOnce = true;
+            if (!seeded) return;
+
+            _pawnsData.SaveState();
+            Messages.Message(Consts.SeedFromWorkTabMessage, MessageTypeDefOf.NeutralEvent, false);
         }
 
         private enum SelectedTab

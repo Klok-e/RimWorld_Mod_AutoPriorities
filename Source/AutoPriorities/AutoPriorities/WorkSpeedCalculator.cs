@@ -32,7 +32,7 @@ namespace AutoPriorities
                     "Mining" => StatDefOf.MiningSpeed,
                     "PlantCutting" => StatDefOf.PlantHarvestYield,
                     "Growing" => StatDefOf.PlantWorkSpeed,
-                    "Research" => StatDefOf.PlantWorkSpeed,
+                    "Research" => StatDefOf.ResearchSpeed,
                     "Construction" => StatDefOf.ConstructSuccessChance,
                     "Handling" => StatDefOf.AnimalGatherSpeed,
                     "Cooking" => CookSpeed,

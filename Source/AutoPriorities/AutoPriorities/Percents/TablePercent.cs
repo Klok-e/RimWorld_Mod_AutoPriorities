@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace AutoPriorities.Percents
 {
@@ -57,9 +58,9 @@ namespace AutoPriorities.Percents
 
         public override string ToString()
         {
-            return $"{nameof(variant)}: {variant}, "
-                   + $"{nameof(PercentValue)}: {PercentValue}, "
-                   + $"{nameof(NumberCount)}: {NumberCount}";
+            var percent = variant == PercentVariant.Percent ? percentValue.ToString(CultureInfo.InvariantCulture) : "n/a";
+            var number = variant == PercentVariant.Number ? numberCount.ToString() : "n/a";
+            return $"{nameof(variant)}: {variant}, " + $"{nameof(PercentValue)}: {percent}, " + $"{nameof(NumberCount)}: {number}";
         }
     }
 }

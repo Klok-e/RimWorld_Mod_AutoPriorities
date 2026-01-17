@@ -217,6 +217,93 @@ namespace AutoPriorities
             }
         }
 
+        public bool SeedFromWorkTab(bool force)
+        {
+            if (!force && WorkTables.Count != 0)
+                return false;
+
+            if (CurrentMapPlayerPawns.Count == 0 || WorkTypes.Count == 0)
+                return false;
+
+            var workTypes = WorkTypes.ToList();
+            var workTables = new List<WorkTableEntry>();
+
+            var maxAssignedPriority = 0;
+            foreach (var workType in workTypes)
+            {
+                if (!SortedPawnFitnessForEveryWork.TryGetValue(workType, out var fitnessData))
+                    continue;
+
+                maxAssignedPriority =
+                    fitnessData.Where(CanPawnBeAssigned)
+                        .Select(x => x.Pawn)
+                        .Select(pawn => pawn.WorkSettingsGetPriority(workType))
+                        .Prepend(maxAssignedPriority)
+                        .Max();
+            }
+
+            if (maxAssignedPriority <= 0)
+                return false;
+
+            for (var priority = 1; priority <= maxAssignedPriority; priority++)
+            {
+                var workTypePercents = new Dictionary<IWorkTypeWrapper, TablePercent>();
+                foreach (var workType in workTypes)
+                {
+                    if (!SortedPawnFitnessForEveryWork.TryGetValue(workType, out var fitnessData))
+                    {
+                        workTypePercents[workType] = TablePercent.Percent(0);
+                        continue;
+                    }
+
+                    var eligibleCount = 0;
+                    var priorityCount = 0;
+                    foreach (var pawn in fitnessData.Where(CanPawnBeAssigned).Select(x => x.Pawn))
+                    {
+                        eligibleCount++;
+                        if (pawn.WorkSettingsGetPriority(workType) == priority)
+                            priorityCount++;
+                    }
+
+                    var percent = eligibleCount > 0 ? (double)priorityCount / eligibleCount : 0d;
+                    workTypePercents[workType] = TablePercent.Percent(percent);
+                }
+
+                var maxJobsPerPawn = 0;
+                var jobsPerPawn = new Dictionary<IPawnWrapper, int>();
+                foreach (var workType in workTypes)
+                {
+                    if (!SortedPawnFitnessForEveryWork.TryGetValue(workType, out var fitnessData))
+                        continue;
+
+                    foreach (var pawnFitness in fitnessData.Where(CanPawnBeAssigned))
+                    {
+                        var pawn = pawnFitness.Pawn;
+                        if (pawn.WorkSettingsGetPriority(workType) != priority)
+                            continue;
+
+                        if (jobsPerPawn.TryGetValue(pawn, out var count))
+                            jobsPerPawn[pawn] = count + 1;
+                        else
+                            jobsPerPawn[pawn] = 1;
+                    }
+                }
+
+                if (jobsPerPawn.Count > 0)
+                    maxJobsPerPawn = jobsPerPawn.Values.Max();
+
+                workTables.Add(new WorkTableEntry { Priority = priority, JobCount = maxJobsPerPawn, WorkTypes = workTypePercents });
+            }
+
+            WorkTables = workTables;
+            return true;
+        }
+
+        public bool SeedFromWorkTabIfEmpty()
+        {
+            return SeedFromWorkTab(false);
+        }
+
         public (double percent, bool takenMoreThanTotal) PercentColonistsAvailable(IWorkTypeWrapper workType, Priority priorityIgnore)
         {
             var taken = 0d;
