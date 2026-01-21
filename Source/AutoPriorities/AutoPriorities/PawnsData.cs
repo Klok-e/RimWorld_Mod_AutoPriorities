@@ -72,6 +72,8 @@ namespace AutoPriorities
                     RunOnTimer = RunOnTimer,
                 };
 
+            shallowCopy.WorkTypes.UnionWith(WorkTypes);
+
             return shallowCopy;
         }
 

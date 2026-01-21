@@ -548,9 +548,9 @@ namespace AutoPriorities.Ui
                 TooltipHandler.TipRegion(pawnNameRect, "Click here to toggle all jobs");
                 if (Widgets.ButtonInvisible(pawnNameRect))
                 {
-                    var c = _pawnsData.ExcludedPawns.Count(x => x.Pawn == pawn);
+                    var c = _pawnsData.ExcludedPawns.Count(x => x.Pawn.Equals(pawn));
                     if (c > _pawnsData.WorkTypes.Count / 2)
-                        _pawnsData.ExcludedPawns.RemoveWhere(x => x.Pawn == pawn);
+                        _pawnsData.ExcludedPawns.RemoveWhere(x => x.Pawn.Equals(pawn));
                     else
                     {
                         foreach (var work in _pawnsData.WorkTypes)
