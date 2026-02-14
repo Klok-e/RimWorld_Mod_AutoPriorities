@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using AutoPriorities.ImportantJobs;
@@ -58,6 +59,10 @@ namespace AutoPriorities.Core
         public static float OptimizationMutationRate => AutoPrioritiesMod.Settings?.optimizationMutationRate ?? 0.8f;
         public static int OptimizationPopulationSize => AutoPrioritiesMod.Settings?.optimizationPopulationSize ?? 256;
         public static float OptimizationJobsPerPawnWeight => AutoPrioritiesMod.Settings?.optimizationJobsPerPawnWeight ?? 1f;
+
+        public static List<string> NonAdultForbiddenWorkTypeDefNames =>
+            AutoPrioritiesMod.Settings?.nonAdultForbiddenWorkTypeDefNames ?? new List<string>();
+
         public static int TimerTicks => AutoPrioritiesMod.Settings?.timerTicks ?? 60000;
         public static event Action? SetPrioritiesOnTimerCallback;
 
@@ -120,9 +125,6 @@ namespace AutoPriorities.Core
 
         public static void SwitchMap()
         {
-            if (Find.CurrentMap == null)
-                return;
-
             LongEventHandler.ExecuteWhenFinished(() =>
                 {
                     if (Find.CurrentMap == null)

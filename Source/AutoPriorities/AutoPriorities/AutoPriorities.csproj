@@ -106,6 +106,7 @@
         <Compile Include="Ui\AutoPriorities_Dialog.cs"/>
         <Compile Include="Ui\Consts.cs"/>
         <Compile Include="Ui\NameExportDialog.cs"/>
+        <Compile Include="Ui\NonAdultForbiddenWorkTypesDialog.cs"/>
         <Compile Include="Ui\PrioritiesTabArtisan.cs"/>
         <Compile Include="Utils\DrawUtil.cs"/>
         <Compile Include="Utils\Extensions\CollectionExtensions.cs" />

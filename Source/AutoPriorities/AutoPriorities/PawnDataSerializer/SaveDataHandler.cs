@@ -30,6 +30,7 @@ namespace AutoPriorities.PawnDataSerializer
                 IgnoreDownedStatus = mapSpecificData.IgnoreDownedStatus,
                 IgnoreWorkSpeed = mapSpecificData.IgnoreWorkSpeed,
                 RunOnTimer = mapSpecificData.RunOnTimer,
+                ForbidNonAdultsFromSelectedJobs = mapSpecificData.ForbidNonAdultsFromSelectedJobs,
             };
         }
 
@@ -45,6 +46,7 @@ namespace AutoPriorities.PawnDataSerializer
             mapDataSaveTo.IgnoreWorkSpeed = request.IgnoreWorkSpeed;
             mapDataSaveTo.IgnoreDownedStatus = request.IgnoreDownedStatus;
             mapDataSaveTo.RunOnTimer = request.RunOnTimer;
+            mapDataSaveTo.ForbidNonAdultsFromSelectedJobs = request.ForbidNonAdultsFromSelectedJobs;
         }
     }
 }

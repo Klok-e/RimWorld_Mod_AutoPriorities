@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using AutoPriorities.Core;
+using AutoPriorities.Ui;
 using UnityEngine;
 using Verse;
 
@@ -95,6 +96,11 @@ namespace AutoPriorities
             listing.Label("Timer ticks (default 60000)");
             var timerTicksRect = listing.GetRect(24f);
             DrawNumericField(timerTicksRect, ref Settings.timerTicks, 1, 2000000, "AutoPriorities.TimerTicks");
+
+            listing.GapLine();
+            listing.Label("Jobs forbidden for non-adults");
+            if (listing.ButtonText(Consts.ConfigureNonAdultWorkTypes))
+                Find.WindowStack.Add(new NonAdultForbiddenWorkTypesDialog());
 
             listing.End();
 

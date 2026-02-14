@@ -38,6 +38,7 @@ namespace Tests.Helpers
             pawn1.MaxLearningRateFactor(workTypes[1]).Returns(1);
             pawn1.MaxLearningRateFactor(workTypes[2]).Returns(1);
             pawn1.MaxLearningRateFactor(workTypes[3]).Returns(1);
+            pawn1.IsAdult().Returns(true);
 
             var pawn2 = Substitute.For<IPawnWrapper>();
             pawn2.ThingID.Returns("pawn2");
@@ -53,6 +54,7 @@ namespace Tests.Helpers
             pawn2.MaxLearningRateFactor(workTypes[1]).Returns(1);
             pawn2.MaxLearningRateFactor(workTypes[2]).Returns(1);
             pawn2.MaxLearningRateFactor(workTypes[3]).Returns(1);
+            pawn2.IsAdult().Returns(true);
 
             var pawn3 = Substitute.For<IPawnWrapper>();
             pawn3.ThingID.Returns("pawn3");
@@ -68,6 +70,7 @@ namespace Tests.Helpers
             pawn3.MaxLearningRateFactor(workTypes[1]).Returns(1);
             pawn3.MaxLearningRateFactor(workTypes[2]).Returns(1);
             pawn3.MaxLearningRateFactor(workTypes[3]).Returns(1);
+            pawn3.IsAdult().Returns(true);
 
             var pawn4 = Substitute.For<IPawnWrapper>();
             pawn4.ThingID.Returns("pawn4");
@@ -83,6 +86,7 @@ namespace Tests.Helpers
             pawn4.MaxLearningRateFactor(workTypes[1]).Returns(1);
             pawn4.MaxLearningRateFactor(workTypes[2]).Returns(1);
             pawn4.MaxLearningRateFactor(workTypes[3]).Returns(1);
+            pawn4.IsAdult().Returns(true);
 
             pawns = new List<IPawnWrapper> { pawn1, pawn2, pawn3, pawn4 };
         }

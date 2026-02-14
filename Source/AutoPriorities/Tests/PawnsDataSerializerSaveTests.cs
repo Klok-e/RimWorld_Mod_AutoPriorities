@@ -80,5 +80,17 @@ namespace Tests
             _logger.NoWarnReceived();
             actualString.Should().Be(expectedString);
         }
+
+        [Test]
+        public void SaveData_SavesForbidNonAdultsFromSelectedJobsToMapData()
+        {
+            _saveDataHandler.SaveData(
+                new SaveDataRequest { ForbidNonAdultsFromSelectedJobs = false },
+                _mapSpecificData,
+                _worldSpecificData
+            );
+
+            _mapSpecificData.Received().ForbidNonAdultsFromSelectedJobs = false;
+        }
     }
 }

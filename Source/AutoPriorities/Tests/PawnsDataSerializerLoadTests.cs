@@ -100,5 +100,18 @@ namespace Tests
             // assert
             _logger.Received(10).Warn(Arg.Any<string>());
         }
+
+        [Test]
+        public void GetSavedData_LoadsForbidNonAdultsFromSelectedJobsFromMapData()
+        {
+            _mapSpecificData.PawnsDataXml.Returns((byte[]?)null);
+            _mapSpecificData.ForbidNonAdultsFromSelectedJobs.Returns(false);
+            _worldSpecificData.ExcludedPawns.Returns(new List<ExcludedPawnEntry>());
+
+            var savedData = _saveDataHandler.GetSavedData(_mapSpecificData, _worldSpecificData);
+
+            savedData.Should().NotBeNull();
+            savedData!.ForbidNonAdultsFromSelectedJobs.Should().BeFalse();
+        }
     }
 }

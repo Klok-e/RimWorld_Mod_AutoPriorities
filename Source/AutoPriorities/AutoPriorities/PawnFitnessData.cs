@@ -14,6 +14,8 @@ namespace AutoPriorities
 
         public bool IsOpposed { get; set; }
 
+        public bool IsNonAdultForbiddenFromWorking { get; set; }
+
         public void Deconstruct(out IPawnWrapper pawn, out float fitness, out float skillLevel, out bool isOpposed, out bool isDumbWorkType)
         {
             pawn = Pawn;

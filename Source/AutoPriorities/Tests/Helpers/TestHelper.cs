@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AutoPriorities.APLogger;
 using AutoPriorities.WorldInfoRetriever;
 using NSubstitute;
@@ -36,6 +37,7 @@ namespace Tests.Helpers
             worldInfoRetriever.OptimizationImprovementSeconds().Returns(1);
             worldInfoRetriever.OptimizationMutationRate().Returns(0.5f);
             worldInfoRetriever.OptimizationJobsPerPawnWeight().Returns(0.01f);
+            worldInfoRetriever.NonAdultForbiddenWorkTypeDefNames().Returns(new List<string>());
 
             return worldInfoRetriever;
         }

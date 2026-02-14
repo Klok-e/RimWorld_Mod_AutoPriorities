@@ -19,5 +19,7 @@ namespace AutoPriorities
         public bool IgnoreWorkSpeed { get; init; }
 
         public bool RunOnTimer { get; set; }
+
+        public bool ForbidNonAdultsFromSelectedJobs { get; init; }
     }
 }

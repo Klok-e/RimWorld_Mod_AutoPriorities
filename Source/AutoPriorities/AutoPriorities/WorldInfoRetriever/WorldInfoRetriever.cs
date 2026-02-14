@@ -86,6 +86,11 @@ namespace AutoPriorities.WorldInfoRetriever
             return Controller.OptimizationJobsPerPawnWeight;
         }
 
+        public List<string> NonAdultForbiddenWorkTypeDefNames()
+        {
+            return Controller.NonAdultForbiddenWorkTypeDefNames;
+        }
+
         #endregion
     }
 }

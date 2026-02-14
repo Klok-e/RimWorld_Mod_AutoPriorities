@@ -42,6 +42,7 @@ namespace AutoPriorities.PawnDataSerializer.Exporter
                     IgnoreLearningRate = false,
                     IgnoreOppositionToWork = false,
                     MinimumSkillLevel = 3,
+                    ForbidNonAdultsFromSelectedJobs = true,
                 }
             );
         }

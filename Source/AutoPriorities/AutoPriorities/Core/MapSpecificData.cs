@@ -6,6 +6,7 @@ namespace AutoPriorities.Core
 {
     public class MapSpecificData : MapComponent, IMapSpecificData
     {
+        private bool _forbidNonAdultsFromSelectedJobs = true;
         private bool _hasOpenedDialogOnce;
         private bool _ignoreDownedStatus;
         private bool _ignoreLearningRate;
@@ -25,6 +26,7 @@ namespace AutoPriorities.Core
             _ignoreOppositionToWork = copy._ignoreOppositionToWork;
             _ignoreDownedStatus = copy._ignoreDownedStatus;
             _ignoreWorkSpeed = copy._ignoreWorkSpeed;
+            _forbidNonAdultsFromSelectedJobs = copy._forbidNonAdultsFromSelectedJobs;
             _hasOpenedDialogOnce = copy._hasOpenedDialogOnce;
             _importantWorkTypes = copy._importantWorkTypes;
             _minimumSkillLevel = copy._minimumSkillLevel;
@@ -70,6 +72,12 @@ namespace AutoPriorities.Core
             set => _ignoreWorkSpeed = value;
         }
 
+        public bool ForbidNonAdultsFromSelectedJobs
+        {
+            get => _forbidNonAdultsFromSelectedJobs;
+            set => _forbidNonAdultsFromSelectedJobs = value;
+        }
+
         public bool RunOnTimer
         {
             get => _runOnTimer;
@@ -92,6 +100,7 @@ namespace AutoPriorities.Core
             Scribe_Values.Look(ref _ignoreOppositionToWork, "AutoPriorities_IgnoreOppositionToWork");
             Scribe_Values.Look(ref _ignoreDownedStatus, "AutoPriorities_IgnoreDownedStatus");
             Scribe_Values.Look(ref _ignoreWorkSpeed, "AutoPriorities_IgnoreWorkSpeed");
+            Scribe_Values.Look(ref _forbidNonAdultsFromSelectedJobs, "AutoPriorities_ForbidNonAdultsFromSelectedJobs", true);
             Scribe_Values.Look(ref _runOnTimer, "runOncePerDay");
             Scribe_Values.Look(ref _hasOpenedDialogOnce, "AutoPriorities_HasOpenedDialogOnce");
 

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -9,6 +12,7 @@ namespace AutoPriorities.Core
         public bool debugLogs;
         public bool debugSaveTablesAndPawns;
         public int maxPriority = 4;
+        public List<string>? nonAdultForbiddenWorkTypeDefNames;
         public float optimizationFeasibleSolutionTimeoutSeconds = 10f;
         public float optimizationImprovementSeconds = 1f;
         public float optimizationJobsPerPawnWeight = 1f;
@@ -30,6 +34,7 @@ namespace AutoPriorities.Core
             Scribe_Values.Look(ref optimizationPopulationSize, "optimizationPopulationSize", 256);
             Scribe_Values.Look(ref optimizationJobsPerPawnWeight, "optimizationJobsPerPawnWeight", 1f);
             Scribe_Values.Look(ref timerTicks, "timerTicks", 60000);
+            Scribe_Collections.Look(ref nonAdultForbiddenWorkTypeDefNames, "nonAdultForbiddenWorkTypeDefNames", LookMode.Value);
 
             ClampValues();
         }
@@ -43,6 +48,11 @@ namespace AutoPriorities.Core
             optimizationPopulationSize = Mathf.Clamp(optimizationPopulationSize, 2, 4096);
             optimizationJobsPerPawnWeight = Mathf.Max(0f, optimizationJobsPerPawnWeight);
             timerTicks = Mathf.Max(1, timerTicks);
+
+            nonAdultForbiddenWorkTypeDefNames =
+                (nonAdultForbiddenWorkTypeDefNames ?? new List<string> { "Handling", "Hunting" }).Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
         }
     }
 }

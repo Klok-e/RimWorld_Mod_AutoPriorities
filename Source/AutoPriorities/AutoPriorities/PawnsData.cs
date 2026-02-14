@@ -53,6 +53,8 @@ namespace AutoPriorities
 
         public float MinimumSkillLevel { get; set; }
 
+        public bool ForbidNonAdultsFromJobs { get; set; }
+
         public PawnsData ShallowCopy()
         {
             var shallowCopy =
@@ -70,6 +72,7 @@ namespace AutoPriorities
                     MinimumSkillLevel = MinimumSkillLevel,
                     IgnoreWorkSpeed = IgnoreWorkSpeed,
                     RunOnTimer = RunOnTimer,
+                    ForbidNonAdultsFromJobs = ForbidNonAdultsFromJobs,
                 };
 
             shallowCopy.WorkTypes.UnionWith(WorkTypes);
@@ -87,6 +90,7 @@ namespace AutoPriorities
             IgnoreDownedStatus = data.IgnoreDownedStatus;
             IgnoreWorkSpeed = data.IgnoreWorkSpeed;
             RunOnTimer = data.RunOnTimer;
+            ForbidNonAdultsFromJobs = data.ForbidNonAdultsFromSelectedJobs;
 
             WorkTables = LoadSavedState(data.WorkTablesData);
 
@@ -123,6 +127,7 @@ namespace AutoPriorities
                 IgnoreDownedStatus = IgnoreDownedStatus,
                 IgnoreWorkSpeed = IgnoreWorkSpeed,
                 RunOnTimer = RunOnTimer,
+                ForbidNonAdultsFromSelectedJobs = ForbidNonAdultsFromJobs,
             };
         }
 
@@ -162,6 +167,8 @@ namespace AutoPriorities
                 CurrentMapPlayerPawns.AddRange(pawns);
 
                 SortedPawnFitnessForEveryWork.Clear();
+                var nonAdultForbiddenWorkTypeDefNames = GetNonAdultForbiddenWorkTypeDefNames();
+
                 foreach (var work in workTypes)
                 {
                     SortedPawnFitnessForEveryWork[work] = new List<PawnFitnessData>();
@@ -178,6 +185,8 @@ namespace AutoPriorities
                             var skill = pawn.AverageOfRelevantSkillsFor(work);
                             var learningRateFactor = IgnoreLearningRate ? 1 : pawn.MaxLearningRateFactor(work);
                             var averageWorkSpeed = IgnoreWorkSpeed ? 1 : _workSpeedCalculator.AverageWorkSpeed(pawn, work);
+                            var isNonAdultForbiddenForWorkType =
+                                !pawn.IsAdult() && nonAdultForbiddenWorkTypeDefNames.Contains(work.DefName);
 
                             var isSkilledWorkType = work.RelevantSkillsCount > 0;
                             var fitness = (isSkilledWorkType ? skill * learningRateFactor : 0.001f) * averageWorkSpeed;
@@ -191,6 +200,7 @@ namespace AutoPriorities
                                         SkillLevel = skill,
                                         IsOpposed = pawn.IsOpposedToWorkType(work),
                                         IsSkilledWorkType = isSkilledWorkType,
+                                        IsNonAdultForbiddenFromWorking = isNonAdultForbiddenForWorkType,
                                     }
                                 );
                         }
@@ -325,8 +335,18 @@ namespace AutoPriorities
 
         public bool CanPawnBeAssigned(PawnFitnessData pawnFitnessData)
         {
-            return (!pawnFitnessData.IsOpposed || IgnoreOppositionToWork)
+            return !(pawnFitnessData.IsNonAdultForbiddenFromWorking && ForbidNonAdultsFromJobs)
+                   && (!pawnFitnessData.IsOpposed || IgnoreOppositionToWork)
                    && (pawnFitnessData.SkillLevel >= MinimumSkillLevel || !pawnFitnessData.IsSkilledWorkType);
+        }
+
+        private HashSet<string> GetNonAdultForbiddenWorkTypeDefNames()
+        {
+            var workTypeDefNames = _worldInfoRetriever.NonAdultForbiddenWorkTypeDefNames();
+
+            var set = workTypeDefNames.Where(x => !string.IsNullOrWhiteSpace(x)).ToHashSet();
+
+            return set;
         }
 
         public int NumberColonists(IWorkTypeWrapper workType)

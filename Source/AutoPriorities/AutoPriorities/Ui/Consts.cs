@@ -49,6 +49,14 @@ namespace AutoPriorities.Ui
         public const string IgnoreWorkSpeed = "Ignore work speed";
         public const string IgnoreWorkSpeedTooltip = "Ignore work speed for priority calculation.";
 
+        public const string ForbidNonAdultsFromSelectedJobs = "Forbid non-adults from some work types";
+
+        public const string ForbidNonAdultsFromSelectedJobsTooltip =
+            "If enabled, non-adult pawns cannot be assigned selected dangerous jobs. Click 'Configure...' to select which jobs.";
+
+        public const string ConfigureNonAdultWorkTypes = "Configure...";
+        public const string NonAdultForbiddenWorkTypesTitle = "Select work types forbidden for non-adults";
+
         public const string RunOnTimer = "Run periodically";
 
         public const string RunOnTimerTooltip =

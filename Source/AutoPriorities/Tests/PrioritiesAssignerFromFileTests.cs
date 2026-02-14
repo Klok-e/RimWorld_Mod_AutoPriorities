@@ -163,11 +163,11 @@ namespace Tests
 
         private IEnumerable<(IPawnWrapper Pawn, IWorkTypeWrapper WorkType, int Priority)> GetAssignedPriorities()
         {
-            return _pawns.SelectMany(
-                pawn => pawn.ReceivedCalls()
+            return _pawns.SelectMany(pawn =>
+                pawn.ReceivedCalls()
                     .Where(x => x.GetMethodInfo().Name == nameof(IPawnWrapper.WorkSettingsSetPriority))
-                    .Select(
-                        x => (Pawn: (IPawnWrapper)x.Target(), WorkType: (IWorkTypeWrapper)x.GetArguments()[0]!,
+                    .Select(x =>
+                        (Pawn: (IPawnWrapper)x.Target(), WorkType: (IWorkTypeWrapper)x.GetArguments()[0]!,
                             Priority: (int)(x.GetArguments()[1] ?? throw new InvalidOperationException()))
                     )
                     .ToList()
@@ -185,71 +185,68 @@ namespace Tests
             using var readStream2 = File.OpenRead($"TestData/Case{testCase}/PrioritiesSmarterAllPlayerPawns.xml");
             var pawns = readStream2.DeserializeXml<ArraySimpleData<PawnSimpleData>>();
 
-            _workTypes = workTypes.array?.Select(
-                                 x =>
-                                 {
-                                     var workTypeWrapper = Substitute.For<IWorkTypeWrapper>();
-                                     workTypeWrapper.WorkTags.Returns(x.workTags);
-                                     workTypeWrapper.DefName.Returns(x.defName);
-                                     workTypeWrapper.LabelShort.Returns(x.labelShort);
-                                     workTypeWrapper.RelevantSkillsCount.Returns(x.relevantSkillsCount);
+            _workTypes =
+                workTypes.array?.Select(x =>
+                        {
+                            var workTypeWrapper = Substitute.For<IWorkTypeWrapper>();
+                            workTypeWrapper.WorkTags.Returns(x.workTags);
+                            workTypeWrapper.DefName.Returns(x.defName);
+                            workTypeWrapper.LabelShort.Returns(x.labelShort);
+                            workTypeWrapper.RelevantSkillsCount.Returns(x.relevantSkillsCount);
 
-                                     return workTypeWrapper;
-                                 }
-                             )
-                             .ToList()
-                         ?? throw new InvalidOperationException();
+                            return workTypeWrapper;
+                        }
+                    )
+                    .ToList()
+                ?? throw new InvalidOperationException();
 
-            _pawns = pawns.array?.Select(
-                             x =>
-                             {
-                                 var pawnWrapper = Substitute.For<IPawnWrapper>();
-                                 pawnWrapper.NameFullColored.Returns(x.nameFullColored);
-                                 pawnWrapper.ThingID.Returns(x.thingID);
-                                 pawnWrapper.LabelNoCount.Returns(x.labelNoCount);
-                                 foreach (var pawnWorkTypeData in x.pawnWorkTypeData)
-                                 {
-                                     var workTypeWrapper = _workTypes.First(y => y.DefName == pawnWorkTypeData.workTypeDefName);
+            _pawns =
+                pawns.array?.Select(x =>
+                        {
+                            var pawnWrapper = Substitute.For<IPawnWrapper>();
+                            pawnWrapper.NameFullColored.Returns(x.nameFullColored);
+                            pawnWrapper.ThingID.Returns(x.thingID);
+                            pawnWrapper.LabelNoCount.Returns(x.labelNoCount);
+                            pawnWrapper.IsAdult().Returns(true);
+                            foreach (var pawnWorkTypeData in x.pawnWorkTypeData)
+                            {
+                                var workTypeWrapper = _workTypes.First(y => y.DefName == pawnWorkTypeData.workTypeDefName);
 
-                                     pawnWrapper.IsCapableOfWholeWorkType(workTypeWrapper)
-                                         .Returns(pawnWorkTypeData.isCapableOfWholeWorkType);
-                                     pawnWrapper.IsOpposedToWorkType(workTypeWrapper).Returns(pawnWorkTypeData.isOpposedToWorkType);
-                                     pawnWrapper.AverageOfRelevantSkillsFor(workTypeWrapper)
-                                         .Returns(pawnWorkTypeData.averageOfRelevantSkillsFor);
-                                     pawnWrapper.MaxLearningRateFactor(workTypeWrapper).Returns(pawnWorkTypeData.maxLearningRateFactor);
-                                 }
+                                pawnWrapper.IsCapableOfWholeWorkType(workTypeWrapper).Returns(pawnWorkTypeData.isCapableOfWholeWorkType);
+                                pawnWrapper.IsOpposedToWorkType(workTypeWrapper).Returns(pawnWorkTypeData.isOpposedToWorkType);
+                                pawnWrapper.AverageOfRelevantSkillsFor(workTypeWrapper)
+                                    .Returns(pawnWorkTypeData.averageOfRelevantSkillsFor);
+                                pawnWrapper.MaxLearningRateFactor(workTypeWrapper).Returns(pawnWorkTypeData.maxLearningRateFactor);
+                            }
 
-                                 return pawnWrapper;
-                             }
-                         )
-                         .ToList()
-                     ?? throw new InvalidOperationException();
+                            return pawnWrapper;
+                        }
+                    )
+                    .ToList()
+                ?? throw new InvalidOperationException();
 
             _worldInfoRetriever.GetAdultPawnsInPlayerFactionInCurrentMap().Returns(_pawns);
             _worldInfoRetriever.GetWorkTypeDefsInPriorityOrder().Returns(_workTypes);
 
-            _workTablesData = workTables.array?.Select(
-                    x =>
-                    {
-                        return new WorkTableEntry
+            _workTablesData =
+                workTables.array?.Select(x =>
                         {
-                            Priority = x.priority,
-                            JobCount = x.jobCount,
-                            WorkTypes = x.workTypes?.Select(
-                                                y =>
-                                                {
-                                                    return new
-                                                        {
-                                                            Key = _workTypes.First(w => w.DefName == y.key?.defName), Value = y.value,
-                                                        };
-                                                }
-                                            )
-                                            .ToDictionary(y => y.Key, y => y.Value)
-                                        ?? throw new InvalidOperationException(),
-                        };
-                    }
-                )
-                .ToList();
+                            return new WorkTableEntry
+                            {
+                                Priority = x.priority,
+                                JobCount = x.jobCount,
+                                WorkTypes =
+                                    x.workTypes?.Select(y =>
+                                            {
+                                                return new { Key = _workTypes.First(w => w.DefName == y.key?.defName), Value = y.value };
+                                            }
+                                        )
+                                        .ToDictionary(y => y.Key, y => y.Value)
+                                    ?? throw new InvalidOperationException(),
+                            };
+                        }
+                    )
+                    .ToList();
 
             var save = new SaveData { WorkTablesData = _workTablesData ?? throw new InvalidOperationException(), IgnoreWorkSpeed = true };
             _serializer.LoadSavedData().Returns(save);

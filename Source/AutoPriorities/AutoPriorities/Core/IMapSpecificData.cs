@@ -4,14 +4,15 @@ namespace AutoPriorities.Core
 {
     public interface IMapSpecificData
     {
-        public List<string>? ImportantWorkTypes { get; set; }
-        public byte[]? PawnsDataXml { get; set; }
-        public float MinimumSkillLevel { get; set; }
+        List<string>? ImportantWorkTypes { get; set; }
+        byte[]? PawnsDataXml { get; set; }
+        float MinimumSkillLevel { get; set; }
 
-        public bool IgnoreLearningRate { get; set; }
+        bool IgnoreLearningRate { get; set; }
         bool IgnoreOppositionToWork { get; set; }
         bool IgnoreDownedStatus { get; set; }
         bool IgnoreWorkSpeed { get; set; }
+        bool ForbidNonAdultsFromSelectedJobs { get; set; }
         bool RunOnTimer { get; set; }
         bool HasOpenedDialogOnce { get; set; }
     }

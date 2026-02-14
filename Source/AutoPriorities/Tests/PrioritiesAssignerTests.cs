@@ -27,6 +27,7 @@ namespace Tests
             // AddMorePawnsToPw();
             _worldInfoRetriever.GetAdultPawnsInPlayerFactionInCurrentMap().Returns(_pw.pawns);
             _worldInfoRetriever.GetWorkTypeDefsInPriorityOrder().Returns(_pw.workTypes);
+            _worldInfoRetriever.NonAdultForbiddenWorkTypeDefNames().Returns(new List<string>());
             AssignPawnsData();
             _importantWorkTypesProvider = Substitute.For<IImportantJobsProvider>();
             _importantWorkTypesProvider.ImportantWorkTypes().Returns(new HashSet<IWorkTypeWrapper>());
@@ -84,16 +85,18 @@ namespace Tests
         {
             var percents = new[] { TablePercent.Number(1), TablePercent.Number(1), TablePercent.Number(1), TablePercent.Number(1) };
             var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y)).ToDictionary(k => k.x, v => v.y);
-            var save = new SaveData
-            {
-                ExcludedPawns = new HashSet<ExcludedPawnEntry> { new() { WorkDef = _pw.workTypes[1], Pawn = _pw.pawns[1] } },
-                WorkTablesData = new List<WorkTableEntry>
+            var save =
+                new SaveData
                 {
-                    new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent },
-                    new() { Priority = 2, JobCount = 4, WorkTypes = workTypePercent },
-                },
-                IgnoreWorkSpeed = true,
-            };
+                    ExcludedPawns = new HashSet<ExcludedPawnEntry> { new() { WorkDef = _pw.workTypes[1], Pawn = _pw.pawns[1] } },
+                    WorkTablesData =
+                        new List<WorkTableEntry>
+                        {
+                            new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent },
+                            new() { Priority = 2, JobCount = 4, WorkTypes = workTypePercent },
+                        },
+                    IgnoreWorkSpeed = true,
+                };
             _serializer.LoadSavedData().Returns(save);
 
             _pawnsData = new PawnsDataBuilder(_serializer, _worldInfoRetriever, _logger, _workSpeedCalculator).Build();

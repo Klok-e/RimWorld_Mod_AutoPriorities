@@ -41,6 +41,11 @@ namespace AutoPriorities.Wrappers
             return GetPawnOrThrow().Downed;
         }
 
+        public bool IsAdult()
+        {
+            return GetPawnOrThrow().DevelopmentalStage == DevelopmentalStage.Adult;
+        }
+
         public float AverageOfRelevantSkillsFor(IWorkTypeWrapper work)
         {
             return GetPawnOrThrow().skills.AverageOfRelevantSkillsFor(work.WorkTypeDef);

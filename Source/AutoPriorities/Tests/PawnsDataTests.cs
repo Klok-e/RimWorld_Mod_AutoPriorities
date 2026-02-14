@@ -28,6 +28,7 @@ namespace Tests
             _pw = PawnWorktypeCreator.Create();
             _retriever.GetAdultPawnsInPlayerFactionInCurrentMap().Returns(_pw.pawns);
             _retriever.GetWorkTypeDefsInPriorityOrder().Returns(_pw.workTypes);
+            _retriever.NonAdultForbiddenWorkTypeDefNames().Returns(new List<string>());
         }
 
         private ILogger _logger = null!;
@@ -42,17 +43,16 @@ namespace Tests
         {
             // arrange
 
-            var percents = new[]
-            {
-                TablePercent.Percent(0.2), TablePercent.Percent(0.2), TablePercent.Percent(0.2), TablePercent.Number(2),
-            };
+            var percents =
+                new[] { TablePercent.Percent(0.2), TablePercent.Percent(0.2), TablePercent.Percent(0.2), TablePercent.Number(2) };
             var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y)).ToDictionary(k => k.x, v => v.y);
-            var save = new SaveData
-            {
-                ExcludedPawns = new HashSet<ExcludedPawnEntry> { new() { WorkDef = _pw.workTypes[1], Pawn = _pw.pawns[1] } },
-                WorkTablesData = new List<WorkTableEntry> { new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent } },
-                IgnoreWorkSpeed = true,
-            };
+            var save =
+                new SaveData
+                {
+                    ExcludedPawns = new HashSet<ExcludedPawnEntry> { new() { WorkDef = _pw.workTypes[1], Pawn = _pw.pawns[1] } },
+                    WorkTablesData = new List<WorkTableEntry> { new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent } },
+                    IgnoreWorkSpeed = true,
+                };
             _serializer.LoadSavedData().Returns(save);
 
             // act
@@ -84,19 +84,18 @@ namespace Tests
         {
             // arrange
 
-            var percents = new[]
-            {
-                TablePercent.Percent(0.2), TablePercent.Percent(0.2), TablePercent.Percent(0.2), TablePercent.Number(2),
-            };
+            var percents =
+                new[] { TablePercent.Percent(0.2), TablePercent.Percent(0.2), TablePercent.Percent(0.2), TablePercent.Number(2) };
             var unknownWorkType = Substitute.For<IWorkTypeWrapper>();
             unknownWorkType.DefName.Returns("unknown");
             _pw.workTypes.Add(unknownWorkType);
             var workTypePercent = _pw.workTypes.Zip(percents, (x, y) => (x, y)).ToDictionary(k => k.x, v => v.y);
-            var save = new SaveData
-            {
-                ExcludedPawns = new HashSet<ExcludedPawnEntry> { new() { WorkDef = _pw.workTypes[1], Pawn = _pw.pawns[1] } },
-                WorkTablesData = new List<WorkTableEntry> { new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent } },
-            };
+            var save =
+                new SaveData
+                {
+                    ExcludedPawns = new HashSet<ExcludedPawnEntry> { new() { WorkDef = _pw.workTypes[1], Pawn = _pw.pawns[1] } },
+                    WorkTablesData = new List<WorkTableEntry> { new() { Priority = 1, JobCount = 4, WorkTypes = workTypePercent } },
+                };
             _serializer.LoadSavedData().Returns(save);
 
             // act

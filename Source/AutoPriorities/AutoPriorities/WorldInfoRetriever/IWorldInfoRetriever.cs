@@ -29,5 +29,7 @@ namespace AutoPriorities.WorldInfoRetriever
         int OptimizationPopulationSize();
 
         float OptimizationJobsPerPawnWeight();
+
+        List<string> NonAdultForbiddenWorkTypeDefNames();
     }
 }

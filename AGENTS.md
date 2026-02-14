@@ -16,13 +16,6 @@
 
 Note: projects reference RimWorld assemblies via `../..//RimManaged/`. Ensure `RimManaged` exists and matches the target RimWorld version.
 
-## Coding Style & Naming Conventions
-
-- C# with `Nullable` enabled; follow `.editorconfig`.
-- Indent with 4 spaces; braces on their own lines.
-- Naming: PascalCase for types/members, camelCase for locals, `_camelCase` for private fields.
-- Keep logging consistent with `AutoPriorities/APLogger/ILogger`.
-
 ## Testing Guidelines
 
 - Frameworks: NUnit, FluentAssertions, NSubstitute, AutoFixture.
@@ -36,8 +29,9 @@ Note: projects reference RimWorld assemblies via `../..//RimManaged/`. Ensure `R
 
 ## Agent-Specific Instructions
 
-- Use JetBrains MCP commands (e.g., Rider MCP) when available for file access, edits, search, and inspections.
-- Use MCP edit tools for file changes whenever possible.
+- Use JetBrains MCP commands (e.g., Rider MCP) when available for search, and inspections.
+- Use do not use mcp for file changes.
+- Inspections and files from rider MCP may be stale after editing without MCP commands.
 - Rider MCP `projectPath` is the C# project root (`.../Source/AutoPriorities`), not the repo root (
   `.../RimWorld_Mod_AutoPriorities`). Use MCP only under the project root; use shell for repo-root files like `About/`.
 - For `mcp__rider__get_file_text_by_path` `truncateMode` valid values are: `START`, `MIDDLE`, `END`, `NONE`.

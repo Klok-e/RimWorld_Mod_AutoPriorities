@@ -19,6 +19,8 @@ namespace AutoPriorities.Wrappers
         bool IsOpposedToWorkType(IWorkTypeWrapper work);
         bool IsIncapacitated();
 
+        bool IsAdult();
+
         float AverageOfRelevantSkillsFor(IWorkTypeWrapper work);
 
         float MaxLearningRateFactor(IWorkTypeWrapper work);

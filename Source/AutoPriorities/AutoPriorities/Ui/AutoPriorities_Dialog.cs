@@ -274,8 +274,12 @@ namespace AutoPriorities.Ui
                 new Rect(inRect.xMin, checkIgnoreDownedStatusRect.yMax + Consts.LabelMargin, inRect.width, Consts.ButtonHeight);
             DrawIgnoreWorkSpeedCheckbox(checkIgnoreWorkSpeedRect);
 
-            var checkRunOncePerDayRect =
+            var checkForbidNonAdultsRect =
                 new Rect(inRect.xMin, checkIgnoreWorkSpeedRect.yMax + Consts.LabelMargin, inRect.width, Consts.ButtonHeight);
+            DrawForbidNonAdultsFromSelectedJobsCheckbox(checkForbidNonAdultsRect);
+
+            var checkRunOncePerDayRect =
+                new Rect(inRect.xMin, checkForbidNonAdultsRect.yMax + Consts.LabelMargin, inRect.width, Consts.ButtonHeight);
             DrawRunOncePerDayCheckbox(checkRunOncePerDayRect);
 
             var seedFromWorkTabRect =
@@ -353,6 +357,20 @@ namespace AutoPriorities.Ui
             DrawCheckbox(inRect, Consts.IgnoreWorkSpeed, Consts.IgnoreWorkSpeedTooltip, ref pawnsDataIgnoreWorkSpeed);
 
             _pawnsData.IgnoreWorkSpeed = pawnsDataIgnoreWorkSpeed;
+        }
+
+        private void DrawForbidNonAdultsFromSelectedJobsCheckbox(Rect inRect)
+        {
+            var forbidNonAdultsFromSelectedJobs = _pawnsData.ForbidNonAdultsFromJobs;
+
+            DrawCheckbox(
+                inRect,
+                Consts.ForbidNonAdultsFromSelectedJobs,
+                Consts.ForbidNonAdultsFromSelectedJobsTooltip,
+                ref forbidNonAdultsFromSelectedJobs
+            );
+
+            _pawnsData.ForbidNonAdultsFromJobs = forbidNonAdultsFromSelectedJobs;
         }
 
 
